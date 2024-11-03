@@ -49,51 +49,7 @@ namespace nsK2EngineLow {
 
 	void SceneLight::Update()
 	{
-		//ディレクションライトを回す
-		Quaternion qRotY;
-		qRotY.SetRotation(g_vec3AxisY, g_pad[0]->GetLStickXF() * 0.02f);
-		qRotY.Apply(m_light.dirDirection);
-
-		//ポイントライトを回す。
-		/*m_light.ptPosition.x -= g_pad[0]->GetLStickXF();
-		if (g_pad[0]->IsPress(enButtonB))
-		{
-			m_light.ptPosition.y += g_pad[0]->GetLStickYF();
-		}
-		else
-		{ 
-			m_light.ptPosition.z -= g_pad[0]->GetLStickYF();
-		}*/
-
-		//スポットライトを回す。
-		//m_light.spPosition.x -= g_pad[0]->GetLStickXF();
-		//if (g_pad[0]->IsPress(enButtonB))
-		//{
-		//	m_light.spPosition.y += g_pad[0]->GetLStickYF();
-		//}
-		//else
-		//{
-		//	m_light.spPosition.z -= g_pad[0]->GetLStickYF();
-		//}
-
-		//Quaternion qRotY;
-		//qRotY.SetRotationDegY(g_pad[0]->GetRStickXF() * 0.01f);
-
-		////
-		//qRotY.Apply(m_light.spDirection);
-
-		//Vector3 rotAxis;
-		//rotAxis.Cross(g_vec3AxisY, m_light.spDirection);
-		//Quaternion qRotX;
-		//qRotX.SetRotation(rotAxis, g_pad[0]->GetRStickYF() * 0.01f);
-		////
-		//qRotX.Apply(m_light.spDirection);
-		////
-		//Quaternion qRot;
-		//qRot.SetRotation({ 0.0f,0.0f,-1.0f }, m_light.spDirection);
-
-		
-
+		//DirRot();
 	}
 
 	void SceneLight::InitDirectionLight()
@@ -101,18 +57,18 @@ namespace nsK2EngineLow {
 		//太陽光
 		//ディレクションライトのデータを作成する
 		//ライトは斜め上から当たっている
-		m_light.dirDirection.x = 0.0f;
-		m_light.dirDirection.y = 0.0f;
+		m_light.dirDirection.x = 1.0f;
+		m_light.dirDirection.y = -1.0f;
 		m_light.dirDirection.z = -1.0f;
 		
 		//正規化する
 		m_light.dirDirection.Normalize();
 
-		//ライトのカラーは灰色(0.6f)
+		//ライトのカラーは灰色(0.6f),bloom(5.8f)
 		//ライトを強めに設定
-		m_light.color.x = 5.8f;
-		m_light.color.y = 5.8f;
-		m_light.color.z = 5.8f;
+		m_light.color.x = 0.6f;
+		m_light.color.y = 0.6f;
+		m_light.color.z = 0.6f;
 
 		//視点
 		m_light.eyePos = g_camera3D->GetPosition();
@@ -183,6 +139,14 @@ namespace nsK2EngineLow {
 		m_light.groundNormal.x = 0.0f;
 		m_light.groundNormal.y = 1.0f;
 		m_light.groundNormal.z = 0.0f;
+	}
+
+	void SceneLight::DirRot()
+	{
+		//ディレクションライトを回す
+		Quaternion qRotY;
+		qRotY.SetRotation(g_vec3AxisY, g_pad[0]->GetLStickXF() * 0.02f);
+		qRotY.Apply(m_light.dirDirection);
 	}
 
 	/*void SceneLight::Update()

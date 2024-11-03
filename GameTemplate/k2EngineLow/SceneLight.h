@@ -108,61 +108,19 @@ namespace nsK2EngineLow {
 		void InitAmbientLight();
 		//半球ライト
 		void InitHemisphereLight();
+		//ディレクションライトを回す
+		void DirRot();
 		//シーンライトを取得
 		Light& GetSceneLight()
 		{
 			return m_light;
 		}
-		////ディレクションライトの取得
-		//DirectionLight& GetDirLight()
-		//{
-		//	return m_dirLight;
-		//}
-		////ポイントライトの取得
-		//SPointLight& GetPointLight()
-		//{
-		//	return m_pointLight;
-		//}
-
-		//ディレクションライトのパラメータを設定
-		/*void SetDirectionLight(int lightNo, Vector3 direction, Vector3 color)
-		{
-			direction.Normalize();
-			m_light.directionalLight.direction = direction;
-			m_light.directionalLight.color = color;
-		}*/
-
-		//環境光を設定
-		/*void SetAmbinet(Vector3 ambient)
-		{
-			m_light.ambientLight = ambient;
-		}*/
+		
 
 		//更新処理
 		void Update();
 
-		//ポイントライトのパラメータを設定
-		/*void SetPointLight(Vector3 position, Vector3 color)
-		{
-			m_light.pointLight = point
-		}*/
-		//ポイントライト配列から未使用のライトのポインタを提供
-		//SPointLight* NewPointLight();
-
-		//使用中のポイントライトを削除
-		//void DeletePointLight(SPointLight* m_pointLight);
-
-
-		//スポットライトの配列から未使用のライトのポインタを提供
-		//SSpotLight* NewSpotLight();
-
-		//使用中のスポットライトを削除
-		//void DeleteSpotLight(SSpotLight* m_spotlight);
-
-		/*void SetLVP(Matrix mat)
-		{
-			m_light.m_LVP = mat;
-		}*/
+		
 
 		Light& GetLightData()
 		{
