@@ -13,6 +13,16 @@
     </ClCompile>
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="GameCamera.cpp" />
+    <ClCompile Include="IPlayerState.cpp" />
+    <ClCompile Include="PlayerIdleState.cpp" />
+    <ClCompile Include="PlayerStartState.cpp" />
+    <ClCompile Include="PlayerPushState.cpp" />
+    <ClCompile Include="PlayerRunState.cpp" />
+    <ClCompile Include="PlayerJumpState.cpp" />
+    <ClCompile Include="PlayerDriftState.cpp" />
+    <ClCompile Include="PlayerJumpEnd.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -21,5 +31,15 @@
     </ClInclude>
     <ClInclude Include="Game.h" />
     <ClInclude Include="BackGround.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="GameCamera.h" />
+    <ClInclude Include="IPlayerState.h" />
+    <ClInclude Include="PlayerIdleState.h" />
+    <ClInclude Include="PlayerStartState.h" />
+    <ClInclude Include="PlayerPushState.h" />
+    <ClInclude Include="PlayerRunState.h" />
+    <ClInclude Include="PlayerJumpState.h" />
+    <ClInclude Include="PlayerDriftState.h" />
+    <ClInclude Include="PlayerJumpEnd.h" />
   </ItemGroup>
 </Project>

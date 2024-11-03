@@ -1,6 +1,12 @@
 #pragma once
 
-class BackGround;
+//#include "SkyCube.h"
+#include "Player.h"
+#include "BackGround.h"
+#include "GameCamera.h"
+//class Player;
+//class BackGround;
+//class GameCamera;
 class Game : public IGameObject
 {
 public:
@@ -10,7 +16,7 @@ public:
 	void PlayerMove();
 	void Update();
 	void Render(RenderContext& rc);
-
+	void SetSkyCube();
 	//テスト用座標
 	Vector3 m_modelTestPos = Vector3::Zero;
 
@@ -22,14 +28,12 @@ public:
 	//テストカメラ
 	//GameCamera* m_testCamera = nullptr;
 
-	PointLight m_testPointLight;
+	//PointLight m_testPointLight;
 private:
-	ModelRender m_modelPlayer;
-
-	ModelRender m_modelFloor;
-
-	BackGround* m_bgModel = nullptr;
-
-	Vector3 m_position;
+	
+	//ModelRender m_modelPlayer;
+	nsPlayer::Player* m_player = nullptr;
+	BackGround* m_backGround = nullptr;
+	GameCamera* m_gameCamera = nullptr;
 };
 

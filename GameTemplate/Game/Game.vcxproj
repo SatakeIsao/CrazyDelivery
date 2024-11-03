@@ -225,7 +225,17 @@
   <ItemGroup>
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameCamera.cpp" />
+    <ClCompile Include="IPlayerState.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerDriftState.cpp" />
+    <ClCompile Include="PlayerIdleState.cpp" />
+    <ClCompile Include="PlayerJumpEnd.cpp" />
+    <ClCompile Include="PlayerJumpState.cpp" />
+    <ClCompile Include="PlayerPushState.cpp" />
+    <ClCompile Include="PlayerRunState.cpp" />
+    <ClCompile Include="PlayerStartState.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -236,6 +246,16 @@
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameCamera.h" />
+    <ClInclude Include="IPlayerState.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerDriftState.h" />
+    <ClInclude Include="PlayerIdleState.h" />
+    <ClInclude Include="PlayerJumpEnd.h" />
+    <ClInclude Include="PlayerJumpState.h" />
+    <ClInclude Include="PlayerPushState.h" />
+    <ClInclude Include="PlayerRunState.h" />
+    <ClInclude Include="PlayerStartState.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
   </ItemGroup>
