@@ -41,12 +41,12 @@ namespace nsK2EngineLow {
 		//2D(フォントやスプライト)用の初期化
 		//Init2DSprite();
 
-		//ブルームの初期化
-		//輝度抽出
+		//ブルームの初期化///
+		////輝度抽出
 		InitBloomLumi();
-		//ガウシアンブラー
+		////ガウシアンブラー
 		InitBloomGauss();
-		//ボケ画像を加算合成するテクスチャ
+		////ボケ画像を加算合成するテクスチャ
 		InitBloomBoke();
 
 		//シャドウのための初期化
@@ -93,19 +93,16 @@ namespace nsK2EngineLow {
 
 		rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderingTarget);
 
-		// ブルーム
-		//輝度抽出
+		// ブルーム///
+		////輝度抽出
 		bloom.RenderLumi(rc);
-		//ガウシアンブラーを実行
-		 bloom.RenderGauss(rc);
-		//ボケ画像を加算合成
-		///// bloom.RenderBoke(rc, m_mainRenderingTarget);
-		// 最終描画
-		
+		////ガウシアンブラーを実行
+		bloom.RenderGauss(rc);
+		////ボケ画像を加算合成
 		rc.WaitUntilToPossibleSetRenderTarget(m_mainRenderingTarget);
 		rc.SetRenderTargetAndViewport(m_mainRenderingTarget);
 		bloom.FinalSpriteDraw(rc);
-		rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderingTarget);
+		rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderingTarget);///
 		
 		//Render2D(rc);
 
