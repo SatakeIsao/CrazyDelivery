@@ -44,7 +44,7 @@ namespace nsK2EngineLow
 
 		
 		void Init(
-			const char* tkmfilePath,
+			const char* tkmFilePath,
 			AnimationClip* animationClip = nullptr,
 			int numAnimationClips = 0,
 			EnModelUpAxis enModelUpAxis = enModelUpAxisZ,
@@ -71,7 +71,6 @@ namespace nsK2EngineLow
 		/// </summary>
 		/// <param name="rc">RenderContext</param>
 		void OnRenderModel(RenderContext& rc)override;
-		void ModelMove();
 		//void DirLigMove();
 		//void PtLigMove();
 		//座標を更新
@@ -83,7 +82,31 @@ namespace nsK2EngineLow
 		{
 			SetPosition({ x,y,z });
 		}
+		/// <summary>
+		/// 回転設定
+		/// </summary>
+		/// <param name="rot"></param>
+		void SetRotation(const Quaternion& rot)
+		{
+			m_rotation = rot;
+		}
 
+		/// <summary>
+		/// サイズ設定
+		/// </summary>
+		/// <param name="scale"></param>
+		void SetScale(const Vector3& scale)
+		{
+			m_scale = scale;
+		}
+		void SetScale(const float x, const float y, const float z)
+		{
+			SetScale({ x,y,z });
+		}
+		void SetScale(const float xyz)
+		{
+			SetScale({ xyz,xyz,xyz });
+		}
 		//モデルを取得
 		Model& GetModel()
 		{
@@ -114,6 +137,57 @@ namespace nsK2EngineLow
 			return m_position.z;
 		}
 
+		/// <summary>
+		/// スケルトンの初期化
+		/// </summary>
+		/// <param name="filePath"></param>
+		void InitSkeleton(const char* filePath);
+		/// <summary>
+		/// アニメーションの初期化
+		/// </summary>
+		/// <param name="animationClips"></param>
+		/// <param name="numAnimationClips"></param>
+		/// <param name="enModelUpAxis"></param>
+		void InitAnimation(
+			AnimationClip* animationClips,
+			int numAnimationClips,
+			EnModelUpAxis enModelUpAxis
+		);
+		/*/// <summary>
+		/// アニメーション済み頂点バッファの計算処理を初期化
+		/// </summary>
+		/// <param name="tkmFilePath"></param>
+		/// <param name="enModelUpAxis"></param>
+		void InitComputeAnimationVertexBuffer(
+			const char* tkmFilePath,
+			EnModelUpAxis enModelUpAxis
+		);*/
+
+		/// <summary>
+		/// アニメーション再生
+		/// </summary>
+		/// <param name="animNo">アニメーションクリップの番号</param>
+		/// <param name="interpolateTime">補間時間（単位:秒）</param>
+		void PlayAnimation(int animNo, float interpolateTime = 0.0f)
+		{
+			m_animation.Play(animNo, interpolateTime);
+		}
+		//アニメーション再生中？
+		bool IsPlayingAnimation() const
+		{
+			return m_animation.IsPlaying();
+		}
+		//アニメーション再生の速度を設定
+		void SetAnimationSpeed(const float animationSpeed)
+		{
+			m_animationSpeed = animationSpeed;
+		}
+		//アニメーションイベント
+		void AddAnimationEvent(AnimationEventListener eventListener)
+		{
+			m_animation.AddAnimationEventListener(eventListener);
+		}
+
 		//bool& GetSyuzinkou()
 		//{
 		//	return m_syuzinkou;
@@ -142,9 +216,17 @@ namespace nsK2EngineLow
 		Quaternion m_rotation;			//回転
 		Vector3 m_scale = g_vec3One;	//拡大率
 		Shadow m_shadow;
+		Skeleton m_skeleton;
+		AnimationClip* m_animationClips = nullptr;
+		int m_numAnimationClips = 0;
+		Animation m_animation;
+		//ComputeAnimationVertexBuffer m_computeAnimationVertexBuffer;	// アニメーション済み頂点バッファの計算処理。
+		float m_animationSpeed = 1.0f; //アニメーションの再生スピード
 		//RenderTarget m_shadowMap;
 		int m_moveState = 0;
-
+		bool m_isEnableInstancingDraw = false; //インスタンシング描画が有効か？
+		bool m_isRaytrecingWorld = true;	   //レイトレワールドに登録するか？
+		StructuredBuffer m_worldMatrixArraySB; //ワールド行列の配列のストラクチャードバッファ
 		//bool m_isShadowCaster = false;
 		/*bool m_syuzinkou = false;
 		bool m_flashFlag = false;

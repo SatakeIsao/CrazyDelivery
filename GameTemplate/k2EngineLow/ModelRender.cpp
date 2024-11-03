@@ -14,20 +14,24 @@ namespace nsK2EngineLow {
 	}
 
 	void ModelRender::Init(
-		const char* tkmfilePath,
+		const char* tkmFilePath,
 		AnimationClip* animationClips,
 		int numAnimationClips,
-		EnModelUpAxis enModeluUpAcxis,
+		EnModelUpAxis enModelUpAcxis,
 		bool isShadowCaster,
 		bool isShadowReceiver)
 	{
+		//スケルトンを初期化
+		InitSkeleton(tkmFilePath);
+		//アニメーションを初期化。
+		InitAnimation(animationClips, numAnimationClips, enModelUpAcxis);
+		//モデルの初期化
 		ModelInitData initData;
 
-		initData.m_tkmFilePath = tkmfilePath;
+		initData.m_tkmFilePath = tkmFilePath;
 
 		initData.m_fxFilePath = "Assets/shader/testModel.fx";
 		//initData.m_fxFilePath = "Assets/shader/shadowReceiverModel.fx";
-
 
 		initData.m_expandConstantBuffer = &g_sceneLight->GetLightData();
 
@@ -41,7 +45,7 @@ namespace nsK2EngineLow {
 		
 		if (isShadowCaster == true)
 		{
-			InitShadowModel(tkmfilePath, enModeluUpAcxis);
+			InitShadowModel(tkmFilePath, enModelUpAcxis);
 		}
 
 		if (isShadowReceiver == true)
@@ -55,6 +59,9 @@ namespace nsK2EngineLow {
 		{
 			initData.m_psEntryPointFunc = "PSNormalMain";
 		}
+		if (animationClips != nullptr) {
+			initData.m_skeleton = &m_skeleton;
+		}
 
 		m_model.Init(initData);
 	}
@@ -66,6 +73,12 @@ namespace nsK2EngineLow {
 		shadowInitData.m_modelUpAxis = modelUpAxis;
 		shadowInitData.m_fxFilePath = "Assets/shader/sampleDrawShadowMap.fx";
 		shadowInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32_FLOAT;
+
+		//スケルトンを指定する
+		if (m_animationClips != nullptr)
+		{
+			shadowInitData.m_skeleton = &m_skeleton;
+		}
 	
 		//ノンスキンメッシュ用の頂点シェーダーのエントリーポイントを指定する
 		shadowInitData.m_vsEntryPointFunc = "VSMain";
@@ -75,24 +88,54 @@ namespace nsK2EngineLow {
 		m_shadowModel.Init(shadowInitData);
 	}
 
+	void ModelRender::InitSkeleton(const char* tkmFilePath)
+	{
+		//スケルトンのデータを読み込み。
+		std::string skeletonFilePath = tkmFilePath;
+		int pos = (int)skeletonFilePath.find(".tkm");
+		skeletonFilePath.replace(pos, 4, ".tks");
+		m_skeleton.Init(skeletonFilePath.c_str());
+	}
+
+	void ModelRender::InitAnimation(AnimationClip* animationClips, int numAnimationClips,EnModelUpAxis EnModelUpAxis)
+	{
+		m_animationClips = animationClips;
+		m_numAnimationClips = numAnimationClips;
+		if (m_animationClips != nullptr)
+		{
+			m_animation.Init(
+				m_skeleton,
+				m_animationClips,
+				numAnimationClips
+			);
+		}
+	}
+
+	/*void ModelRender::InitComputeAnimationVertexBuffer(const char* tkmFilePath, EnModelUpAxis enModelUpAxis)
+	{
+		StructuredBuffer* worldMatrxiArraySB = nullptr;
+		if (m_isEnableInstancingDraw) {
+			worldMatrxiArraySB = &m_worldMatrixArraySB;
+		}
+
+		m_computeAnimationVertexBuffer.Init(
+			tkmFilePath,
+			m_skeleton.GetNumBones(),
+			m_skeleton.GetBoneMatricesTopAddress(),
+			enModelUpAxis,
+			m_maxInstance,
+			worldMatrxiArraySB
+		);
+	}*/
+
 	void ModelRender::Update()
 	{
-		ModelMove();
-		/*if (g_pad[0]->IsTrigger(enButtonA))
-		{
-			m_moveState++;
-			m_moveState %= 4;
-		}*/
-
-		/*switch (m_moveState)
-		{
-		case 0:
-			ModelMove();
-			break;
-		case 1:
-			break;
-
-		}*/
+		//モデルのワールド行列更新
+		m_model.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+		m_shadowModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+		m_skeleton.Update(m_model.GetWorldMatrix());
+		//アニメーションを進める
+		m_animation.Progress(g_gameTime->GetFrameDeltaTime() * m_animationSpeed);
 	}
 
 	void ModelRender::Draw(RenderContext& rc)
@@ -116,33 +159,7 @@ namespace nsK2EngineLow {
 		
 	}
 
-	void ModelRender::ModelMove()
-	{
-		//カメラ基準の処理にしてない
 
-	//モデルの移動
-		m_position.y += g_pad[0]->GetLStickXF();
-		m_position.x -= g_pad[0]->GetLStickYF();
-		//モデルの回転
-		m_rotation.AddRotationY(g_pad[0]->GetRStickXF() * 0.05f);
-		m_rotation.AddRotationX(g_pad[0]->GetRStickYF() * 0.05f);
-
-		if (g_pad[0]->IsPress(enButtonUp)) {
-			m_position.y += 0.02f;
-		}
-		if (g_pad[0]->IsPress(enButtonDown)) {
-			m_position.y -= 0.02f;
-		}
-		if (g_pad[0]->IsPress(enButtonRight)) {
-			m_position.x += 0.02f;
-		}
-		if (g_pad[0]->IsPress(enButtonLeft)) {
-			m_position.x -= 0.02f;
-		}
-
-		//モデルのワールド行列更新
-		m_model.UpdateWorldMatrix(m_position, m_rotation, m_scale);
-		m_shadowModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
-	}
+	
 
 }
