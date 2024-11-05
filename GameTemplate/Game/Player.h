@@ -17,7 +17,6 @@ namespace nsPlayer
 			enAnimClip_Push,
 			enAnimClip_Run,
 			enAnimClip_Jump,
-			enAnimClip_JumpEnd,
 			enAnimClip_Drift,
 			//enAnimClip_Angry,
 			enAnimClip_Num

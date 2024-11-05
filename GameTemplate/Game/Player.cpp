@@ -109,15 +109,11 @@ namespace nsPlayer
 		m_boardAnimClips[enAnimClip_Run].Load("Assets/animData/board/push2.tka");
 		m_boardAnimClips[enAnimClip_Run].SetLoopFlag(false);
 		//ジャンプする時のアニメーション
-		m_playerAnimClips[enAnimClip_Jump].Load("Assets/animData/skater/jump.tka");
+		m_playerAnimClips[enAnimClip_Jump].Load("Assets/animData/skater/jumpFast.tka");
 		m_playerAnimClips[enAnimClip_Jump].SetLoopFlag(false);
-		m_boardAnimClips[enAnimClip_Jump].Load("Assets/animData/board/jump.tka");
+		m_boardAnimClips[enAnimClip_Jump].Load("Assets/animData/board/jumpFast.tka");
 		m_boardAnimClips[enAnimClip_Jump].SetLoopFlag(false);
-		//ジャンプする時のアニメーション（スケートボードが反転しているためのアニメーション）
-		/*m_playerAnimClips[enAnimClip_JumpEnd].Load("Assets/animData/skater/jumpFastEnd.tka");
-		m_playerAnimClips[enAnimClip_JumpEnd].SetLoopFlag(false);
-		m_boardAnimClips[enAnimClip_JumpEnd].Load("Assets/animData/board/jumpFastEnd.tka");
-		m_boardAnimClips[enAnimClip_JumpEnd].SetLoopFlag(false);*/
+		
 		//ドリフトする時のアニメーション
 		m_playerAnimClips[enAnimClip_Drift].Load("Assets/animData/skater/drift.tka");
 		m_playerAnimClips[enAnimClip_Drift].SetLoopFlag(false);
