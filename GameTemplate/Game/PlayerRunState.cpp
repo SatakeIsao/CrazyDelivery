@@ -73,7 +73,7 @@ namespace nsPlayer {
 			
 		}
 
-		if (g_pad[0]->IsPress(enButtonA))
+		if (g_pad[0]->IsTrigger(enButtonA))
 		{
 			//player->SetJump();
 			return new PlayerJumpState(m_player);
