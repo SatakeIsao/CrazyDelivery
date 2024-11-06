@@ -76,7 +76,7 @@ void Game::SetSkyCube()
 }
 void Game::Render(RenderContext& rc)
 {
-	m_shadowTest.Draw(rc);
+	//m_shadowTest.Draw(rc);
 }
 
 
