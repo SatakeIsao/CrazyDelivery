@@ -10,6 +10,19 @@
 class Game : public IGameObject
 {
 public:
+	//テスト用アニメーションクリップ
+	enum EnAnimationClip
+	{
+		enAnimClip_Idle,
+		enAnimClip_Start,
+		enAnimClip_Push,
+		enAnimClip_Run,
+		enAnimClip_Jump,
+		enAnimClip_Drift,
+		//enAnimClip_Angry,
+		enAnimClip_Num
+	};
+
 	Game();
 	~Game();
 	bool Start();
@@ -35,5 +48,9 @@ private:
 	nsPlayer::Player* m_player = nullptr;
 	BackGround* m_backGround = nullptr;
 	GameCamera* m_gameCamera = nullptr;
+
+	ModelRender m_shadowTest;		//テスト用モデル
+	AnimationClip m_playerAnimClips[enAnimClip_Num]; //テスト用プレイヤーのアニメーションクリップ
+
 };
 
