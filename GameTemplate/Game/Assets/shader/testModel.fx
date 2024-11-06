@@ -173,7 +173,6 @@ float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
 SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 {
     SPSIn psIn;
-    
     float4x4 worldMatrix;
     if (!hasSkin)
     {

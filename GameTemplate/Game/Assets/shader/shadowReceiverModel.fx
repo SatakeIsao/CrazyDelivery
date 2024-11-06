@@ -254,13 +254,14 @@ float4 PSMain( SPSIn psIn ) : SV_Target0
     //環境光の強さを環境光に乗算する
     ambient *= ambientPower;
     
-    //シャドウマップを計算
+    //ライトビュースクリーン空間からUV空間に座標変換
     float2 shadowMapUV = psIn.posInLVP.xy / psIn.posInLVP.w;
     shadowMapUV *= float2(0.5f, -0.5f);
     shadowMapUV += 0.5f;
     
     float3 shadowMap = 1.0f;
-    if(shadowMap.x > 0.0f && shadowMapUV.x < 1.0f && shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f)
+    if(shadowMapUV.x > 0.0f && shadowMapUV.x < 1.0f
+        && shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f)
     {
         shadowMap = g_shadowMap.Sample(g_sampler, shadowMapUV);
     }
@@ -283,30 +284,6 @@ float4 PSMain( SPSIn psIn ) : SV_Target0
 }
 
 
-//float4 Shadow(SPSIn psIn) : SV_Target1
-//{
-//    float4 color = g_texture.Sample(g_sampler, psIn.uv);
-    
-//    //ライトビュースクリーン空間からUV空間に座標返還
-//    float2 shadowMapUV = psIn.posInLVP.xy / psIn.posInLVP.w;
-//    shadowMapUV *= float2(0.5f, -0.5f);
-//    shadowMapUV += 0.5f;
-    
-//    //UV座標を使ってシャドウマップから影情報をサンプリング
-//    float3 shadowMap = 1.0f;
-//    if(shadowMapUV.x > 0.0f && shadowMapUV.x < 1.0f && shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f)
-//    {
-//        shadowMap = g_shadowMap.Sample(g_sampler, shadowMapUV);
-//    }
-    
-//    //サンプリングした影情報をテクスチャカラーに乗算
-//    color.xyz *= shadowMap;
-    
-//    return color;
-    
-//    //シャドウマップ描画用のピクセルシェーダーを作成する
-//    // return float4(0.5f, 0.5f, 0.5f, 1.0f);
-//}
 
 ////////////////////////////////////////////////
 // 関数定義。

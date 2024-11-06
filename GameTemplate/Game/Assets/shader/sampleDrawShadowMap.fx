@@ -86,38 +86,50 @@ sampler g_sampler : register(s0);	//サンプラステート。
 /// <summary>
 //スキン行列を計算する。
 /// </summary>
-//float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
-//{
-//    float4x4 skinning = 0;
-//    float w = 0.0f;
-//	[unroll]
-//    for (int i = 0; i < 3; i++)
-//    {
-//        skinning += g_boneMatrix[skinVert.Indices[i]] * skinVert.Weights[i];
-//        w += skinVert.Weights[i];
-//    }
+float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
+{
+    float4x4 skinning = 0;
+    float w = 0.0f;
+	[unroll]
+    for (int i = 0; i < 3; i++)
+    {
+        skinning += g_boneMatrix[skinVert.Indices[i]] * skinVert.Weights[i];
+        w += skinVert.Weights[i];
+    }
     
-//    skinning += g_boneMatrix[skinVert.Indices[3]] * (1.0f - w);
+    skinning += g_boneMatrix[skinVert.Indices[3]] * (1.0f - w);
 	
-//    return skinning;
-//}
+    return skinning;
+}
 
 /// <summary>
 /// 頂点シェーダーのコア関数。
 /// </summary>
 SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 {
+    //シャドウマップ描画用の頂点シェーダーを実装
     SPSIn psIn;
+    float4x4 worldMatrix;
+    if (!hasSkin)
+    {
+        worldMatrix = mWorld;
+
+    }
+    else
+    {
+        worldMatrix = CalcSkinMatrix(vsIn.skinVert);
+
+    }
     
-    psIn.pos = mul(mWorld, vsIn.pos); //モデルの頂点をワールド座標系に変換
+    psIn.pos = mul(worldMatrix, vsIn.pos); //モデルの頂点をワールド座標系に変換
     psIn.worldPos = psIn.pos;
     psIn.pos = mul(mView, psIn.pos); //ワールド座標系からカメラ座標系に変換
     psIn.pos = mul(mProj, psIn.pos); //カメラ座標系からスクリーン座標系に変換
 
-    psIn.normal = mul(mWorld, vsIn.normal); //法線を回転させる。
+    psIn.normal = mul(worldMatrix, vsIn.normal); //法線を回転させる。
     
-    psIn.tangent = normalize(mul(mWorld, vsIn.tangent)); //接ベクトルをワールド空間に変換する
-    psIn.biNormal = normalize(mul(mWorld, vsIn.biNormal)); //従ベクトルをワールド空間に変換する
+    psIn.tangent = normalize(mul(worldMatrix, vsIn.tangent)); //接ベクトルをワールド空間に変換する
+    psIn.biNormal = normalize(mul(worldMatrix, vsIn.biNormal)); //従ベクトルをワールド空間に変換する
     
     psIn.uv = vsIn.uv;
 
@@ -141,7 +153,7 @@ SPSIn VSSkinMain(SVSIn vsIn)
 }
 
 /// <summary>
-/// ピクセルシェーダーのエントリー関数。
+/// シャドウマップ描画用のピクセルシェーダー。
 /// </summary>
 float4 PSMain( SPSIn psIn ) : SV_Target0
 {
