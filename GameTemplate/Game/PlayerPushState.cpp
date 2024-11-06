@@ -3,6 +3,8 @@
 #include "PlayerStartState.h"
 #include "PlayerRunState.h"
 #include "PlayerIdleState.h"
+#include "PlayerDriftState.h"
+#include "PlayerJumpState.h"
 
 namespace
 {
@@ -32,6 +34,19 @@ namespace nsPlayer
 			return new PlayerRunState(m_player);
 		}
 		
+		if (g_pad[0]->IsTrigger(enButtonRB1))
+		{
+			m_player->SetDriftTime(m_player->GetDriftTime());
+			m_player->SetRotation(m_player->GetRotation());
+			return new PlayerDriftState(m_player);
+		}
+
+		if (g_pad[0]->IsTrigger(enButtonA))
+		{
+			//player->SetJump();
+			return new PlayerJumpState(m_player);
+		}
+
 		//ここまで来たらステートを遷移しない
 		return nullptr;
 	}
