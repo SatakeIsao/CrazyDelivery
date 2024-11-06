@@ -188,7 +188,7 @@ namespace nsPlayer
 		/// </summary>
 		/// <param name="driftTime"></param>
 		/// <returns></returns>
-		const void SetDriftTime(float& driftTime)
+		void SetDriftTime(float driftTime)
 		{
 			this->m_driftTime = driftTime;
 		}
@@ -217,10 +217,16 @@ namespace nsPlayer
 			}
 		}												//*!
 	
-		void SetIsDriftStart(const bool driftStart)
+		void SetIsDriftStart(bool driftStart)
 		{
 			m_isDrifting = driftStart;
 		}
+
+		float GetDriftTime()
+		{
+			return m_driftTime;
+		}
+
 	private:
 		ModelRender m_playerModel; //プレイヤーモデル
 		ModelRender m_boardModel;  //ボードモデル
@@ -257,7 +263,7 @@ namespace nsPlayer
 		//bool m_isAcceleRequested = false; //Bボタンが押されたかどうか
 
 		float m_acceleDelayTime = 0.0f;		//タイマー変数
-		float m_driftTime = 0.0f;		//ドリフトタイマー変数
+		float m_driftTime = 1.15f;		//ドリフトタイマー変数
 
 		bool m_isDrifting = false;	//ドリフト中かどうか
 		float m_driftAngle = 0.0f;	//ドリフト中の角度

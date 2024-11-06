@@ -37,11 +37,12 @@ namespace nsPlayer
 		/// ステートにおける更新処理
 		/// </summary>
 		void Update() override;
-
 		
+		
+
 	private:
 		float acceleTime = 1.15f;
-		float driftTime = 1.15f;
+		//float driftTime = 1.15f;
 		
 	};
 }

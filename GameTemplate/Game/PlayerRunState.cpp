@@ -37,7 +37,7 @@ namespace nsPlayer {
 		//左スティックの入力されてない且つ、
 		//速度がゼロだったら
 		if (g_pad[0]->GetLStickYF() == 0.000f 
-			&& m_player->GetPlayerVelocity().Length() < 0.1f)
+			&& m_player->GetPlayerVelocity().Length() < 0.001f)
 		{
 			m_player->SetBrake();
 			//待機ステートに遷移する
@@ -81,7 +81,7 @@ namespace nsPlayer {
 
 		if (g_pad[0]->IsTrigger(enButtonRB1))
 		{
-			m_player->SetDriftTime(driftTime);
+			m_player->SetDriftTime(m_player->GetDriftTime());
 			m_player->SetRotation(m_player->GetRotation());
 			return new PlayerDriftState(m_player);
 		}
