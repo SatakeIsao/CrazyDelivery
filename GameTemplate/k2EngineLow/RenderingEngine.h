@@ -53,6 +53,11 @@ namespace nsK2EngineLow {
 			return shadow.GetRenderTarget();
 		}
 
+		Camera& GetLigCamera()
+		{
+			return shadow.GetLigCamera();
+		}
+
 		RenderTarget& GetBloom()
 		{
 			return bloom.GetRenderTarget();

@@ -29,6 +29,11 @@ namespace nsK2EngineLow {
 			return shadowMap;
 		}
 
+		Camera& GetLigCamera()
+		{
+			return m_lightCamera;
+		}
+
 	private:
 		/// <summary>
 		/// レンダーターゲットの初期化
@@ -42,7 +47,7 @@ namespace nsK2EngineLow {
 		
 	private:
 		Camera m_lightCamera;
-		Vector3 m_lightCameraPos;
+		//Vector3 m_lightCameraPos;
 		RenderTarget shadowMap;
 		Sprite sprite;
 	};

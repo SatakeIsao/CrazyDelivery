@@ -16,6 +16,10 @@ void nsK2EngineLow::Shadow::Init()
 
 void nsK2EngineLow::Shadow::Render(RenderContext& rc, std::vector<IRenderer*>& renderObjects)
 {
+	m_lightCamera.SetTarget(g_camera3D->GetTarget());
+	m_lightCamera.SetPosition(g_camera3D->GetTarget() + Vector3{0.0f, 600.0f, 300.0f});
+	m_lightCamera.Update();
+
 	rc.WaitUntilToPossibleSetRenderTarget(shadowMap);
 	rc.SetRenderTargetAndViewport(shadowMap);
 	rc.ClearRenderTargetView(shadowMap);
@@ -47,10 +51,10 @@ void nsK2EngineLow::Shadow::InitRenderTarget()
 
 void nsK2EngineLow::Shadow::InitLightCamera()
 {
-	m_lightCamera.SetPosition(0, 600, 0);
+	m_lightCamera.SetPosition(0, 600, 300);
 	m_lightCamera.SetTarget(0, 0, 0);
 	m_lightCamera.SetUp(1, 0, 0);
-	m_lightCamera.SetViewAngle(Math::DegToRad(20.0f));
+	//m_lightCamera.SetViewAngle(Math::DegToRad(20.0f));
 	m_lightCamera.Update();
 }
 

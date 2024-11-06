@@ -74,7 +74,7 @@ namespace nsK2EngineLow {
 		shadowInitData.m_fxFilePath = "Assets/shader/sampleDrawShadowMap.fx";
 		shadowInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32_FLOAT;
 
-		//スケルトンを指定する
+		//アニメーションがあるならスケルトンを指定する
 		if (m_animationClips != nullptr)
 		{
 			shadowInitData.m_skeleton = &m_skeleton;
@@ -99,6 +99,7 @@ namespace nsK2EngineLow {
 
 	void ModelRender::InitAnimation(AnimationClip* animationClips, int numAnimationClips,EnModelUpAxis EnModelUpAxis)
 	{
+		//アニメーションの設定
 		m_animationClips = animationClips;
 		m_numAnimationClips = numAnimationClips;
 		if (m_animationClips != nullptr)
@@ -133,6 +134,7 @@ namespace nsK2EngineLow {
 		//モデルのワールド行列更新
 		m_model.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 		m_shadowModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+
 		m_skeleton.Update(m_model.GetWorldMatrix());
 		//アニメーションを進める
 		m_animation.Progress(g_gameTime->GetFrameDeltaTime() * m_animationSpeed);

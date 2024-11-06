@@ -49,6 +49,8 @@ namespace nsK2EngineLow {
 
 	void SceneLight::Update()
 	{
+		m_light.mLVP = g_renderingEngine->GetLigCamera().GetViewProjectionMatrix();
+
 		//DirRot();
 	}
 
