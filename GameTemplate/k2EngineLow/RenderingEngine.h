@@ -1,9 +1,12 @@
 #pragma once
 #include "Shadow.h"
 #include "Bloom.h"
+
 namespace nsK2EngineLow {
 
 	class Bloom;
+	class SpriteRender;
+	class FontRender;
 
 	class RenderingEngine : public Noncopyable
 	{
@@ -20,6 +23,23 @@ namespace nsK2EngineLow {
 		void AddRenderObject(IRenderer* renderObject)
 		{
 			m_renderObjects.emplace_back(renderObject);
+		}
+
+		/// <summary>
+		/// スプライトレンダーをコンテナの後ろにくっつける
+		/// </summary>
+		/// <param name="spriteRender">スプライトレンダー</param>
+		void AddSpriteRenderObject(SpriteRender* spriteRender)
+		{
+			SpriteRenderObject.push_back(spriteRender);
+		}
+		/// <summary>
+		/// フォントレンダーをコンテナの後ろにくっつける
+		/// </summary>
+		/// <param name="fontRender">フォントレンダー</param>
+		void AddFontRenderObject(FontRender* fontRender)
+		{
+			FontRenderObject.push_back(fontRender);
 		}
 
 		//void InitFinalSprite();
@@ -78,6 +98,8 @@ namespace nsK2EngineLow {
 
 		std::vector<ModelRender*> ModelRenderObject;
 		std::vector<IRenderer* > m_renderObjects;	//描画オブジェクトのリスト
+		std::vector<SpriteRender*> SpriteRenderObject;	//スプライトレンダー
+		std::vector<FontRender*> FontRenderObject;	//フォントレンダー
 	};
 
 }
