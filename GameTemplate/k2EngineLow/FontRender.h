@@ -2,7 +2,7 @@
 
 namespace nsK2EngineLow
 {
-	class FontRender:public Noncopyable
+	class FontRender:public IRenderer
 	{
 	public:
 		static const int MAX_TEXT_SIZE = 256;
@@ -110,7 +110,7 @@ namespace nsK2EngineLow
 		}
 
 	private:
-		void OnRender2D(RenderContext& rc)
+		void OnRender2D(RenderContext& rc) override
 		{
 			m_font.Begin(rc);
 			m_font.Draw(m_text, Vector2(m_position.x, m_position.y), m_color, m_rotation, m_scale, m_pivot);

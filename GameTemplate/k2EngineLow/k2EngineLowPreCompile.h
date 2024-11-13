@@ -82,6 +82,8 @@ using namespace Microsoft::WRL;
 #include "RenderingEngine.h"
 #include "Shadow.h"
 #include "Bloom.h"
+#include "FontRender.h"
+#include "SpriteRender.h"
 //#include "MyRenderer.h"
 //
 #include "graphics/GaussianBlur.h"

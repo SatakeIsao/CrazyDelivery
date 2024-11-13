@@ -3,7 +3,7 @@
 namespace nsK2EngineLow
 {
 
-	class SpriteRender : public Noncopyable
+	class SpriteRender : public IRenderer
 	{
 	public:
 		//‰Šú‰»
@@ -84,7 +84,8 @@ namespace nsK2EngineLow
 		//XVˆ—
 		void Update()
 		{
-			m_sprite.Update(m_position,
+			m_sprite.Update(
+				m_position,
 				m_rotation,
 				m_scale,
 				m_pivot);
@@ -92,7 +93,8 @@ namespace nsK2EngineLow
 
 		//•`‰æˆ—
 		void Draw(RenderContext& rc);
-		void OnDraw(RenderContext& rc)
+
+		void OnRender2D(RenderContext& rc) override
 		{
 			m_sprite.Draw(rc);
 		}

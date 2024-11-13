@@ -1,6 +1,6 @@
 #pragma once
 
-//#include "SkyCube.h"
+#include "SkyCube.h"
 #include "Player.h"
 #include "BackGround.h"
 #include "GameCamera.h"
@@ -43,7 +43,7 @@ public:
 
 	//PointLight m_testPointLight;
 private:
-	
+	SkyCube* m_skyCube = nullptr;
 	//ModelRender m_modelPlayer;
 	nsPlayer::Player* m_player = nullptr;
 	BackGround* m_backGround = nullptr;
@@ -51,6 +51,7 @@ private:
 
 	ModelRender m_shadowTest;		//テスト用モデル
 	AnimationClip m_playerAnimClips[enAnimClip_Num]; //テスト用プレイヤーのアニメーションクリップ
-
+	FontRender m_testFont;			//テスト表示用メッセージ
+	SpriteRender m_testSprite;			//テスト表示用スプライト
 };
 

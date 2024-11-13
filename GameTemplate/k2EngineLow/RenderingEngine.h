@@ -16,9 +16,11 @@ namespace nsK2EngineLow {
 
 		void Init();
 		void InitShadowMap();
-		void InitBloomLumi();
-		void InitBloomGauss();
-		void InitBloomBoke();
+		void InitBloom();
+		//void InitBloomLumi();
+		//void InitBloomGauss();
+		//void InitBloomBoke();
+		void Init2DSprite();
 		
 		void AddRenderObject(IRenderer* renderObject)
 		{
@@ -29,17 +31,17 @@ namespace nsK2EngineLow {
 		/// スプライトレンダーをコンテナの後ろにくっつける
 		/// </summary>
 		/// <param name="spriteRender">スプライトレンダー</param>
-		void AddSpriteRenderObject(SpriteRender* spriteRender)
+		void AddSpriteRenderObject(IRenderer * spriteRender)
 		{
-			SpriteRenderObject.push_back(spriteRender);
+			m_renderObjects.push_back(spriteRender);
 		}
 		/// <summary>
 		/// フォントレンダーをコンテナの後ろにくっつける
 		/// </summary>
 		/// <param name="fontRender">フォントレンダー</param>
-		void AddFontRenderObject(FontRender* fontRender)
+		void AddFontRenderObject(IRenderer* fontRender)
 		{
-			FontRenderObject.push_back(fontRender);
+			m_renderObjects.push_back(fontRender);
 		}
 
 		//void InitFinalSprite();
@@ -54,8 +56,9 @@ namespace nsK2EngineLow {
 		//実行
 		void Execute(RenderContext& rc);
 
-		void CopyMainRenderTargetFrameBuffer(RenderContext& rc);
+		void CopyMainRenderTargetToFrameBuffer(RenderContext& rc);
 
+		void SpriteFontDraw(RenderContext& rc);
 		////ライトビュースクリーンの設定
 		//void SetLVP(Matrix mat)
 		//{
@@ -86,6 +89,9 @@ namespace nsK2EngineLow {
 	private:
 		SceneLight m_sceneLight;
 		RenderTarget m_mainRenderingTarget;
+		RenderTarget m_2DRenderTarget;
+		Sprite m_mainSprite;
+		Sprite m_2DSprite;
 		//シャドウ用
 		//RenderTarget m_shadowMapTarget;
 		Camera lightCamera;
@@ -98,8 +104,6 @@ namespace nsK2EngineLow {
 
 		std::vector<ModelRender*> ModelRenderObject;
 		std::vector<IRenderer* > m_renderObjects;	//描画オブジェクトのリスト
-		std::vector<SpriteRender*> SpriteRenderObject;	//スプライトレンダー
-		std::vector<FontRender*> FontRenderObject;	//フォントレンダー
 	};
 
 }
