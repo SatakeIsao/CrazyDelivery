@@ -107,6 +107,20 @@ namespace nsK2EngineLow
 		{
 			SetScale({ xyz,xyz,xyz });
 		}
+
+		/// <summary>
+		/// 座標・拡大・回転を設定
+		/// </summary>
+		/// <param name="pos"></param>
+		/// <param name="rot"></param>
+		/// <param name="scale"></param>
+		void SetTRS(const Vector3& pos, const Quaternion& rot, const Vector3& scale)
+		{
+			SetPosition(pos);
+			SetRotation(rot);
+			SetScale(scale);
+		}
+
 		//モデルを取得
 		Model& GetModel()
 		{
@@ -188,28 +202,44 @@ namespace nsK2EngineLow
 			m_animation.AddAnimationEventListener(eventListener);
 		}
 
-		//bool& GetSyuzinkou()
-		//{
-		//	return m_syuzinkou;
-		//}
+		/// <summary>
+		/// スカイキューブの初期化
+		/// </summary>
+		/// <param name="initData"></param>
+		void InitSkyCubeModel(ModelInitData& initData)
+		{
+			m_renderToGBufferModel.Init(initData);
+		}
 
-		//void OnDraw(RenderContext& rc)
-		//{
-		//	m_model.Draw(rc, 1, m_flashFlag, m_UVScrollFlag);
-		//}
+		/// <summary>
+		/// シャドウキャスターのフラグを設定する
+		/// </summary>
+		/// <param name="flag"></param>
+		void SetShadowCasterFlag(bool flag)
+		{
+			m_isShadowCaster = flag;
+		}
 
-		//void PlayFlash()
-		//{
-		//	m_flashFlag = true;
-		//}
+		/// <summary>
+		/// シャドウキャスター？
+		/// </summary>
+		/// <returns></returns>
+		bool IsShadowCaster() const
+		{
+			return m_isShadowCaster;
+		}
 
-		//void PlayerUVScroll()
-		//{
-		//	m_UVScrollFlag = true;
-		//}
+		/// <summary>
+		/// カリングの対象から外す
+		/// </summary>
+		void SetDontCulling()
+		{
+			m_doCulling = false;
+		}
 	private:
 		Model m_model;					//モデル
 		Model m_bgModel;
+		Model m_renderToGBufferModel;	//RenderToGBufferで描画されるモデル
 		Model m_shadowModel;			//シャドウマップ
 		Light m_light;					//シェーダーに送るライトの情報
 		Vector3 m_position = Vector3::Zero;		//座標
@@ -227,10 +257,8 @@ namespace nsK2EngineLow
 		bool m_isEnableInstancingDraw = false; //インスタンシング描画が有効か？
 		bool m_isRaytrecingWorld = true;	   //レイトレワールドに登録するか？
 		StructuredBuffer m_worldMatrixArraySB; //ワールド行列の配列のストラクチャードバッファ
-		//bool m_isShadowCaster = false;
-		/*bool m_syuzinkou = false;
-		bool m_flashFlag = false;
-		bool m_UVScrollFlag = false;*/
+		bool m_isShadowCaster = false;		   //シャドウキャスターフラグ
+		bool m_doCulling = true;			   //カリングするかどうか
 	};
 }
 

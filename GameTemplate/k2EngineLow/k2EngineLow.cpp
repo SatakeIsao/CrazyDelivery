@@ -30,6 +30,11 @@ namespace nsK2EngineLow {
 	}
 	void K2EngineLow::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeight)
 	{
+		//追加した
+		//g_renderingEngine = new RenderingEngine;
+		//raytracing::InitData raytracintInitData;
+		//raytracintInitData.m_expandShaderResource = &g_renderingEngine->GetRaytracingLightData();
+		//raytracintInitData.m_expandShaderResourceSize = sizeof(g_renderingEngine->GetRaytracingLightData());
 		if (hwnd) {
 			//グラフィックエンジンの初期化。
 			m_graphicsEngine = new GraphicsEngine();
@@ -104,7 +109,7 @@ namespace nsK2EngineLow {
 		auto& renderContext = g_graphicsEngine->GetRenderContext();
 		// ゲームオブジェクトマネージャーの描画処理を実行。
 		GameObjectManager::GetInstance()->ExecuteRender(renderContext);
-		
+		//g_renderingEngine->Update();
 	}
 
 	/// <summary>
