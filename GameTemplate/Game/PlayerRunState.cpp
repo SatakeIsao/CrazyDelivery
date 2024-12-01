@@ -36,13 +36,16 @@ namespace nsPlayer {
 		//}
 		//¶ƒXƒeƒBƒbƒN‚Ì“ü—Í‚³‚ê‚Ä‚È‚¢ŠŽ‚ÂA
 		//‘¬“x‚ªƒ[ƒ‚¾‚Á‚½‚ç
-		if (g_pad[0]->GetLStickYF() == 0.000f 
-			&& m_player->GetPlayerVelocity().Length() < 0.001f)
-		{
-			m_player->SetBrake();
-			//‘Ò‹@ƒXƒe[ƒg‚É‘JˆÚ‚·‚é
-			return new PlayerIdleState(m_player);
-		}
+		
+		//if(m_player->GetPlayerVelocity().Length() < 0.001f)
+		////if (g_pad[0]->GetLStickYF() == 0.000f 
+		////	&& m_player->GetPlayerVelocity().Length() < 0.001f)
+		//{
+		//	m_player->SetBrake();
+		//	//‘Ò‹@ƒXƒe[ƒg‚É‘JˆÚ‚·‚é
+		//	return new PlayerIdleState(m_player);
+		//}
+		
 		//Bƒ{ƒ^ƒ“‚ð‰Ÿ‚·‚Æ
 		//if (g_pad[0]->IsTrigger(enButtonB))
 		//{
@@ -68,7 +71,9 @@ namespace nsPlayer {
 			const auto& forward = m_player->GetForward();
 			// ‘O•û•ûŒü‚É‚P‚Okm/s^2‚Ì‰Á‘¬“x‚ð”­¶‚³‚¹‚é
 			// ƒNƒ‹ƒ}‚ª‚U‚O‚‹‚/s‚Å‘–‚Á‚Ä‚¢‚éŽž‚É‚±‚Ì‰Á‘¬“x‚ð‰Á‚¦‘±‚¯‚½‚çA‚P•bŒã‚É‚Í•b‘¬‚V‚Okm/sH
-			m_player->SetAccele(forward * 50000.0f, acceleTime);
+			m_player->SetAccele(forward * 30000.0f, acceleTime);
+			//m_player->SetAccele(forward * 50000.0f, acceleTime);
+
 			return new PlayerPushState(m_player);
 			
 		}
