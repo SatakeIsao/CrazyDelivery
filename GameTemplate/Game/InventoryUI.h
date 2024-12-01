@@ -30,21 +30,21 @@ public:
 	}
 
 private:
-	SpriteRender m_humburgerSp;				//テストハンバーガー
-	SpriteRender m_humburgerGrayHalf;
-	SpriteRender m_humburgerGrayAll;		//テストグレーハンバーガー
-	SpriteRender m_pizzaSp;					//テストピザ
-	SpriteRender m_pizzaGrayHalf;
-	SpriteRender m_pizzaGrayAll;			//テストグレーピザ
-	SpriteRender m_sushiSp;					//テスト寿司
-	SpriteRender m_sushiGrayHalf;
-	SpriteRender m_sushiGrayAll;			//テストグレー寿司
-	bool		 m_isShowHumberger = false;	//ハンバーガーの色あり画像を表示するかどうか
-	bool		 m_isShowPizza = false;		//ピザの色あり画像を表示するかどうか
-	bool		 m_isShowSushi = false;		//寿司の色あり画像を表示するかどうか
+	SpriteRender	m_humburgerSp;					//ハンバーガー：色あり
+	SpriteRender	m_humburgerGrayHalf;			//ハンバーガー：グレーと色あり
+	SpriteRender	m_humburgerGrayAll;				//ハンバーガー：グレー
+	SpriteRender	m_pizzaSp;						//ピザ：色あり
+	SpriteRender	m_pizzaGrayHalf;				//ピザ：グレーと色あり
+	SpriteRender	m_pizzaGrayAll;					//ピザ：グレー
+	SpriteRender	m_sushiSp;						//寿司：色あり
+	SpriteRender	m_sushiGrayHalf;				//寿司：グレーと色あり
+	SpriteRender	m_sushiGrayAll;					//寿司：グレー
+	bool			m_isShowHumberger = false;		//ハンバーガーの色あり画像を表示するかどうか
+	bool			m_isShowPizza = false;			//ピザの色あり画像を表示するかどうか
+	bool			m_isShowSushi = false;			//寿司の色あり画像を表示するかどうか
 
-	ItemState m_hamburgerState = ITEM_ALL;	//初期状態
-	ItemState m_pizzaState = ITEM_ALL;		//初期状態
-	ItemState m_sushiState = ITEM_ALL;		//初期状態
+	ItemState		m_hamburgerState = ITEM_ALL;	//初期状態
+	ItemState		m_pizzaState = ITEM_ALL;		//初期状態
+	ItemState		m_sushiState = ITEM_ALL;		//初期状態
 };
 

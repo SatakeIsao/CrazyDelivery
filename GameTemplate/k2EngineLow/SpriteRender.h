@@ -81,6 +81,9 @@ namespace nsK2EngineLow
 			return m_sprite.GetMulColor();
 		}
 
+		//í«â¡
+		//void SetTexture(const std::string& filePath);
+
 		//çXêVèàóù
 		void Update()
 		{
@@ -103,6 +106,7 @@ namespace nsK2EngineLow
 	public:
 	private:
 		Sprite m_sprite;
+		//Texture m_texture;
 		Vector3 m_position = Vector3::Zero;
 		Vector3 m_scale = Vector3::One;
 		Quaternion m_rotation = Quaternion::Identity;

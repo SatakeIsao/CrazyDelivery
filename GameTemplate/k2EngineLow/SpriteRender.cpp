@@ -22,6 +22,13 @@ namespace nsK2EngineLow {
 		m_sprite.Init(initData);
 	}
 
+	/*void SpriteRender::SetTexture(const std::string& filePath)
+	{
+		if (m_texture.InitFromMemory(filePath.c_str())) {
+
+		}
+	}*/
+
 	void SpriteRender::Draw(RenderContext& rc)
 	{
 		g_renderingEngine->AddSpriteRenderObject(this);
