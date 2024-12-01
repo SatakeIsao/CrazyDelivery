@@ -30,6 +30,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	m_renderingEngine.Init();
 	g_renderingEngine = &m_renderingEngine;
 
+	CollisionObjectManager m_collisionObjectManager;
+	g_collisionObjectManager = &m_collisionObjectManager;
+
 	Game* game = NewGO<Game>(0);
 
 	// ここからゲームループ。
