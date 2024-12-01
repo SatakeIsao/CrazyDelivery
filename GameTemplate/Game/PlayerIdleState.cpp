@@ -27,7 +27,8 @@ namespace nsPlayer
 
 	IPlayerState* PlayerIdleState::StateChange()
 	{
-		if (g_pad[0]->GetLStickYF() != 0.000f )
+		if(g_pad[0]->IsTrigger(enButtonB))
+		//if (g_pad[0]->GetLStickYF() != 0.000f )
 		{
 			//スタートランステートに遷移する
 			return new PlayerStartState(m_player);
