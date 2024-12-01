@@ -18,6 +18,7 @@ namespace nsK2EngineLow {
 	class RenderingEngine;
 	class Shadow;
 	class Bloom;
+	class CollisionObjectManager;
 	//
 	class K2EngineLow {
 	public:
@@ -232,6 +233,7 @@ namespace nsK2EngineLow {
 	extern RenderingEngine* g_renderingEngine;
 	extern Shadow* g_shadow;
 	extern Bloom* g_bloom;
+	extern CollisionObjectManager* g_collisionObjectManager;
 	//
 }
 

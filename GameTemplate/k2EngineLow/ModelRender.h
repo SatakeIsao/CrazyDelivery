@@ -90,6 +90,7 @@ namespace nsK2EngineLow
 		{
 			m_rotation = rot;
 		}
+		
 
 		/// <summary>
 		/// ÉTÉCÉYê›íË

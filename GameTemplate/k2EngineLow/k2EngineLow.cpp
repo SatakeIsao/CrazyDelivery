@@ -9,6 +9,7 @@ namespace nsK2EngineLow {
 	//追加したコード
 	SceneLight* g_sceneLight = nullptr;
 	RenderingEngine* g_renderingEngine = nullptr;
+	CollisionObjectManager* g_collisionObjectManager = nullptr;
 	//
 	K2EngineLow::~K2EngineLow()
 	{
@@ -18,6 +19,7 @@ namespace nsK2EngineLow {
 		//追加したコード
 		g_sceneLight = nullptr;
 		g_renderingEngine = nullptr;
+		g_collisionObjectManager = nullptr;
 		//
 		delete m_graphicsEngine;
 		
@@ -31,6 +33,7 @@ namespace nsK2EngineLow {
 	void K2EngineLow::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeight)
 	{
 		//追加した
+		//g_collisionObjectManager = new CollisionObjectManager;
 		//g_renderingEngine = new RenderingEngine;
 		//raytracing::InitData raytracintInitData;
 		//raytracintInitData.m_expandShaderResource = &g_renderingEngine->GetRaytracingLightData();

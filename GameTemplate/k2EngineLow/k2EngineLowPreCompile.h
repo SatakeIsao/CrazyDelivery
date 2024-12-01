@@ -111,6 +111,8 @@ static const int MAX_BONE = 512;	// ƒ{[ƒ“‚ÌÅ‘å”B
 #include "gameObject/GameObjectManager.h"
 #include "gameObject/IGameObject.h"
 
+#include "CollisionObject.h"
+
 #include <windows.h>
 #include <xaudio2.h>
 #include <x3daudio.h>
