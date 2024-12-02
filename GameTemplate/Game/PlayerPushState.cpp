@@ -22,14 +22,17 @@ namespace nsPlayer
 	{
 		//再生するアニメーションを設定
 		m_player->SetAnimation(Player::enAnimClip_Push, 1.0f);
+		//m_player->PlaySetAnimationSpeed(2.0f);
 	}
 
 	IPlayerState* PlayerPushState::StateChange()
 	{
 		//アニメーションの再生が終わったら
-		if (m_player->GetIsPlayingAnimation() == false
-			|| g_pad[0]->GetLStickYF() == 0.000f)
+		if (m_player->GetIsPlayingAnimation() == false)
+		//if (m_player->GetIsPlayingAnimation() == false
+		//	|| g_pad[0]->GetLStickYF() == 0.000f)
 		{
+			//m_player->PlaySetAnimationSpeed(1.0f);
 			//スタートステートに遷移する
 			return new PlayerRunState(m_player);
 		}
@@ -38,12 +41,14 @@ namespace nsPlayer
 		{
 			m_player->SetDriftTime(m_player->GetDriftTime());
 			m_player->SetRotation(m_player->GetRotation());
+			//m_player->PlaySetAnimationSpeed(1.0f);
 			return new PlayerDriftState(m_player);
 		}
 
 		if (g_pad[0]->IsTrigger(enButtonA))
 		{
 			//player->SetJump();
+			//m_player->PlaySetAnimationSpeed(1.0f);
 			return new PlayerJumpState(m_player);
 		}
 
