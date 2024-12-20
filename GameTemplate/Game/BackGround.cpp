@@ -20,10 +20,11 @@ bool BackGround::Start()
 
 void BackGround::Init()
 {
-	m_position.Set(0.0f,0.0f,0.0f);
-	m_bgModel.Init("Assets/stageData/map/map8.tkm",0,0,enModelUpAxisY,false);
+	//背景モデルの初期化
+	m_bgModel.Init("Assets/stageData/map/map_1218.tkm", 0, 0, enModelUpAxisY, false);
 	m_bgModel.SetPosition(m_position);
-	m_bgModel.SetScale(0.6f);
+	m_bgModel.SetRotation(m_rotation);
+	m_bgModel.SetScale(m_scale);
 	m_bgModel.Update();
 
 	//静的物理オブジェクトを作成
