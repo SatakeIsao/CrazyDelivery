@@ -52,6 +52,11 @@ namespace nsK2EngineLow
 		{
 			return m_scale;
 		}
+		//‰ñ“]‚ğæ“¾
+		const Quaternion& GetRotation() const
+		{
+			return m_rotation;
+		}
 
 		//‰ñ“]‚ğİ’è
 		void SetRotation(const Quaternion& rot)
