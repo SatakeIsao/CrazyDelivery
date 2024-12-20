@@ -40,6 +40,7 @@ namespace nsPlayer
 		/// ステートにおける更新処理
 		/// </summary>
 		void Update() override;
+		
 	};
 }
 

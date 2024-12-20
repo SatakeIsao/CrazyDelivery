@@ -323,6 +323,21 @@ namespace nsPlayer
 		}
 	}
 
+	void Player::CollisionPoint()
+	{
+		//背景のコリジョンの配列を取得する
+		const auto& shopHamburgerCollision = g_collisionObjectManager->FindCollisionObjects("player");
+		//コリジョンの配列をfor文で回す
+		for (auto collision : shopHamburgerCollision) {
+			//コリジョンとキャラコンが衝突したら
+			if (collision->IsHit(m_charaCon))
+			{
+				m_velocity = Vector3::Zero;
+				//return true;
+			}
+		}
+	}
+
 
 
 

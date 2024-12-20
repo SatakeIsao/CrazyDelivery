@@ -3,6 +3,7 @@
 #include "PlayerStartState.h"
 #include "PlayerPushState.h"
 
+
 namespace
 {
 
@@ -30,6 +31,7 @@ namespace nsPlayer
 		if(g_pad[0]->IsTrigger(enButtonB))
 		//if (g_pad[0]->GetLStickYF() != 0.000f )
 		{
+			//m_game->SetState(m_game->enStartUIState_AlphaZero);
 			//スタートランステートに遷移する
 			return new PlayerStartState(m_player);
 		}

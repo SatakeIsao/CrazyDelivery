@@ -1,6 +1,8 @@
 #pragma once
 
 class BackGround;
+class Point;
+class ShopHamburger;
 
 namespace
 {
@@ -51,6 +53,7 @@ namespace nsPlayer
 		void CheckSpeedFromMovement();
 		void CheckCollisionWithWall();
 		void ApplySpeedLimit();
+		void CollisionPoint();
 		//void SetBackGround(BackGround* background);
 		//void Jump();
 		
@@ -290,7 +293,11 @@ namespace nsPlayer
 			return m_acceleTime;
 		}
 
-		
+		CharacterController& GetCharacterController()
+		{
+			return m_charaCon;
+		}
+
 	private:
 		ModelRender			m_playerModel;								//プレイヤーモデル
 		ModelRender			m_boardModel;								//ボードモデル
@@ -347,8 +354,10 @@ namespace nsPlayer
 		Vector3				m_reflection= Vector3::Zero;
 
 		BackGround*			m_backGround = nullptr;
+		//Point* m_point = nullptr;
 
 	protected:
 		CCapsuleCollider	m_capsuleCollider;							//遮蔽物確認用のコライダー
+
 	};
 }
