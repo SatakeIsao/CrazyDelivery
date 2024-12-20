@@ -224,10 +224,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="CustomerMan.cpp" />
+    <ClCompile Include="CustomerManFailureState.cpp" />
+    <ClCompile Include="CustomerManHandState.cpp" />
+    <ClCompile Include="CustomerManHappyState.cpp" />
+    <ClCompile Include="CustomerManIdleState.cpp" />
+    <ClCompile Include="CustomerMan_Hamburger.cpp" />
+    <ClCompile Include="CustomerMan_Pizza.cpp" />
+    <ClCompile Include="CustomerMan_Sushi.cpp" />
+    <ClCompile Include="CustomerUI.cpp" />
+    <ClCompile Include="CustomerWoman.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
+    <ClCompile Include="GameTimer.cpp" />
+    <ClCompile Include="ICustomerManState.cpp" />
+    <ClCompile Include="InventoryUI.cpp" />
     <ClCompile Include="IPlayerState.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MakeEffect.cpp" />
+    <ClCompile Include="MapUI.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerDriftState.cpp" />
     <ClCompile Include="PlayerIdleState.cpp" />
@@ -236,6 +251,10 @@
     <ClCompile Include="PlayerPushState.cpp" />
     <ClCompile Include="PlayerRunState.cpp" />
     <ClCompile Include="PlayerStartState.cpp" />
+    <ClCompile Include="ShopHamburger.cpp" />
+    <ClCompile Include="ShopPizza.cpp" />
+    <ClCompile Include="ShopSushi.cpp" />
+    <ClCompile Include="StartButtonUI.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -245,9 +264,24 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
+    <ClInclude Include="CustomerMan.h" />
+    <ClInclude Include="CustomerManFailureState.h" />
+    <ClInclude Include="CustomerManHandState.h" />
+    <ClInclude Include="CustomerManHappyState.h" />
+    <ClInclude Include="CustomerManIdleState.h" />
+    <ClInclude Include="CustomerMan_Hamburger.h" />
+    <ClInclude Include="CustomerMan_Pizza.h" />
+    <ClInclude Include="CustomerMan_Sushi.h" />
+    <ClInclude Include="CustomerUI.h" />
+    <ClInclude Include="CustomerWoman.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
+    <ClInclude Include="GameTimer.h" />
+    <ClInclude Include="ICustomerManState.h" />
+    <ClInclude Include="InventoryUI.h" />
     <ClInclude Include="IPlayerState.h" />
+    <ClInclude Include="MakeEffect.h" />
+    <ClInclude Include="MapUI.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerDriftState.h" />
     <ClInclude Include="PlayerIdleState.h" />
@@ -256,6 +290,10 @@
     <ClInclude Include="PlayerPushState.h" />
     <ClInclude Include="PlayerRunState.h" />
     <ClInclude Include="PlayerStartState.h" />
+    <ClInclude Include="ShopHamburger.h" />
+    <ClInclude Include="ShopPizza.h" />
+    <ClInclude Include="ShopSushi.h" />
+    <ClInclude Include="StartButtonUI.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
   </ItemGroup>
