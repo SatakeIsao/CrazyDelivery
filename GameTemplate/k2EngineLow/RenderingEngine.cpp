@@ -157,7 +157,8 @@ namespace nsK2EngineLow {
 
 		//モデルの描画
 		ModelDraw(rc);
-
+		//エフェクトの描画
+		EffectEngine::GetInstance()->Draw();
 		//レンダリングターゲットへの書き込み終了待ち
 		rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderingTarget);
 
