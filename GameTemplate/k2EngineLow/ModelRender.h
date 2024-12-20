@@ -6,6 +6,7 @@
 #include "Shadow.h"
 namespace nsK2EngineLow
 {
+	//class RenderingEngine;
 	class ModelRender : public IRenderer
 	{
 	public:
@@ -61,6 +62,14 @@ namespace nsK2EngineLow
 		//	const char* tkmFilePath,
 		//	EnModelUpAxis enModelUpAxis);
 		void Update();
+		/// <summary>
+		/// インスタンシングデータの更新
+		/// </summary>
+		/// <param name="instanceNo">インスタンス番号</param>
+		/// <param name="pos">座標</param>
+		/// <param name="rot">回転</param>
+		/// <param name="scale">拡大率</param>
+		//void UpdateInstancingData(int instanceNo, const Vector3& pos, const Quaternion& rot, const Vector3& scale);
 		//描画処理
 		void Draw(RenderContext& rc);
 		
@@ -260,6 +269,16 @@ namespace nsK2EngineLow
 		StructuredBuffer m_worldMatrixArraySB; //ワールド行列の配列のストラクチャードバッファ
 		bool m_isShadowCaster = false;		   //シャドウキャスターフラグ
 		bool m_doCulling = true;			   //カリングするかどうか
+
+		int							m_maxInstance = 1;					// 最大インスタンス数。
+		Model						m_translucentModel;					// 半透明モデル。
+		Model						m_zprepassModel;					// ZPrepassで描画されるモデル
+		int							m_numInstance = 0;					// インスタンスの数。
+
+
+
+		std::unique_ptr<Matrix[]>	m_worldMatrixArray;					// ワールド行列の配列。
+		std::unique_ptr<int[]>		m_instanceNoToWorldMatrixArrayIndexTable;	// インスタンス番号からワールド行列の配列のインデックスに変換するテーブル。
 	};
 }
 
