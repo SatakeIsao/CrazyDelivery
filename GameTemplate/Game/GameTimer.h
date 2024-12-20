@@ -3,6 +3,13 @@
 class GameTimer : public IGameObject
 {
 public:
+	enum GameTimerSetPos
+	{
+		POS_OUTSIDE,
+		POS_INSIDE,
+		POS_SLIDE,
+	};
+
 	enum GameTimerMinuteState
 	{
 		MINUTE_0,
@@ -39,10 +46,12 @@ public:
 
 	bool Start();
 	void Update();
+	//void GameTimerOutSide();
 	void GameTimerInit();
 	void IncreaseTimer();
 	void GameTimerSpriteSet();
 	void UpdateTimerSprites();
+	void NextGameTimerPosState();
 	void NextMinuteState();
 	void NextSecondLeftState();
 	void NextSecondRightState();
@@ -84,10 +93,13 @@ private:
 	SpriteRender m_secondRight9;
 	//Game* m_game = nullptr;
 
+	Vector3 m_timerPosition = Vector3(-80.0f, 580.0f, 0.0f);
 	int m_minute = 3.0f;	//タイマーの分数
 	float m_second = 0.0f;	//タイマーの秒数
 	float m_time = 180.0f;
+	bool  m_isTimerSterted = false;
 
+	GameTimerSetPos		 m_setPosState = POS_OUTSIDE;
 	GameTimerMinuteState m_minState = MINUTE_3;
 	GameTimerSecondLeft  m_secLeftState = SECOND_LEFT_0;
 	GameTimerSecondRight m_secRightState = SECOND_RIGHT_0;

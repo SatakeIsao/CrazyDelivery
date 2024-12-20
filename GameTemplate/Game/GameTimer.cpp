@@ -26,6 +26,43 @@ bool GameTimer::Start()
 
 void GameTimer::Update()
 {
+	if (g_pad[0]->IsTrigger(enButtonB)) {
+		//次の座標状態に変更
+		NextGameTimerPosState();
+	}
+
+	//状態に基づいて座標を更新
+	if (m_setPosState == POS_SLIDE) {
+		//Y軸を減少させて下にスライド
+		if (m_timerPosition.y > 380.0f) {
+			//スライド速度
+			m_timerPosition.y -= 5.0f;
+		}
+		else {
+			//スライド完了時に状態を更新
+			m_setPosState = POS_INSIDE;
+			//タイマー開始フラグを設定
+			m_isTimerSterted = true;
+		}
+	}
+
+	//タイマーを更新
+	if (m_isTimerSterted ==  true) {
+		//タイマーをカウントダウン
+		IncreaseTimer();
+	}
+
+	m_timerSprite3.SetPosition(m_timerPosition);
+	m_timerSprite3.Update();
+
+	m_timerColon.SetPosition(Vector3(m_timerPosition.x +40.0f, m_timerPosition.y, 0.0f));
+	m_timerColon.Update();
+
+	m_secondsLeft0.SetPosition(Vector3(m_timerPosition.x + 80.0f, m_timerPosition.y, 0.0f));
+	m_secondsLeft0.Update();
+
+	m_secondRight0.SetPosition(Vector3(m_timerPosition.x + 130.0f, m_timerPosition.y, 0.0f));
+	m_secondRight0.Update();
 	//タイマーを更新
 	//IncreaseTimer();
 	//スプライトを時間に応じて更新
@@ -44,6 +81,8 @@ void GameTimer::Update()
 	//秒数（右側）スプライトの更新
 	//m_secondRight.Update();
 }
+
+
 
 void GameTimer::GameTimerInit()
 {
@@ -239,6 +278,22 @@ void GameTimer::UpdateTimerSprites()
 	//m_secondRight.Init(("Assets/TimerFontData/TimerFont_" + std::to_string(secondRight) + ".DDS").c_str(), 200.0f, 200.0f);
 }
 
+void GameTimer::NextGameTimerPosState()
+{
+	switch (m_setPosState){
+	case POS_OUTSIDE:
+		//外からスライドする状態に変更
+		m_setPosState = POS_SLIDE;
+		break;
+	case POS_SLIDE:
+		//完全にスライドし終わった状態に変更
+		m_setPosState = POS_INSIDE;
+		break;
+	default:
+		break;
+	}
+}
+
 
 
 void GameTimer::FontSet()
@@ -259,10 +314,13 @@ void GameTimer::FontSet()
 
 void GameTimer::Render(RenderContext& rc)
 {
-	m_time -= g_gameTime->GetFrameDeltaTime();
-	if (m_time < 0.0f) {
-		m_time = 0.0f;
+	if (m_isTimerSterted == true) {
+		m_time -= g_gameTime->GetFrameDeltaTime();
+		if (m_time < 0.0f) {
+			m_time = 0.0f;
+		}
 	}
+	
 
 	int minutes = static_cast<int>(m_time) / 60;
 	int seconds = static_cast<int>(m_time) % 60;
