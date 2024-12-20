@@ -1,6 +1,7 @@
 #pragma once
 #include "Player.h"
 #include "GameCamera.h"
+#include "Game.h"
 
 /// <summary>
 /// プレイヤーの名前空間
@@ -20,7 +21,7 @@ namespace nsPlayer
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="player">プレイヤー</param>
-		IPlayerState(Player*player):m_player(player){}
+		IPlayerState(Player *player):m_player(player){}
 
 		/// <summary>
 		/// デストラクタ
@@ -46,6 +47,7 @@ namespace nsPlayer
 	protected:
 		Player* m_player = nullptr; //プレイヤー
 		GameCamera* m_gameCamera = nullptr; //ゲームカメラ
+		Game* m_game = nullptr;
 	};
 
 
