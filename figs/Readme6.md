@@ -6,6 +6,9 @@
 >
 >  <dt>GitHubのURL</dt>
 >  <dd>https://github.com/SatakeIsao/CrazyDelivery</dd> 
+>
+>  <dt>YouTubeのURL</dt>
+>  <dd>https://youtu.be/15Zs_lyXw1c</dd>
 
 
 # 目次
@@ -15,15 +18,15 @@
 - [担当ソースコード](#担当ソースコード)
 - [操作説明](#操作説明)
 - [ゲーム説明](#ゲーム説明)
-  - [◇ゲーム詳細](#ゲーム詳細)
-  - [◇プレイヤーについて](#プレイヤーについて)
-    - [①スケートボードの挙動](#スケートボードの挙動)
-    - [②壁との衝突時](#壁との衝突時)
-  - [◇UIについて](#uiについて)
-    - [①インベントリーについて](#インベントリーについて)
-    - [②ゲーム開始が「PressB」である理由](#ゲーム開始がpressbである理由)
-  - [◇ミニマップについて](#ミニマップについて)
-  - [◇お店とお客さんのUI表示/非表示を距離で切り替えている理由](#お店とお客さんのui表示非表示を距離で切り替えている理由)
+  - [◇ゲーム詳細](#game)
+  - [◇プレイヤーについて](#player)
+    - [①スケートボードの挙動](#player1)
+    - [②壁との衝突時](#player2)
+  - [◇UIについて](#UI)
+    - [①インベントリーについて](#UI1)
+    - [②ゲーム開始が「PressB」である理由](#UI2)
+  - [◇ミニマップについて](#map)
+  - [◇お店とお客さんのUI表示/非表示を距離で切り替えている理由](#show)
 
 <br />
 
@@ -101,6 +104,7 @@
 * InventoryUI.cpp
 * InventoryUI.h
 * IPlayerState.h
+* main.cpp
 * MakeEffect.cpp
 * MakeEffect.h
 * MapUI.cpp
@@ -185,11 +189,9 @@
   * debugWireFrame.fx
   * gaussianBlur.fx
   * model.fx
-  * ModelVSCommon.h
   * PostEffect.fx
   * sample2D.fx
   * sampleDrawShadowMap.fx
-  * Shadowing.h
   * shadowReceiverModel.fx
   * skyCube.fx
   * sprite.fx
