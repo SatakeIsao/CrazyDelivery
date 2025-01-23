@@ -1,144 +1,207 @@
 #include "stdafx.h"
 #include "CustomerMan_Hamburger.h"
 #include "Game.h"
-
+#include "ResultUI.h"
+#include "InventoryUI.h"
+#include "GameSound.h"
 namespace
 {
-	//リセットタイムのしきい値
-	const float RESET_TIME_THRESHOLD = 3.0f;
-	//ハンバーガーを届けた時の報酬
-	const int	REWARD_HAMBURGER = 150.0f;
+
+	const float RESET_TIME_THRESHOLD = 3.0f;				//リセットタイムのしきい値
+	const int	REWARD_HAMBURGER = 150.0f;					//ハンバーガーを届けた時の報酬
+	const float MAX_RENDER_DISTANCE = 2000.0f;				//プレイヤーとお客さんの最大距離
+	const float CAMERA_VIEW_ANGLE = Math::DegToRad(50.0f);	//カメラの視野角
+	const float EFFECT_COOL_TIME = 2.0f;					//エフェクト再生間隔
+	const float UI_HEIGHT_OFFSET = 100.0f;					//UIのY軸オフセット
+	const float EFFECT_Y_OFFSET = 10.0f;					//エフェクトのY軸オフセット
 }
 
-namespace nsCustomerMan
+CustomerMan_Hamburger::CustomerMan_Hamburger()
 {
-	void CustomerMan_Hamburger::Init()
-	{
-		m_rotation.SetRotationDegZ(0.0f);
-		m_customerMan_Hamburger.Init("Assets/Customer/Man2/human.tkm", m_manAnimClips, enAnimClip_Num);
-		//m_customerMan.Init("Assets/Customer/Man2/man.tkm");
-		m_customerMan_Hamburger.SetPosition(m_position);
-		m_customerMan_Hamburger.SetRotation(m_rotation);
-		m_customerMan_Hamburger.SetScale(m_scale);
-		m_customerMan_Hamburger.Update();
-		//お客さんの頭上に表示するUI
-		m_customerUI.Init("Assets/Customer/UI/CustomerHamburger.DDS",224,126);
+}
 
-		m_customerMan = &m_customerMan_Hamburger;
-	}
-	void CustomerMan_Hamburger::CollisionPlayerPoint()
+CustomerMan_Hamburger::~CustomerMan_Hamburger()
+{
+	DeleteGO(m_collision);
+}
+
+
+void CustomerMan_Hamburger::Init()
+{
+	//初期回転を設定
+	m_rotation.SetRotationDegZ(0.0f);
+
+	//モデルの初期化
+	m_customerMan_Hamburger.Init("Assets/Customer/Man2/human.tkm", m_manAnimClips, enAnimClip_Num);
+	m_customerMan_Hamburger.SetPosition(m_position);
+	m_customerMan_Hamburger.SetRotation(m_rotation);
+	m_customerMan_Hamburger.SetScale(m_scale);
+	m_customerMan_Hamburger.Update();
+
+	//お客さんの頭上に表示するUI
+	m_customerUI.Init("Assets/Customer/UI/CustomerHamburger.DDS",224,150);
+	m_customerUI_Thank.Init("Assets/skaterData/PlayerUI_Thank2.dds", 1920, 1080);
+	m_customerMan = &m_customerMan_Hamburger;
+}
+void CustomerMan_Hamburger::CollisionPlayerPoint()
+{
+	//コリジョンとキャラコンが衝突したら
+	if (m_collision->IsHit(m_player->GetCharacterController()))
 	{
-		//コリジョンとキャラコンが衝突したら
-		if (m_collision->IsHit(m_player->GetCharacterController()))
+		//衝突可能かつ、ハンバーガを持っている場合
+		if (m_inventoryUI->GetIsHasHamburger() 
+			&&  m_isHasCollided_Man == false)
 		{
-			if (m_inventoryUI->GetIsHasHamburger() &&  m_isHasCollided_Man == false)
-			{
-				m_inventoryUI->PreviousHamburgerState();
-				m_isHasCollided_Man = true;
-				m_isScoreAdded = true;
-				m_game->ScoreAdded(REWARD_HAMBURGER);
-				//m_isScoreAdded = true;
-				//m_hamburgerScore += REWARD_HAMBURGER;
-				m_scoreResetTimer = 0.0f;
-			}
-		}
-		else {
-			m_isHasCollided_Man = false;
-			m_isScoreAdded = false;
-			//m_hamburgerScore = 0.0f;
+			m_inventoryUI->PreviousHamburgerState();
+			m_isHasCollided_Man = true;	//衝突フラグを立てる
+			m_isScoreAdded = true;
+			m_scoreResetTimer = RESET_TIME_THRESHOLD; //リセットタイマーを設定
+			//スコアの追加
+			m_resultUI->ScoreAdded(REWARD_HAMBURGER);
+			
+			//プレイヤーの速度をゼロにリセット（ブレーキ）
+			m_player->SetBrake();
 		}
 	}
+	else {
+		//衝突が解消された場合
+		m_isHasCollided_Man = false;
+		m_isScoreAdded = false;
+		m_isSoundPlayed = false;
+	}
+}
 
-	bool CustomerMan_Hamburger::CalcAngle()
+bool CustomerMan_Hamburger::CalcAngle()
+{
+	//カメラからお客さんの位置へのベクトルを求める
+	Vector3 toCustomerHamburger = m_position - g_camera3D->GetPosition();
+	toCustomerHamburger.Normalize();
+
+	//カメラの前向きとカメラからお客さんへのベクトルの内積を求める
+	float angle = g_camera3D->GetForward().Dot(toCustomerHamburger);
+
+	//内積の結果から角度を求める
+	angle = acos(angle);
+	//カメラから見てお客さんが一定角度以内の時
+	if (fabsf(angle) <= CAMERA_VIEW_ANGLE)
 	{
-		//カメラからお客さんの位置へのベクトルを求める
-		Vector3 toCustomerHamburger = m_position - g_camera3D->GetPosition();
-		toCustomerHamburger.Normalize();
-
-		//カメラの前向きとカメラからお客さんへのベクトルの内積を求める
-		float angle = g_camera3D->GetForward().Dot(toCustomerHamburger);
-
-		//内積の結果から角度を求める
-		angle = acos(angle);
-		//カメラから見てお客さんが一定角度以内の時
-		if (fabsf(angle) <= Math::DegToRad(50.0f))
+		//プレイヤーとお客さんの距離を求める
+		Vector3 diff = m_position - m_player->GetPostion();
+		//一定距離以内だったら
+		if (diff.Length() <= MAX_RENDER_DISTANCE)
 		{
-			//プレイヤーとお客さんの距離を求める
-			Vector3 diff = m_position - m_player->GetPostion();
-			//一定距離以内だったら
-			if (diff.Length() <= 2000.0f)
-			{
-				//描画する
-				return true;
-			}
+			//描画する
+			return true;
 		}
-		//描画しない
-		return false;
 	}
+	//描画しない
+	return false;
+}
 
-	void CustomerMan_Hamburger::CoolTime()
+void CustomerMan_Hamburger::CoolTime()
+{
+	// OnUpdateでリセット判定
+	if (m_scoreResetTimer > 0.0f)
 	{
-		// OnUpdateでリセット判定
-		if (m_isHamburgerScoreAdded)
+		m_scoreResetTimer -= g_gameTime->GetFrameDeltaTime();
+		if (m_scoreResetTimer < 0.0f)
 		{
-			m_scoreResetTimer += g_gameTime->GetFrameDeltaTime();
-			if (m_scoreResetTimer > RESET_TIME_THRESHOLD) // 3秒後にリセット
-			{
-				m_isHamburgerScoreAdded = false;
-				m_scoreResetTimer = 0.0f; // タイマーをリセット
-			}
+			m_scoreResetTimer = 0.0f;	//タイマーをリセット
 		}
 	}
+}
 
-	void CustomerMan_Hamburger::EffectCoolTime()
+void CustomerMan_Hamburger::EffectCoolTime()
+{
+	//クールタイムの経過時間を更新
+	m_effectCoolTimer += g_gameTime->GetFrameDeltaTime();
+	//衝突していない場合
+	if (m_isHasCollided_Man == false)
 	{
-		//クールタイムの経過時間を更新
-		m_effectCoolTimer += g_gameTime->GetFrameDeltaTime();
-		//3秒経過したらエフェクトを再生
-		if (m_effectCoolTimer >= 2.0f)
+		//2秒経過したらエフェクトを再生
+		if (m_effectCoolTimer >= EFFECT_COOL_TIME)
 		{
 			Vector3 effectPosition = m_position;
-			effectPosition.y += 10.0f;
-			PlayEffect(enEffectName_CustomerHamburger, effectPosition, m_rotation, m_effectScale);
+			effectPosition.y += EFFECT_Y_OFFSET;
+			//エフェクトを再生
+			PlayEffect(enEffectName_CustomerPizza, effectPosition, m_rotation, m_effectScale);
 			//タイマーをリセット
 			m_effectCoolTimer = 0.0f;
 		}
+	}		
+}
+
+void CustomerMan_Hamburger::OnUpdate()
+{
+		
+	//エフェクトのクール時間
+	EffectCoolTime();
+	//クール時間
+	CoolTime();
+	//プレイヤーとの衝突判定
+	CollisionPlayerPoint();
+	//プレイヤーの前方向にお客さんを向ける
+	if (CalcAngle())
+	{
+		//プレイヤーの前方向を取得
+		Vector3 playerForward = m_player->GetForward();
+		playerForward.y = 0.0f; //Y軸方向の影響を除外
+		playerForward.Normalize();
+
+		//プレイヤーのY軸回転角度を取得
+		float playerAngleY = atan2(playerForward.x, playerForward.z);
+		float customerAngleY = playerAngleY + Math::PI; //180度反転
+
+		//プレイヤーの回転をそのまま適用
+		m_rotation.SetRotationY(customerAngleY);
 	}
 
-	void CustomerMan_Hamburger::OnUpdate()
+	//お客さん（男性）モデルの更新
+	m_customerMan_Hamburger.SetPosition(m_position);
+	m_customerMan_Hamburger.SetRotation(m_rotation);
+	m_customerMan_Hamburger.SetScale(m_scale);
+	m_customerMan_Hamburger.Update();
+
+	//オブジェクトの上の方に画像を表示したいのでY軸を少し上げる
+	Vector3 position = m_position;
+	position.y += UI_HEIGHT_OFFSET;
+	//ワールド座標からスクリーン座標を計算
+	g_camera3D->CalcScreenPositionFromWorldPosition(m_customerUIPos, position);
+	m_customerUI.SetPosition(Vector3(m_customerUIPos.x, m_customerUIPos.y, 0.0f));
+	m_customerUI.Update();
+	m_customerUI_Thank.SetPosition(Vector3(m_customerUIPos.x, m_customerUIPos.y, 0.0f));
+	m_customerUI_Thank.Update();
+}
+
+void CustomerMan_Hamburger::Render(RenderContext& rc)
+{
+	//お客さん（男性）モデルの更新
+	m_customerMan_Hamburger.Draw(rc);
+
+	//描画範囲外の場合は描画しない
+	if (CalcAngle() == false)
 	{
-		//エフェクトのクール時間
-		EffectCoolTime();
-		//クール時間
-		CoolTime();
-		//プレイヤーとの衝突判定
-		CollisionPlayerPoint();
-
-		m_customerMan_Hamburger.SetPosition(m_position);
-		m_customerMan_Hamburger.SetRotation(m_rotation);
-		m_customerMan_Hamburger.SetScale(m_scale);
-		m_customerMan_Hamburger.Update();
-
-		//オブジェクトの上の方に画像を表示したいのでY軸を少し上げる
-		Vector3 position = m_position;
-		position.y += 100.0f;
-		//ワールド座標からスクリーン座標を計算
-		g_camera3D->CalcScreenPositionFromWorldPosition(m_customerUIPos, position);
-		m_customerUI.SetPosition(Vector3(m_customerUIPos.x, m_customerUIPos.y, 0.0f));
-		m_customerUI.Update();
-		//m_customerMan_Hamburger.
-
+		return;
 	}
 
-	void CustomerMan_Hamburger::Render(RenderContext& rc)
+	//Playerと衝突したら
+	if (m_isHasCollided_Man == true)
 	{
-		m_customerMan_Hamburger.Draw(rc);
-
-		if (CalcAngle() == false)
+		m_customerUI_Thank.Draw(rc);
+			
+		if (m_isSoundPlayed==false)
 		{
-			return;
+			m_rewardGot = NewGO<SoundSource>(0);
+			m_rewardGot->Init(enSoundName_RewardGot);
+			m_rewardGot->SetVolume(1.0f);
+
+			m_rewardGot->Play(false);
+			m_isSoundPlayed = true;
 		}
-		m_customerUI.Draw(rc);
 	}
-	
+	else 
+	{
+		//通常UIの描画
+		m_customerUI.Draw(rc);
+	}		
 }
