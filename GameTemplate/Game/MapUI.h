@@ -14,7 +14,6 @@ class CustomerMan_Sushi;
 class InventoryUI;
 class ResultUI;
 class GameTimer;
-//#include "CustomerMan_Hamburger.h"
 
 
 class MapUI : public IGameObject
@@ -178,7 +177,6 @@ private:
 	std::vector<CustomerMan_Pizza*> m_customerMan_Pizza;
 	std::vector<CustomerMan_Sushi*> m_customerMan_Sushi;
 	//std::vector<CustomerMan
-	ResultUI* m_resultUI = nullptr;
 	GameTimer* m_gameTimer = nullptr;
 
 	CoolTimeSpriteData m_coolTimeSpriteData;

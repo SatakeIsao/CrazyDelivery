@@ -9,7 +9,6 @@
 #include "CustomerMan_Pizza.h"
 #include "CustomerMan_Sushi.h"
 #include "InventoryUI.h"
-#include "ResultUI.h"
 #include "GameTimer.h"
 namespace
 {
@@ -137,7 +136,6 @@ bool MapUI::Start()
 	m_customerMan_Sushi = FindGOs<CustomerMan_Sushi>("customerman_sushi");
 	auto* m_customerMan_SushiB = FindGO<CustomerMan_Sushi>("customerMan_sushiB");
 
-	m_resultUI = FindGO<ResultUI>("resultui");
 	m_gameTimer = FindGO<GameTimer>("gametimer");
 
 	return true;
@@ -494,43 +492,8 @@ const bool MapUI::WorldPosConvertToMapPos(Vector3 worldCenterPosition, Vector3 w
 	mapPosition = MAP_CENTER_POSITION;
 	mapPosition.x += diff.x;
 	mapPosition.y += diff.z;
-	//g_camera2D->CalcScreenPositionFromWorldPosition()
 	return true;
 
-	/*
-	//Y座標はマップの座標とは関係ないので、０にする
-	worldCenterPosition.y = 0.0f;
-	worldPosition.y = 0.0f;
-	Vector3 diff = worldPosition - worldCenterPosition;
-	//マップの中心とするオブジェクトとの距離が一定以上離れていたら。
-	if (diff.LengthSq() >= LIMITED_RANGE_IMAGE_X * LIMITED_RANGE_IMAGE_Z)
-	{
-		//表示しないようにする。
-		return false;
-	}
-
-	//ベクトルの長さを取得
-	float length = diff.Length();
-
-	//カメラの前方向ベクトルからクォータニオンを生成
-	Vector3 forward = g_camera3D->GetForward();
-	Quaternion rot;
-	rot.SetRotationY(atan2(-forward.x, forward.z));
-
-	//ベクトルにカメラの回転を通用
-	rot.Apply(diff);
-
-	//ベクトルを正規化
-	rot.Normalize();
-
-	//マップの大きさ/距離制限でベクトルをマップ座標系に変換
-	diff *= length * MAP_RADIUS / LIMITED_RANGE_IMAGE_Z;
-	//diff *= length * 240.0f / 600.0f;
-
-	//マップの中央座標と上記ベクトルを加算する
-	mapPosition = Vector3(MAP_CENTER_POSITION.x + diff.x,MAP_CENTER_POSITION.y + diff.z, 0.0f);
-	//mapPosition = Vector3(1000.0f + diff.x, 15500.0f + diff.z, 0.0f);
-	return true; */
 }
 
 void MapUI::Render(RenderContext& rc)
@@ -712,18 +675,7 @@ void MapUI::Render(RenderContext& rc)
 	if (IsInsideCircle(m_customerSushiSprite2.GetPosition(), mapCenter, mapRadius)) {
 		m_customerSushiSprite2.Draw(rc);
 	}
-	//m_bargerShopSprite.Draw(rc);
-	//m_bargerShopSprite2.Draw(rc);
-	//m_pizzaShopSprite.Draw(rc);
-	//m_pizzaShopSprite2.Draw(rc);
-	//m_sushiShopSprite.Draw(rc);
-	//m_sushiShopSprite2.Draw(rc);
-	//m_customerHamburgerSprite.Draw(rc);
-	//m_customerHamburgerSprite2.Draw(rc);
-	//m_customerPizzaSprite.Draw(rc);
-	//m_customerPizzaSprite2.Draw(rc);
-	//m_customerSushiSprite.Draw(rc);
-	//m_customerSushiSprite2.Draw(rc);
+
 
 	m_playerSprite.Draw(rc);
 }
