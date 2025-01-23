@@ -9,6 +9,7 @@
 #include "ShopHamburger.h"
 #include "ShopPizza.h"
 #include "ShopSushi.h"
+#include "CustomerMan.h"
 #include "CustomerMan_Hamburger.h"
 #include "CustomerMan_Pizza.h"
 #include "CustomerMan_Sushi.h"
@@ -22,47 +23,64 @@ Game::Game()
 
 Game::~Game()
 {
-	DeleteGO(m_makeEfe);
-
+	
+	//ハンバーガーショップの削除
 	std::vector<ShopHamburger*>  shopHamburger = FindGOs<ShopHamburger>("shophamburger");
 	for (auto shHamGo : shopHamburger) {
 		DeleteGO(shHamGo);
 	}
 
+	//ピザショップの削除
 	std::vector<ShopPizza*> shopPizza = FindGOs<ShopPizza>("shoppizza");
 	for (auto shPizGo : shopPizza) {
 		DeleteGO(shPizGo);
 	}
 	
+	//寿司店の削除
 	std::vector<ShopSushi*> shopSushi = FindGOs<ShopSushi>("shopsushi");
 	for (auto shSusGo : shopSushi){
 		DeleteGO(shSusGo);
 	}
 	
+	//お客さん（ハンバーガー）の削除
 	std::vector<CustomerMan_Hamburger*> customerManHam = FindGOs<CustomerMan_Hamburger>("customerman_hamburger");
 	for (auto csHamGo : customerManHam) {
 		DeleteGO(csHamGo);
 	}
 	
+	//お客さん（ピザ）の削除
 	std::vector<CustomerMan_Pizza*> customerManPiz = FindGOs<CustomerMan_Pizza>("customerman_pizza");
 	for (auto csPizGo : customerManPiz) {
 		DeleteGO(csPizGo);
 	}
 
+	//お客さん（寿司）の削除
 	std::vector<CustomerMan_Sushi*> customerManSus = FindGOs<CustomerMan_Sushi>("customerman_sushi");
 	for (auto csSusGo : customerManSus) {
 		DeleteGO(csSusGo);
 	}
 
+	//お客さん（基底クラス）の削除
 	DeleteGO(m_customerMan);
+	//プレイヤーの削除
 	DeleteGO(m_player);
+	//エフェクトの削除
+	DeleteGO(m_makeEfe);
+	//背景の削除
 	DeleteGO(m_backGround);
+	//ゲームカメラの削除
 	DeleteGO(m_gameCamera);
+	//ゲームタイマーの削除
 	DeleteGO(m_gameTimer);
+	//インベントリーUIの削除
 	DeleteGO(m_inventoryUI);
+	//マップUIの削除
 	DeleteGO(m_mapUI);
+	//スタートボタンUIの削除
 	DeleteGO(m_startButtonUI);
+	//リザルトUIの削除
 	DeleteGO(m_resultUI);
+	//ゲームインフォメーションの削除
 	DeleteGO(m_gameInfo);
 	
 }
@@ -71,11 +89,11 @@ bool Game::Start()
 {
 	//エフェクトの初期化
 	m_makeEfe = NewGO<MakeEffect>(0, "makeeffect");
+	//レベルの初期化
 	m_levelRender.Init("Assets/stageData/map/map24.tkl",
 	[&](LevelObjectData_Render& objData)
 	{
-		
-		//ハンバーガー店
+		//ハンバーガーショップの生成
 		if (objData.ForwardMatchName(L"DummyHamburger") == true)
 		{
 			//std::vector<ShopHamburger*> ins = FindGOs<ShopHamburger>("shophamburger");
@@ -87,7 +105,7 @@ bool Game::Start()
 	
 			return true;
 		}
-		//ピザ店
+		//ピザショップの生成
 		else if (objData.ForwardMatchName(L"DummyPizza") == true)
 		{
 			ShopPizza* shopPizza = NewGO<ShopPizza>(0, "shoppizza");
@@ -96,7 +114,7 @@ bool Game::Start()
 			shopPizza->SetScale(objData.scale);
 			return true;
 		}
-		//寿司店
+		//寿司店の生成
 		else if (objData.ForwardMatchName(L"DummySushi") == true)
 		{
 			ShopSushi* shopSushi = NewGO<ShopSushi>(0, "shopsushi");
@@ -106,7 +124,6 @@ bool Game::Start()
 			return true;
 		}
 		
-		
 		//ハンバーガー待ちのお客さん
 		else if (objData.ForwardMatchName(L"DummyManHamburger") == true)
 		{
@@ -115,47 +132,12 @@ bool Game::Start()
 			customerHamburger->SetRotation(objData.rotation);
 			customerHamburger->SetGamePointer(this);
 
-			////乱数を生成
-			//int randomChoice = rand() % 2;
-
-			//if (randomChoice == 0 && objData.EqualObjectName(L"DummyManHamburger001") == true)
-			//{
-			//	m_customerMan_Hamburger = NewGO<nsCustomerMan::CustomerMan_Hamburger>(0, "customerman_hamburger");
-			//	m_customerMan_Hamburger->SetPosition(objData.position);
-			//	m_customerMan_Hamburger->SetRotation(objData.rotation);
-			//}
-			//else if(randomChoice == 1 && objData.EqualObjectName(L"DummyManHamburger002") == true)
-			//{
-			//	m_customerMan_Hamburger = NewGO<nsCustomerMan::CustomerMan_Hamburger>(0, "customerman_hamburger");
-			//	m_customerMan_Hamburger->SetPosition(objData.position);
-			//	m_customerMan_Hamburger->SetRotation(objData.rotation);
-			//}
-			
-
 			return true;
 		}
-
 
 		//ピザ待ちのお客さん
 		else if (objData.ForwardMatchName(L"DummyManPizza") == true)
 		{
-			////乱数を生成
-			//int randomChoice = rand() % 2;
-
-			//if (randomChoice == 0 && objData.EqualObjectName(L"DummyManPizza001") == true)
-			//{
-			//	m_customerMan_Pizza = NewGO<nsCustomerMan::CustomerMan_Pizza>(0, "customerman_pizza");
-			//	m_customerMan_Pizza->SetPosition(objData.position);
-			//	m_customerMan_Pizza->SetRotation(objData.rotation);
-			//}
-			//else if (randomChoice == 1 && objData.EqualObjectName(L"DummyManPizza002") == true)
-			//{
-			//	m_customerMan_Pizza = NewGO<nsCustomerMan::CustomerMan_Pizza>(0, "customerman_pizza");
-			//	m_customerMan_Pizza->SetPosition(objData.position);
-			//	m_customerMan_Pizza->SetRotation(objData.rotation);
-			//}
-
-
 			CustomerMan_Pizza* customerPizza = NewGO<CustomerMan_Pizza>(0, "customerman_pizza");
 			customerPizza->SetPosition(objData.position);
 			customerPizza->SetRotation(objData.rotation);
@@ -171,22 +153,6 @@ bool Game::Start()
 			customerSushi->SetPosition(objData.position);
 			customerSushi->SetRotation(objData.rotation);
 			customerSushi->SetGamePointer(this);
-
-			////乱数を生成
-			//int randomChoice = rand() % 2;
-
-			//if (randomChoice == 0 && objData.EqualObjectName(L"DummySushi001") == true)
-			//{
-			//	m_customerMan_Sushi = NewGO<nsCustomerMan::CustomerMan_Sushi>(0, "customerman_sushi");
-			//	m_customerMan_Sushi->SetPosition(objData.position);
-			//	m_customerMan_Sushi->SetRotation(objData.rotation);
-			//}
-			//else if (randomChoice == 1 && objData.EqualObjectName(L"DummyManSushi002") == true)
-			//{
-			//	m_customerMan_Sushi = NewGO<nsCustomerMan::CustomerMan_Sushi>(0, "customerman_sushi");
-			//	m_customerMan_Sushi->SetPosition(objData.position);
-			//	m_customerMan_Sushi->SetRotation(objData.rotation);
-			//}
 		
 			return true;
 		}
@@ -212,174 +178,84 @@ bool Game::Start()
 	//スカイキューブの作成
 	//SetSkyCube();
 	
-	//テスト用スプライトの初期化
-	m_testSprite.Init("Assets/modelData/scorePanel2.DDS", 500.0f, 500.0f);
-	m_testSprite.SetPosition(m_testSpritePos);
-	m_testSprite.Update();
-
-	
-
-	////クールタイムのスプライト
-	//SpriteInitData m_coolTimeUIInitData;
-	//m_coolTimeUIInitData.m_ddsFilePath[0] = "Assets/Sprite/CoolTime4.DDS";
-	////アルファ値操作用の画像設定
-	//m_coolTimeTexture.InitFromDDSFile(L"Assets/Sprite/CoolTime1.DDS");
-	//m_coolTimeUIInitData.m_expandShaderResoruceView[0] = &m_coolTimeTexture;
-	////シェーダーファイルを設定
-	//m_coolTimeUIInitData.m_fxFilePath = "Assets/shader/coolTime.fx";
-	////ユーザー拡張データを設定
-	//m_coolTimeUIInitData.m_expandConstantBuffer = &m_coolTimeSpriteData;
-	//m_coolTimeUIInitData.m_expandConstantBufferSize = sizeof(m_coolTimeSpriteData);
-	////比率を設定
-	//m_coolTimeUIInitData.m_width = static_cast<UINT>(1920);
-	//m_coolTimeUIInitData.m_height = static_cast<UINT>(1080);
-	////ブレンドモードを設定
-	//m_coolTimeUIInitData.m_alphaBlendMode = AlphaBlendMode_Trans;
-	////設定したデータをスプライトに設定
-	//m_coolSprite.Init(m_coolTimeUIInitData);
-	//m_coolSprite.SetPosition({ 0.0f,0.0f,0.0f });
-	//m_coolSprite.Update();
+	//スコアパネルスプライトの初期化
+	m_scorePanelSprite.Init("Assets/modelData/scorePanel2.DDS", 500.0f, 500.0f);
+	m_scorePanelSprite.SetPosition(m_scorePanelSpritePos);
+	m_scorePanelSprite.Update();
 
 	//ゲームインフォメーションクラスの作成
 	m_gameInfo = NewGO<GameInformation>(0, "gameinformation");
-
-
-
-
-	////スタート時のスプライトの初期化
-	//m_initStartData.m_ddsFilePath[0] = "Assets/StartData/PressB.DDS";
-	//m_initStartData.m_fxFilePath = "Assets/shader/buttonB.fx";
-	//m_initStartData.m_expandConstantBuffer = &m_alpha;
-	//m_initStartData.m_expandConstantBufferSize += sizeof(float);
-
-	////スプライトの幅と高さを指定する
-	//m_initStartData.m_width = static_cast<UINT>(960.0f);
-	//m_initStartData.m_height = static_cast<UINT>(540.0f);
-	//m_initStartData.m_alphaBlendMode = AlphaBlendMode_Trans;
-
-	////現在のスコア表示
-	//wchar_t wcsbuf[256];
-	//swprintf_s(wcsbuf, 256, L"%d", m_nowScore);
-	//m_nowScoreRender.SetText(wcsbuf);
-	//m_nowScoreRender.SetPosition(Vector3(700.0f, 500.0f, 0.0f));
-	//m_nowScoreRender.SetScale(1.0f);
-	//m_nowScoreRender.SetColor({ 1.0f,1.0f,1.0f,1.0f });
 
 	
 	return true;
 }
 
-void Game::PlayerMove()
-{
-	
-}
-
 void Game::Update()
 {
-
+	//タイマー終了処理
 	FinishTimer();
 
-	//DeleteGOのテスト
-	if (m_resultUI->GetIsResultEnd()
+	//DeleteGOできるかのテスト
+	/*if (m_resultUI->GetIsResultEnd()
 	&& g_pad[0]->IsTrigger(enButtonB))
 	{
-		//m_resultUI=NewGO<ResultUI>(0, "resultui");
-
 		DeleteGO(this);
-	}
+	}*/
 
-	//CalcAlpha();
-	m_coolSprite.Update();
-	//時間の表示を更新
-	//DisplayTime();
+	//スコアパネルのスライド処理
 	if (g_pad[0]->IsTrigger(enButtonB)) {
 		NextScorePosState();
 	}
 
+	//スライドパネルのスライド処理
 	if (m_setScorePosState == POS_SCORE_SLIDE) {
-		if (m_testSpritePos.x > 550.0f) {
-			m_testSpritePos.x -= 130.0f;
+		if (m_scorePanelSpritePos.x > 550.0f) {
+			m_scorePanelSpritePos.x -= 130.0f;
 		}
 		else {
 			m_setScorePosState = POS_SCORE_INSIDE;
 		}
 	}
 
-	//テスト用スプライトを更新
-	m_testSprite.SetPosition(m_testSpritePos);
-	m_testSprite.Update();
+	//スコアパネルスプライトを更新
+	m_scorePanelSprite.SetPosition(m_scorePanelSpritePos);
+	m_scorePanelSprite.Update();
 	
 }
 
-void Game::UpdateScore()
-{
-	if (m_nowScore >= 601)
-	{
-		m_scoreRankState = enScoreS;
-	}
-	else if(m_nowScore >= 401)
-	{
-		m_scoreRankState = enScoreA;
-	}
-	else if (m_nowScore >= 201)
-	{
-		m_scoreRankState = enScoreB;
-	}
-	else
-	{
-		m_scoreRankState = enScoreC;
-	}
-
-}
-
-void Game::SetSkyCube()
-{
-	m_skyCube = NewGO<SkyCube>(0, "skycube");
-	m_skyCube->SetLuminance(1.0f);
-	m_skyCube->SetScale(2000.0f);
-	m_skyCube->SetPosition({ 1000.0f,500.0f,15500.0f });
-	m_skyCube->SetType((EnSkyCubeType)enSkyCubeType_Day);
-
-	// 環境光の計算のためのIBLテクスチャをセットする。
-	//g_renderingEngine->SetAmbientByIBLTexture(m_skyCube->GetTextureFilePath(), 0.1f);
-
-}
-
-void Game::FinishTimer()
-{
-	if (m_gameTimer->GetIsTimerEnd()) {
-		if (m_isFinishStarted = false)
-		{
-			m_isFinishStarted = true;
-			m_finishStartTime = g_gameTime->GetFrameDeltaTime();
-		}
-
-		if (m_isFinishStarted
-			&& g_gameTime->GetFrameDeltaTime() - m_finishStartTime >= 3.0f)
-		{
-			m_isFinish = true;
-		}
-	}
-}
-
-//void Game::CalcAlpha()
+//void Game::SetSkyCube()
 //{
-//	if (m_shopHamburger->GetIsHasCoollid_Hamburger() == false)
-//	{
-//		m_coolTimeSpriteData.AddDirection(-0.1);
-//	}
-//	else
-//	{
-//		m_coolTimeSpriteData.SetDirection(6.3f);
-//	}
-//	
+//	m_skyCube = NewGO<SkyCube>(0, "skycube");
+//	m_skyCube->SetLuminance(1.0f);
+//	m_skyCube->SetScale(2000.0f);
+//	m_skyCube->SetPosition({ 1000.0f,500.0f,15500.0f });
+//	m_skyCube->SetType((EnSkyCubeType)enSkyCubeType_Day);
+//
+//	// 環境光の計算のためのIBLテクスチャをセットする。
+//	//g_renderingEngine->SetAmbientByIBLTexture(m_skyCube->GetTextureFilePath(), 0.1f);
 //
 //}
 
-void Game::DisplayTime()
+void Game::FinishTimer()
 {
-	//時間をフォントに設定して表示
-	m_gameTimer->FontSet();
+	//タイマーが終了している場合
+	if (m_gameTimer->GetIsTimerEnd()) {
+		//終了処理開始していない場合
+		if (m_isFinishStarted = false)
+		{
+			//ゲームを終了処理開始
+			m_isFinishStarted = true;
+			//フィニッシュ開始時間を記録
+			m_finishStartTime = g_gameTime->GetFrameDeltaTime();
+		}
+		//終了処理が開始されてから３秒経過した場合
+		if (m_isFinishStarted
+			&& g_gameTime->GetFrameDeltaTime() - m_finishStartTime >= 3.0f)
+		{
+			//ゲームを終了状態に設定
+			m_isFinish = true;
+		}
+	}
 }
 
 void Game::NextScorePosState()
@@ -396,36 +272,15 @@ void Game::NextScorePosState()
 	}
 }
 
-//void Game::ScoreAdded(int addScore)
-//{
-//	m_nowScore += addScore;
-//}
-
-
-
 void Game::Render(RenderContext& rc)
 {
 
-	//if (m_gameTimer->GetIsTimerEnd() == true)
-	//{
-	//	m_finishSprite.Draw(rc);
-	//	//m_isFinish = true;
-	//}
-
-	//if (m_resultUI->GetIsEnd() == true)
 	if (m_gameTimer->GetIsTimerEnd() == true)
 	{
-		//m_nowScoreRender.SetScale(2.5f);
-		//m_nowScoreRender.SetPosition(Vector3(100.0f, 100.0f, 0.0f));
-		//m_nowScoreRender.Draw(rc);
 		return;
 	}
-
 	
-
-	m_testSprite.Draw(rc);
-	//m_nowScoreRender.Draw(rc);
-	//m_coolSprite.Draw(rc);
+	m_scorePanelSprite.Draw(rc);
 }
 
 
