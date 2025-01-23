@@ -25,8 +25,8 @@ namespace nsK2EngineLow {
 			//ピクセルシェーダーのエントリーポイントを指定する
 			luminanceSpriteInitData.m_psEntryPoinFunc = "PSSamplingLuminance";
 			//スプライトの幅と高さは luminnceRenderTarget と同じ
-			luminanceSpriteInitData.m_width = 1280;
-			luminanceSpriteInitData.m_height = 720;
+			luminanceSpriteInitData.m_width = luminanceRenderTarget.GetWidth();
+			luminanceSpriteInitData.m_height = luminanceRenderTarget.GetHeight();
 			//テクスチャはメインレンダリングターゲットのカラーバッファ
 			luminanceSpriteInitData.m_textures[0]
 				= &mainRenderTarget.GetRenderTargetTexture();
@@ -59,8 +59,8 @@ namespace nsK2EngineLow {
 			finalSpriteInitData.m_textures[3] = &gaussianBlur[3].GetBokeTexture();
 
 			//解像度は mainRenderTargetの幅と高さ
-			finalSpriteInitData.m_width = 1280;
-			finalSpriteInitData.m_height = 720;
+			finalSpriteInitData.m_width = mainRenderTarget.GetWidth();
+			finalSpriteInitData.m_height = mainRenderTarget.GetHeight();
 
 			//ぼかした画像を、通常の2Dとしてメインレンダリングターゲットの描画するので
 			//2D用のシェーダーを使用する
