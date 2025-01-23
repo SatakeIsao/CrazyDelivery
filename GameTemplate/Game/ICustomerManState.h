@@ -4,46 +4,39 @@
 #include "InventoryUI.h"
 #include "CustomerMan_Pizza.h"
 
-namespace nsCustomerMan
+class CustomerMan;
+class ICustomerManState
 {
-	class CustomerMan;
-	//class InventoryUI;
-	class ICustomerManState
-	{
-	public:
-		/// <summary>
-		/// コンストラクタ
-		/// </summary>
-		/// <param name="customerMan"></param>
-		ICustomerManState(CustomerMan* customerMan) : m_customerMan(customerMan){}
+public:
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="customerMan"></param>
+	ICustomerManState(CustomerMan* customerMan) : m_customerMan(customerMan){}
 
-		/// <summary>
-		/// デストラクタ
-		/// </summary>
-		virtual ~ICustomerManState(){}
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	virtual ~ICustomerManState(){}
 
-		/// <summary>
-		/// ステートの開始時の処理
-		/// </summary>
-		virtual void Enter() = 0;
+	/// <summary>
+	/// ステートの開始時の処理
+	/// </summary>
+	virtual void Enter() = 0;
 
-		/// <summary>
-		/// ステートの遷移処理
-		/// </summary>
-		/// <returns>遷移するステート</returns>
-		virtual ICustomerManState* StateChange() = 0;
+	/// <summary>
+	/// ステートの遷移処理
+	/// </summary>
+	/// <returns>遷移するステート</returns>
+	virtual ICustomerManState* StateChange() = 0;
 
-		/// <summary>
-		/// 各ステートにおける更新処理
-		/// </summary>
-		virtual void Update() = 0;
+	/// <summary>
+	/// 各ステートにおける更新処理
+	/// </summary>
+	virtual void Update() = 0;
 
-	protected:
-		CustomerMan* m_customerMan = nullptr;
-		//CustomerMan_Pizza* m_manPizza = nullptr;
-		Game* m_game = nullptr;
-		//InventoryUI* m_inventoryUI = nullptr;
-	};
-}
-
+protected:
+	CustomerMan* m_customerMan = nullptr;
+	Game* m_game = nullptr;
+};
 

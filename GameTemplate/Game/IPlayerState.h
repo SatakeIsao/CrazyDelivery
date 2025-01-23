@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "GameCamera.h"
 #include "Game.h"
+#include "GameSound.h"
 
 /// <summary>
 /// プレイヤーの名前空間
@@ -48,6 +49,9 @@ namespace nsPlayer
 		Player* m_player = nullptr; //プレイヤー
 		GameCamera* m_gameCamera = nullptr; //ゲームカメラ
 		Game* m_game = nullptr;
+		SoundSource* m_skaterJumpSE = nullptr;
+		//SoundSource* m_skaterRunSE = nullptr;
+		//SoundSource* m_skaterAcceleSE = nullptr;
 	};
 
 
