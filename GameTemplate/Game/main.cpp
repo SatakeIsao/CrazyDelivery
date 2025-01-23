@@ -3,6 +3,7 @@
 #include "ModelRender.h"
 #include "Game.h"
 #include "Player.h"
+#include "GameSound.h"
 
 // K2EngineLowのグローバルアクセスポイント。
 K2EngineLow* g_k2EngineLow = nullptr;
@@ -33,6 +34,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	CollisionObjectManager m_collisionObjectManager;
 	g_collisionObjectManager = &m_collisionObjectManager;
 
+	auto gameSound = NewGO<GameSound>(0, "gamesound");
 	Game* game = NewGO<Game>(0);
 
 	// ここからゲームループ。
