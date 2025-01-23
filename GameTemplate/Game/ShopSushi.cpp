@@ -4,8 +4,9 @@
 
 namespace
 {
-	const Vector3 CHECKPOINT_SIZE = { 200.0f,200.0f,200.0f };
-	const float	  COOLDOWN_TIME = 10.0f;
+	const Vector3 CHECKPOINT_SIZE = { 400.0f,200.0f,400.0f };
+	const float	  COOLDOWN_TIME = 7.0f;
+	const float		MOVE_STOP_SUSHI = 1.7f;	//SUSHI_LEFT_ENDPOSに到達する時間
 }
 
 ShopSushi::ShopSushi()
@@ -14,6 +15,7 @@ ShopSushi::ShopSushi()
 
 ShopSushi::~ShopSushi()
 {
+	DeleteGO(m_collision);
 }
 
 bool ShopSushi::Start()
@@ -37,7 +39,10 @@ void ShopSushi::Init()
 	//コリジョンオブジェクトが自動で削除されないようにする
 	m_collision->SetIsEnableAutoDelete(false);
 	//お寿司のUI
-	m_shopSushiUI.Init("Assets/MapData/mapSushi.dds", 2240, 1260);
+	m_shopSushiUI.Init("Assets/MapData/ShopSushiUI.dds", 224, 150);
+
+	m_shopSushiX_UI.Init("Assets/MapData/ShopSushiXUI.dds", 224, 150);
+	m_shopSushiGrayUI.Init("Assets/MapData/ShopSushiGrayUI.dds", 224, 150);
 }
 
 void ShopSushi::Update()
@@ -49,35 +54,72 @@ void ShopSushi::Update()
 	//ワールド座標からスクリーン座標を計算
 	g_camera3D->CalcScreenPositionFromWorldPosition(m_shopSushiUIPos, pos);
 	m_shopSushiUI.SetPosition(Vector3{ m_shopSushiUIPos.x,m_shopSushiUIPos.y,0.0f });
+	m_shopSushiX_UI.SetPosition(Vector3{ m_shopSushiUIPos.x,m_shopSushiUIPos.y,0.0f });
+	m_shopSushiGrayUI.SetPosition(Vector3{ m_shopSushiUIPos.x,m_shopSushiUIPos.y,0.0f });
 	//
-	m_shopSushiUI.Update();
+	
 	EffectCoolTime();
-	if (m_coolDownTimer >= 0.0f)
+	/*if (m_coolDownTimer >= 0.0f)
 	{
 		m_coolDownTimer -= g_gameTime->GetFrameDeltaTime();
-	}
-	else
-	{
+	}*/
+	//else
+	//{
 		CollisionPlayerPoint();
-	}
+
+		//寿司移動の管理
+		HandleSushiTrasition();
+
+		//UIの更新
+		m_shopSushiUI.Update();
+		m_shopSushiX_UI.Update();
+		m_shopSushiGrayUI.Update();
+	//}
 
 }
 
 void ShopSushi::CollisionPlayerPoint()
 {
+	//クールタイム中は何もしない
+	if (m_coolDownTimer > 0.0f)
+	{
+		m_coolDownTimer -= g_gameTime->GetFrameDeltaTime();
+		return;
+	}
 	//コリジョンとキャラコンが衝突したら
 	if (m_collision->IsHit(m_player->GetCharacterController()))
 	{
-		if (m_isHasCollided_Sushi==false)
+		if (!m_isSushiUIMove)
 		{
-			m_inventoryUI->NextSushiState();
-			m_isHasCollided_Sushi = true;
+			m_isSushiUIMove = true;
+			m_sushiUIMoveTimer = 0.0f;
 			m_coolDownTimer = COOLDOWN_TIME;
 		}
+		else
+		{
+			//衝突解除後もクールダウン中は何もしない
+			if (m_coolDownTimer <= 0.0f)
+
+			{
+				m_isSushiUIMove = false;
+			}
+		}
+	//	//初めて衝突した場合
+	//	if (m_isHasCollided_Sushi==false)
+	//	{
+	//		m_inventoryUI->NextSushiState();	//寿司の状態を更新
+	//		m_isHasCollided_Sushi = true;		//衝突フラグを立てる
+	//		m_coolDownTimer = COOLDOWN_TIME;	//クールタイマーをリセット
+	//	}
+	//	
+	//}
+	//else {
+	//	//衝突が解除された場合でも、クールダウン中はフラグを変更しない
+	//	if (m_coolDownTimer <= 0.0f)
+	//	{
+	//		m_isHasCollided_Sushi = false;	//衝突フラグをリセット
+	//	}
 		
-	}
-	else {
-		m_isHasCollided_Sushi = false;
 	}
 }
 
@@ -125,6 +167,36 @@ bool ShopSushi::CalcAngle()
 	return false;
 }
 
+void ShopSushi::HandleSushiTrasition()
+{
+	if (!m_isSushiUIMove)
+	{
+		return;
+	}
+
+	//経過時間を加算
+	m_sushiUIMoveTimer += g_gameTime->GetFrameDeltaTime();
+	//SUSHI_LEFT_ENDPOSに到達する時間を設定
+	//const float transitionSushiTime = 1.7f;
+	if (m_sushiUIMoveTimer >= MOVE_STOP_SUSHI)
+	{
+		//フラグをリセットして状態を進める
+		m_isSushiUIMove = false;
+		m_inventoryUI->NextSushiState();
+		//
+		if (!GetIsSushiFull())
+		{
+			//効果音の再生
+			m_inventoryChangeSE = NewGO<SoundSource>(0);
+			m_inventoryChangeSE->Init(enSoundName_inventoryChange);
+			m_inventoryChangeSE->SetVolume(1.0f);
+			m_inventoryChangeSE->Play(false);
+		}
+		
+	}
+		
+}
+
 void ShopSushi::PlayEffect(EffectName name, Vector3 pos, Quaternion rot, Vector3 scale)
 {
 	//エフェクトの再生
@@ -143,7 +215,26 @@ void ShopSushi::Render(RenderContext& rc)
 	{
 		return;
 	}
-	m_shopSushiUI.Draw(rc);
+	if (m_coolDownTimer <= 7.0f
+		&& m_coolDownTimer >=0.1f
+		&& m_isSushiFull == false)
+	{
+		m_shopSushiGrayUI.Draw(rc);
+	}
+
+	else if (m_inventoryUI->GetIsHasFullSushi())
+	{
+		//寿司をフルで所持している場合
+		m_shopSushiX_UI.Draw(rc);
+		m_isSushiFull = true;
+	}
+	else
+	{
+		//通常の描画
+		m_shopSushiUI.Draw(rc);
+		m_isSushiFull = false;
+	}
+	
 }
 
 

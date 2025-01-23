@@ -4,8 +4,9 @@
 
 namespace
 {
-	const Vector3 CHECKPOINT_SIZE = { 200.0f,200.0f,200.0f };
-	const float	  COOLDOWN_TIME = 10.0f;
+	const Vector3	CHECKPOINT_SIZE = { 400.0f,200.0f,400.0f };
+	const float		COOLDOWN_TIME = 7.0f;
+	const float		MOVE_STOP_PIZZA = 1.5f; //PIZZA_LEFT_ENDPOSに到達する時間
 }
 
 ShopPizza::ShopPizza()
@@ -14,6 +15,7 @@ ShopPizza::ShopPizza()
 
 ShopPizza::~ShopPizza()
 {
+	DeleteGO(m_collision[0]);
 }
 
 bool ShopPizza::Start()
@@ -37,7 +39,11 @@ void ShopPizza::Init()
 	//コリジョンオブジェクトが自動で削除されないようにする
 	m_collision[0]->SetIsEnableAutoDelete(false);
 	//お店のUI
-	m_shopPizzaUI.Init("Assets/MapData/mapPizza.dds", 2240, 1260);
+	m_shopPizzaUI.Init("Assets/MapData/ShopPizzaUI.dds", 224, 150);
+
+	m_shopPizzaX_UI.Init("Assets/MapData/ShopPizzaXUI.dds", 224, 150);
+
+	m_shopPizzaGrayUI.Init("Assets/MapData/ShopPizzaGrayUI.dds", 224, 150);
 }
 
 
@@ -50,33 +56,71 @@ void ShopPizza::Update()
 	//ワールド座標からスクリーン座標を計算
 	g_camera3D->CalcScreenPositionFromWorldPosition(m_shopPizzaUIPos, pos);
 	m_shopPizzaUI.SetPosition(Vector3(m_shopPizzaUIPos.x, m_shopPizzaUIPos.y, 0.0f));
-	m_shopPizzaUI.Update();
+	m_shopPizzaX_UI.SetPosition(Vector3(m_shopPizzaUIPos.x, m_shopPizzaUIPos.y, 0.0f));
+	m_shopPizzaGrayUI.SetPosition(Vector3(m_shopPizzaUIPos.x, m_shopPizzaUIPos.y, 0.0f));
+	
+	
 	EffectCoolTime();
-	if (m_coolDownTimer >= 0.0f)
+	/*if (m_coolDownTimer >= 0.0f)
 	{
 		m_coolDownTimer -= g_gameTime->GetFrameDeltaTime();
-	}
-	else
-	{
+	}*/
+	//else
+	//{
 		CollisionPlayerPoint();
-	}
+
+		//ピザ移動の管理
+		HandlePizzaTrasition();
+
+		//UIの更新
+		m_shopPizzaUI.Update();
+		m_shopPizzaX_UI.Update();
+		m_shopPizzaGrayUI.Update();
+	//}
 	
 }
 
 void ShopPizza::CollisionPlayerPoint()
 {
+	//クールダウン中は何もしない
+	if (m_coolDownTimer > 0.0f)
+	{
+		m_coolDownTimer -= g_gameTime->GetFrameDeltaTime();
+		return;
+	}
 	//コリジョンとキャラコンが衝突したら
 	if (m_collision[0]->IsHit(m_player->GetCharacterController()))
 	{
-		if (m_isHasCollided_Pizza == false) 
+		if (!m_isPizzaUIMove)
 		{
-			m_inventoryUI->NextPizzaState();
-			m_isHasCollided_Pizza = true;
+			m_isPizzaUIMove = true;
+			m_pizzaUIMoveTimer = 0.0f;
 			m_coolDownTimer = COOLDOWN_TIME;
 		}
-	}
-	else {
-		m_isHasCollided_Pizza = false;
+		else
+		{
+			//衝突解除後もクールダウン中は何もしない
+			if (m_coolDownTimer <= 0.0f)
+			{
+				m_isPizzaUIMove = false;
+			}
+		}
+
+	//	//初めて衝突した場合
+	//	if (m_isHasCollided_Pizza == false) 
+	//	{
+	//		m_inventoryUI->NextPizzaState();	//ピザの状態を更新
+	//		m_isHasCollided_Pizza = true;		//衝突フラグを立てる
+	//		m_coolDownTimer = COOLDOWN_TIME;	//クールタイムをリセット
+	//	}
+	//}
+	//else {
+	//	//衝突が解除された場合でも、クールダウン中はフラグを変更しない
+	//	if (m_coolDownTimer <= 0.0f)
+	//	{
+	//		m_isHasCollided_Pizza = false;		//衝突フラグをリセット
+	//	}
+	
 	}
 }
 
@@ -90,7 +134,7 @@ void ShopPizza::EffectCoolTime()
 		Vector3 effectPosition = m_position;
 		effectPosition.x -= 130.0f;
 		effectPosition.y += 50.0f;
-		PlayEffect(enEffectName_ShopPizza, effectPosition, m_rotation, m_effectScale);
+		PlayEffect(enEffectName_ShopSushi, effectPosition, m_rotation, m_effectScale);
 		//タイマーをリセット
 		m_effectCoolTimer = 0.0f;
 	}
@@ -123,6 +167,35 @@ bool ShopPizza::CalcAngle()
 
 }
 
+void ShopPizza::HandlePizzaTrasition()
+{
+	if (!m_isPizzaUIMove)
+	{
+		return;
+	}
+
+	//経過時間を加算
+	m_pizzaUIMoveTimer += g_gameTime->GetFrameDeltaTime();
+;
+
+	if (m_pizzaUIMoveTimer >= MOVE_STOP_PIZZA)
+	{
+		//フラグをリセットして状態を進める
+		m_isPizzaUIMove = false;
+		m_inventoryUI->NextPizzaState();
+		if (!GetIsPizzaFull())
+		{
+			//効果音の再生
+			m_inventoryChangeSE = NewGO<SoundSource>(0);
+			m_inventoryChangeSE->Init(enSoundName_inventoryChange);
+			m_inventoryChangeSE->SetVolume(1.0f);
+			m_inventoryChangeSE->Play(false);
+		}
+		
+
+	}
+}
+
 void ShopPizza::PlayEffect(EffectName name, Vector3 pos, Quaternion rot, Vector3 scale)
 {
 	//エフェクトの再生
@@ -140,5 +213,25 @@ void ShopPizza::Render(RenderContext& rc)
 	{
 		return;
 	}
-	m_shopPizzaUI.Draw(rc);
+
+	if (m_coolDownTimer<=7.0f
+		&& m_coolDownTimer>=0.1f
+		//m_isHasCollided_Pizza == true
+		&& m_isPizzaFull == false)
+	{
+		m_shopPizzaGrayUI.Draw(rc);
+	}
+	else if (m_inventoryUI->GetIsHasFullPizza())
+	{
+		//ピザをフルで所持している場合
+		m_shopPizzaX_UI.Draw(rc);
+		m_isPizzaFull = true;
+	}
+	else
+	{
+		//通常の描画
+		m_shopPizzaUI.Draw(rc);
+		m_isPizzaFull = false;
+	}
+	
 }

@@ -5,7 +5,8 @@
 namespace
 {
 	const Vector3 CHECKPOINT_SIZE = { 400.0f,200.0f,400.0f };
-	const float	  COOLDOWN_TIME = 10.0f;
+	const float	  COOLDOWN_TIME = 7.0f;
+	const float		TRANSITION_TIME = 1.3f;	//HAMBURGER_LEFT_ENDPOS に到達する時間を設定
 }
 
 ShopHamburger::ShopHamburger()
@@ -14,6 +15,7 @@ ShopHamburger::ShopHamburger()
 
 ShopHamburger::~ShopHamburger()
 {
+	DeleteGO(m_collision);
 }
 
 bool ShopHamburger::Start()
@@ -27,86 +29,81 @@ void ShopHamburger::Init()
 	m_player = FindGO<nsPlayer::Player>("player");
 	m_inventoryUI = FindGO<InventoryUI>("inventoryui");
 
-	//m_collisionSize.Set(1000.0f, 1000.0f, 1000.0f);
-
 	m_collision = NewGO<CollisionObject>(0);
 	m_collision->CreateBox(
 		m_position, 
 		m_rotation, 
-		//Vector3(m_collisionSize.x * m_scale.x, m_collisionSize.y * m_scale.y, m_collisionSize.z * m_scale.z)
 		CHECKPOINT_SIZE	
 		);
-	//コリジョンに名前を付ける
-	//m_collision->SetName("ShopHamburgerWall");
 
 	//コリジョンオブジェクトが自動で削除されないようにする
 	m_collision->SetIsEnableAutoDelete(false);
-	//m_physicsGhostObject.CreateBox(m_position,m_rotation,m_scale);
-	m_shopHamburgerUI.Init("Assets/MapData/hamburger.dds", 120, 120);
+
+	m_shopHamburgerUI.Init("Assets/MapData/ShopHamburgerUI.dds", 224, 150);
 	
+	m_shopHamburgerX_UI.Init("Assets/MapData/ShopHamburgerXUI.dds", 224, 150);
+
+	m_shopHamburgerGrayUI.Init("Assets/MapData/ShopHamburgerGrayUI.dds", 224, 150);
 }
 
 void ShopHamburger::Update()
 {
-	
-	//エフェクト再生
-	//PlayEffect(enEffectName_ShopHamburger, m_effectPos, m_rotation, m_effectScale);
 	//お店の前方向に画像を表示したいのでZ値を少し上げる
 	Vector3 pos = m_position;
 	pos.x -= 180.0f;
 	pos.y += 100.0f;
 	//ワールド座標からスクリーン座標を計算
 	g_camera3D->CalcScreenPositionFromWorldPosition(m_shopHamburgerUIPps, pos);
+
 	m_shopHamburgerUI.SetPosition(Vector3(m_shopHamburgerUIPps.x, m_shopHamburgerUIPps.y, 0.0f));
-
-	/*
-	//UIを回転し続ける
-	static float rotYAngle = 0.0f; //回転角度を保持
-	rotYAngle += 0.00005f;			  //回転速度
-	if (rotYAngle >= 360.0f) {
-		rotYAngle -= 360.0f;
-	}
-	Quaternion currentRotation = m_shopHamburgerUI.GetRotation(); //現在の回転を取得
-	currentRotation.AddRotationDegY(1.0f);
-	m_shopHamburgerUI.SetRotation(currentRotation);*/
+	m_shopHamburgerX_UI.SetPosition(Vector3(m_shopHamburgerUIPps.x, m_shopHamburgerUIPps.y, 0.0f));
+	m_shopHamburgerGrayUI.SetPosition(Vector3(m_shopHamburgerUIPps.x, m_shopHamburgerUIPps.y, 0.0f));
 
 
-	m_shopHamburgerUI.Update();
+	
 	EffectCoolTime();
 
-	//pos.x += 130.0f;
-	//pos.y -= 50.0f;
-	//if (g_pad[0]->IsTrigger(enButtonA))
-	//{
-	//	PlayEffect(enEffectName_ShopHamburger, pos, m_rotation, m_effectScale);
-	//	//PlayEffect(enEffectName_ShopHamburger, m_effectPos, m_rotation, m_effectScale);
-	//}
-	if (m_coolDownTimer >= 0.0f)
-	{
-		m_coolDownTimer -= g_gameTime->GetFrameDeltaTime();
-	}
-	else
-	{
-		CollisionPlayerPoint();
-	}
+	//衝突判定
+	CollisionPlayerPoint();
+	//ハンバーガー移動の管理
+	HandleHamburgerTrasition();
+	//UIの更新
+	m_shopHamburgerUI.Update();
+	m_shopHamburgerX_UI.Update();
+	m_shopHamburgerGrayUI.Update();
 }
 
 void ShopHamburger::CollisionPlayerPoint()
 {
+	//クールタイム中は何もしない
+	if (m_coolDownTimer > 0.0f)
+	{
+		m_coolDownTimer -= g_gameTime->GetFrameDeltaTime();
+		return;
+	}
+	if (m_collision == nullptr) {
+		return;
+	}
+
 	//コリジョンとキャラコンが衝突したら
 	if (m_collision->IsHit(m_player->GetCharacterController()))
 	{
-		if (!m_isHasCollided_Hamburger)
+		if (!m_isHaburgerUIMove)
 		{
-			m_inventoryUI->NextHamburgerState();
-			m_isHasCollided_Hamburger = true;
-			m_coolDownTimer = COOLDOWN_TIME;
+			//Hamburgerのスライドを開始
+			m_isHaburgerUIMove = true;
+			m_hamburgerUIMoveTimer = 0.0f;	//タイマーリセット
+			m_coolDownTimer = COOLDOWN_TIME;	//クールダウンタイマーリセット
+		}
+		else
+		{
+			//衝突解除後もクールダウン中は何もしない	
+			if (m_coolDownTimer <= 0.0f)
+			{
+				m_isHaburgerUIMove = false;
+			}
 		}
 	}
-	else {
-		m_isHasCollided_Hamburger = false;
-	}
-
 }
 
 void ShopHamburger::EffectCoolTime()
@@ -119,22 +116,11 @@ void ShopHamburger::EffectCoolTime()
 		Vector3 effectPosition = m_position;
 		effectPosition.x += 130.0f;
 		effectPosition.y += 50.0f;
-		PlayEffect(enEffectName_ShopHamburger, effectPosition, m_rotation, m_effectScale);
+		PlayEffect(enEffectName_ShopSushi, effectPosition, m_rotation, m_effectScale);
 
 		//タイマーをリセット
 		m_effectCoolTimer = 0.0f;
 	}
-	
-	////
-	//if (m_isEffectCoolTime)
-	//{
-	//	m_effectCoolTimer += g_gameTime->GetFrameDeltaTime();
-	//	if (m_effectCoolTimer > 3.0f)
-	//	{
-	//		m_isEffectCoolTime = false;
-	//		m_effectCoolTimer = 0.0f;
-	//	}
-	//}
 }
 
 bool ShopHamburger::CalcAngle()
@@ -163,6 +149,35 @@ bool ShopHamburger::CalcAngle()
 	return false;
 }
 
+void ShopHamburger::HandleHamburgerTrasition()
+{
+	if (!m_isHaburgerUIMove)
+	{
+		return;
+	}
+
+	//経過時間を加算
+	m_hamburgerUIMoveTimer += g_gameTime->GetFrameDeltaTime();
+
+	if (m_hamburgerUIMoveTimer >= TRANSITION_TIME)
+	{
+		//フラグをリセットして状態を進める
+		m_isHaburgerUIMove = false;
+		m_inventoryUI->NextHamburgerState();	//次の状態へ進む
+
+		//ハンバーガーの所持数が上限に達していないなら
+		if (!GetIsHamburgerFull())
+		{
+			//効果音の再生
+			m_inventoryChangeSE = NewGO<SoundSource>(0);
+			m_inventoryChangeSE->Init(enSoundName_inventoryChange);
+			m_inventoryChangeSE->SetVolume(1.0f);
+			m_inventoryChangeSE->Play(false);
+		}
+		
+	};
+}
+
 void ShopHamburger::PlayEffect(EffectName name, Vector3 pos, Quaternion rot, Vector3 scale)
 {
 	//エフェクトの再生
@@ -181,5 +196,24 @@ void ShopHamburger::Render(RenderContext& rc)
 	{
 		return;
 	}
-	m_shopHamburgerUI.Draw(rc);
+	if (m_coolDownTimer<=7.0f
+		&&m_coolDownTimer>=0.1f
+		&& m_isHamburgerFull == false)
+	{
+		m_shopHamburgerGrayUI.Draw(rc);
+	}
+
+	else if (m_inventoryUI->GetIsHasFullHamburger())
+	{
+		//ハンバーガーをフルで所持している場合
+		m_shopHamburgerX_UI.Draw(rc);
+		m_isHamburgerFull = true;
+	}
+	else
+	{
+		//通常の描画
+		m_shopHamburgerUI.Draw(rc);
+		m_isHamburgerFull = false;
+	}
+	
 }

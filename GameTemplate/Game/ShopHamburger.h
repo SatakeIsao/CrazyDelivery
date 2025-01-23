@@ -2,6 +2,7 @@
 #include "MakeEffect.h"
 #include "Player.h"
 #include "InventoryUI.h"
+#include "GameSound.h"
 //class Player;
 //class InventoryUI;
 
@@ -16,13 +17,44 @@ public:
 	void CollisionPlayerPoint();
 	void EffectCoolTime();
 	bool CalcAngle();
+	void HandleHamburgerTrasition();
 	void Render(RenderContext& rc);
 
+	/// <summary>
+	/// 現在の座標を取得
+	/// </summary>
+	/// <returns></returns>
 	const Vector3& GetPosition() const
 	{
 		return m_position;
 	}
 
+	/// <summary>
+	/// ハンバーガーの所持数が上限に達しているかの取得
+	/// </summary>
+	/// <returns></returns>
+	bool& GetIsHamburgerFull()
+	{
+		return m_isHamburgerFull;
+	}
+
+	/// <summary>
+	/// クールダウンタイマーの値を取得
+	/// </summary>
+	/// <returns></returns>
+	float& GetCoolDownTimer()
+	{
+		return m_coolDownTimer;
+	}
+
+	/// <summary>
+	/// ハンバーガーUIが移動中かどうか
+	/// </summary>
+	/// <returns></returns>
+	const bool& GetIsHamburgerUIMove() const
+	{
+		return m_isHaburgerUIMove;
+	}
 	/// <summary>
 	/// 座標を設定
 	/// </summary>
@@ -62,22 +94,26 @@ public:
 	
 
 private:
-	ModelRender			m_shopHanburger;
-	SpriteRender		m_shopHamburgerUI;
-	nsPlayer::Player*				m_player = nullptr;
-	InventoryUI*					m_inventoryUI = nullptr;
-	//PhysicsGhostObject	m_physicsGhostObject;
-	Vector3				m_position = Vector3::Zero;
-	Quaternion			m_rotation;
-	Vector3				m_collisionSize = Vector3::Zero;
-	Vector3				m_scale = Vector3::One;
-	//Vector3				m_effectPos = (Vector3(-180.0f, 100.0f, 0.0f));
-	Vector3				m_effectScale = Vector3(10.0f,10.0,10.0f);
-	Vector2				m_shopHamburgerUIPps = Vector2::Zero;
-	CollisionObject*		m_collision;
-	bool				m_isHasCollided_Hamburger = false;
-	//bool				m_isEffectCoolTime = false;
-	float m_coolDownTimer = 0.0f;
-	float m_effectCoolTimer = 0.0f;
+	SpriteRender		m_shopHamburgerUI;	//ハンバーガーショップのUIスプライト
+	SpriteRender		m_shopHamburgerX_UI;	//ハンバーガーショップのX表示用スプライト
+	SpriteRender		m_shopHamburgerGrayUI;	//ハンバーガーショップのグレー表示用スプライト
+	nsPlayer::Player*				m_player = nullptr;	//プレイヤー
+	InventoryUI*					m_inventoryUI = nullptr;	//インベントリーUI
+	Vector3				m_position = Vector3::Zero;				//座標
+	Quaternion			m_rotation;								//回転
+	Vector3				m_scale = Vector3::One;					//拡大率
+	Vector3				m_effectScale = Vector3(10.0f,10.0,10.0f);	//エフェクトの拡大率
+	Vector2				m_shopHamburgerUIPps = Vector2::Zero;		//UIの座標
+	CollisionObject*	m_collision = nullptr;;						//衝突判定オブジェクト
+	SoundSource*		m_inventoryChangeSE = nullptr;				//インベントリー変更の効果音
+
+
+	float m_coolDownTimer = 0.0f;									//クールダウンタイマー
+	float m_effectCoolTimer = 0.0f;									//エフェクトクールタイマー
+	float m_hamburgerUIMoveTimer = 0.0f;							//ハンバーガーUIが移動するタイマー
+
+	bool				m_isHamburgerFull = false;					//ハンバーガーの所持数が上限に達しているか
+	bool				m_isHaburgerUIMove = false;					//ハンバーガーUIが動いているかどうか
+
 };
 
