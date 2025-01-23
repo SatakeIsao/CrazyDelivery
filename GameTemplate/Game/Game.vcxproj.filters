@@ -15,14 +15,12 @@
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="GameCamera.cpp" />
-    <ClCompile Include="IPlayerState.cpp" />
     <ClCompile Include="PlayerIdleState.cpp" />
     <ClCompile Include="PlayerStartState.cpp" />
     <ClCompile Include="PlayerPushState.cpp" />
     <ClCompile Include="PlayerRunState.cpp" />
     <ClCompile Include="PlayerJumpState.cpp" />
     <ClCompile Include="PlayerDriftState.cpp" />
-    <ClCompile Include="PlayerJumpEnd.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="InventoryUI.cpp" />
     <ClCompile Include="MapUI.cpp" />
@@ -32,7 +30,6 @@
     <ClCompile Include="ShopSushi.cpp" />
     <ClCompile Include="CustomerMan.cpp" />
     <ClCompile Include="CustomerWoman.cpp" />
-    <ClCompile Include="ICustomerManState.cpp" />
     <ClCompile Include="CustomerManIdleState.cpp" />
     <ClCompile Include="CustomerMan_Hamburger.cpp" />
     <ClCompile Include="CustomerMan_Pizza.cpp" />
@@ -40,8 +37,11 @@
     <ClCompile Include="CustomerManHandState.cpp" />
     <ClCompile Include="CustomerManHappyState.cpp" />
     <ClCompile Include="CustomerManFailureState.cpp" />
-    <ClCompile Include="CustomerUI.cpp" />
     <ClCompile Include="MakeEffect.cpp" />
+    <ClCompile Include="ResultUI.cpp" />
+    <ClCompile Include="GameSound.cpp" />
+    <ClCompile Include="GameInformation.cpp" />
+    <ClCompile Include="Fade.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -59,7 +59,6 @@
     <ClInclude Include="PlayerRunState.h" />
     <ClInclude Include="PlayerJumpState.h" />
     <ClInclude Include="PlayerDriftState.h" />
-    <ClInclude Include="PlayerJumpEnd.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="InventoryUI.h" />
     <ClInclude Include="MapUI.h" />
@@ -77,7 +76,10 @@
     <ClInclude Include="CustomerManHandState.h" />
     <ClInclude Include="CustomerManHappyState.h" />
     <ClInclude Include="CustomerManFailureState.h" />
-    <ClInclude Include="CustomerUI.h" />
     <ClInclude Include="MakeEffect.h" />
+    <ClInclude Include="ResultUI.h" />
+    <ClInclude Include="GameSound.h" />
+    <ClInclude Include="GameInformation.h" />
+    <ClInclude Include="Fade.h" />
   </ItemGroup>
 </Project>
