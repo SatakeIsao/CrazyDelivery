@@ -12,6 +12,12 @@ namespace nsK2EngineLow
 			const float h,											//画像の縦幅
 			AlphaBlendMode alphaBlendMode = AlphaBlendMode_Trans);	//デフォルトは半透明合成
 
+		//ユーザーが用意したデータで初期化
+		void Init(SpriteInitData initData)
+		{
+			m_sprite.Init(initData);
+		}
+		
 		//座標設定
 		void SetPosition(const Vector3& pos)
 		{
