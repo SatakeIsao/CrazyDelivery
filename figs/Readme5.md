@@ -3,7 +3,9 @@
 # Crazy Delivery
 > ### 河原電子ビジネス専門学校 ゲームクリエイター科
 > ### 氏名：佐竹 功（さたけ いさお）
-
+>
+>  <dt>GitHubのURL</dt>
+>  <dd>https://github.com/SatakeIsao/CrazyDelivery</dd> 
 
 
 # 目次
