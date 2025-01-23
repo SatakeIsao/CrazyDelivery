@@ -14,7 +14,6 @@ BackGround::~BackGround()
 bool BackGround::Start()
 {
 	Init();
-	//FontInitTest();
 	return true;
 }
 
@@ -34,18 +33,6 @@ void BackGround::Init()
 	physicsStaticObject.GetbtCollisionObject()->setUserIndex(enCollisionAttr_Wall);
 }
 
-void BackGround::FontInitTest()
-{
-	m_fontTest2.SetText(L"testnow");
-	m_fontTest2.SetScale(1.0f);
-	m_fontTest2.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
-	m_fontTest2.SetColor({ 1.0f,1.0f,1.0f,1.0f });
-}
-
-//const PhysicsStaticObject& BackGround::GetPhysicsObject() const
-//{
-//	return physicsStaticObject;
-//}
 
 void BackGround::Update()
 {
@@ -55,5 +42,4 @@ void BackGround::Update()
 void BackGround::Render(RenderContext& rc)
 {
 	m_bgModel.Draw(rc);
-	//m_fontTest2.Draw(rc);
 }
