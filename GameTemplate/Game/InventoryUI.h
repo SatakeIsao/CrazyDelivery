@@ -1,72 +1,82 @@
 #pragma once
 
-
 class ShopHamburger;
 class ShopPizza;
 class ShopSushi;
-
 class CustomerMan;
 class CustomerMan_Hamburger;
 class CustomerMan_Pizza;
 class CustomerMan_Sushi;
-class ResultUI;
 class GameTimer;
 
 class InventoryUI : public IGameObject
 {
-public:
+private:
+	//アイテムの状態を表す列挙型
 	enum ItemState {
-		ITEM_ALL,
-		ITEM_GRAY_HALF,
-		ITEM_GRAY_ALL
+		Item_All,					//すべてのアイテムを収集済み
+		Item_Gray_Half,				//アイテムの半分がグレー
+		Item_Gray_All				//アイテムのすべてグレー
 	};
 
+	//アイテムのスケール状態を表す列挙型
 	enum ItemScaleState {
-		ITEM_SCALE_ZERO,
-		ITEM_SCALE_LARGE,
-		ITEM_SCALE_NORMAL,
-		ITEM_SCALE_FINAL,
+		Item_Scale_Zero,			//拡大率がゼロ
+		Item_Scale_Large,			//拡大率が大きくなる
+		Item_Scale_Default,			//拡大率が等倍
+		Item_Scale_Final,			//拡大率が最終的
 	};
 
+	//報酬の板の状態を列挙型
 	enum RewardPlaneState {
-		Sliding_To_Stop,
-		Stopped,
-		Sliding_To_End,
-		Sliding_To_HamburgerLeftEnd,
-		Sliding_To_HamburgerRightEnd,
-		Sliding_To_PizzaLeftEnd,
-		Sliding_To_SushiLeftEnd,
+		Sliding_To_Stop,			//停止位置までスライド中
+		Stopped,					//停止状態
+		Sliding_To_End,				//終了位置までスライド中
+		Sliding_To_HamburgerLeftEnd,//ハンバーガー左端までスライド中
+		Sliding_To_HamburgerRightEnd,//ハンバーガー左端までスライド中
+		Sliding_To_PizzaLeftEnd,	//ピザ左端までスライド中
+		Sliding_To_SushiLeftEnd,	//寿司左端までスライド中
 	};
 
 private:
+	//報酬スプライト用構造体
 	struct RewardSprite
 	{
-		SpriteRender sprite;
-		Vector3 position = Vector3::Zero;
-		float stopTimer = 0.0f;
-		RewardPlaneState state = Sliding_To_Stop;
+		SpriteRender			m_reSprite;					//描画用スプライト
+		Vector3					m_position = Vector3::Zero;	//スプライトの位置
+		float					m_stopTimer = 0.0f;			//停止状態のタイマー
+		RewardPlaneState		m_state = Sliding_To_Stop;	//報酬スプライトの現在の状態
 	};
 
+	//食べ物スプライト用構造体
 	struct FoodSprite
 	{
-	
-		void SetVisible(bool isVisible) { m_isVisible = isVisible; }
-		bool IsVisible() const { return m_isVisible; }
+		//スプライトの可視性を設定
+		void SetVisible(bool isVisible) 
+		{
+			m_isVisible = isVisible; 
+		}
+		//スプライトが可視かどうか
+		bool& GetIsVisible()
+		{
+			return m_isVisible; 
+		}
 		
+		//スプライトを描画
 		void Draw(RenderContext& rc)
 		{
 			if (m_isVisible)
 			{
-				foodSprite.Draw(rc);
+				m_foodSprite.Draw(rc);
 			}
 		}
 		
-		SpriteRender foodSprite;
-		Vector3 foodPos = Vector3::Zero;
-		float foodScale = 1.0f;
-		float stopTimer = 0.0f;
-		RewardPlaneState foodState = Sliding_To_Stop;
-		bool m_isVisible = true; // 初期状態は可視
+		SpriteRender			m_foodSprite;					//食べ物取得時のスプライト
+		Vector3					m_foodPos = Vector3::Zero;		//食べ物取得時のスプライトの位置
+		float					m_foodScale = 1.0f;				//食べ物取得時のスプライトの拡大率
+		float					m_stopTimer = 0.0f;				//停止状態のタイマー
+		RewardPlaneState		m_foodState = Sliding_To_Stop;	//食べ物取得時のスプライトの現在の状態
+		bool					m_isVisible = true;				//スプライトの可視状態
 	};
 
 
@@ -81,7 +91,7 @@ public:
 	void SpriteSlide(RewardSprite& rewardSprite);
 	void SpriteSlideFood(FoodSprite& foodSprite);
 	void SetRewardSpriteToGetPlane();
-	void ButtonTest();
+	//void ButtonTest();
 	void CalcAlphaAndScale(float& alpha,float& scale);
 	void NextHamburgerState();
 	void NextPizzaState();
@@ -94,95 +104,37 @@ public:
 	void SetFoodSprite(FoodSprite* foodSprite);
 	void RenderImmediate(SpriteRender& sprite);
 	void Render(RenderContext& rc);
-		
+	
 	/// <summary>
-	/// 表示するスプライトを切り替える関数
-	/// </summary>
-	/// <param name="showGray"></param>
-	void ShowHumburgar(bool showGray) {
-		m_isShowHumberger = showGray;
-	}
-
-	/// <summary>
-	/// 衝突がしているか
-	/// </summary>
-	/// <param name="isHasCollided"></param>
-	void SetIsHasCollided(bool isHasCollided) {
-		m_isHasCollided = isHasCollided;
-	}
-
-	/// <summary>
-	/// 衝突がしているかどうかの取得
-	/// </summary>
-	/// <returns>衝突がしているかを示すbool値</returns>
-	const bool& GetIsHasCollided() const
-	{
-		return m_isHasCollided;
-	}
-
-	/// <summary>
-	/// 食べ物を所持しているかどうかの取得
+	/// ハンバーガーを全所持かどうかの取得
 	/// </summary>
 	/// <returns></returns>
-	const bool& GetIsHasHamburger() const
+	bool& GetIsHasHamburger()
 	{
 		return m_isHasHamburger;
 	}
 
 	/// <summary>
-	/// 食べ物を所持しているかどうかの取得
+	/// ピザを全所持かどうかの取得
 	/// </summary>
 	/// <returns></returns>
-	const bool& GetIsHasPizza() const
+	bool& GetIsHasPizza()
 	{
 		return m_isHasPizza;
 	}
 
 	/// <summary>
-	/// 食べ物を所持しているかどうかの取得
+	/// 寿司を全所持かどうかの取得
 	/// </summary>
 	/// <returns></returns>
-	const bool& GetIsHasSushi() const
+	bool& GetIsHasSushi()
 	{
 		return m_isHasSushi;
 	}
 
-	void SetItemState(ItemState hamburgerState)
-	{
-		m_hamburgerState = hamburgerState;
-	}
-
-	bool GetIsHasHamburger()
-	{
-		return m_isHasHamburger;
-	}
-
-	void SetIsHasHamburger(bool isHasHamburger)
-	{
-		m_isHasHamburger = isHasHamburger;
-	}
-
-	bool GetIsHasPizza()
-	{
-		return m_isHasPizza;
-	}
-
-	void SetIsHasPizza(bool isHasPizza)
-	{
-		m_isHasPizza = isHasPizza;
-	}
-
-	bool GetIsHasSushi()
-	{
-		return m_isHasSushi;
-	}
-
-	void SetIsHasSushi(bool isHasSushi)
-	{
-		m_isHasSushi = isHasSushi;
-	}
+	
 	/// <summary>
-	/// 
+	/// ハンバーガーを全所持かどうかの設定
 	/// </summary>
 	/// <returns></returns>
 	bool& GetIsHasFullHamburger()
@@ -190,24 +142,22 @@ public:
 		return m_isHasFullHamburger;
 	}
 	
-	bool GetIsHasFullPizza()
+	/// <summary>
+	/// ピザを全所持かどうかの設定
+	/// </summary>
+	/// <returns></returns>
+	bool& GetIsHasFullPizza()
 	{
 		return m_isHasFullPizza;
 	}
 
-	bool GetIsHasFullSushi()
+	/// <summary>
+	/// 寿司を全所持かどうかの設定
+	/// </summary>
+	/// <returns></returns>
+	bool& GetIsHasFullSushi()
 	{
 		return m_isHasFullSushi;
-	}
-
-	bool& GetIsNextOn()
-	{
-		return m_isNextOn;
-	}
-
-	void ResetHamburgerEndFlag()
-	{
-		m_isNextOn = false;
 	}
 
 	
@@ -222,62 +172,58 @@ private:
 	std::vector<CustomerMan_Pizza*> m_customerMan_Pizza;
 	std::vector<CustomerMan_Sushi*> m_customerMan_Sushi;
 
-	SpriteRender		m_humburgerSp;					//ハンバーガー：色あり
-	SpriteRender		m_humburgerGrayHalf;			//ハンバーガー：グレーと色あり
-	SpriteRender		m_humburgerGrayAll;				//ハンバーガー：グレー
-	SpriteRender		m_pizzaSp;						//ピザ：色あり
-	SpriteRender		m_pizzaGrayHalf;				//ピザ：グレーと色あり
-	SpriteRender		m_pizzaGrayAll;					//ピザ：グレー
-	SpriteRender		m_sushiSp;						//寿司：色あり
-	SpriteRender		m_sushiGrayHalf;				//寿司：グレーと色あり
-	SpriteRender		m_sushiGrayAll;					//寿司：グレー			
-	RewardSprite		m_reward150;					//報酬をもらった時の板
-	RewardSprite		m_reward200;
-	RewardSprite		m_reward500;
-	RewardSprite		m_gotPlane;						//IGotの板
-	RewardSprite		m_soldOut;
-	RewardSprite*		m_currentRewardSprite = nullptr;
+	SpriteRender		m_humburgerSp;							//ハンバーガー：色あり
+	SpriteRender		m_humburgerGrayHalf;					//ハンバーガー：グレーと色あり
+	SpriteRender		m_humburgerGrayAll;						//ハンバーガー：グレー
+	SpriteRender		m_pizzaSp;								//ピザ：色あり
+	SpriteRender		m_pizzaGrayHalf;						//ピザ：グレーと色あり
+	SpriteRender		m_pizzaGrayAll;							//ピザ：グレー
+	SpriteRender		m_sushiSp;								//寿司：色あり
+	SpriteRender		m_sushiGrayHalf;						//寿司：グレーと色あり
+	SpriteRender		m_sushiGrayAll;							//寿司：グレー			
+	RewardSprite		m_reward150;							//150円用報酬スプライト
+	RewardSprite		m_reward200;							//200円用報酬スプライト
+	RewardSprite		m_reward500;							//500円用報酬スプライト
+	RewardSprite		m_gotPlane;								//獲得時のスプライト
+	RewardSprite		m_soldOut;								//売り切れ時のスプライト
+	RewardSprite*		m_currentRewardSprite = nullptr;		//現在の報酬スプライト
 	
-	FoodSprite			m_gotSushi;
-	FoodSprite			m_gotPizza;
-	FoodSprite			m_gotHamburger;
-	FoodSprite*			m_currentFoodSprite = nullptr;
-	float				m_scaleTimer = 0.0f;
-	float				m_scale = 0.0f;
-	float				m_rewardPlaneStopTimer = 0.0f;
-	float				targetScale = 0.0f;
-	float				distance = 0.0f;
-	float				m_targetPizzaScale = 0.0f;
-	float				distancePizza = 0.0f;
-	float				m_targetSushiScale = 0.0f;
-	float				m_distanceSushi = 0.0f;
-	Vector3				dirPizza = Vector3::Zero;
-	Vector3				m_dirSushi = Vector3::Zero;
+	FoodSprite			m_gotSushi;								//寿司スプライト
+	FoodSprite			m_gotPizza;								//ピザスプライト
+	FoodSprite			m_gotHamburger;							//ハンバーガースプライト
+	FoodSprite*			m_currentFoodSprite = nullptr;			//現在の食べ物スプライト
+	float				m_scale = 0.0f;							//現在の拡大率
+	float				m_targetScale = 0.0f;					//ターゲットの拡大率
+	float				m_distance = 0.0f;						//ターゲットまでの距離
+	float				m_targetPizzaScale = 0.0f;				//ピザのターゲットスケール
+	float				m_distancePizza = 0.0f;					//ピザのターゲットまでの距離
+	float				m_targetSushiScale = 0.0f;				//寿司のターゲットスケール
+	float				m_distanceSushi = 0.0f;					//寿司のターゲットまでの距離
+	Vector3				m_dirPizza = Vector3::Zero;				//ピザスプライトの方向
+	Vector3				m_dirSushi = Vector3::Zero;				//寿司スプライトの方向
 
-	Vector3				dir = Vector3::Zero;
-	bool				m_isShowHumberger = false;		//ハンバーガーの色あり画像を表示するかどうか
-	bool				m_isShowPizza = false;			//ピザの色あり画像を表示するかどうか
-	bool				m_isShowSushi = false;			//寿司の色あり画像を表示するかどうか
-	bool				m_isHasCollided = false;
-	bool				m_isHasHamburger = false;
-	bool				m_isHasPizza = false;
-	bool				m_isHasSushi = false;
-	bool				m_isHasFullHamburger = false;	//ハンバーガーをフル所持かどうか
-	bool				m_isHasFullPizza = false;		//ピザをフル所持かどうか
-	bool				m_isHasFullSushi = false;		//寿司をフル所持かどうか
-	bool				m_isSlidingMoneyPlane = false;
-	bool				m_isRewardSpriteInitialized = false;
-	bool				m_isNextOn = false;
+	Vector3				m_dirHamburger = Vector3::Zero;			//ハンバーガースプライトの方向
+	
+	
+	
+	
+	bool				m_isHasHamburger = false;				//ハンバーガー所有フラグ
+	bool				m_isHasPizza = false;					//ピザ所有フラグ
+	bool				m_isHasSushi = false;					//寿司所有フラグ
+	bool				m_isHasFullHamburger = false;			//ハンバーガーを全所持かどうか
+	bool				m_isHasFullPizza = false;				//ピザを全所持かどうか
+	bool				m_isHasFullSushi = false;				//寿司を全所持かどうか
+	
+	bool				m_isRewardSpriteInitialized = false;	//報酬スプライト初期化フラグ
+	bool				m_isNextOn = false;						//次の状態フラグ
 
-	ItemState			m_hamburgerState = ITEM_GRAY_ALL;		//初期状態
-	ItemState			m_pizzaState = ITEM_GRAY_ALL;			//初期状態
-	ItemState			m_sushiState = ITEM_GRAY_ALL;			//初期状態
-	ItemScaleState		m_scaleState = ITEM_SCALE_ZERO;			//初期状態
-	RewardPlaneState	m_rewardPlaneState = Sliding_To_Stop;	//初期状態
-
-	ResultUI*			m_resultUI = nullptr;
-	GameTimer*			m_gameTimer = nullptr;
-	SoundSource*		m_soldOutSE = nullptr;
-	SoundSource*		m_foodGotSE = nullptr;
+	ItemState			m_hamburgerState = Item_Gray_All;		//ハンバーガーの初期状態
+	ItemState			m_pizzaState = Item_Gray_All;			//ピザの初期状態
+	ItemState			m_sushiState = Item_Gray_All;			//寿司の初期状態
+	ItemScaleState		m_scaleState = Item_Scale_Zero;			//拡大率の初期状態
+;
+	GameTimer*			m_gameTimer = nullptr;					//ゲームタイマー
+	SoundSource*		m_soldOutSE = nullptr;					//売り切れサウンド効果
+	SoundSource*		m_foodGotSE = nullptr;					//食べ物取得サウンド効果
 };
 

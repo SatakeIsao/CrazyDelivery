@@ -8,7 +8,6 @@
 #include "CustomerMan_Pizza.h"
 #include "CustomerMan_Sushi.h"
 #include "GameSound.h"
-#include "ResultUI.h"
 #include "GameTimer.h"
 
 namespace
@@ -36,7 +35,6 @@ InventoryUI::~InventoryUI()
 
 bool InventoryUI::Start()
 {
-	m_resultUI = FindGO<ResultUI>("resultui");
 	m_gameTimer = FindGO<GameTimer>("gametimer");
 	m_shopHamburger = FindGOs<ShopHamburger>("shophamburger");
 	auto* m_shopHamburgerB = FindGO<ShopHamburger>("shophamburgerB");
@@ -101,61 +99,61 @@ bool InventoryUI::Start()
 	m_sushiGrayAll.SetMulColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 	m_sushiGrayAll.Update();
 	//IGotの板
-	m_gotPlane.sprite.Init("Assets/skaterData/PlayerUI_Get3.dds", 1920.0f, 1080.0f);
-	m_gotPlane.position = MONEY_PLANE_STARTPOS;
-	m_gotPlane.sprite.SetPosition(m_gotPlane.position);
-	m_gotPlane.sprite.SetScale(1.0f);
-	m_gotPlane.sprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
-	m_gotPlane.sprite.Update();
+	m_gotPlane.m_reSprite.Init("Assets/skaterData/PlayerUI_Get3.dds", 1920.0f, 1080.0f);
+	m_gotPlane.m_position = MONEY_PLANE_STARTPOS;
+	m_gotPlane.m_reSprite.SetPosition(m_gotPlane.m_position);
+	m_gotPlane.m_reSprite.SetScale(1.0f);
+	m_gotPlane.m_reSprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+	m_gotPlane.m_reSprite.Update();
 
 	//ハンバーガー
-	m_gotHamburger.foodSprite.Init("Assets/skaterData/hamburgerGet.dds", 1920.0f, 1080.0f);
-	m_gotHamburger.foodPos = MONEY_PLANE_STARTPOS;
-	m_gotHamburger.foodSprite.SetPosition(m_gotPlane.position);
-	m_gotHamburger.foodSprite.SetScale(1.0f);
-	m_gotHamburger.foodSprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
-	m_gotHamburger.foodSprite.Update();
+	m_gotHamburger.m_foodSprite.Init("Assets/skaterData/hamburgerGet.dds", 1920.0f, 1080.0f);
+	m_gotHamburger.m_foodPos = MONEY_PLANE_STARTPOS;
+	m_gotHamburger.m_foodSprite.SetPosition(m_gotPlane.m_position);
+	m_gotHamburger.m_foodSprite.SetScale(1.0f);
+	m_gotHamburger.m_foodSprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+	m_gotHamburger.m_foodSprite.Update();
 
 	//ピザ
-	m_gotPizza.foodSprite.Init("Assets/skaterData/pizzaGet.dds", 1920.0f, 1080.0f);
-	m_gotPizza.foodPos = MONEY_PLANE_STARTPOS;
-	m_gotPizza.foodSprite.SetPosition(m_gotPlane.position);
-	m_gotPizza.foodSprite.SetScale(1.0f);
-	m_gotPizza.foodSprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
-	m_gotPizza.foodSprite.Update();
+	m_gotPizza.m_foodSprite.Init("Assets/skaterData/pizzaGet.dds", 1920.0f, 1080.0f);
+	m_gotPizza.m_foodPos = MONEY_PLANE_STARTPOS;
+	m_gotPizza.m_foodSprite.SetPosition(m_gotPlane.m_position);
+	m_gotPizza.m_foodSprite.SetScale(1.0f);
+	m_gotPizza.m_foodSprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+	m_gotPizza.m_foodSprite.Update();
 	
 	//寿司
-	m_gotSushi.foodSprite.Init("Assets/skaterData/sushiGet.dds", 1920.0f, 1080.0f);
-	m_gotSushi.foodPos = MONEY_PLANE_STARTPOS;
-	m_gotSushi.foodSprite.SetPosition(m_gotPlane.position);
-	m_gotSushi.foodSprite.SetScale(1.0f);
-	m_gotSushi.foodSprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
-	m_gotSushi.foodSprite.Update();
+	m_gotSushi.m_foodSprite.Init("Assets/skaterData/sushiGet.dds", 1920.0f, 1080.0f);
+	m_gotSushi.m_foodPos = MONEY_PLANE_STARTPOS;
+	m_gotSushi.m_foodSprite.SetPosition(m_gotPlane.m_position);
+	m_gotSushi.m_foodSprite.SetScale(1.0f);
+	m_gotSushi.m_foodSprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+	m_gotSushi.m_foodSprite.Update();
 
 	//報酬をもらった時の板
-	m_reward150.sprite.Init("Assets/skaterData/Reward150_2UI.dds", 1920.0f, 1080.0f);
-	m_reward150.sprite.SetPosition(MONEY_PLANE_STARTPOS);
-	m_reward150.sprite.SetScale(1.0f);
-	m_reward150.sprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
-	m_reward150.sprite.Update();
+	m_reward150.m_reSprite.Init("Assets/skaterData/Reward150_2UI.dds", 1920.0f, 1080.0f);
+	m_reward150.m_reSprite.SetPosition(MONEY_PLANE_STARTPOS);
+	m_reward150.m_reSprite.SetScale(1.0f);
+	m_reward150.m_reSprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+	m_reward150.m_reSprite.Update();
 	//報酬200
-	m_reward200.sprite.Init("Assets/skaterData/Reward200_2UI.dds", 1920.0f, 1080.0f);
-	m_reward200.sprite.SetPosition(MONEY_PLANE_STARTPOS);
-	m_reward200.sprite.SetScale(1.0f);
-	m_reward200.sprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
-	m_reward200.sprite.Update();
+	m_reward200.m_reSprite.Init("Assets/skaterData/Reward200_2UI.dds", 1920.0f, 1080.0f);
+	m_reward200.m_reSprite.SetPosition(MONEY_PLANE_STARTPOS);
+	m_reward200.m_reSprite.SetScale(1.0f);
+	m_reward200.m_reSprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+	m_reward200.m_reSprite.Update();
 	//報酬500
-	m_reward500.sprite.Init("Assets/skaterData/Reward500_2UI.dds", 1920.0f, 1080.0f);
-	m_reward500.sprite.SetPosition(MONEY_PLANE_STARTPOS);
-	m_reward500.sprite.SetScale(1.0f);
-	m_reward500.sprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
-	m_reward500.sprite.Update();
+	m_reward500.m_reSprite.Init("Assets/skaterData/Reward500_2UI.dds", 1920.0f, 1080.0f);
+	m_reward500.m_reSprite.SetPosition(MONEY_PLANE_STARTPOS);
+	m_reward500.m_reSprite.SetScale(1.0f);
+	m_reward500.m_reSprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+	m_reward500.m_reSprite.Update();
 
-	m_soldOut.sprite.Init("Assets/skaterData/SoldOutUI.dds", 1920.0f, 1080.0f);
-	m_soldOut.sprite.SetPosition(MONEY_PLANE_STARTPOS);
-	m_soldOut.sprite.SetScale(1.0f);
-	m_soldOut.sprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
-	m_soldOut.sprite.Update();
+	m_soldOut.m_reSprite.Init("Assets/skaterData/SoldOutUI.dds", 1920.0f, 1080.0f);
+	m_soldOut.m_reSprite.SetPosition(MONEY_PLANE_STARTPOS);
+	m_soldOut.m_reSprite.SetScale(1.0f);
+	m_soldOut.m_reSprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+	m_soldOut.m_reSprite.Update();
 	return true;
 }
 
@@ -294,8 +292,8 @@ void InventoryUI::Update()
 
 	//クールタイム終了時のスプライトリセット
 	if (m_currentRewardSprite != nullptr 
-		&& m_currentRewardSprite->state == Sliding_To_End
-		&& m_currentRewardSprite->position.x <= MONEY_PLANE_ENDPOS.x)
+		&& m_currentRewardSprite->m_state == Sliding_To_End
+		&& m_currentRewardSprite->m_position.x <= MONEY_PLANE_ENDPOS.x)
 	{
 		m_currentRewardSprite = nullptr;
 		m_isRewardSpriteInitialized = false;	//フラグをリセット
@@ -312,9 +310,9 @@ void InventoryUI::Update()
 	}
 
 	
-	if (g_pad[0]->IsTrigger(enButtonB) && m_scaleState == ITEM_SCALE_ZERO) 
+	if (g_pad[0]->IsTrigger(enButtonB) && m_scaleState == Item_Scale_Zero) 
 	{
-		m_scaleState = ITEM_SCALE_LARGE;
+		m_scaleState = Item_Scale_Large;
 	}
 
 	SpriteScale();
@@ -337,42 +335,42 @@ void InventoryUI::Update()
 	m_sushiGrayAll.Update();
 
 	//各アイテムの状態に基づいてフラグを更新
-	m_isHasHamburger = (m_hamburgerState != ITEM_GRAY_ALL);
-	m_isHasPizza = (m_pizzaState != ITEM_GRAY_ALL);
-	m_isHasSushi = (m_sushiState != ITEM_GRAY_ALL);
+	m_isHasHamburger = (m_hamburgerState != Item_Gray_All);
+	m_isHasPizza = (m_pizzaState != Item_Gray_All);
+	m_isHasSushi = (m_sushiState != Item_Gray_All);
 }
 
 void InventoryUI::SpriteScale()
 {
 	switch (m_scaleState) {
-	case ITEM_SCALE_ZERO:
+	case Item_Scale_Zero:
 		m_scale = 0.0f;
 		m_humburgerGrayAll.SetScale(m_scale);
 		m_pizzaGrayAll.SetScale(m_scale);
 		m_sushiGrayAll.SetScale(m_scale);
 		break;
-	case ITEM_SCALE_LARGE:
+	case Item_Scale_Large:
 		m_scale += 0.125f;
 		if (m_scale >=  3.0f) {
 			m_scale = 3.0f;
-			m_scaleState = ITEM_SCALE_NORMAL;
+			m_scaleState = Item_Scale_Default;
 		}
 		m_humburgerGrayAll.SetScale(m_scale);
 		m_pizzaGrayAll.SetScale(m_scale);
 		m_sushiGrayAll.SetScale(m_scale);
 		
 		break;
-	case ITEM_SCALE_NORMAL:
+	case Item_Scale_Default:
 		m_scale -= 0.025f;
 		if (m_scale <= 2.0f) {
 			m_scale = 2.0f;
-			m_scaleState = ITEM_SCALE_FINAL;
+			m_scaleState = Item_Scale_Final;
 		}
 		m_humburgerGrayAll.SetScale(m_scale);
 		m_pizzaGrayAll.SetScale(m_scale);
 		m_sushiGrayAll.SetScale(m_scale);
 		break;
-	case ITEM_SCALE_FINAL:
+	case Item_Scale_Final:
 		m_scale = 2.0f;
 		m_humburgerGrayAll.SetScale(m_scale);
 		m_pizzaGrayAll.SetScale(m_scale);
@@ -387,94 +385,94 @@ void InventoryUI::SpriteSlide(RewardSprite& rewardSprite)
 {
 	float deltaTime = g_gameTime->GetFrameDeltaTime();
 
-	switch (rewardSprite.state){
+	switch (rewardSprite.m_state){
 	case Sliding_To_Stop: {
 		//停止位置に向かって移動
-		rewardSprite.position.x -= MONEY_PLANE_SLIDESPEED * deltaTime;
+		rewardSprite.m_position.x -= MONEY_PLANE_SLIDESPEED * deltaTime;
 
-		if (rewardSprite.position.x <= MONEY_PLANE_STOPPOS.x)
+		if (rewardSprite.m_position.x <= MONEY_PLANE_STOPPOS.x)
 		{
-			rewardSprite.position.x = MONEY_PLANE_STOPPOS.x;
-			rewardSprite.state = Stopped;
-			rewardSprite.stopTimer = 0.0f;
+			rewardSprite.m_position.x = MONEY_PLANE_STOPPOS.x;
+			rewardSprite.m_state = Stopped;
+			rewardSprite.m_stopTimer = 0.0f;
 		}
 		break;
 	}
 	case Stopped:
 	{
 		//停止時間をカウント
-		rewardSprite.stopTimer += deltaTime;
+		rewardSprite.m_stopTimer += deltaTime;
 
-		if (rewardSprite.stopTimer >= REWARD_PLANE_STOPDURATION)
+		if (rewardSprite.m_stopTimer >= REWARD_PLANE_STOPDURATION)
 		{
-			rewardSprite.state = Sliding_To_End;
+			rewardSprite.m_state = Sliding_To_End;
 		}
 		break;
 	}
 	case Sliding_To_End:
 	{
 		//終了位置に向かって移動
-		rewardSprite.position.x -= MONEY_PLANE_SLIDESPEED * deltaTime;
+		rewardSprite.m_position.x -= MONEY_PLANE_SLIDESPEED * deltaTime;
 
-		if (rewardSprite.position.x <= MONEY_PLANE_ENDPOS.x)
+		if (rewardSprite.m_position.x <= MONEY_PLANE_ENDPOS.x)
 		{
-			rewardSprite.position.x = MONEY_PLANE_ENDPOS.x;
-			rewardSprite.state = Stopped;
+			rewardSprite.m_position.x = MONEY_PLANE_ENDPOS.x;
+			rewardSprite.m_state = Stopped;
 		}
 		break;
 	}
 	default:
 		break;
 	}
-	rewardSprite.sprite.SetPosition(rewardSprite.position);
-	rewardSprite.sprite.Update();
+	rewardSprite.m_reSprite.SetPosition(rewardSprite.m_position);
+	rewardSprite.m_reSprite.Update();
 }
 
 void InventoryUI::SpriteSlideFood(FoodSprite& foodSprite)
 {
 	float deltaTime = g_gameTime->GetFrameDeltaTime();
 
-	switch (foodSprite.foodState) {
+	switch (foodSprite.m_foodState) {
 	case Sliding_To_Stop: {
 		//停止位置に向かって移動
-		foodSprite.foodPos.x -= MONEY_PLANE_SLIDESPEED * deltaTime;
+		foodSprite.m_foodPos.x -= MONEY_PLANE_SLIDESPEED * deltaTime;
 
-		if (foodSprite.foodPos.x <= MONEY_PLANE_STOPPOS.x)
+		if (foodSprite.m_foodPos.x <= MONEY_PLANE_STOPPOS.x)
 		{
-			foodSprite.foodPos.x = MONEY_PLANE_STOPPOS.x;
-			foodSprite.foodState = Stopped;
-			foodSprite.stopTimer = 0.0f;
+			foodSprite.m_foodPos.x = MONEY_PLANE_STOPPOS.x;
+			foodSprite.m_foodState = Stopped;
+			foodSprite.m_stopTimer = 0.0f;
 		}
 	}
 	break;
 	case Stopped:
 	{
 		//停止時間をカウント
-		foodSprite.stopTimer += deltaTime;
+		foodSprite.m_stopTimer += deltaTime;
 		m_isNextOn = false;
 
-		if (foodSprite.stopTimer >= REWARD_PLANE_STOPDURATION)
+		if (foodSprite.m_stopTimer >= REWARD_PLANE_STOPDURATION)
 		{
 			if (m_shopHamburger[0]->GetIsHamburgerUIMove()
 				|| m_shopHamburger[1]->GetIsHamburgerUIMove())
 			{
-				foodSprite.foodState = Sliding_To_HamburgerLeftEnd;
-				foodSprite.foodScale = 1.0f;
-				foodSprite.stopTimer = 0.0f;
+				foodSprite.m_foodState = Sliding_To_HamburgerLeftEnd;
+				foodSprite.m_foodScale = 1.0f;
+				foodSprite.m_stopTimer = 0.0f;
 			}
 			else if (m_shopPizza[0]->GetIsPizzaUIMove()
 					|| m_shopPizza[1]->GetIsPizzaUIMove())
 			{
-				foodSprite.foodState = Sliding_To_PizzaLeftEnd;
-				foodSprite.foodScale = 1.0f;
-				foodSprite.stopTimer = 0.0f;
+				foodSprite.m_foodState = Sliding_To_PizzaLeftEnd;
+				foodSprite.m_foodScale = 1.0f;
+				foodSprite.m_stopTimer = 0.0f;
 			}
 			else if (m_shopSushi[0]->GetIsSushiUIMove()
 				|| m_shopSushi[1]->GetIsSushiUIMove())
 			{
-				foodSprite.foodState = Sliding_To_SushiLeftEnd;
-				foodSprite.foodScale = 1.0f;
-				foodSprite.stopTimer = 0.0f;
+				foodSprite.m_foodState = Sliding_To_SushiLeftEnd;
+				foodSprite.m_foodScale = 1.0f;
+				foodSprite.m_stopTimer = 0.0f;
 			}
 		}
 
@@ -483,106 +481,106 @@ void InventoryUI::SpriteSlideFood(FoodSprite& foodSprite)
 	case Sliding_To_End:
 	{
 		//終了位置に向かって移動
-		foodSprite.foodPos.x -= MONEY_PLANE_SLIDESPEED * deltaTime;
+		foodSprite.m_foodPos.x -= MONEY_PLANE_SLIDESPEED * deltaTime;
 
-		if (foodSprite.foodPos.x <= MONEY_PLANE_ENDPOS.x)
+		if (foodSprite.m_foodPos.x <= MONEY_PLANE_ENDPOS.x)
 		{
-			foodSprite.foodPos.x = MONEY_PLANE_ENDPOS.x;
-			foodSprite.foodState = Stopped;
+			foodSprite.m_foodPos.x = MONEY_PLANE_ENDPOS.x;
+			foodSprite.m_foodState = Stopped;
 		}
 		
 	}
 	break;
 	case Sliding_To_HamburgerLeftEnd:
 	{
-		targetScale = foodSprite.foodScale * 0.5;
-		foodSprite.foodScale += (targetScale - foodSprite.foodScale) * 0.1;
+		m_targetScale = foodSprite.m_foodScale * 0.5;
+		foodSprite.m_foodScale += (m_targetScale - foodSprite.m_foodScale) * 0.1;
 
 		//目標位置への方向ベクトルを計算
-		dir = HAMBURGER_LEFT_ENDPOS - foodSprite.foodPos;
-		distance = dir.Length();
+		m_dirHamburger = HAMBURGER_LEFT_ENDPOS - foodSprite.m_foodPos;
+		m_distance = m_dirHamburger.Length();
 
-		if (distance > 50.1f)
+		if (m_distance > 50.1f)
 		{
-			dir.Normalize();
-			foodSprite.foodPos += dir * FOOD_SLIDESPEED * deltaTime;
+			m_dirHamburger.Normalize();
+			foodSprite.m_foodPos += m_dirHamburger * FOOD_SLIDESPEED * deltaTime;
 			
 		}
 		else
 		{
 			
-			foodSprite.foodPos = MONEY_PLANE_STARTPOS;
-			foodSprite.foodScale = 1.0f;
-			foodSprite.foodState = Stopped;
+			foodSprite.m_foodPos = MONEY_PLANE_STARTPOS;
+			foodSprite.m_foodScale = 1.0f;
+			foodSprite.m_foodState = Stopped;
 		}
 		break;
 	}
 
 	case Sliding_To_PizzaLeftEnd:
-		m_targetPizzaScale = foodSprite.foodScale * 0.5f;
-		foodSprite.foodScale += (m_targetPizzaScale - foodSprite.foodScale) * 0.1f;
+		m_targetPizzaScale = foodSprite.m_foodScale * 0.5f;
+		foodSprite.m_foodScale += (m_targetPizzaScale - foodSprite.m_foodScale) * 0.1f;
 
 		//目標位置へのベクトルを計算
-		dirPizza = PIZZA_LEFT_ENDPOS - foodSprite.foodPos;
-		distancePizza = dirPizza.Length();
+		m_dirPizza = PIZZA_LEFT_ENDPOS - foodSprite.m_foodPos;
+		m_distancePizza = m_dirPizza.Length();
 
-		if (distancePizza > 50.1f)
+		if (m_distancePizza > 50.1f)
 		{
-			dirPizza.Normalize();
-			foodSprite.foodPos += dirPizza * FOOD_SLIDESPEED * deltaTime;
+			m_dirPizza.Normalize();
+			foodSprite.m_foodPos += m_dirPizza * FOOD_SLIDESPEED * deltaTime;
 		}
 		else
 		{
-			foodSprite.foodPos = MONEY_PLANE_STARTPOS;
-			foodSprite.foodScale = 1.0f;
-			foodSprite.foodState = Stopped;
+			foodSprite.m_foodPos = MONEY_PLANE_STARTPOS;
+			foodSprite.m_foodScale = 1.0f;
+			foodSprite.m_foodState = Stopped;
 		}
 		break;
 
 	case Sliding_To_SushiLeftEnd:
-		m_targetSushiScale = foodSprite.foodScale * 0.5f;
-		foodSprite.foodScale += (m_targetSushiScale - foodSprite.foodScale) * 0.1f;
+		m_targetSushiScale = foodSprite.m_foodScale * 0.5f;
+		foodSprite.m_foodScale += (m_targetSushiScale - foodSprite.m_foodScale) * 0.1f;
 		//目標位置へのベクトルを計算
-		m_dirSushi = SUSHI_LEFT_ENDPOS - foodSprite.foodPos;
+		m_dirSushi = SUSHI_LEFT_ENDPOS - foodSprite.m_foodPos;
 		m_distanceSushi = m_dirSushi.Length();
 
 		if (m_distanceSushi > 50.1f)
 		{
 			m_dirSushi.Normalize();
-			foodSprite.foodPos += m_dirSushi * FOOD_SLIDESPEED * deltaTime;
+			foodSprite.m_foodPos += m_dirSushi * FOOD_SLIDESPEED * deltaTime;
 		}
 		else
 		{
-			foodSprite.foodPos = MONEY_PLANE_STARTPOS;
-			foodSprite.foodScale = 1.0f;
-			foodSprite.foodState = Stopped;
+			foodSprite.m_foodPos = MONEY_PLANE_STARTPOS;
+			foodSprite.m_foodScale = 1.0f;
+			foodSprite.m_foodState = Stopped;
 		}
 		break;
 
 	default:
 		break;
 	}
-	foodSprite.foodSprite.SetPosition(foodSprite.foodPos);
-	foodSprite.foodSprite.SetScale(foodSprite.foodScale);
-	foodSprite.foodSprite.Update();
+	foodSprite.m_foodSprite.SetPosition(foodSprite.m_foodPos);
+	foodSprite.m_foodSprite.SetScale(foodSprite.m_foodScale);
+	foodSprite.m_foodSprite.Update();
 }
 
-//一時的なテスト
-void InventoryUI::ButtonTest()
-{
-	if (g_pad[0]->IsTrigger(enButtonUp))
-	{
-		NextHamburgerState();
-	}
-	if (g_pad[0]->IsTrigger(enButtonDown))
-	{
-		NextPizzaState();
-	}
-	if (g_pad[0]->IsTrigger(enButtonLeft))
-	{
-		NextSushiState();
-	}
-}
+////一時的なテスト
+//void InventoryUI::ButtonTest()
+//{
+//	if (g_pad[0]->IsTrigger(enButtonUp))
+//	{
+//		NextHamburgerState();
+//	}
+//	if (g_pad[0]->IsTrigger(enButtonDown))
+//	{
+//		NextPizzaState();
+//	}
+//	if (g_pad[0]->IsTrigger(enButtonLeft))
+//	{
+//		NextSushiState();
+//	}
+//}
 
 void InventoryUI::CalcAlphaAndScale(float& alpha, float& scale)
 {
@@ -604,14 +602,14 @@ void InventoryUI::CalcAlphaAndScale(float& alpha, float& scale)
 void InventoryUI::NextHamburgerState()
 {
 	switch (m_hamburgerState) {
-		case ITEM_ALL:
+		case Item_All:
 			break;
-		case ITEM_GRAY_HALF:
-			m_hamburgerState = ITEM_ALL;
+		case Item_Gray_Half:
+			m_hamburgerState = Item_All;
 			m_isHasFullHamburger = true;
 			break;
-		case ITEM_GRAY_ALL:
-			m_hamburgerState = ITEM_GRAY_HALF;
+		case Item_Gray_All:
+			m_hamburgerState = Item_Gray_Half;
 			m_isHasFullHamburger = false;
 			break;
 	}
@@ -620,14 +618,14 @@ void InventoryUI::NextHamburgerState()
 void InventoryUI::NextPizzaState()
 {
 	switch (m_pizzaState) {
-	case ITEM_ALL:
+	case Item_All:
 		break;
-	case ITEM_GRAY_HALF:
-		m_pizzaState = ITEM_ALL;
+	case Item_Gray_Half:
+		m_pizzaState = Item_All;
 		m_isHasFullPizza = true;
 		break;
-	case ITEM_GRAY_ALL:
-		m_pizzaState = ITEM_GRAY_HALF;
+	case Item_Gray_All:
+		m_pizzaState = Item_Gray_Half;
 		m_isHasFullPizza = false;
 		break;
 	}
@@ -636,14 +634,14 @@ void InventoryUI::NextPizzaState()
 void InventoryUI::NextSushiState()
 {
 	switch (m_sushiState) {
-	case ITEM_ALL:
+	case Item_All:
 		break;
-	case ITEM_GRAY_HALF:
-		m_sushiState = ITEM_ALL;
+	case Item_Gray_Half:
+		m_sushiState = Item_All;
 		m_isHasFullSushi = true;
 		break;
-	case ITEM_GRAY_ALL:
-		m_sushiState = ITEM_GRAY_HALF;
+	case Item_Gray_All:
+		m_sushiState = Item_Gray_Half;
 		m_isHasFullSushi = false;
 		break;
 	}
@@ -652,14 +650,14 @@ void InventoryUI::NextSushiState()
 void InventoryUI::NextScaleState()
 {
 	switch (m_scaleState) {
-	case ITEM_SCALE_ZERO:
-		m_scaleState = ITEM_SCALE_LARGE;
+	case Item_Scale_Zero:
+		m_scaleState = Item_Scale_Large;
 		break;
-	case ITEM_SCALE_LARGE:
-		m_scaleState = ITEM_SCALE_NORMAL;
+	case Item_Scale_Large:
+		m_scaleState = Item_Scale_Default;
 		break;
-	case ITEM_SCALE_NORMAL:
-		m_scaleState = ITEM_SCALE_FINAL;
+	case Item_Scale_Default:
+		m_scaleState = Item_Scale_Final;
 		break;
 	default:
 		break;
@@ -669,14 +667,14 @@ void InventoryUI::NextScaleState()
 void InventoryUI::PreviousHamburgerState()
 {
 	switch (m_hamburgerState) {
-	case ITEM_ALL:
-		m_hamburgerState = ITEM_GRAY_HALF;
+	case Item_All:
+		m_hamburgerState = Item_Gray_Half;
 		m_isHasFullHamburger = false;
 		break;
-	case ITEM_GRAY_HALF:
-		m_hamburgerState = ITEM_GRAY_ALL;
+	case Item_Gray_Half:
+		m_hamburgerState = Item_Gray_All;
 		break;
-	case ITEM_GRAY_ALL:
+	case Item_Gray_All:
 		break;
 	}
 }
@@ -684,14 +682,14 @@ void InventoryUI::PreviousHamburgerState()
 void InventoryUI::PreviousPizzaState()
 {
 	switch (m_pizzaState) {
-	case ITEM_ALL:
-		m_pizzaState = ITEM_GRAY_HALF;
+	case Item_All:
+		m_pizzaState = Item_Gray_Half;
 		m_isHasFullPizza = false;
 		break;
-	case ITEM_GRAY_HALF:
-		m_pizzaState = ITEM_GRAY_ALL;
+	case Item_Gray_Half:
+		m_pizzaState = Item_Gray_All;
 		break;
-	case ITEM_GRAY_ALL:
+	case Item_Gray_All:
 		break;
 	}
 }
@@ -699,14 +697,14 @@ void InventoryUI::PreviousPizzaState()
 void InventoryUI::PreviousSushiState()
 {
 	switch (m_sushiState) {
-	case ITEM_ALL:
-		m_sushiState = ITEM_GRAY_HALF;
+	case Item_All:
+		m_sushiState = Item_Gray_Half;
 		m_isHasFullSushi = false;
 		break;
-	case ITEM_GRAY_HALF:
-		m_sushiState = ITEM_GRAY_ALL;
+	case Item_Gray_Half:
+		m_sushiState = Item_Gray_All;
 		break;
-	case ITEM_GRAY_ALL:
+	case Item_Gray_All:
 		break;
 	}
 }
@@ -714,26 +712,26 @@ void InventoryUI::PreviousSushiState()
 void InventoryUI::SetRewardSprite(RewardSprite* rewardSprite)
 {
 	m_currentRewardSprite = rewardSprite;
-	m_currentRewardSprite->position = MONEY_PLANE_STARTPOS;
-	m_currentRewardSprite->state = Sliding_To_Stop;
+	m_currentRewardSprite->m_position = MONEY_PLANE_STARTPOS;
+	m_currentRewardSprite->m_state = Sliding_To_Stop;
 	//スプライトの即時更新と描画
-	m_currentRewardSprite->sprite.SetPosition(m_currentRewardSprite->position);
-	m_currentRewardSprite->sprite.Update();
-	RenderImmediate(m_currentRewardSprite->sprite);
+	m_currentRewardSprite->m_reSprite.SetPosition(m_currentRewardSprite->m_position);
+	m_currentRewardSprite->m_reSprite.Update();
+	RenderImmediate(m_currentRewardSprite->m_reSprite);
 }
 
 void InventoryUI::SetFoodSprite(FoodSprite* foodSprite)
 {
 	m_currentFoodSprite = foodSprite;
-	m_currentFoodSprite->foodPos = MONEY_PLANE_STARTPOS;
-	m_currentFoodSprite->foodState = Sliding_To_Stop;
+	m_currentFoodSprite->m_foodPos = MONEY_PLANE_STARTPOS;
+	m_currentFoodSprite->m_foodState = Sliding_To_Stop;
 	//スケールをリセット
-	m_currentFoodSprite->foodScale = 1.0f;
+	m_currentFoodSprite->m_foodScale = 1.0f;
 	//スプライトの即時更新と描画
-	m_currentFoodSprite->foodSprite.SetPosition(m_currentFoodSprite->foodPos);
-	m_currentFoodSprite->foodSprite.SetScale(m_currentFoodSprite->foodScale);
-	m_currentFoodSprite->foodSprite.Update();
-	RenderImmediate(m_currentFoodSprite->foodSprite);
+	m_currentFoodSprite->m_foodSprite.SetPosition(m_currentFoodSprite->m_foodPos);
+	m_currentFoodSprite->m_foodSprite.SetScale(m_currentFoodSprite->m_foodScale);
+	m_currentFoodSprite->m_foodSprite.Update();
+	RenderImmediate(m_currentFoodSprite->m_foodSprite);
 }
 
 void InventoryUI::RenderImmediate(SpriteRender& sprite)
@@ -753,48 +751,48 @@ void InventoryUI::Render(RenderContext& rc)
 	}
 
 	switch (m_hamburgerState) {
-		case ITEM_ALL:
+		case Item_All:
 			m_humburgerSp.Draw(rc);
 			break;
-		case ITEM_GRAY_HALF:
+		case Item_Gray_Half:
 			m_humburgerGrayHalf.Draw(rc);
 			break;
-		case ITEM_GRAY_ALL:
+		case Item_Gray_All:
 			m_humburgerGrayAll.Draw(rc);
 			break;
 	}
 
 	switch (m_pizzaState) {
-	case ITEM_ALL:
+	case Item_All:
 		m_pizzaSp.Draw(rc);
 		break;
-	case ITEM_GRAY_HALF:
+	case Item_Gray_Half:
 		m_pizzaGrayHalf.Draw(rc);
 		break;
-	case ITEM_GRAY_ALL:
+	case Item_Gray_All:
 		m_pizzaGrayAll.Draw(rc);
 		break;
 	}
 
 	switch (m_sushiState) {
-	case ITEM_ALL:
+	case Item_All:
 		m_sushiSp.Draw(rc);
 		break;
-	case ITEM_GRAY_HALF:
+	case Item_Gray_Half:
 		m_sushiGrayHalf.Draw(rc);
 		break;
-	case ITEM_GRAY_ALL:
+	case Item_Gray_All:
 		m_sushiGrayAll.Draw(rc);
 		break;
 	}
 	
 	if (m_currentRewardSprite != nullptr)
 	{
-		m_currentRewardSprite->sprite.Draw(rc);
+		m_currentRewardSprite->m_reSprite.Draw(rc);
 	}
 
 	// フードスプライトを描画
-	if (m_currentFoodSprite && m_currentFoodSprite->IsVisible()) {
+	if (m_currentFoodSprite && m_currentFoodSprite->GetIsVisible()) {
 		m_currentFoodSprite->Draw(rc);
 	}
 }
@@ -802,8 +800,8 @@ void InventoryUI::Render(RenderContext& rc)
 void InventoryUI::SetRewardSpriteToGetPlane()
 {
 	m_currentRewardSprite = &m_gotPlane;
-	m_currentRewardSprite->position = MONEY_PLANE_STARTPOS;
-	m_currentRewardSprite->state = Sliding_To_Stop;
-	m_currentRewardSprite->sprite.SetPosition(m_currentRewardSprite->position);
-	m_currentRewardSprite->sprite.Update();
+	m_currentRewardSprite->m_position = MONEY_PLANE_STARTPOS;
+	m_currentRewardSprite->m_state = Sliding_To_Stop;
+	m_currentRewardSprite->m_reSprite.SetPosition(m_currentRewardSprite->m_position);
+	m_currentRewardSprite->m_reSprite.Update();
 }
