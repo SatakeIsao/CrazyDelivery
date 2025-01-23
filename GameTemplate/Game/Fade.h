@@ -10,9 +10,9 @@ public:
 	void Render(RenderContext& rc);
 
 private:
-	SpriteRender m_fadeSprite;
-	SpriteRender m_loadSprite;
+	SpriteRender m_fadeSprite;			//フェード用スプライト
+	SpriteRender m_loadSprite;			//ロード用スプライト
 
-	float m_fadeSpriteAlpha;
+	float m_fadeSpriteAlpha = 0.0f;		//フェード用のアルファ値
 };
 
