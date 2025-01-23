@@ -1,13 +1,19 @@
 #pragma once
-
 class BackGround;
 class Point;
 class ShopHamburger;
+class ShopPizza;
+class ShopSushi;
+class GameTimer;
+class CustomerMan;
+class CustomerMan_Hamburger;
+class CustomerMan_Pizza;
+class CustomerMan_Sushi;
 
 namespace
 {
 	const float ADD_ACCELE = 10000.0f;		//追加加速度
-	const float JUMP_VALUE = 600.0f;	//ジャンプする数値
+	const float JUMP_VALUE = 600.0f;		//ジャンプする数値
 }
 namespace nsPlayer
 {
@@ -32,18 +38,18 @@ namespace nsPlayer
 			enAnimClip_Num		//アニメーションクリップの数
 		};
 
-		////ステート関係
-		//enum State {
-		//	enState_Idle,
-		//	enState_Run,
-		//	enState_Jump,
-		//	enState_Num,
-		//};
 
 		Player();
 		~Player();
 		bool Start();
+		void InitPlayerModels();
 		void InitPlayerAnimationClips();
+		void InitGameObjects();
+		void InitPlayerUI();
+		void InitCharaCon();
+		void InitPlayerStates();
+		void InitPlayerSound();
+		void HandleStateChange();
 		void Move();
 		void MoveLStickOn();
 		void Speed();
@@ -52,8 +58,18 @@ namespace nsPlayer
 		void BackGroundCollisionCheck();
 		void CheckSpeedFromMovement();
 		void CheckCollisionWithWall();
+		void UpdateModelPos();
+		void UpdateUIPos();
+		void UpdateModels();
+		void HandleDriftRot();
+		void HandleAcceleration();
+		void AdjustVelocityDir();
+		void ApplyGravity();
+		void UpdatePosWithVelocity();
+		void PlayAccelerationSound();
 		void ApplySpeedLimit();
 		void CollisionPoint();
+		void RunSEProcess();
 		//void SetBackGround(BackGround* background);
 		//void Jump();
 		
@@ -65,6 +81,7 @@ namespace nsPlayer
 		//void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);//アニメーションイベント用の関数
 		void Render(RenderContext& rc);
 
+		bool IsPlayerMoving();
 		/// <summary>
 		/// プレイヤーの前方方向を取得
 		/// </summary>
@@ -77,7 +94,7 @@ namespace nsPlayer
 		/// 座標の設定
 		/// </summary>
 		/// <param name="pos">設定する座標</param>
-		void SetPosition(const Vector3 pos)
+		void SetPosition(const Vector3& pos)
 		{
 			m_position = pos;
 		}
@@ -86,7 +103,7 @@ namespace nsPlayer
 		/// 大きさの設定
 		/// </summary>
 		/// <param name="scale">設定するスケール</param>
-		void SetScale(const Vector3 scale)
+		void SetScale(const Vector3& scale)
 		{
 			m_scale = scale;
 		}
@@ -164,8 +181,12 @@ namespace nsPlayer
 		/// </summary>
 		void SetBrake()
 		{
-			m_velocity.x = 0.00f;
-			m_velocity.z = 0.00f;
+			/*m_velocity.x *= 0.00f;
+			m_velocity.z *= 0.00f;*/
+
+			m_velocity.x *= 0.20f;
+			m_velocity.z *= 0.20f;
+
 			//m_velocity.x *= 0.999f * g_gameTime->GetFrameDeltaTime();
 			//m_velocity.z *= 0.999f * g_gameTime->GetFrameDeltaTime();
 		}
@@ -212,6 +233,7 @@ namespace nsPlayer
 		{
 			this->m_acceleDelayTime = delayTime;
 			this->m_accele = accele;
+			//プレイヤーの速度を上限値以内に制限する
 			ApplySpeedLimit();
 		}
 
@@ -229,7 +251,7 @@ namespace nsPlayer
 		/// アクセルスタートしているかの取得
 		/// </summary>
 		/// <returns></returns>
-		const bool GetIsAcceleStart()
+		const bool GetIsAcceleStart() const
 		{
 			return m_isAcceleStart;
 		}
@@ -243,19 +265,6 @@ namespace nsPlayer
 			m_isAcceleStart = acceleStart;
 		}
 
-		//const void A(Vector3& speed, float& quietTime)	
-		//{
-		//	Vector3 subSpeed;	//減算
-		//	subSpeed = speed / quietTime;
-		//	m_velocity -= subSpeed;
-
-		//	if (m_velocity.x < 0.0f) {
-		//		m_velocity.x = 0.0f;
-		//	}
-		//	if (m_velocity.z < 0.0f) {
-		//		m_velocity.z = 0.0f;
-		//	}
-		//}	
 
 		/// <summary>
 		/// ドリフト開始しているかの設定
@@ -270,7 +279,7 @@ namespace nsPlayer
 		/// ドリフト時間の取得
 		/// </summary>
 		/// <returns></returns>
-		float GetDriftTime()
+		float GetDriftTime() const
 		{
 			return m_driftTime;
 		}
@@ -298,9 +307,20 @@ namespace nsPlayer
 			return m_charaCon;
 		}
 
+		//void FadeOutSprite(Sprite& sprite, float& alpha, float fadeDuration, bool& isShow, float& fadeTimer);
+
+		/*void SetVelicity(Vector3 velocity) const
+		{
+			m_velocity = velocity;
+		}*/
+
 	private:
 		ModelRender			m_playerModel;								//プレイヤーモデル
 		ModelRender			m_boardModel;								//ボードモデル
+		SpriteRender		m_goSprite;
+		SpriteRender		m_gotItSprite;
+		Vector3				m_spriteGoPos = Vector3(0.0f, 60.0f,0.0f);
+		Vector3				m_spriteGotPos = Vector3(300.0f, 0.0f, 0.0f);
 		Vector3				m_forward = Vector3::Front;					//プレイヤーの前方方向
 		Vector3				m_position = Vector3(1000.0f,10.0f,-220.0f);		//プレイヤーの現在座標
 		Vector3				m_moveSpeed = Vector3::Zero;				//プレイヤーの移動速度
@@ -320,13 +340,14 @@ namespace nsPlayer
 		//float				m_accele = 0.0f;
 		Vector3				m_velocity = Vector3::Zero;					//現在の速度
 		Vector3				m_friction = Vector3(0.1f, 0.1f, 0.1f);		//摩擦力
-		Vector3				nextPosition = Vector3::Zero;				//次フレームの座標
-		Vector3				movementVector = Vector3::Zero;				//現在の座標と次のフレームの座標の移動ベクトル
+		Vector3				m_nextPosition = Vector3::Zero;				//次フレームの座標
+		Vector3				m_movementVector = Vector3::Zero;				//現在の座標と次のフレームの座標の移動ベクトル
 		//const float maxAcceleration = 500.0f;							//最大加速度
 		//const float maxDeceleration = 0.2f;							//最大減衰率
 		Quaternion			tsts = Quaternion::Identity;
+		SoundSource* m_skaterAcceleSE = nullptr;
+		SoundSource* m_skaterRunSE = nullptr;
 
-		
 		float				raitoAccele = 0.0f;							//加速割合
 		float				initQuietTime = 5.0f;						//初期の静止時間(加速度1000.0fの時)
 		float				initQuietSeppd = 0.0f;						//初期の減速度
@@ -350,12 +371,22 @@ namespace nsPlayer
 		
 		float				RotSpeed = -0.01f;							//回転速度
 		float				currentSpeed = 0.0f;						//現在の速度
-		float				movementLength = 0.0f;						//移動ベクトルの長さ
+		float				m_movementLength = 0.0f;						//移動ベクトルの長さ
 		Vector3				m_reflection= Vector3::Zero;
 
 		BackGround*			m_backGround = nullptr;
+		GameTimer*			m_gameTimer = nullptr;
+		CustomerMan* m_customerMan = nullptr;
+		std::vector<CustomerMan_Hamburger*> m_customerMan_Hamburger;
+		std::vector<CustomerMan_Pizza*> m_customerMan_Pizza;
+		std::vector<CustomerMan_Sushi*> m_customerMan_Sushi;
+
+		std::vector<ShopHamburger*>		m_shopHamburger;
+		std::vector<ShopPizza*>			m_shopPizza;
+		std::vector<ShopSushi*>			m_shopSushi;
 		//Point* m_point = nullptr;
 
+		
 	protected:
 		CCapsuleCollider	m_capsuleCollider;							//遮蔽物確認用のコライダー
 

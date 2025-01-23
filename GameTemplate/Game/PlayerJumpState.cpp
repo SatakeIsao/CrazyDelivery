@@ -1,13 +1,7 @@
 #include "stdafx.h"
 #include "PlayerJumpState.h"
 #include "PlayerRunState.h"
-#include "PlayerJumpEnd.h"
 #include "PlayerDriftState.h"
-
-namespace
-{
-
-}
 
 namespace nsPlayer {
 	PlayerJumpState::~PlayerJumpState()
@@ -26,10 +20,6 @@ namespace nsPlayer {
 		{
 			return new PlayerRunState(m_player);
 		}
-		/*if (m_player->GetIsPlayingAnimation() == false)
-		{
-			return new PlayerJumpEnd(m_player);
-		}*/
 
 		if (g_pad[0]->IsTrigger(enButtonRB1))
 		{

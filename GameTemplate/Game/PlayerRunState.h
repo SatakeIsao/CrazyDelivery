@@ -43,8 +43,7 @@ namespace nsPlayer
 			return acceleTime;
 		}*/
 	private:
-		float acceleTime = 0.6f;
-		//float driftTime = 1.15f;
+		float m_acceleTime = 0.6f;
 		
 	};
 }

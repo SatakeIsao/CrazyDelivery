@@ -6,13 +6,30 @@
 #include "PlayerPushState.h"
 #include "GameCamera.h"
 #include "BackGround.h"
+#include "ShopHamburger.h"
+#include "ShopPizza.h"
+#include "ShopSushi.h"
+#include "GameTimer.h"
 #include <fstream>
 #include <iostream>
+#include "CustomerMan.h"
+#include "CustomerMan_Hamburger.h"
+#include "CustomerMan_Pizza.h"
+#include "CustomerMan_Sushi.h"
+#include "GameSound.h"
 
 namespace
 {
-	//const float MAX_ACCELERATION = 500.0f;			//最大加速度
-	//const float MAX_DECELERATION = 0.2f;				//最大減衰度
+	// 定数の定義
+	const float MIN_DECELERATION_FACTOR = 0.0f;			//減衰係数の最小値
+	const float MAX_DOT_POWER = 0.9f;					//ドット積のべき乗の指数
+	const float MIN_FRICTION = 0.998f;					//摩擦力の最小値
+	const float MAX_FRICTION = 1.0f;					//摩擦力の最大値
+
+	const float MIN_DECELERATION = 0.2f;				//最小減速率
+	const float MAX_DECELERATION = 0.7f;				//最大減速率
+	const float NORMAL_Y_VALUE = 0.0f;					//法線ベクトルのY成分固定値
+	const float REFLECTION_SCALAR = -2.0f;				//反射計算用のスカラー値
 	
 	const float CHARACON_RADIUS = 20.0f;				//キャラクターコントローラーの半径
 	const float CHARACON_HEIGHT = 50.0f;				//キャラクターコントローラーの高さ
@@ -22,7 +39,6 @@ namespace
 	const float DRIFT_ROT_SPEED_MULTPLAER = 5.0f;		//ドリフト中の回転速度倍率
 	const float GRAVITY = 15.0f;						//重力加速度(仮の値、適宜調整)
 	const float GROUND_LEVEL = 0.0f;					//地面の高さ
-	const float COLLISION_UP_OFFSET = CHARACON_HEIGHT;	//コリジョンチェックのY軸オフセット
 	const float SPEED_THRESHOLD = 1.5f;					//スピードリセットのしきい値
 }
 
@@ -38,10 +54,38 @@ namespace nsPlayer
 
 	bool Player::Start()
 	{
-		m_backGround = FindGO<BackGround>("background");
+		//ゲームオブジェクトを初期化
+		InitGameObjects();
+
 		//プレイヤーのアニメーションクリップを初期化
 		InitPlayerAnimationClips();
 
+		//プレイヤーのモデルを初期化
+		InitPlayerModels();
+		
+		//プレイヤーUIを初期化
+		InitPlayerUI();
+
+		//キャラコンを初期化
+		InitCharaCon();
+
+		//プレイヤーのアニメーション速度を設定
+		PlaySetAnimationSpeed(2.0f);
+
+		//減速度の初期設定
+		InitQuietTimeSet();
+
+		//プレイヤーステートを初期化
+		InitPlayerStates();
+
+		//プレイヤーのサウンドを初期化
+		InitPlayerSound();
+		
+		return true;
+	}
+
+	void Player::InitPlayerModels()
+	{
 		//プレイヤーモデルの初期化
 		m_playerModel.Init("Assets/skaterData/player.tkm", m_playerAnimClips, enAnimClip_Num);
 		m_playerModel.SetPosition(m_position);
@@ -55,76 +99,69 @@ namespace nsPlayer
 		m_boardModel.SetRotation(m_rotation);
 		m_boardModel.SetScale(m_scale);
 		m_boardModel.Update();
-
-
-		//キャラクターコントローラーを初期化
-		m_charaCon.Init(
-			CHARACON_RADIUS,		//半径
-			CHARACON_HEIGHT,		//高さ
-			m_position	//初期位置設定
-		);
-
-		//衝突確認用のコライダーを初期化
-		//半径はキャラクターコントローラーと同じ
-		//高さはキャラクターコントローラーの2分の1
-		m_capsuleCollider.Init(CHARACON_RADIUS, CHARACON_HEIGHT / 2);
-
-		PlaySetAnimationSpeed(2.0f);
-
-		//減速度の初期設定
-		InitQuietTimeSet();
-
-		//初期ステートを待機状態に設定
-		m_playerState = new PlayerIdleState(this);
-		m_playerState->Enter();		//待機状態の初期処理
-		m_forward = Vector3::Right;
-		return true;
 	}
 
 	void Player::Update()
 	{
-		//ステートの変更のチェックと変更
-		IPlayerState* playerState = m_playerState->StateChange();
-
-		//新しいステートが設定されている場合、ステートを変更
-		if (playerState != nullptr)
+		if (m_gameTimer->GetIsTimerEnd()==true)
 		{
-			delete m_playerState;		//現在のステートを削除
-			m_playerState = playerState;//新しいステートに変更
-			m_playerState->Enter();		//新しいステートの初期処理
+			//ブレーキを設定
+			SetBrake();
 		}
+		//プレイヤーのステート変更の管理
+		HandleStateChange();
 		//プレイヤーの移動処理
 		Move();
+
 		//移動ベクトルをチェックしてスピードをリセット
 		//CheckSpeedFromMovement();
-
 		
-
+		//進行時の効果音
+		RunSEProcess();
+		
 		//減速処理
 		Friction();
-		//テキストファイルに現在のパラメータを書き込む
+
+		//テキストファイルに現在のパラメータを書き込む処理
 		//Output();
-
-		//Jump();
-		//MoveLStickOn();
-		//tsts.AddRotationDegZ(g_pad[0]->GetLStickXF());
-		//tsts.AddRotationDegY(g_pad[0]->GetLStickXF());
-
 
 		//現在のステートの更新
 		m_playerState->Update();
 		
 		//アニメーションを再生する
 		PlayAnimation(m_currentAnimationClip);
+
 		//壁との衝突チェック
 		CheckCollisionWithWall();
-		//モデルの回転を更新
-		m_playerModel.SetRotation(m_rotation);
-		m_boardModel.SetRotation(m_rotation);
+
+		//UIの座標を更新
+		UpdateUIPos();
+		
+		//モデルの更新
+		UpdateModels();
+		
+	}
+
+
+	void Player::Move()
+	{
+		//ドリフト回転を制御する
+		HandleDriftRot();
+
+		//加速処理
+		HandleAcceleration();
+
+		//速度の方向を調整
+		AdjustVelocityDir();
+
+		//重力を適用
+		ApplyGravity();
+
+		//速度を使用して座標を更新
+		UpdatePosWithVelocity();
 
 		//モデルの更新
-		m_playerModel.Update();
-		m_boardModel.Update();
+		UpdateModelPos();
 	}
 
 	void Player::Speed()
@@ -143,28 +180,31 @@ namespace nsPlayer
 
 	void Player::Friction()
 	{
-		// 減速にかかる時間を5秒で設定
-		float decelerationTime = 5.0f;
+		//フレームごとに経過時間を取得
 		float frameDeltaTime = g_gameTime->GetFrameDeltaTime();
 
-		// 減衰係数を計算（1フレームあたりに速度をどの割合で減らすか）
-		float decelerationFactor = 1.0f - (frameDeltaTime / decelerationTime);
+		//減衰係数を計算（1フレームあたりに速度をどの割合で減らすか）
+		float decelerationFactor = 1.0f - (frameDeltaTime / DECELERATION_TIME);
 
-		// 減衰係数が負の数にならないように制限
-		if (decelerationFactor < 0.0f) {
-			decelerationFactor = 0.0f;
+		//減衰係数が負の数にならないように制限
+		if (decelerationFactor < MIN_DECELERATION_FACTOR) {
+			decelerationFactor = MIN_DECELERATION_FACTOR;
 		}
-		// ボードの方向と速度の方向で摩擦力を変化させる
-		// -> ボードが横を向いていたら摩擦力が強くなるようにする
+		//ボードの方向と速度の方向で摩擦力を変化させる
+		//ボードが横を向いていたら摩擦力が強くなるようにする
 		auto velDir = m_velocity;
 		velDir.Normalize();
-		auto t = pow(max(0.0f, velDir.Dot(m_forward)), 0.9f);
-		decelerationFactor *= Math::Lerp(t,  0.998f, 1.0f); // ボードが真横を向いている場合は4ばいの摩擦力
+
+		// ボードの前方向と速度ベクトルのドット積を計算
+		auto rictionAdjustment = pow(max(0.0f, velDir.Dot(m_forward)), MAX_DOT_POWER);
+
+		// 線形補間で減衰係数を調整（ボードが真横を向いている場合は摩擦力を増加）
+		decelerationFactor *= Math::Lerp(rictionAdjustment,  MIN_FRICTION, MAX_FRICTION);
 
 		// 速度ベクトルに減衰係数を適用して減速
 		m_velocity *= decelerationFactor;
 
-		// 速度ベクトルの長さが0.1未満であれば、完全に停止（速度を0にリセット）
+		// 速度ベクトルの長さがしきい値未満であれば、完全に停止
 		if (m_velocity.Length() < STOP_THRESHOLD) {
 			m_velocity = Vector3::Zero;
 		}
@@ -202,7 +242,6 @@ namespace nsPlayer
 			if (collision->IsHit(m_charaCon))
 			{
 				m_velocity = Vector3::Zero;
-				//return true;
 			}
 		}
 	}
@@ -230,29 +269,20 @@ namespace nsPlayer
 
 	void Player::CheckSpeedFromMovement()
 	{
-		nextPosition = m_charaCon.Execute(m_velocity, g_gameTime->GetFrameDeltaTime());
+		m_nextPosition = m_charaCon.Execute(m_velocity, g_gameTime->GetFrameDeltaTime());
 		m_charaCon.SetPosition(m_position);
-
-		//次のフレームの座標を計算
-		//Vector3 nextPosition = m_position + (m_velocity * g_gameTime->GetFrameDeltaTime());
 		
 		//現在の座標と次のフレームの座標の移動ベクトルを計算
-		movementVector = nextPosition - m_position;
+		m_movementVector = m_nextPosition - m_position;
 		//移動ベクトルの長さを計算
-		movementLength = movementVector.Length();
+		m_movementLength = m_movementVector.Length();
 
 		//移動ベクトルが、しきい値以下ならスピードをリセット
-		//const float threshold = 1.5f;
-		if (movementLength < SPEED_THRESHOLD)
+		if (m_movementLength < SPEED_THRESHOLD)
 		{
 			m_velocity = Vector3::Zero;
 			return;
 		}
-		
-		//背景コリジョンとプレイヤーの次フレーム座標の近接をチェック
-		//const PhysicsStaticObject& bgPhysics = m_backGround
-		//if(m_backGround)
-
 	}
 
 	
@@ -288,30 +318,155 @@ namespace nsPlayer
 
 		SweepResultWall callback;
 		
-		//PhysicsWorld::GetInstance()->ConvexSweepTest((const btConcaveShape*)m_sphereCollider.GetBody(), start, end, callback);
 		PhysicsWorld::GetInstance()->ConvexSweepTest((const btConvexShape*)m_capsuleCollider.GetBody(), start, end, callback);
 		
 
 		//壁と衝突したら
 		if (callback.isHit == true)
 		{
-			// callback.normal（N）とm_velocity（F）を使って反射ベクトルを求める
+			//callback.normal（N）とm_velocity（F）を使って反射ベクトルを求める
+			//衝突法線ベクトル
 			Vector3 normalXZ = callback.normal;
-			normalXZ.y = 0.0f;
+			//水平方向のみを考慮
+			normalXZ.y = NORMAL_Y_VALUE;
 			normalXZ.Normalize();
+
+			//現在の速度ベクトル
 			Vector3 velDir = m_velocity;
 			velDir.Normalize();
-			m_reflection = normalXZ * m_velocity.Dot(normalXZ * -2.0f);
 
-			//m_velocity = m_reflection;
+			//反射ベクトルを計算
+			m_reflection = normalXZ * m_velocity.Dot(normalXZ * REFLECTION_SCALAR);
+			//反射ベクトルを加算して新しい方向を決定
 			m_reflection += m_velocity;
-			// 進入角度によって減速率を計算する
-			float t = max(0, velDir.Dot(normalXZ) * -1.0f);
 
-			m_velocity = m_reflection * Math::Lerp(t, 0.7f, 0.2f);
-			//m_velocity = Vector3::Zero;
+			//進入角度によって減速率を計算する
+			float entryAngleFactor = max(0, velDir.Dot(normalXZ) * -1.0f);
+			//減速率を補間して適用
+			m_velocity = m_reflection * Math::Lerp(entryAngleFactor, MAX_DECELERATION, MIN_DECELERATION);
 			
 		}
+	}
+
+	void Player::UpdateModelPos()
+	{
+		//モデルの座標を設定
+		m_playerModel.SetPosition(m_position);
+		m_boardModel.SetPosition(m_position);
+		m_charaCon.SetPosition(m_position);
+	}
+
+	void Player::UpdateUIPos()
+	{
+		//UIの座標を更新
+		m_goSprite.SetPosition(m_spriteGoPos);
+		m_gotItSprite.SetPosition(m_spriteGotPos);
+	}
+
+	void Player::UpdateModels()
+	{
+		//モデルの回転を更新
+		m_playerModel.SetRotation(m_rotation);
+		m_boardModel.SetRotation(m_rotation);
+
+		//モデルの更新
+		m_playerModel.Update();
+		m_boardModel.Update();
+		m_goSprite.Update();
+		m_gotItSprite.Update();
+	}
+
+	void Player::HandleDriftRot()
+	{
+		//左スティックのｘ軸入力を取得し、回転速度を適用
+		float lStick_x = g_pad[0]->GetLStickXF() * ROT_SPEED;
+
+		//ドリフト中の場合、回転速度を増加
+		if (m_isDrifting == true)
+		{
+			lStick_x = g_pad[0]->GetLStickXF() * ROT_SPEED * DRIFT_ROT_SPEED_MULTPLAER;
+		}
+
+		//プレイヤーの進行方向ベクトルの回転
+		m_forward.x = m_forward.x * cos(lStick_x) - m_forward.z * sin(lStick_x);
+		m_forward.z = m_forward.x * sin(lStick_x) + m_forward.z * cos(lStick_x);
+		m_forward.Normalize();
+		m_rotation.SetRotationY(atan2(m_forward.x, m_forward.z));
+	}
+
+	void Player::HandleAcceleration()
+	{
+		//加速時間が 0秒より大きい時、加速時間のカウントダウンを行う
+		if (m_acceleDelayTime > 0.0f) {
+			//現在のフレームの経過時間を使って加速時間を減少させる
+			m_acceleDelayTime -= g_gameTime->GetFrameDeltaTime();
+			//加速時間が負の値になった時、0秒にする
+			if (m_acceleDelayTime < 0.0f) {
+				m_acceleDelayTime = 0.0f;
+
+			}
+			//カウントダウン終了後の加速処理
+			if (m_acceleDelayTime == 0.0f) {
+				//加速度の割合を計算
+				// 
+				m_velocity += m_accele * g_gameTime->GetFrameDeltaTime();
+
+				PlayAccelerationSound();
+				//加速度を半減
+				//ドリフトする回数増えるごと加速力減少してしまう理由かも
+				//原因ではない
+				m_accele *= 0.5f;
+
+				//低速以下の場合、加速度をリセット
+				if (m_accele.Length() < 0.1f) {
+					m_accele = Vector3::Zero;
+				}
+			}
+		}
+	}
+
+	void Player::AdjustVelocityDir()
+	{
+		//速度を進行方向に向けてゆっくり曲げていく
+		Vector3 targetVelocity;	//目標
+		float t = m_velocity.Length();
+		targetVelocity = m_forward * t;
+		m_velocity.Lerp(0.01f, m_velocity, targetVelocity);
+	}
+
+	void Player::ApplyGravity()
+	{
+		//重力の設定
+		if (m_position.y > GROUND_LEVEL) {
+			m_velocity.y -= GRAVITY * g_gameTime->GetFrameDeltaTime();
+		}
+		else {
+			m_velocity.y = 0.0f;
+			m_position.y = GROUND_LEVEL;
+		}
+	}
+
+	void Player::UpdatePosWithVelocity()
+	{
+		//キャラクターコントローラーを使用して座標を更新
+		if (m_velocity.Length() > STOP_THRESHOLD) {
+			m_position = m_charaCon.Execute(m_velocity, g_gameTime->GetFrameDeltaTime());
+			//m_position.y += m_velocity.y * g_gameTime->GetFrameDeltaTime();
+		}
+		else {
+			m_velocity = Vector3::Zero;
+		}
+	}
+
+
+
+	void Player::PlayAccelerationSound()
+	{
+		//加速する時の効果音を再生
+		m_skaterAcceleSE = NewGO<SoundSource>(0);
+		m_skaterAcceleSE->Init(enSoundName_skaterAccele);
+		m_skaterAcceleSE->SetVolume(0.5f);
+		m_skaterAcceleSE->Play(false);
 	}
 
 	void Player::ApplySpeedLimit()
@@ -334,6 +489,22 @@ namespace nsPlayer
 			{
 				m_velocity = Vector3::Zero;
 				//return true;
+			}
+		}
+	}
+
+	void Player::RunSEProcess()
+	{
+		if (IsPlayerMoving()) {
+			// プレイヤーが動いている場合、再生
+			if (!m_skaterRunSE->IsPlaying()) {
+				m_skaterRunSE->Play(true);
+			}
+		}
+		else {
+			// プレイヤーが停止している場合、停止
+			if (m_skaterRunSE->IsPlaying()) {
+				m_skaterRunSE->Stop();
 			}
 		}
 	}
@@ -380,6 +551,82 @@ namespace nsPlayer
 		m_boardAnimClips[enAnimClip_Drift].SetLoopFlag(false);
 	}
 
+	void Player::InitGameObjects()
+	{
+		m_backGround = FindGO<BackGround>("background");
+		m_shopHamburger = FindGOs<ShopHamburger>("shophamburger");
+		auto* m_shopHamburgerB = FindGO<ShopHamburger>("shophamburgerB");
+		m_shopPizza = FindGOs<ShopPizza>("shoppizza");
+		auto* m_shopPizzaB = FindGO<ShopPizza>("shoppizzaB");
+		m_shopSushi = FindGOs<ShopSushi>("shopsushi");
+		auto* m_shopSushiB = FindGO<ShopSushi>("shopsushiB");
+
+		m_customerMan_Hamburger = FindGOs<CustomerMan_Hamburger>("customerman_hamburger");
+		auto* m_customerMan_HamburgerB = FindGO<CustomerMan_Hamburger>("customerman_hamburgerB");
+		m_customerMan_Pizza = FindGOs<CustomerMan_Pizza>("customerman_pizza");
+		auto* m_customerMan_PizzaB = FindGO<CustomerMan_Pizza>("customerman_pizzaB");
+		m_customerMan_Sushi = FindGOs<CustomerMan_Sushi>("customerman_sushi");
+		auto* m_customerMan_SushiB = FindGO<CustomerMan_Sushi>("customerMan_sushiB");
+		//ゲームタイマー
+		m_gameTimer = FindGO<GameTimer>("gametimer");
+	}
+
+	void Player::InitPlayerUI()
+	{
+
+		//プレイヤーのUI「GO！」のスプライト
+		m_goSprite.Init("Assets/skaterData/PlayerUI_GO.dds", 1920, 1080);
+		//プレイヤーのUI「Got It!」のスプライト
+		m_gotItSprite.Init("Assets/skaterData/PlayerUI_Got.dds", 1920, 1080);
+	}
+
+	void Player::InitCharaCon()
+	{
+		//キャラクターコントローラーを初期化
+		m_charaCon.Init(
+			CHARACON_RADIUS,		//半径
+			CHARACON_HEIGHT,		//高さ
+			m_position	//初期位置設定
+		);
+
+		//衝突確認用のコライダーを初期化
+		//半径はキャラクターコントローラーと同じ
+		//高さはキャラクターコントローラーの2分の1
+		m_capsuleCollider.Init(
+			CHARACON_RADIUS,
+			CHARACON_HEIGHT / 2
+		);
+	}
+
+	void Player::InitPlayerStates()
+	{
+		//初期ステートを待機状態に設定
+		m_playerState = new PlayerIdleState(this);
+		m_playerState->Enter();		//待機状態の初期処理
+		m_forward = Vector3::Right;
+	}
+
+	void Player::InitPlayerSound()
+	{
+		m_skaterRunSE = NewGO<SoundSource>(0);
+		m_skaterRunSE->Init(enSoundName_skaterRun);
+		m_skaterRunSE->SetVolume(2.0f);
+	}
+
+	void Player::HandleStateChange()
+	{
+		//ステートの変更のチェックと変更
+		IPlayerState* playerState = m_playerState->StateChange();
+
+		//新しいステートが設定されている場合、ステートを変更
+		if (playerState != nullptr)
+		{
+			delete m_playerState;		//現在のステートを削除
+			m_playerState = playerState;//新しいステートに変更
+			m_playerState->Enter();		//新しいステートの初期処理
+		}
+	}
+
 
 	
 
@@ -394,113 +641,6 @@ namespace nsPlayer
 	{
 		m_playerModel.SetAnimationSpeed(m_animationSpeed);
 		m_boardModel.SetAnimationSpeed(m_animationSpeed);
-	}
-
-
-
-	void Player::Move()
-	{
-		//左スティックのｘ軸入力を取得し、回転速度を適用
-		float lStick_x = g_pad[0]->GetLStickXF() * ROT_SPEED;
-
-		//ドリフト中の場合、回転速度を増加
-		if (m_isDrifting == true)
-		{
-			lStick_x = g_pad[0]->GetLStickXF() * ROT_SPEED * DRIFT_ROT_SPEED_MULTPLAER;
-		}
-		//もとの回転速度に戻す
-		else
-		{
-			lStick_x = g_pad[0]->GetLStickXF() * ROT_SPEED;
-		}
-		//プレイヤーの進行方向ベクトルの回転
-		m_forward.x = m_forward.x * cos(lStick_x) - m_forward.z * sin(lStick_x);
-		m_forward.z = m_forward.x * sin(lStick_x) + m_forward.z * cos(lStick_x);
-		m_forward.Normalize();
-		m_rotation.SetRotationY(atan2(m_forward.x, m_forward.z));
-		//if (lStick_x >= 0.0f)
-		
-		//カメラの前方向を基準に速度を計算
-		Vector3 cameraForward = g_camera3D->GetForward();
-		cameraForward.y = 0.0f;
-		cameraForward.Normalize();
-
-		// 現在の速度を取得して上限速度との関係から加速度の割合を計算
-		//float currentSpeed = m_velocity.Length();
-		//float speedLimit = SpeedLimit;
-
-		//加速時間が 0秒より大きい時、加速時間のカウントダウンを行う
-		if (m_acceleDelayTime > 0.0f) {
-			//現在のフレームの経過時間を使って加速時間を減少させる
-			m_acceleDelayTime -= g_gameTime->GetFrameDeltaTime();
-			//加速時間が負の値になった時、0秒にする
-			if (m_acceleDelayTime < 0.0f) {
-				m_acceleDelayTime = 0.0f;
-																	
-			}
-			//カウントダウン終了後の加速処理
-			if (m_acceleDelayTime == 0.0f) {
-				//加速度の割合を計算
-				// 
-				m_velocity += m_accele * g_gameTime->GetFrameDeltaTime();
-				//加速度を半減
-				//ドリフトする回数増えるごと加速力減少してしまう理由かも
-				//原因ではない
-				m_accele *= 0.5f;		
-
-				//低速以下の場合、加速度をリセット
-				if (m_accele.Length() < 0.1f) {
-					m_accele = Vector3::Zero;
-				}
-#if 0
-				raitoAccele = (SpeedLimit - currentSpeed) / SpeedLimit;
-				if (raitoAccele < 0.0f) {
-					raitoAccele = 0.0f;
-				}
-				// 加速度が上限に近づくほど低下するように加速を適用
-				float adjustedAcceleration = addAccele * raitoAccele;
-
-				// 現在の加速度に基づいて速度を更新
-				m_velocity += cameraForward * (adjustedAcceleration * g_gameTime->GetFrameDeltaTime());
-
-				// 上限速度を超えないように制限
-				if (m_velocity.Length() > SpeedLimit) {
-					m_velocity.Normalize();
-					m_velocity *= SpeedLimit;
-				}
-#endif
-			}
-		}
-		//速度を進行方向に向けてゆっくり曲げていく
-		Vector3 targetVelocity;	//目標
-		float t = m_velocity.Length();
-		targetVelocity = m_forward * t;
-		m_velocity.Lerp(0.01f, m_velocity, targetVelocity);
-
-		
-		//重力の設定
-		if (m_position.y > GROUND_LEVEL) {
-			m_velocity.y -= GRAVITY * g_gameTime->GetFrameDeltaTime();
-		}
-		else {
-			m_velocity.y = 0.0f;
-			m_position.y = GROUND_LEVEL;
-		}
-
-		//キャラクターコントローラーを使用して座標を更新
-		if (m_velocity.Length() > STOP_THRESHOLD) {
-			m_position = m_charaCon.Execute(m_velocity, g_gameTime->GetFrameDeltaTime());
-			//m_position.y += m_velocity.y * g_gameTime->GetFrameDeltaTime();
-		}
-		else {
-			m_velocity = Vector3::Zero;
-		}
-		
-		
-		//モデルの座標を設定
-		m_playerModel.SetPosition(m_position);
-		m_boardModel.SetPosition(m_position);
-		m_charaCon.SetPosition(m_position);
 	}
 
 	void Player::MoveLStickOn()
@@ -525,5 +665,12 @@ namespace nsPlayer
 		//プレイヤーモデルとボードモデルを描画
 		m_playerModel.Draw(rc);
 		m_boardModel.Draw(rc);
+		
 	}
+	bool Player::IsPlayerMoving()
+	{
+
+		return m_velocity.Length() > STOP_THRESHOLD;
+	}
+
 }

@@ -39,9 +39,7 @@ namespace nsPlayer
 		void Update() override;
 
 	private:
-		float acceleTime = 0.6f;
-		//ModelRender			m_playerModel;								//プレイヤーモデル
-		//ModelRender			m_boardModel;								//ボードモデル
+		float m_acceleTime = 0.6f;
 	};
 }
 

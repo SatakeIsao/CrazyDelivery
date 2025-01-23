@@ -22,6 +22,11 @@ namespace nsPlayer
 	{
 		//再生するアニメーションを設定
 		m_player->SetAnimation(Player::enAnimClip_Push, 1.0f);
+
+		/*m_skaterAcceleSE = NewGO<SoundSource>(0);
+		m_skaterAcceleSE->Init(enSoundName_skaterAccele);
+		m_skaterAcceleSE->SetVolume(1.0f);
+		m_skaterAcceleSE->Play(false);*/
 		//m_player->PlaySetAnimationSpeed(2.0f);
 	}
 
