@@ -50,8 +50,6 @@ public:
 		m_isScoreAdded = isAdded;
 	}
 
-	
-
 	/// <summary>
 	/// ‚¨‹q‚³‚ñi’j«j‚ªÕ“Ë‚µ‚Ä‚¢‚é‚©‚Ìæ“¾
 	/// </summary>

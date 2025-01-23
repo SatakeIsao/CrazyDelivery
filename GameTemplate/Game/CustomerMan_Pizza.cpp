@@ -6,9 +6,8 @@
 #include "GameSound.h"
 namespace
 {
-	
-	const float RESET_TIME_THRESHOLD = 3.0f;				//スコアリセットタイム
 	const int	REWARD_PIZZA = 200.0f;						//ピザを届けた時の報酬
+	const float RESET_TIME_THRESHOLD = 3.0f;				//スコアリセットタイム
 	const float MAX_RENDER_DISTANCE = 2000.0f;				//プレイヤーとお客さんの最大距離
 	const float CAMERA_VIEW_ANGLE = Math::DegToRad(50.0f);	//カメラの視野角
 	const float EFFECT_COOL_TIME = 2.0f;					//エフェクト再生間隔
