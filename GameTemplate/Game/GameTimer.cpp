@@ -12,15 +12,9 @@ GameTimer::~GameTimer()
 
 bool GameTimer::Start()
 {
+	m_resultUI = FindGO<ResultUI>("resultui");
 	//タイマー用コロンスプライトの初期化
 	GameTimerInit();
-	//フォントの位置を設定
-	//m_timerFont.SetPosition(Vector3(-50.0f,500.0f,0.0f));
-	//フォントの大きさを設定
-	//m_timerFont.SetScale(1.0f);
-	//フォントの色を設定
-	//m_timerFont.SetColor({ 1.0f,1.0f,1.0f,1.0f });
-
 	return true;
 }
 
@@ -32,7 +26,7 @@ void GameTimer::Update()
 	}
 
 	//状態に基づいて座標を更新
-	if (m_setPosState == POS_SLIDE) {
+	if (m_setPosState == Pos_Slide) {
 		//Y軸を減少させて下にスライド
 		if (m_timerPosition.y > 380.0f) {
 			//スライド速度
@@ -40,7 +34,7 @@ void GameTimer::Update()
 		}
 		else {
 			//スライド完了時に状態を更新
-			m_setPosState = POS_INSIDE;
+			m_setPosState = Pos_Inside;
 			//タイマー開始フラグを設定
 			m_isTimerSterted = true;
 		}
@@ -63,59 +57,14 @@ void GameTimer::Update()
 
 	m_secondRight0.SetPosition(Vector3(m_timerPosition.x + 130.0f, m_timerPosition.y, 0.0f));
 	m_secondRight0.Update();
-	//タイマーを更新
-	//IncreaseTimer();
-	//スプライトを時間に応じて更新
-	//UpdateTimerSprites();
 
-	////テスト用タイマースプライトの更新
-	//for (int t = 0; t < 4; t++)
-	//{
-	//	m_timerSprite[t].Update();
-	//}
-
-	//タイマー用コロンスプライトの実装
-	//m_timerColon.Update();
-	//秒数（左側）スプライトの更新
-	//m_secondsLeft.Update();
-	//秒数（右側）スプライトの更新
-	//m_secondRight.Update();
 }
 
 
 
 void GameTimer::GameTimerInit()
 {
-	////数字スプライトのパスを配列で管理
-	//m_dightTextures = {
-	//	"Assets/TimerFontData/TimerFont_0.DDS",
-	//	"Assets/TimerFontData/TimerFont_1.DDS",
-	//	"Assets/TimerFontData/TimerFont_2.DDS",
-	//	"Assets/TimerFontData/TimerFont_3.DDS",
-	//	"Assets/TimerFontData/TimerFont_4.DDS",
-	//	"Assets/TimerFontData/TimerFont_5.DDS",
-	//	"Assets/TimerFontData/TimerFont_6.DDS",
-	//	"Assets/TimerFontData/TimerFont_7.DDS",
-	//	"Assets/TimerFontData/TimerFont_8.DDS",
-	//	"Assets/TimerFontData/TimerFont_9.DDS"
-	//};
-
-	//for (int t = 0; t < 4; t++)
-	//{
-	//	m_timerSprite[0].Init("Assets/TimerFontData/TimerFont_0.DDS", 200.0f, 200.0f);
-	//	m_timerSprite[1].Init("Assets/TimerFontData/TimerFont_1.DDS", 200.0f, 200.0f);
-	//	//m_timerSprite[2].Init("Assets/TimerFontData/TimerFont_2.DDS", 200.0f, 200.0f);
-	//	//m_timerSprite[3].Init("Assets/TimerFontData/TimerFont_3.DDS", 200.0f, 200.0f);
-	//	m_timerSprite[t].SetPosition(Vector3(-80.0f, 380.0f, 0.0f));
-	//	//m_timerSprite.SetPosition(Vector3(-80.0f, 380.0f, 0.0f));
-	//	//m_timerSprite.Update();
-	//}
-	//m_timerSprite.Init(m_dightTextures[3], 200.0f, 200.0f);
-	//m_timerSprite.SetPosition(Vector3(-80.0f, 300.0f, 0.0f));
-
-	
-
-	////テスト用タイマースプライトの初期化
+	//テスト用タイマースプライトの初期化
 	m_timerSprite0.Init("Assets/TimerFontData/TimerFont_0.DDS", 200.0f, 200.0f);
 	m_timerSprite0.SetPosition(Vector3(-80.0f, 380.0f, 0.0f));
 	m_timerSprite0.Update();
@@ -137,11 +86,7 @@ void GameTimer::GameTimerInit()
 	m_timerColon.SetPosition(Vector3(-40.0f, 380.0f, 0.0f));
 	m_timerColon.Update();
 
-	////秒数（左側）スプライトの初期化
-	//m_secondsLeft.Init(m_dightTextures[0], 200.0f, 200.0f);
-	//m_secondsLeft.SetPosition(Vector3(0.0f, 380.0f, 0.0f));
-
-	// 
+	//秒数（左側）スプライトの初期化
 	m_secondsLeft0.Init("Assets/TimerFontData/TimerFont_0.DDS", 200.0f, 200.0f);
 	m_secondsLeft0.SetPosition(Vector3(0.0f, 380.0f, 0.0f));
 	m_secondsLeft0.Update();
@@ -182,11 +127,7 @@ void GameTimer::GameTimerInit()
 	m_secondsLeft9.SetPosition(Vector3(0.0f, 380.0f, 0.0f));
 	m_secondsLeft9.Update();
 
-	////秒数（右側）スプライトの初期化
-	// 
-	//m_secondRight.Init(m_dightTextures[0], 200.0f, 200.0f);
-	//m_secondRight.SetPosition(Vector3(50.0f, 380.0f, 0.0f));
-	// 
+	//秒数（右側）スプライトの初期化
 	m_secondRight0.Init("Assets/TimerFontData/TimerFont_0.DDS", 200.0f, 200.0f);
 	m_secondRight0.SetPosition(Vector3(50.0f, 380.0f, 0.0f));
 	m_secondRight0.Update();
@@ -245,49 +186,22 @@ void GameTimer::IncreaseTimer()
 		//分も秒も0になった場合は、00:00で停止
 		else {
 			m_second = 0.0f;
+			m_isTimerEnd = true;
 		}
 	}
 }
 
-void GameTimer::GameTimerSpriteSet()
-{
-
-}
-
-void GameTimer::UpdateTimerSprites()
-{
-	////分と秒を取得
-	//int minutes = static_cast<int>(m_minute);
-	//int seconds = static_cast<int>(m_second);
-	////秒（左桁）を取得（１０の位）
-	//int secondsLeft = seconds / 10;
-	////秒（右桁）を取得（１の位）
-	//int secondRight = seconds % 10;
-
-	//m_timerSprite.Init(m_dightTextures[minutes/10], 200.0f, 200.0f);
-	////秒（左桁）スプライトの更新（ 0～5 ）
-	//m_secondsLeft.Init(m_dightTextures[seconds / 10], 200.0f, 200.0f);
-	////秒（右桁）スプライトの更新（ 0～9 ）
-	//m_secondRight.Init(m_dightTextures[seconds % 10], 200.0f, 200.0f);
-
-	//分スプライトの取得（ 0～3 ）
-	//m_timerSprite.Init(("Assets/TimerFontData/TimerFont_" + std::to_string(minutes) + ".DDS").c_str(), 200.0f, 200.0f);
-	//秒（左桁）スプライトの更新（ 0～5 ）
-	//m_secondsLeft.Init(("Assets/TimerFontData/TimerFont_" + std::to_string(secondsLeft) + ".DDS").c_str(), 200.0f, 200.0f);
-	//秒（右桁）スプライトの更新（ 0～9 ）
-	//m_secondRight.Init(("Assets/TimerFontData/TimerFont_" + std::to_string(secondRight) + ".DDS").c_str(), 200.0f, 200.0f);
-}
 
 void GameTimer::NextGameTimerPosState()
 {
 	switch (m_setPosState){
-	case POS_OUTSIDE:
+	case Pos_Outside:
 		//外からスライドする状態に変更
-		m_setPosState = POS_SLIDE;
+		m_setPosState = Pos_Slide;
 		break;
-	case POS_SLIDE:
+	case Pos_Slide:
 		//完全にスライドし終わった状態に変更
-		m_setPosState = POS_INSIDE;
+		m_setPosState = Pos_Inside;
 		break;
 	default:
 		break;
@@ -314,6 +228,12 @@ void GameTimer::FontSet()
 
 void GameTimer::Render(RenderContext& rc)
 {
+	if(m_isTimerEnd == true)
+	//if (m_resultUI->GetIsEnd() == true)
+	{
+		return;
+	}
+
 	if (m_isTimerSterted == true) {
 		m_time -= g_gameTime->GetFrameDeltaTime();
 		if (m_time < 0.0f) {
@@ -376,26 +296,22 @@ void GameTimer::Render(RenderContext& rc)
 
 	}
 	m_timerColon.Draw(rc);
-	//m_secondsLeft.Draw(rc);
-	//m_secondRight.Draw(rc);
-	//フォントの描画
-	//m_timerFont.Draw(rc);
 }
 
 void GameTimer::NextMinuteState()
 {
 	switch (m_minState)
 	{
-	case MINUTE_0:
+	case Minute_0:
 		break;
-	case MINUTE_1:
-		m_minState = MINUTE_0;
+	case Minute_1:
+		m_minState = Minute_0;
 		break;
-	case MINUTE_2:
-		m_minState = MINUTE_1;
+	case Minute_2:
+		m_minState = Minute_1;
 		break;
-	case MINUTE_3:
-		m_minState = MINUTE_2;
+	case Minute_3:
+		m_minState = Minute_2;
 		break;
 	default:
 		break;
@@ -406,26 +322,26 @@ void GameTimer::NextSecondLeftState()
 {
 	switch (m_secLeftState)
 	{
-	case SECOND_LEFT_0:
-		m_secLeftState = SECOND_LEFT_6;
+	case Second_Left_0:
+		m_secLeftState = Second_Left_6;
 		break;
-	case SECOND_LEFT_1:
-		m_secLeftState = SECOND_LEFT_0;
+	case Second_Left_1:
+		m_secLeftState = Second_Left_0;
 		break;
-	case SECOND_LEFT_2:
-		m_secLeftState = SECOND_LEFT_1;
+	case Second_Left_2:
+		m_secLeftState = Second_Left_1;
 		break;
-	case SECOND_LEFT_3:
-		m_secLeftState = SECOND_LEFT_2;
+	case Second_Left_3:
+		m_secLeftState = Second_Left_2;
 		break;
-	case SECOND_LEFT_4:
-		m_secLeftState = SECOND_LEFT_3;
+	case Second_Left_4:
+		m_secLeftState = Second_Left_3;
 		break;
-	case SECOND_LEFT_5:
-		m_secLeftState = SECOND_LEFT_4;
+	case Second_Left_5:
+		m_secLeftState = Second_Left_4;
 		break;
-	case SECOND_LEFT_6:
-		m_secLeftState = SECOND_LEFT_5;
+	case Second_Left_6:
+		m_secLeftState = Second_Left_5;
 		break;
 	default:
 		break;
@@ -436,35 +352,35 @@ void GameTimer::NextSecondRightState()
 {
 	switch (m_secRightState)
 	{
-	case SECOND_RIGHT_0:
-		m_secRightState = SECOND_RIGHT_9;
+	case Second_Right_0:
+		m_secRightState = Second_Right_9;
 		break;
-	case SECOND_RIGHT_1:
-		m_secRightState = SECOND_RIGHT_0;
+	case Second_Right_1:
+		m_secRightState = Second_Right_0;
 		break;
-	case SECOND_RIGHT_2:
-		m_secRightState = SECOND_RIGHT_1;
+	case Second_Right_2:
+		m_secRightState = Second_Right_1;
 		break;
-	case SECOND_RIGHT_3:
-		m_secRightState = SECOND_RIGHT_2;
+	case Second_Right_3:
+		m_secRightState = Second_Right_2;
 		break;
-	case SECOND_RIGHT_4:
-		m_secRightState = SECOND_RIGHT_3;
+	case Second_Right_4:
+		m_secRightState = Second_Right_3;
 		break;
-	case SECOND_RIGHT_5:
-		m_secRightState = SECOND_RIGHT_4;
+	case Second_Right_5:
+		m_secRightState = Second_Right_4;
 		break;
-	case SECOND_RIGHT_6:
-		m_secRightState = SECOND_RIGHT_5;
+	case Second_Right_6:
+		m_secRightState = Second_Right_5;
 		break;
-	case SECOND_RIGHT_7:
-		m_secRightState = SECOND_RIGHT_6;
+	case Second_Right_7:
+		m_secRightState = Second_Right_6;
 		break;
-	case SECOND_RIGHT_8:
-		m_secRightState = SECOND_RIGHT_7;
+	case Second_Right_8:
+		m_secRightState = Second_Right_7;
 		break;
-	case SECOND_RIGHT_9:
-		m_secRightState = SECOND_RIGHT_8;
+	case Second_Right_9:
+		m_secRightState = Second_Right_8;
 		break;
 	default:
 		break;
