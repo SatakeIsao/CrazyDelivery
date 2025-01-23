@@ -406,19 +406,19 @@ float3 CalcLigFromSpotLight(SPSIn psIn)
 {    
      // ポイントライトによるLambert拡散反射光とPhong鏡面反射光を計算する
 
-    // step-7 サーフェイスに入射するポイントライトの光の向きを計算する
+    // サーフェイスに入射するポイントライトの光の向きを計算する
     float3 ligDir = psIn.worldPos - spPosition;
     // 正規化して大きさ1のベクトルにする
     ligDir = normalize(ligDir);
 
-    // step-7 減衰なしのLambert拡散反射光を計算する
+    // 減衰なしのLambert拡散反射光を計算する
     float3 diffSpotLight = CalcLamberDiffuse(
         ligDir, // ライトの方向
         ptColor, // ライトのカラー
         psIn.normal // サーフェイスの法線
     );
 
-    // step-9 減衰なしのPhong鏡面反射光を計算する
+    // 減衰なしのPhong鏡面反射光を計算する
     float3 specSpotLight = CalcPhongSpecular(
         ligDir, // ライトの方向
         ptColor, // ライトのカラー
@@ -434,7 +434,7 @@ float3 CalcLigFromSpotLight(SPSIn psIn)
 //    psIn.normal,
 //    psIn.normalInView
 //);
-    // step-10 距離による影響率を計算する
+    // 距離による影響率を計算する
     // ポイントライトとの距離を計算する
     float3 distance = length(psIn.worldPos - spPosition);
 
@@ -450,7 +450,7 @@ float3 CalcLigFromSpotLight(SPSIn psIn)
     //影響を指数関数的にする。今回のサンプルでは3乗している
     affect = pow(affect, 3.0f);
 
-    // step-11 拡散反射光と鏡面反射光に減衰率を乗算して影響を弱める
+    // 拡散反射光と鏡面反射光に減衰率を乗算して影響を弱める
     diffSpotLight *= affect;
     specSpotLight *= affect;
     // limLight *= affect;
@@ -506,7 +506,7 @@ float3 CalcLigFromLimLight(float3 lightDirection, float3 lightColor, float3 norm
 }
 
 
-////半球ライトを計算
+//半球ライトを計算
 float3 CalcLigFromHemiLight(SPSIn psIn)
 {
     //float3 directionLig = CalcLigFromDirectionLight(psIn);

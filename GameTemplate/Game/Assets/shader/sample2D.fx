@@ -29,7 +29,7 @@ PSInput VSMain(VSInput In)
 
 float4 PSMain(PSInput In) : SV_Target0
 {
-    // step-3 ピクセルシェーダーから出力するαを変更する
+    //ピクセルシェーダーから出力するαを変更する
     float4 color = colorTexture.Sample(Sampler, In.uv) * mulColor;
 
     return color;

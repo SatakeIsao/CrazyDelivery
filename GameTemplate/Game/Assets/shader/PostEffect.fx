@@ -47,7 +47,7 @@ Texture2D<float4> g_bokeTexture_3 : register(t3);
  */
 float4 PSSamplingLuminance(PSInput In) : SV_Target0
 {
-    // step-14 輝度を抽出するピクセルシェーダーを実装
+    // 輝度を抽出するピクセルシェーダーを実装
     // メインレンダリングターゲットからカラーをサンプリング
     float4 color = mainRenderTargetTexture.Sample(Sampler, In.uv);
 
