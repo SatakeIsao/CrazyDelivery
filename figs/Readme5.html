@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Readme5.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="crazy-delivery">Crazy Delivery</h1>
+<blockquote>
+<h3 id="%E6%B2%B3%E5%8E%9F%E9%9B%BB%E5%AD%90%E3%83%93%E3%82%B8%E3%83%8D%E3%82%B9%E5%B0%82%E9%96%80%E5%AD%A6%E6%A0%A1-%E3%82%B2%E3%83%BC%E3%83%A0%E3%82%AF%E3%83%AA%E3%82%A8%E3%82%A4%E3%82%BF%E3%83%BC%E7%A7%91">河原電子ビジネス専門学校 ゲームクリエイター科</h3>
+<h3 id="%E6%B0%8F%E5%90%8D%E4%BD%90%E7%AB%B9-%E5%8A%9F%E3%81%95%E3%81%9F%E3%81%91-%E3%81%84%E3%81%95%E3%81%8A">氏名：佐竹 功（さたけ いさお）</h3>
+</blockquote>
+<h1 id="%E7%9B%AE%E6%AC%A1">目次</h1>
+<ul>
+<li><a href="#crazy-delivery">Crazy Delivery</a></li>
+<li><a href="#%E7%9B%AE%E6%AC%A1">目次</a></li>
+<li><a href="#%E4%BD%9C%E5%93%81%E6%A6%82%E8%A6%81">作品概要</a></li>
+<li><a href="#%E6%8B%85%E5%BD%93%E3%82%BD%E3%83%BC%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%89">担当ソースコード</a></li>
+<li><a href="#%E6%93%8D%E4%BD%9C%E8%AA%AC%E6%98%8E">操作説明</a></li>
+<li><a href="#%E3%82%B2%E3%83%BC%E3%83%A0%E8%AA%AC%E6%98%8E">ゲーム説明</a>
+<ul>
+<li><a href="#game">◇ゲーム詳細</a></li>
+<li><a href="#player">◇プレイヤーについて</a>
+<ul>
+<li><a href="#player1">①スケートボードの挙動</a></li>
+<li><a href="#player2">②壁との衝突時</a></li>
+</ul>
+</li>
+<li><a href="#UI">◇UIについて</a>
+<ul>
+<li><a href="#UI1">①インベントリーについて</a></li>
+<li><a href="#UI2">②ゲーム開始が「PressB」である理由</a></li>
+</ul>
+</li>
+<li><a href="#map">◇ミニマップについて</a></li>
+<li><a href="#show">◇お店とお客さんのUI表示/非表示を距離で切り替えている理由</a></li>
+</ul>
+</li>
+</ul>
+<br />
+<p><a id="anchor1"></a></p>
+<h1 id="%E4%BD%9C%E5%93%81%E6%A6%82%E8%A6%81">作品概要</h1>
+<blockquote>
+<d1>
+ <dt>タイトル</dt>
+ <dd>Crazy Delivery(クレイジーデリバリー)</dd>
+ <dt>制作人数</dt>
+ <dd>1人</dd>
+ <dt>制作期間</dt>
+ <dd>2024年8月～現在
+ <dt>ゲームジャンル</dt>
+ <dd>3Dアクションゲーム</dd>
+ <dt>プレイ人数</dt>
+ <dd>1人</dd>
+ <dt>使用言語</dt>
+ <dd>C++
+ <br />
+ HLSL<dd>
+ <dt>使用ツール</dt>
+ <dd>Visual Studio 2022</dd>
+ <dd>Visual Studio Code</dd>
+ <dd>Adobe Photoshop 2025</dd>
+ <dd>3ds Max 2024</dd>
+ <dd>Effekseer</dd>
+ <dd>GitHub</dd>
+ <dd>Fork</dd>
+ <dd>Trello</dd>
+ <dt>開発環境</dt>
+ <dd>学校内製の簡易エンジン</dd>
+ <dd>Windows11
+</blockquote>
+<br />
+<p><a id = "anchor2"></a></p>
+<h1 id="%E6%8B%85%E5%BD%93%E3%82%BD%E3%83%BC%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%89">担当ソースコード</h1>
+<details><summary>
+  ゲーム部分
+  </summary>
+<ul>
+<li>BackGround.cpp</li>
+<li>BackGround.h</li>
+<li>CustomerMan.cpp</li>
+<li>CustomerMan.h</li>
+<li>CustomerMan_Hamburger.cpp</li>
+<li>CustomerMan_Hamburger.h</li>
+<li>CustomerMan_Pizza.cpp</li>
+<li>CustomerMan_Pizza.h</li>
+<li>CustomerMan_Sushi.cpp</li>
+<li>CustomerMan_Sushi.h</li>
+<li>CustomerManFailureState.cpp</li>
+<li>CustomerManFailureState.h</li>
+<li>CustomerManHandState.cpp</li>
+<li>CustomerManHandState.h</li>
+<li>CustomerManHappyState.cpp</li>
+<li>CustomerManHappyState.h</li>
+<li>CustomerManIdleState.cpp</li>
+<li>CustomerManIdleState.h</li>
+<li>CustomerWoman.cpp</li>
+<li>CustomerWoman.h</li>
+<li>Fade.cpp</li>
+<li>Fade.h</li>
+<li>Game.cpp</li>
+<li>Game.h</li>
+<li>GameCamera.cpp</li>
+<li>GameCamera.h</li>
+<li>GameInformation.cpp</li>
+<li>GameInformation.h</li>
+<li>GameSound.cpp</li>
+<li>GameSound.h</li>
+<li>GameTimer.cpp</li>
+<li>GameTimer.h</li>
+<li>ICustomerManState.h</li>
+<li>InventoryUI.cpp</li>
+<li>InventoryUI.h</li>
+<li>IPlayerState.h</li>
+<li>MakeEffect.cpp</li>
+<li>MakeEffect.h</li>
+<li>MapUI.cpp</li>
+<li>MapUI.h</li>
+<li>Player.cpp</li>
+<li>Player.h</li>
+<li>PlayerDriftState.cpp</li>
+<li>PlayerDriftState.h</li>
+<li>PlayerIdleState.cpp</li>
+<li>PlayerIdleState.h</li>
+<li>PlayerJumpState.cpp</li>
+<li>PlayerJumpState.h</li>
+<li>PlayerPushState.cpp</li>
+<li>PlayerPushState.h</li>
+<li>PlayerRunState.cpp</li>
+<li>PlayerRunState.h</li>
+<li>PlayerStartState.cpp</li>
+<li>PlayerStartState.h</li>
+<li>ResultUI.cpp</li>
+<li>ResultUI.h</li>
+<li>ShopHamburger.cpp</li>
+<li>ShopHamburger.h</li>
+<li>ShopPizza.cpp</li>
+<li>ShopPizza.h</li>
+<li>ShopSushi.cpp</li>
+<li>ShopSushi.h</li>
+<li>StartButtonUI.cpp</li>
+<li>StartButtonUI.h</li>
+</ul>
+</details>
+</details>
+<details><summary>
+   エンジン
+   </summary>
+<p>大文字は改造のみ</p>
+<ul>
+<li>Bloom.cpp</li>
+<li>Bloom.h</li>
+<li>CameraCollisionSolver.cpp</li>
+<li>CameraCollisionSolver.h</li>
+<li>CollisionObject.cpp</li>
+<li>CollisionObject.h</li>
+<li>FontRender.cpp</li>
+<li>FontRender.h</li>
+<li>IRenderer.cpp</li>
+<li>IRenderer.h</li>
+<li><strong>k2EngineLow.cpp</strong></li>
+<li><strong>k2EngineLow.h</strong></li>
+<li>LevelRender.cpp</li>
+<li>LevelRender.h</li>
+<li>MapChipRender.cpp</li>
+<li>MapChipRender.h</li>
+<li>ModelRender.cpp</li>
+<li>ModelRender.h</li>
+<li>MyRenderer.cpp</li>
+<li>MyRenderer.h</li>
+<li>PointLight.cpp</li>
+<li>PointLight.h</li>
+<li>RenderingEngine.cpp</li>
+<li>RenderingEngine.h</li>
+<li>SceneLight.cpp</li>
+<li>SceneLight.h</li>
+<li>Shadow.cpp</li>
+<li>Shadow.h</li>
+<li>Shadowing.cpp</li>
+<li>Shadowing.h</li>
+<li>SkyCube.cpp</li>
+<li>SkyCube.h</li>
+<li>SpringCamera.cpp</li>
+<li>SpringCamera.h</li>
+<li>SpriteRender.cpp</li>
+<li>SpriteRender.h</li>
+</ul>
+</details>
+<details><summary>
+   シェーダー
+   </summary>
+<ul>
+<li>coolTime.fx</li>
+<li>debugWireFrame.fx</li>
+<li>gaussianBlur.fx</li>
+<li>model.fx</li>
+<li>ModelVSCommon.h</li>
+<li>PostEffect.fx</li>
+<li>sample2D.fx</li>
+<li>sampleDrawShadowMap.fx</li>
+<li>Shadowing.h</li>
+<li>shadowReceiverModel.fx</li>
+<li>skyCube.fx</li>
+<li>sprite.fx</li>
+<li>testModel.fx</li>
+</ul>
+</details>
+<p><a id = "anchor3"></a></p>
+<h1 id="%E6%93%8D%E4%BD%9C%E8%AA%AC%E6%98%8E">操作説明</h1>
+<blockquote>
+<p><img src="image-2.png" alt="alt text"></p>
+</blockquote>
+<br />
+<p><a id = "anchor4"></a></p>
+<h1 id="%E3%82%B2%E3%83%BC%E3%83%A0%E8%AA%AC%E6%98%8E">ゲーム説明</h1>
+<br />
+<p><a id = "game"></a></p>
+<h2 id="%E2%97%87%E3%82%B2%E3%83%BC%E3%83%A0%E8%A9%B3%E7%B4%B0">◇ゲーム詳細</h2>
+<blockquote>
+<h3 id="%E3%81%93%E3%81%AE%E3%82%B2%E3%83%BC%E3%83%A0%E3%81%AF%E3%82%B9%E3%82%B1%E3%83%BC%E3%83%88%E3%83%9C%E3%83%BC%E3%83%89%E3%81%A7%E8%A1%97%E3%82%92%E9%A7%86%E3%81%91%E5%B7%A1%E3%82%8B%E3%82%A2%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3%E3%82%B2%E3%83%BC%E3%83%A0%E3%81%A7%E3%81%99">このゲームは、スケートボードで街を駆け巡るアクションゲームです。</h3>
+<h3 id="%E5%88%B6%E9%99%90%E6%99%82%E9%96%93%E5%86%85%E3%81%AB%E3%81%8A%E5%BA%97%E3%81%A7%E3%83%86%E3%82%A4%E3%82%AF%E3%82%A2%E3%82%A6%E3%83%88%E3%81%97%E3%81%9F%E9%A3%9F%E3%81%B9%E7%89%A9%E3%82%92%E3%81%8A%E5%AE%A2%E3%81%95%E3%82%93%E3%81%AB%E5%B1%8A%E3%81%91%E3%82%8B%E3%81%93%E3%81%A8%E3%81%8C%E7%9B%AE%E7%9A%84%E3%81%A7%E3%81%99">制限時間内に、お店でテイクアウトした食べ物をお客さんに届けることが目的です。</h3>
+<p><img src="image-4.png" alt="alt text"></p>
+<h3 id="%E9%A3%9F%E3%81%B9%E7%89%A9%E3%81%AE%E7%A8%AE%E9%A1%9E%E3%81%AF%E3%83%8F%E3%83%B3%E3%83%90%E3%83%BC%E3%82%AC%E3%83%BC%E3%83%94%E3%82%B6%E5%AF%BF%E5%8F%B8%E3%81%AE3%E7%A8%AE%E9%A1%9E%E3%81%A7%E3%81%99">食べ物の種類は、ハンバーガー、ピザ、寿司の3種類です。</h3>
+<p><img src="image-1.png" alt="alt text"></p>
+<h3 id="%E3%81%8A%E5%AE%A2%E3%81%95%E3%82%93%E3%81%AB%E9%A3%9F%E3%81%B9%E7%89%A9%E3%82%92%E5%B1%8A%E3%81%91%E3%82%8B%E3%81%A8%E5%A0%B1%E9%85%AC%E3%82%92%E7%A8%BC%E3%81%90%E3%81%93%E3%81%A8%E3%81%8C%E5%87%BA%E6%9D%A5%E3%81%BE%E3%81%99">お客さんに食べ物を届けると、報酬を稼ぐことが出来ます。</h3>
+<p><img src="image-5.png" alt="alt text"></p>
+</blockquote>
+<br />
+<p><a id = "player"></a></p>
+<h2 id="%E2%97%87%E3%83%97%E3%83%AC%E3%82%A4%E3%83%A4%E3%83%BC%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6">◇プレイヤーについて</h2>
+<br />
+<p><a id = "player1"></a></p>
+<h3 id="%E2%91%A0%E3%82%B9%E3%82%B1%E3%83%BC%E3%83%88%E3%83%9C%E3%83%BC%E3%83%89%E3%81%AE%E6%8C%99%E5%8B%95">①スケートボードの挙動</h3>
+<blockquote>
+<h3 id="%E3%83%BB%E5%8A%A0%E9%80%9F%E5%BA%A6">・加速度</h3>
+<h3 id="b%E3%83%9C%E3%82%BF%E3%83%B3%E3%82%92%E6%8A%BC%E3%81%99%E3%81%93%E3%81%A8%E3%81%A7%E3%83%97%E3%83%AC%E3%82%A4%E3%83%A4%E3%83%BC%E3%81%AE%E9%80%B2%E8%A1%8C%E6%96%B9%E5%90%91%E3%81%AB%E4%B8%80%E5%AE%9A%E3%81%AE%E5%8A%A0%E9%80%9F%E5%BA%A6%E3%82%92%E5%8A%A0%E3%81%88%E3%81%BE%E3%81%99">Bボタンを押すことでプレイヤーの進行方向に一定の加速度を加えます。</h3>
+<h3 id="alt-text"><img src="accele.gif" alt="alt text"></h3>
+<pre class="hljs"><code><div>
+/<span class="hljs-regexp">//</span> &lt;summary&gt;
+<span class="hljs-regexp">//</span><span class="hljs-regexp">/ 加速度を設定
+/</span><span class="hljs-regexp">//</span> &lt;<span class="hljs-regexp">/summary&gt;
+/</span><span class="hljs-regexp">//</span> &lt;param name=<span class="hljs-string">"accele"</span>&gt;加速度&lt;<span class="hljs-regexp">/param&gt;
+/</span><span class="hljs-regexp">//</span> &lt;param name=<span class="hljs-string">"delayTime"</span>&gt;加速度の適用を開始する遅延時間（単位：秒）&lt;<span class="hljs-regexp">/param&gt;
+const void SetAccele(const Vector3&amp; accele, float&amp; delayTime)
+{
+    this-&gt;m_acceleDelayTime = delayTime;
+    this-&gt;m_accele = accele;
+    /</span><span class="hljs-regexp">/ プレイヤーの速度を上限値以内に制限する
+    ApplySpeedLimit();
+}
+
+/</span><span class="hljs-regexp">/ Bボタン押されたら
+if (g_pad[0]-&gt;IsTrigger(enButtonB))
+{
+    const auto&amp; forward = m_player-&gt;GetForward();
+    /</span><span class="hljs-regexp">/ 加速する
+    m_player-&gt;SetAccele(forward * PLAYER_ACCELE, m_acceleTime);
+    
+    return new PlayerPushState(m_player);
+}
+</span></div></code></pre>
+</blockquote>
+<br />
+<blockquote>
+<h3 id="%E3%83%BB%E6%91%A9%E6%93%A6%E5%8A%9B">・摩擦力</h3>
+<h3 id="%E9%80%9F%E5%BA%A6%E3%83%99%E3%82%AF%E3%83%88%E3%83%AB%E3%81%AE%E9%80%86%E6%96%B9%E5%90%91%E3%81%AB%E4%BD%9C%E7%94%A8%E3%81%97%E9%80%9F%E5%BA%A6%E3%82%92%E5%BE%90%E3%81%AB%E6%B8%9B%E5%B0%91%E3%81%95%E3%81%9B%E6%9C%80%E7%B5%82%E7%9A%84%E3%81%AB%E5%81%9C%E6%AD%A2%E3%81%99%E3%82%8B%E6%8C%99%E5%8B%95%E3%82%92%E5%AE%9F%E7%8F%BE%E3%81%97%E3%81%A6%E3%81%84%E3%81%BE%E3%81%99">速度ベクトルの逆方向に作用し、速度を徐々に減少させ、最終的に停止する挙動を実現しています。</h3>
+<h3 id="%E3%81%93%E3%82%8C%E3%81%AB%E3%82%88%E3%82%8A%E6%85%A3%E6%80%A7%E3%82%92%E4%BC%B4%E3%81%A3%E3%81%9F%E8%87%AA%E7%84%B6%E3%81%AA%E5%81%9C%E6%AD%A2%E5%8B%95%E4%BD%9C%E3%81%8C%E5%8F%AF%E8%83%BD%E3%81%A7%E3%81%99">これにより、慣性を伴った自然な停止動作が可能です。</h3>
+<h3 id="%E3%81%BE%E3%81%9Fb%E3%83%9C%E3%82%BF%E3%83%B3%E3%81%AE%E5%85%A5%E5%8A%9B%E3%81%8C%E3%81%AA%E3%81%84%E5%A0%B4%E5%90%88%E3%81%AB%E9%80%9F%E5%BA%A6%E3%81%8C%E5%BE%90%E3%81%AB%E6%B8%9B%E9%80%9F%E3%81%99%E3%82%8B%E3%82%88%E3%81%86%E3%81%AA%E4%BB%95%E7%B5%84%E3%81%BF%E3%82%92%E5%8F%96%E3%82%8A%E5%85%A5%E3%82%8C%E3%81%BE%E3%81%97%E3%81%9F">また、「Bボタン」の入力がない場合に速度が徐々に減速するような仕組みを取り入れました。</h3>
+<h3 id="alt-text-alt-text"><img src="friction.gif" alt="alt text"> <img src="image-17.png" alt="alt text"></h3>
+<pre class="hljs"><code><div>
+namespace
+{
+    <span class="hljs-regexp">//</span> 定数の定義
+    const float DECELERATION_TIME = <span class="hljs-number">5.0</span>f;           <span class="hljs-regexp">//</span> 減速にかかる時間（秒）
+    const float MIN_DECELERATION_FACTOR = <span class="hljs-number">0</span>.0f;     <span class="hljs-regexp">//</span> 減衰係数の最小値
+    const float MAX_DOT_POWER = <span class="hljs-number">0</span>.<span class="hljs-number">9</span>f;               <span class="hljs-regexp">//</span> ドット積のべき乗の指数
+    const float MIN_FRICTION = <span class="hljs-number">0</span>.<span class="hljs-number">998</span>f;              <span class="hljs-regexp">//</span> 摩擦力の最小値
+    const float MAX_FRICTION = <span class="hljs-number">1.0</span>f;                <span class="hljs-regexp">//</span> 摩擦力の最大値
+}
+
+void Player::Friction()
+{
+    <span class="hljs-regexp">//</span> フレームごとに経過時間を取得
+    float frameDeltaTime = g_gameTime-&gt;GetFrameDeltaTime();
+
+    <span class="hljs-regexp">//</span> 減衰係数を計算（<span class="hljs-number">1</span>フレームあたりに速度をどの割合で減らすか）
+    float decelerationFactor = <span class="hljs-number">1.0</span>f - (frameDeltaTime / DECELERATION_TIME);
+
+    <span class="hljs-regexp">//</span> 減衰係数が負の数にならないように制限
+    <span class="hljs-keyword">if</span> (decelerationFactor &lt; MIN_DECELERATION_FACTOR) {
+        decelerationFactor = MIN_DECELERATION_FACTOR;
+    }
+
+    /<span class="hljs-regexp">/ ボードの方向と速度の方向で摩擦力を変化させる
+    /</span><span class="hljs-regexp">/ ボードが横を向いていたら摩擦力が強くなるようにする
+    auto velDir = m_velocity;
+    velDir.Normalize();
+
+    /</span><span class="hljs-regexp">/ ボードの前方向と速度ベクトルのドット積を計算
+    auto rictionAdjustment = pow(max(0.0f, velDir.Dot(m_forward)), MAX_DOT_POWER);
+
+    /</span><span class="hljs-regexp">/ 線形補間で減衰係数を調整（ボードが真横を向いている場合は摩擦力を増加）
+    decelerationFactor *= Math::Lerp(rictionAdjustment, MIN_FRICTION, MAX_FRICTION);
+
+    /</span><span class="hljs-regexp">/ 速度ベクトルに減衰係数を適用して減速
+    m_velocity *= decelerationFactor;
+
+    /</span><span class="hljs-regexp">/ 速度ベクトルの長さがしきい値未満であれば、完全に停止
+    if (m_velocity.Length() &lt; STOP_THRESHOLD) {
+        m_velocity = Vector3::Zero;
+    }
+}
+</span></div></code></pre>
+</blockquote>
+<br />
+<blockquote>
+<h3 id="%E3%83%BB%E3%83%89%E3%83%AA%E3%83%95%E3%83%88">・ドリフト</h3>
+<h3 id="rb%E3%83%9C%E3%82%BF%E3%83%B3%E3%82%92%E6%8A%BC%E3%81%99%E3%81%93%E3%81%A8%E3%81%A7%E3%83%89%E3%83%AA%E3%83%95%E3%83%88%E3%81%8C%E9%96%8B%E5%A7%8B%E3%81%95%E3%82%8C%E3%81%BE%E3%81%99">RBボタンを押すことで、ドリフトが開始されます。</h3>
+<h3 id="%E3%83%89%E3%83%AA%E3%83%95%E3%83%88%E4%B8%AD%E3%81%AF%E5%B7%A6%E3%82%B9%E3%83%86%E3%82%A3%E3%83%83%E3%82%AF%E3%81%AE%E5%85%A5%E5%8A%9B%E6%96%B9%E5%90%91%E3%81%AB%E5%9F%BA%E3%81%A5%E3%81%84%E3%81%A6%E3%82%B9%E3%83%A0%E3%83%BC%E3%82%BA%E3%81%AB%E5%9B%9E%E8%BB%A2%E3%81%97%E3%81%BE%E3%81%99">ドリフト中は、左スティックの入力方向に基づいてスムーズに回転します。</h3>
+<h3 id="%E3%81%95%E3%82%89%E3%81%AB%E6%85%A3%E6%80%A7%E3%81%AE%E8%A6%81%E7%B4%A0%E3%82%92%E5%8A%A0%E3%81%88%E3%82%8B%E3%81%93%E3%81%A8%E3%81%A7%E3%83%AA%E3%82%A2%E3%83%AB%E3%81%AA%E3%83%89%E3%83%AA%E3%83%95%E3%83%88%E5%8B%95%E4%BD%9C%E3%82%92%E5%86%8D%E7%8F%BE%E3%81%97%E3%81%A6%E3%81%84%E3%81%BE%E3%81%99">さらに、慣性の要素を加えることで、リアルなドリフト動作を再現しています。</h3>
+<h3 id="alt-text"><img src="drift.gif" alt="alt text"></h3>
+</blockquote>
+<br />
+<p><a id = "player2"></a></p>
+<h3 id="%E2%91%A1%E5%A3%81%E3%81%A8%E3%81%AE%E8%A1%9D%E7%AA%81%E6%99%82">②壁との衝突時</h3>
+<blockquote>
+<h3 id="%E3%83%BB%E3%82%82%E3%81%A8%E3%82%82%E3%81%A8%E8%A1%9D%E7%AA%81%E6%99%82%E5%8A%A0%E9%80%9F%E3%82%920%E3%81%AB%E3%81%97%E3%81%A6%E3%81%84%E3%81%BE%E3%81%97%E3%81%9F%E3%81%8C">・もともと衝突時、加速を0にしていましたが</h3>
+<h3 id="%E3%81%93%E3%81%AE%E3%82%B2%E3%83%BC%E3%83%A0%E3%81%AF%E7%96%BE%E8%B5%B0%E6%84%9F%E3%81%8C%E3%81%82%E3%82%8B%E3%82%B2%E3%83%BC%E3%83%A0%E3%81%A7%E3%81%82%E3%82%8B%E3%81%9F%E3%82%81">このゲームは疾走感があるゲームであるため、</h3>
+<h3 id="%E3%82%B2%E3%83%BC%E3%83%A0%E3%82%92%E9%81%8A%E3%81%B6%E3%83%86%E3%83%B3%E3%83%9D%E6%84%9F%E3%81%8C%E8%90%BD%E3%81%A1%E3%81%A6%E3%81%97%E3%81%BE%E3%81%84%E3%81%BE%E3%81%99">ゲームを遊ぶテンポ感が落ちてしまいます。</h3>
+<h3 id="%E2%9E%A1%E8%A1%9D%E7%AA%81%E6%99%82%E5%8F%8D%E5%B0%84%E3%81%99%E3%82%8B%E3%81%AB%E5%8A%A0%E3%81%88%E6%B8%9B%E9%80%9F%E3%82%82%E3%81%97%E3%81%AA%E3%81%8C%E3%82%89%E5%8F%8D%E5%B0%84%E3%81%99%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E5%A4%89%E6%9B%B4%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F">➡衝突時、反射するに加え、減速もしながら反射するように変更しました。</h3>
+<p><img src="reflection.gif" alt="alt text"> <img src="image-3.png" alt="alt text"></p>
+<pre class="hljs"><code><div>
+namespace
+{
+<span class="hljs-regexp">//</span> 定数の定義
+const float MIN_DECELERATION = <span class="hljs-number">0</span>.<span class="hljs-number">2</span>f; <span class="hljs-regexp">//</span> 最小減速率
+const float MAX_DECELERATION = <span class="hljs-number">0</span>.<span class="hljs-number">7</span>f; <span class="hljs-regexp">//</span> 最大減速率
+const float NORMAL_Y_VALUE = <span class="hljs-number">0</span>.0f; <span class="hljs-regexp">//</span> 法線ベクトルのY成分固定値
+const float REFLECTION_SCALAR = -<span class="hljs-number">2.0</span>f; <span class="hljs-regexp">//</span> 反射計算用のスカラー値
+}
+
+/<span class="hljs-regexp">/壁と衝突したら
+if (callback.isHit == true)
+{
+  /</span><span class="hljs-regexp">/callback.normalとm_velocityを使って反射ベクトルを求める
+  /</span><span class="hljs-regexp">/衝突法線ベクトル
+  Vector3 normalXZ = callback.normal;
+  /</span><span class="hljs-regexp">/水平方向のみを考慮
+  normalXZ.y = NORMAL_Y_VALUE;
+  normalXZ.Normalize();
+
+  /</span><span class="hljs-regexp">/現在の速度ベクトル
+  Vector3 velDir = m_velocity;
+  velDir.Normalize();
+
+  /</span><span class="hljs-regexp">/反射ベクトルを計算
+  m_reflection = normalXZ * m_velocity.Dot(normalXZ * REFLECTION_SCALAR);
+  /</span><span class="hljs-regexp">/反射ベクトルを加算して新しい方向を決定
+  m_reflection += m_velocity;
+
+  /</span><span class="hljs-regexp">/進入角度によって減速率を計算する
+  float entryAngleFactor = max(0, velDir.Dot(normalXZ) * -1.0f);
+  /</span><span class="hljs-regexp">/減速率を補間して適用
+  m_velocity = m_reflection * Math::Lerp(entryAngleFactor, MAX_DECELERATION, MIN_DECELERATION);
+	
+}
+</span></div></code></pre>
+</blockquote>
+<br />
+<p><a id = "UI"></a></p>
+<br />
+<h2 id="%E2%97%87ui%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6">◇UIについて</h2>
+<p><a id = "UI1"></a></p>
+<h3 id="%E2%91%A0%E3%82%A4%E3%83%B3%E3%83%99%E3%83%B3%E3%83%88%E3%83%AA%E3%83%BC%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6">①インベントリーについて</h3>
+<blockquote>
+<h3 id="%E9%A3%9F%E3%81%B9%E7%89%A9%E3%82%92%E5%8F%96%E5%BE%97%E3%81%97%E3%81%9F%E6%99%82%E3%81%AB%E9%A3%9F%E3%81%B9%E7%89%A9%E3%81%AEui%E3%81%AB%E5%8B%95%E3%81%8D%E3%82%92%E5%87%BA%E3%81%97%E3%81%A6">食べ物を取得した時に、食べ物のUIに動きを出して</h3>
+<h3 id="%E7%94%BB%E9%9D%A2%E5%8F%B3%E4%B8%8A%E3%81%AB%E3%81%82%E3%82%8B%E3%82%A4%E3%83%B3%E3%83%99%E3%83%B3%E3%83%88%E3%83%AA%E3%83%BC%E3%81%AB%E3%82%B9%E3%83%A9%E3%82%A4%E3%83%89%E3%81%95%E3%81%9B%E3%81%BE%E3%81%97%E3%81%9F">画面右上にあるインベントリーにスライドさせました。</h3>
+<p><img src="inventory.gif" alt="alt text"></p>
+<h3 id="%E2%9E%A1%E5%8B%95%E3%81%8D%E3%82%92%E4%BB%98%E3%81%91%E3%82%8B%E3%81%93%E3%81%A8%E3%81%A7%E5%8F%96%E5%BE%97%E3%81%99%E3%82%8B%E5%BA%A6%E3%81%AB%E7%8F%BE%E5%9C%A8%E3%81%AE%E3%82%A4%E3%83%B3%E3%83%99%E3%83%B3%E3%83%88%E3%83%AA%E3%83%BC%E3%81%AE%E7%8A%B6%E6%85%8B%E3%81%8C%E7%A2%BA%E8%AA%8D%E3%81%A7%E3%81%8D%E3%81%BE%E3%81%99">➡動きを付けることで、取得する度に現在のインベントリーの状態が確認できます。</h3>
+<h3 id="%E3%81%BE%E3%81%9F%E5%8B%95%E3%81%8D%E3%82%92%E4%BB%98%E3%81%91%E3%82%8B%E5%89%8D%E3%81%AF%E5%8F%96%E5%BE%97%E3%81%97%E3%81%9F%E5%8A%B9%E6%9E%9C%E9%9F%B3%E3%81%A8">また、動きを付ける前は取得した効果音と、</h3>
+<h3 id="%E3%82%B0%E3%83%AC%E3%83%BC%E8%A1%A8%E7%A4%BA%E6%8C%81%E3%81%A3%E3%81%A6%E3%81%84%E3%81%AA%E3%81%84%E3%81%8B%E3%82%89%E8%89%B2%E4%BB%98%E3%81%8D%E8%A1%A8%E7%A4%BA%E6%8C%81%E3%81%A3%E3%81%A6%E3%81%84%E3%82%8B%E3%81%AE%E5%88%87%E3%82%8A%E6%9B%BF%E3%81%88%E3%81%AE%E3%81%BF%E3%81%A7%E3%81%97%E3%81%9F%E3%81%8C">グレー表示（持っていない）から色付き表示(持っている)の切り替えのみでしたが</h3>
+<h3 id="%E5%8F%96%E5%BE%97%E3%81%97%E3%81%9F%E6%84%9F%E3%82%92%E4%B8%8A%E3%81%92%E3%82%8B%E3%81%9F%E3%82%81%E3%81%AB%E5%8B%95%E3%81%8D%E3%82%92%E4%BB%98%E3%81%91%E3%81%BE%E3%81%97%E3%81%9F">取得した感を上げるために動きを付けました。</h3>
+</blockquote>
+<br />
+<p><a id = "UI2"></a></p>
+<h3 id="%E2%91%A1%E3%82%B2%E3%83%BC%E3%83%A0%E9%96%8B%E5%A7%8B%E3%81%8Cpressb%E3%81%A7%E3%81%82%E3%82%8B%E7%90%86%E7%94%B1">②ゲーム開始が「PressB」である理由</h3>
+<blockquote>
+<h3 id="b%E3%83%9C%E3%82%BF%E3%83%B3%E3%82%92%E6%8A%BC%E3%81%97%E3%81%A6%E3%82%B2%E3%83%BC%E3%83%A0%E3%82%92%E9%96%8B%E5%A7%8B%E3%81%95%E3%81%9B%E3%82%8B%E3%81%93%E3%81%A8%E3%81%A7">「Bボタン」を押して、ゲームを開始させることで</h3>
+<h3 id="%E3%82%B9%E3%82%B1%E3%83%BC%E3%83%88%E3%83%9C%E3%83%BC%E3%83%89%E3%81%AE%E5%8A%A0%E9%80%9F%E3%81%99%E3%82%8B%E3%83%9C%E3%82%BF%E3%83%B3%E3%81%8Cb%E3%83%9C%E3%82%BF%E3%83%B3%E3%81%A7%E3%81%82%E3%82%8B%E3%81%93%E3%81%A8%E3%82%92">スケートボードの加速するボタンが「Bボタン」であることを</h3>
+<h3 id="%E9%81%8A%E3%81%B6%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E3%81%AB%E3%82%B9%E3%83%A0%E3%83%BC%E3%82%BA%E3%81%AB%E6%95%99%E3%81%88%E3%82%8B%E3%81%9F%E3%82%81%E3%81%A7%E3%81%99">遊ぶユーザーにスムーズに教えるためです。</h3>
+<p><img src="pressB.gif" alt="alt text"></p>
+</blockquote>
+<br />
+<p><a id = "map"></a></p>
+<h2 id="%E2%97%87%E3%83%9F%E3%83%8B%E3%83%9E%E3%83%83%E3%83%97%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6">◇ミニマップについて</h2>
+<blockquote>
+<h3 id="%E3%83%97%E3%83%AC%E3%82%A4%E3%83%A4%E3%83%BC%E3%81%8A%E5%AE%A2%E3%81%95%E3%82%93%E3%81%8A%E5%BA%97%E3%81%AF%E3%83%9F%E3%83%8B%E3%83%9E%E3%83%83%E3%83%97%E3%81%AE%E5%86%86%E5%BD%A2%E3%81%AE%E7%AF%84%E5%9B%B2%E5%A4%96%E3%81%AB%E5%87%BA%E3%82%8B%E3%81%A8%E9%9D%9E%E8%A1%A8%E7%A4%BA%E3%81%AB%E3%81%AA%E3%82%8A%E3%81%BE%E3%81%99">プレイヤー、お客さん、お店はミニマップの「円形の範囲外」に出ると非表示になります。</h3>
+<h3 id="%E3%83%9F%E3%83%8B%E3%83%9E%E3%83%83%E3%83%97%E3%81%A7%E8%A1%A8%E7%A4%BA%E3%81%99%E3%82%8B%E7%AF%84%E5%9B%B2%E3%82%92%E5%86%86%E5%BD%A2%E3%81%AE%E7%AF%84%E5%9B%B2%E3%81%A8%E3%81%97%E3%81%A6%E5%AE%9A%E7%BE%A9%E3%81%97">ミニマップで表示する範囲を「円形の範囲」として定義し、</h3>
+<h3 id="%E3%82%AB%E3%83%A1%E3%83%A9%E3%82%84%E3%83%97%E3%83%AC%E3%82%A4%E3%83%A4%E3%83%BC%E3%81%AE%E4%BD%8D%E7%BD%AE%E3%81%AB%E5%9F%BA%E3%81%A5%E3%81%8D%E5%BA%A7%E6%A8%99%E3%82%92%E5%A4%89%E6%8F%9B%E3%81%97%E3%81%BE%E3%81%99">カメラやプレイヤーの位置に基づき、座標を変換します。</h3>
+<h3 id="%E3%81%BE%E3%81%9F%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E5%BA%A7%E6%A8%99%E7%B3%BB%E3%82%92%E3%83%9F%E3%83%8B%E3%83%9E%E3%83%83%E3%83%97%E4%B8%8A%E3%81%AE%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E5%BA%A7%E6%A8%99%E7%B3%BB%E3%81%AB%E5%A4%89%E6%8F%9B%E3%81%97%E3%81%BE%E3%81%99">また、ワールド座標系をミニマップ上のスクリーン座標系に変換します。</h3>
+<p><img src="map.gif" alt="alt text"></p>
+</blockquote>
+<br />
+<p><a id = "show"></a></p>
+<h2 id="%E2%97%87%E3%81%8A%E5%BA%97%E3%81%A8%E3%81%8A%E5%AE%A2%E3%81%95%E3%82%93%E3%81%AEui%E8%A1%A8%E7%A4%BA%E9%9D%9E%E8%A1%A8%E7%A4%BA%E3%82%92%E8%B7%9D%E9%9B%A2%E3%81%A7%E5%88%87%E3%82%8A%E6%9B%BF%E3%81%88%E3%81%A6%E3%81%84%E3%82%8B%E7%90%86%E7%94%B1">◇お店とお客さんのUI表示/非表示を距離で切り替えている理由</h2>
+<blockquote>
+<h3 id="%E8%A6%96%E8%A6%9A%E7%9A%84%E3%81%AA%E6%83%85%E5%A0%B1%E9%81%8E%E5%A4%9A%E3%82%92%E9%98%B2%E3%81%8E%E3%82%B2%E3%83%BC%E3%83%A0%E3%83%97%E3%83%AC%E3%82%A4%E3%82%92%E9%9B%86%E4%B8%AD%E3%81%97%E3%82%84%E3%81%99%E3%81%8F%E3%81%97%E3%81%A6%E3%81%84%E3%81%BE%E3%81%99">視覚的な情報過多を防ぎ、ゲームプレイを集中しやすくしています。</h3>
+<h3 id="%E5%90%84%E3%81%8A%E5%BA%97%E3%82%84%E3%81%8A%E5%AE%A2%E3%81%95%E3%82%93%E3%81%AE%E5%BA%A7%E6%A8%99%E3%81%A8%E3%83%97%E3%83%AC%E3%82%A4%E3%83%A4%E3%83%BC%E3%81%AE%E5%BA%A7%E6%A8%99%E3%82%92%E3%83%99%E3%82%AF%E3%83%88%E3%83%AB%E3%81%A7%E5%8F%96%E5%BE%97%E3%81%97%E3%81%9D%E3%81%AE%E5%B7%AE%E5%88%86%E3%82%92%E8%A8%88%E7%AE%97%E3%81%97%E3%81%BE%E3%81%99">各お店やお客さんの座標とプレイヤーの座標をベクトルで取得し、その差分を計算します。</h3>
+<h3 id="%E8%A8%88%E7%AE%97%E3%81%95%E3%82%8C%E3%81%9F%E8%B7%9D%E9%9B%A2%E3%81%8C%E4%B8%80%E5%AE%9A%E5%80%A4%E4%BB%A5%E5%86%85%E3%81%A7%E3%81%82%E3%82%8C%E3%81%B0%E8%A9%B2%E5%BD%93%E3%81%99%E3%82%8Bui%E3%82%92%E8%A1%A8%E7%A4%BA%E3%81%97%E3%81%BE%E3%81%99">計算された距離が一定値以内であれば、該当するUIを表示します。</h3>
+<h3 id="%E3%81%BE%E3%81%9F%E4%B8%80%E5%AE%9A%E5%80%A4%E3%82%92%E8%B6%85%E3%81%88%E3%81%9F%E5%A0%B4%E5%90%88%E3%81%AFui%E3%82%92%E9%9D%9E%E8%A1%A8%E7%A4%BA%E3%81%AB%E3%81%97%E3%81%BE%E3%81%99">また、一定値を超えた場合はUIを非表示にします。</h3>
+<h3 id="%E3%82%AB%E3%83%A1%E3%83%A9%E3%81%AE%E5%89%8D%E6%96%B9%E3%83%99%E3%82%AF%E3%83%88%E3%83%AB%E3%81%A8%E3%82%B7%E3%83%A7%E3%83%83%E3%83%97%E3%82%84%E3%81%8A%E5%AE%A2%E3%81%95%E3%82%93%E3%81%B8%E3%81%AE%E6%96%B9%E5%90%91%E3%83%99%E3%82%AF%E3%83%88%E3%83%AB%E3%81%AE%E5%86%85%E7%A9%8D%E3%82%92%E7%94%A8%E3%81%84%E3%81%A6%E8%A6%96%E9%87%8E%E8%A7%92%E5%86%85%E3%81%AB%E3%81%82%E3%82%8B%E3%81%8B%E3%82%92%E8%A8%88%E7%AE%97%E3%81%97%E3%81%BE%E3%81%99">カメラの前方ベクトルとショップやお客さんへの方向ベクトルの内積を用いて、視野角内にあるかを計算します。</h3>
+<h3 id="%E3%81%93%E3%82%8C%E3%81%AB%E3%82%88%E3%82%8A%E3%83%97%E3%83%AC%E3%82%A4%E3%83%A4%E3%83%BC%E3%81%8B%E3%82%89%E8%A6%8B%E3%81%88%E3%82%8B%E7%AF%84%E5%9B%B2%E5%86%85%E3%81%AB%E3%81%82%E3%82%8B%E5%A0%B4%E5%90%88%E3%81%AE%E3%81%BFui%E3%81%8C%E8%A1%A8%E7%A4%BA%E3%81%95%E3%82%8C%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%97%E3%81%A6%E3%81%84%E3%81%BE%E3%81%99">これにより、プレイヤーから見える範囲内にある場合のみUIが表示されるようにしています。</h3>
+<p><img src="shopUI.gif" alt="alt text"> <img src="customerUI.gif" alt="alt text"></p>
+</blockquote>
+
+</body>
+</html>
