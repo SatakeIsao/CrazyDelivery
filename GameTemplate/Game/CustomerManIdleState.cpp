@@ -2,29 +2,26 @@
 #include "CustomerManIdleState.h"
 #include "CustomerManHandState.h"
 
-namespace nsCustomerMan
+CustomerManIdleState::~CustomerManIdleState()
 {
-	nsCustomerMan::CustomerManIdleState::~CustomerManIdleState()
-	{
-	}
+}
 
-	void CustomerManIdleState::Enter()
-	{
-		//再生するアニメーションを設定
-		m_customerMan->SetAnimation(CustomerMan::enAnimClip_Idle, 0.5f);
-	}
+void CustomerManIdleState::Enter()
+{
+	//再生するアニメーションを設定
+	m_customerMan->SetAnimation(CustomerMan::enAnimClip_Idle, 0.5f);
+}
 
-	ICustomerManState* nsCustomerMan::CustomerManIdleState::StateChange()
+ICustomerManState* CustomerManIdleState::StateChange()
+{
+	if (m_customerMan->GetIsHasFood() == true)
 	{
-		if (m_customerMan->GetIsHasFood() == true)
-		{
-			return new CustomerManHandState(m_customerMan);
-		}
-		return nullptr;
+		return new CustomerManHandState(m_customerMan);
 	}
+	return nullptr;
+}
 
-	void nsCustomerMan::CustomerManIdleState::Update()
-	{
-	}
+void CustomerManIdleState::Update()
+{
 }
 
