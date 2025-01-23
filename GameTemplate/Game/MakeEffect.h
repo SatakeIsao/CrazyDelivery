@@ -17,6 +17,7 @@ enum EffectName
 class MakeEffect : public IGameObject
 {
 public:
+	MakeEffect();
 	~MakeEffect();
 	bool Start();
 	void Update();
