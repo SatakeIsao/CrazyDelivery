@@ -91,23 +91,26 @@ public:
 	void PlayEffect(EffectName name, Vector3 pos, Quaternion rot, Vector3 scale);
 
 private:
-	SpriteRender		m_shopSushiUI;					//寿司店のUIスプライト
-	SpriteRender		m_shopSushiX_UI;				//X表示用のUIスプライト
-	SpriteRender		m_shopSushiGrayUI;				//グレー表示用UIスプライト
-	nsPlayer::Player*	m_player = nullptr;				//プレイヤー
-	InventoryUI*		m_inventoryUI = nullptr;		//インベントリーUI
-	CollisionObject*	m_collision;					//衝突判定オブジェクト
-	SoundSource*		m_inventoryChangeSE = nullptr;	//インベントリー変更の効果音
-	Vector3				m_position = Vector3::Zero;		//座標
-	Quaternion			m_rotation = Quaternion(1.0f, 0.0f, 0.0f, 0.0f);	//回転
-	Vector3				m_scale = Vector3::One;			//拡大率
-	Vector3				m_effectScale = Vector3(10.0f, 10.0f, 10.0f);	//エフェクト用拡大率
-	Vector2				m_shopSushiUIPos = Vector2::Zero;				//UIの座標						
-	bool				m_isSushiFull = false;			//寿司の所持数が上限に達しているか
-	bool				m_isSushiUIMove = false;		//寿司UIが動いているかどうか 
-	float				m_coolDownTimer = 0.0f;			//クールダウンタイマー
-	float				m_effectCoolTimer = 0.0f;		//エフェクトクールタイマー
-	float				m_sushiUIMoveTimer = 0.0f;		//寿司UIが移動するタイマー
+	SpriteRender		m_shopSushiUI;										//寿司店のUIスプライト
+	SpriteRender		m_shopSushiX_UI;									//X表示用のUIスプライト
+	SpriteRender		m_shopSushiGrayUI;									//グレー表示用UIスプライト
 	
+	nsPlayer::Player*	m_player = nullptr;									//プレイヤー
+	CollisionObject*	m_collision;										//衝突判定オブジェクト
+	InventoryUI*		m_inventoryUI = nullptr;							//インベントリーUI
+	SoundSource*		m_inventoryChangeSE = nullptr;						//インベントリー変更の効果音
+
+	Vector3				m_position = Vector3::Zero;							//座標
+	
+	Vector3				m_scale = Vector3::One;								//拡大率
+	Vector3				m_effectScale = Vector3(10.0f, 10.0f, 10.0f);		//エフェクト用拡大率
+	Vector2				m_shopSushiUIPos = Vector2::Zero;					//UIの座標			
+	Quaternion			m_rotation = Quaternion(1.0f, 0.0f, 0.0f, 0.0f);	//回転
+
+	float				m_coolDownTimer = 0.0f;								//クールダウンタイマー
+	float				m_effectCoolTimer = 0.0f;							//エフェクトクールタイマー
+	float				m_sushiUIMoveTimer = 0.0f;							//寿司UIが移動するタイマー
+	bool				m_isSushiFull = false;								//寿司の所持数が上限に達しているか
+	bool				m_isSushiUIMove = false;							//寿司UIが動いているかどうか 
 };
 

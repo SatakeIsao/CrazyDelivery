@@ -46,10 +46,10 @@ namespace nsPlayer
 		virtual void Update() = 0;
 
 	protected:
-		Player* m_player = nullptr; //プレイヤー
-		GameCamera* m_gameCamera = nullptr; //ゲームカメラ
-		Game* m_game = nullptr;
-		SoundSource* m_skaterJumpSE = nullptr;
+		Player*			m_player = nullptr; //プレイヤー
+		GameCamera*		m_gameCamera = nullptr; //ゲームカメラ
+		Game*			m_game = nullptr;		//ゲーム
+		SoundSource*	m_skaterJumpSE = nullptr;//効果音
 		//SoundSource* m_skaterRunSE = nullptr;
 		//SoundSource* m_skaterAcceleSE = nullptr;
 	};

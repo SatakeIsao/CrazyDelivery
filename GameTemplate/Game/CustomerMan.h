@@ -60,28 +60,48 @@ public:
 	{
 		m_scale = scale;
 	}
-
+	/// <summary>
+	/// アニメーションの設定
+	/// </summary>
+	/// <param name="enAnimationClip"></param>
+	/// <param name="complementTime"></param>
 	void SetAnimation(const EnAnimationClip enAnimationClip, const float complementTime)
 	{
 		m_currentAnimationClip = enAnimationClip;
 		m_complementTime = complementTime;
 	}
 
+	/// <summary>
+	/// 食べ物を持っているかの取得
+	/// </summary>
+	/// <returns></returns>
 	const bool& GetIsHasFood() const
 	{
 		return m_isHasFood;
 	}
 
+	/// <summary>
+	/// スコアが加算されたかの取得
+	/// </summary>
+	/// <returns></returns>
 	bool& GetIsScoreAddedBur()
 	{
 		return m_isScoreAddedBur;
 	}
 
+	/// <summary>
+	/// ゲームのポインタを取得
+	/// </summary>
+	/// <param name="game"></param>
 	void SetGamePointer(Game* game)
 	{
 		m_game = game;
 	}
 
+	/// <summary>
+	/// 当たり判定の取得
+	/// </summary>
+	/// <returns></returns>
 	bool& GetIsHasCollided_Man()
 	{
 		return m_isHasCollided_Man;
@@ -101,9 +121,11 @@ protected:
 	ModelRender*			m_customerMan;
 	Game*					m_game = nullptr;
 	ResultUI*				m_resultUI = nullptr;
+	nsPlayer::Player*		m_player = nullptr;
+
 	EnAnimationClip			m_currentAnimationClip = enAnimClip_Idle;	//アニメーションクリップ
 	AnimationClip			m_manAnimClips[enAnimClip_Num];				//現在設定されているアニメーション
-	nsPlayer::Player*		m_player = nullptr;
+	
 	InventoryUI*			m_inventoryUI = nullptr;
 	ICustomerManState*		m_customerManState = nullptr;				//ステート
 	CharacterController		m_charaCon;									//キャラクターコントローラー
@@ -114,8 +136,9 @@ protected:
 	Vector3					m_scale = Vector3(0.6f,0.6f,0.6f);			//拡大率
 	SoundSource*			m_rewardGot = nullptr;
 	
+	float					m_complementTime = 0.0f;					//アニメーションの補間時間
 	bool					m_isHasCollided_Man = false;				//Playerとの衝突判定
 	bool					m_isScoreAddedBur = false;					//スコアを加算したか
 	bool					m_isHasFood = false;						//商品を受け取ったか
-	float					m_complementTime = 0.0f;					//アニメーションの補間時間
+	
 };

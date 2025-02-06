@@ -12,16 +12,21 @@
 #include "GameTimer.h"
 namespace
 {
-	Vector3 MAP_CENTER_POSITION = Vector3(-600.0f, -250.0f, 0.0f);
+	const Vector3 MAP_CENTER_POSITION = Vector3(-600.0f, -250.0f, 0.0f);
 
-	
 	//マップの描画範囲（円形の半径）
-	float MAP_RADIUS = 240.0f;
+	const float MAP_RADIUS = 240.0f;
 	//マップに表示する、プレイヤーや店の制限距離 *2.5f
-	float LIMITED_RANGE_IMAGE_X = 7125.0f*2.0f;
-	float LIMITED_RANGE_IMAGE_Z = 9530.0f*2.0f;
+	const float LIMITED_RANGE_IMAGE_X = 7125.0f * 2.0f;
+	const float LIMITED_RANGE_IMAGE_Z = 9530.0f * 2.0f;
 	//調整値
-	float ADJUSTMENT_VALUE = 400.0f;
+	const float ADJUSTMENT_VALUE = 400.0f;
+	const int	ALPHA_ZERO = 0.0f;
+	const int	ALPHA_PLUS_ONE = 1.0f;
+	const int	ALPHA_MINUS_ONE = -1.0f;
+	const int	PULSE_COUNT_MAX = 5.0f;
+	const float	ALPHA_RATE = 0.02f;
+	//int	  ALPHA_MINUS = -1.0f;
 	/*float LIMITED_RANGE_IMAGE_X = 7125.0f;
 	float LIMITED_RANGE_IMAGE_Z = 9530.0f;*/
 }
@@ -40,7 +45,6 @@ bool MapUI::Start()
 	m_spriteRender.Init("Assets/MapData/map.DDS", 400, 400);
 	m_spriteRender.SetPosition(Vector3(-600.0f,-250.0f,0.0f));
 	m_spriteRender.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
-	//m_spriteRender.SetScale(m_scale);
 	m_spriteRender.Update();
 
 	//マップ中心の赤い画像
@@ -54,9 +58,6 @@ bool MapUI::Start()
 	m_bargerShopSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
 	m_bargerShopSprite2.Init("Assets/MapData/mapHamburger.dds", 1216, 684);
 	m_bargerShopSprite2.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
-	
-	//m_bargerShopSprite.Init("Assets/MapData/mapSushi.dds", 960, 540);
-	//m_bargerShopSprite.SetPosition(Vector3(2144.19f, 0.0f, 1365.55f));
 	
 	m_bargerShopGray.Init("Assets/MapData/mapHamburgerGray.dds", 1216, 684);
 	m_bargerShopGray.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
@@ -119,6 +120,8 @@ bool MapUI::Start()
 	
 	m_player = FindGO<nsPlayer::Player>("player");
 	m_inventoryUI = FindGO<InventoryUI>("inventoryui");
+
+	//std::vector<ShopHamburger*>  shopHamburger = FindGOs<ShopHamburger>("shophamburger");
 	m_shopHamburger = FindGOs<ShopHamburger>("shophamburger");
 	auto* shopHamburgerB = FindGO<ShopHamburger>("shophamburgerB");
 
@@ -143,7 +146,7 @@ bool MapUI::Start()
 
 void MapUI::Update()
 {
-	CalcWipeRatio();
+	//CalcWipeRatio();
 
 	Vector3 playerPosition = m_player->GetPostion();
 	Vector3 bargerShopPositionA = m_shopHamburger[0]->GetPosition();
@@ -398,26 +401,26 @@ float MapUI::CalcAlpha()
 	return m_alpha;
 }
 
-void MapUI::CalcWipeRatio()
-{
-	if (m_shopHamburger[0]->GetIsHamburgerUIMove() == false)
-	{
-		m_coolTimeSpriteData.AddDirection(-0.1f);
-	}
-	else
-	{
-		m_coolTimeSpriteData.SetDirection(6.3f);
-	}
-
-	if (m_shopHamburger[1]->GetIsHamburgerUIMove() == false)
-	{
-		m_coolTimeSpriteData.AddDirection(-0.1f);
-	}
-	else
-	{
-		m_coolTimeSpriteData.AddDirection(6.3f);
-	}
-}
+//void MapUI::CalcWipeRatio()
+//{
+//	if (m_shopHamburger[0]->GetIsHamburgerUIMove() == false)
+//	{
+//		m_coolTimeSpriteData.AddDirection(-0.1f);
+//	}
+//	else
+//	{
+//		m_coolTimeSpriteData.SetDirection(6.3f);
+//	}
+//
+//	if (m_shopHamburger[1]->GetIsHamburgerUIMove() == false)
+//	{
+//		m_coolTimeSpriteData.AddDirection(-0.1f);
+//	}
+//	else
+//	{
+//		m_coolTimeSpriteData.AddDirection(6.3f);
+//	}
+//}
 
 //void MapUI::CalcAlpha(float& alpha)
 //{
@@ -429,31 +432,27 @@ void MapUI::CalcWipeRatio()
 //	}
 //}
 
-void MapUI::AlphaZero()
-{
-}
-
 void MapUI::PlayerSpritePulse()
-{
-	if (m_pulseCount <= 5)
+{	
+	if (m_pulseCount <= PULSE_COUNT_MAX)
 	{
-		m_pulseAlpha += 0.02f * m_pulseDirection;
-		if (m_pulseAlpha > 1.0f)
+		m_pulseAlpha += ALPHA_RATE * m_pulseDirection;
+		if (m_pulseAlpha > ALPHA_PLUS_ONE)
 		{
-			m_pulseAlpha = 1.0f;
-			m_pulseDirection = -1;
+			m_pulseAlpha = ALPHA_PLUS_ONE;
+			m_pulseDirection = ALPHA_MINUS_ONE;
 			m_pulseCount++;
 		}
-		else if (m_pulseAlpha < 0.0f)
+		else if (m_pulseAlpha < ALPHA_ZERO)
 		{
-			m_pulseAlpha = 0.0f;
-			m_pulseDirection = 1;
+			m_pulseAlpha = ALPHA_ZERO;
+			m_pulseDirection = ALPHA_PLUS_ONE;
 			m_pulseCount++;
 		}
 		m_playerSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_pulseAlpha });
 	}
 	else {
-		m_playerSprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+		m_playerSprite.SetMulColor({ 1.0f,1.0f,1.0f,ALPHA_PLUS_ONE });
 	}
 	
 }
@@ -675,7 +674,6 @@ void MapUI::Render(RenderContext& rc)
 	if (IsInsideCircle(m_customerSushiSprite2.GetPosition(), mapCenter, mapRadius)) {
 		m_customerSushiSprite2.Draw(rc);
 	}
-
 
 	m_playerSprite.Draw(rc);
 }

@@ -52,7 +52,7 @@ private:
 	struct FoodSprite
 	{
 		//スプライトの可視性を設定
-		void SetVisible(bool isVisible) 
+		void SetVisible(const bool isVisible) 
 		{
 			m_isVisible = isVisible; 
 		}

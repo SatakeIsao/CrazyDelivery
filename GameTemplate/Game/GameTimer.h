@@ -1,5 +1,6 @@
 #pragma once
 class ResultUI;
+
 class GameTimer : public IGameObject
 {
 public:
@@ -11,6 +12,7 @@ public:
 		Pos_Slide,		//タイマーがスライドする状態
 	};
 
+	//タイマーの分を定義する列挙型
 	enum GameTimerMinuteState
 	{
 		Minute_0,		//分が０の状態
@@ -22,28 +24,28 @@ public:
 	//タイマーの秒（左側）を定義する列挙型
 	enum GameTimerSecondLeft
 	{
-		Second_Left_0,	
-		Second_Left_1,
-		Second_Left_2,
-		Second_Left_3,
-		Second_Left_4,
-		Second_Left_5,
-		Second_Left_6
+		Second_Left_0,	//１０の位が０
+		Second_Left_1,	//１０の位が１
+		Second_Left_2,	//１０の位が２
+		Second_Left_3,	//１０の位が３
+		Second_Left_4,	//１０の位が４
+		Second_Left_5,	//１０の位が５
+		Second_Left_6	//１０の位が６
 	};
 
 	//タイマーの秒（右側）を定義する列挙型
 	enum GameTimerSecondRight
 	{
-		Second_Right_0,
-		Second_Right_1,
-		Second_Right_2,
-		Second_Right_3,
-		Second_Right_4,
-		Second_Right_5,
-		Second_Right_6,
-		Second_Right_7,
-		Second_Right_8,
-		Second_Right_9
+		Second_Right_0,	//１の位が０
+		Second_Right_1,	//１の位が１
+		Second_Right_2,	//１の位が２
+		Second_Right_3,	//１の位が３
+		Second_Right_4,	//１の位が４
+		Second_Right_5,	//１の位が５
+		Second_Right_6,	//１の位が６
+		Second_Right_7,	//１の位が７
+		Second_Right_8,	//１の位が８
+		Second_Right_9	//１の位が９
 	};
 
 	
@@ -119,13 +121,22 @@ private:
 	SpriteRender		m_secondRight8;
 	SpriteRender		m_secondRight9;
 
-	Vector3				 m_timerPosition = Vector3(-80.0f, 580.0f, 0.0f);	//タイマーの初期座標
-	int				   	 m_minute = 3.0f;									//タイマーの分数
-	float				 m_second = 0.0f;									//タイマーの秒数
-	float				 m_time = 180.0f;									//タイマーの総時間（３分）
-	bool				 m_isTimerSterted = false;							//タイマー開始したか
-	bool				 m_isTimerEnd = false;								//タイマー終了したか
+	Vector3				m_timerPosition = Vector3(-80.0f, 580.0f, 0.0f);	//タイマーの初期座標
 
-	std::array<const char*, 10> m_dightTextures;							//スプライトのテクスチャパス
+	int				   	m_minute = 3.0f;									//タイマーの分数
+	float				m_second = 0.0f;									//タイマーの秒数
+	float				m_time = 180.0f;									//タイマーの総時間（３分）
+	
+	///*デバッグ用*/
+	//int				m_minute = 0.0f;									//タイマーの分数
+	//float				m_second = 3.0f;									//タイマーの秒数
+	//float				m_time = 3.0f;										//タイマーの総時間（３秒）
+	
+	
+	bool				m_isTimerSterted = false;							//タイマー開始したか
+	bool				m_isTimerEnd = false;								//タイマー終了したか
+
+	
+	//std::array<const char*, 10> m_dightTextures;							//スプライトのテクスチャパス
 };
 

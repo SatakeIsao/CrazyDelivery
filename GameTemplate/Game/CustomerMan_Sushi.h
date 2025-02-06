@@ -44,7 +44,7 @@ public:
 	/// スコアが追加されたかの設定
 	/// </summary>
 	/// <param name="isAdded"></param>
-	void SetScoreAdded(bool& isAdded)
+	void SetScoreAdded(const bool& isAdded)
 	{
 		m_isScoreAdded = isAdded;
 	}
@@ -64,10 +64,11 @@ private:
 	Vector3				m_effectScale = Vector3(3.0f,3.0f,3.0f);	//エフェクトの拡大率
 	Vector2				m_customerUIPos = Vector2::Zero;			//UIの座標
 	Vector3				m_forward = Vector3::Front;					//お客さんの前方向を示すベクトル
-	int					m_sushiScore = 0.0f;						//寿司のスコア
-	bool				m_isScoreAdded = false;						//スコアを加算したか
+
 	float				m_scoreResetTimer = 0.0f;					//スコアリセット用タイマー
 	float				m_effectCoolTimer = 0.0f;					//エフェクトのクール時間
+	int					m_sushiScore = 0.0f;						//寿司のスコア
+	bool				m_isScoreAdded = false;						//スコアを加算したか
 	bool				m_isSEPlayed = false;						//効果音が再生中かどうか
 };
 

@@ -94,23 +94,23 @@ public:
 	
 
 private:
-	SpriteRender		m_shopHamburgerUI;	//ハンバーガーショップのUIスプライト
-	SpriteRender		m_shopHamburgerX_UI;	//ハンバーガーショップのX表示用スプライト
-	SpriteRender		m_shopHamburgerGrayUI;	//ハンバーガーショップのグレー表示用スプライト
-	nsPlayer::Player*				m_player = nullptr;	//プレイヤー
-	InventoryUI*					m_inventoryUI = nullptr;	//インベントリーUI
-	Vector3				m_position = Vector3::Zero;				//座標
-	Quaternion			m_rotation;								//回転
-	Vector3				m_scale = Vector3::One;					//拡大率
-	Vector3				m_effectScale = Vector3(10.0f,10.0,10.0f);	//エフェクトの拡大率
-	Vector2				m_shopHamburgerUIPps = Vector2::Zero;		//UIの座標
+	SpriteRender		m_shopHamburgerUI;							//ハンバーガーショップのUIスプライト
+	SpriteRender		m_shopHamburgerX_UI;						//ハンバーガーショップのX表示用スプライト
+	SpriteRender		m_shopHamburgerGrayUI;						//ハンバーガーショップのグレー表示用スプライト
+	nsPlayer::Player*	m_player = nullptr;							//プレイヤー
 	CollisionObject*	m_collision = nullptr;;						//衝突判定オブジェクト
+	InventoryUI*		m_inventoryUI = nullptr;					//インベントリーUI
 	SoundSource*		m_inventoryChangeSE = nullptr;				//インベントリー変更の効果音
 
+	Vector3				m_position = Vector3::Zero;					//座標
+	Vector3				m_scale = Vector3::One;						//拡大率
+	Vector3				m_effectScale = Vector3(10.0f,10.0,10.0f);	//エフェクトの拡大率
+	Vector2				m_shopHamburgerUIPps = Vector2::Zero;		//UIの座標
+	Quaternion			m_rotation;									//回転
 
-	float m_coolDownTimer = 0.0f;									//クールダウンタイマー
-	float m_effectCoolTimer = 0.0f;									//エフェクトクールタイマー
-	float m_hamburgerUIMoveTimer = 0.0f;							//ハンバーガーUIが移動するタイマー
+	float				m_coolDownTimer = 0.0f;						//クールダウンタイマー
+	float				m_effectCoolTimer = 0.0f;					//エフェクトクールタイマー
+	float				m_hamburgerUIMoveTimer = 0.0f;				//ハンバーガーUIが移動するタイマー
 
 	bool				m_isHamburgerFull = false;					//ハンバーガーの所持数が上限に達しているか
 	bool				m_isHaburgerUIMove = false;					//ハンバーガーUIが動いているかどうか

@@ -91,25 +91,26 @@ public:
 	void PlayEffect(EffectName name,Vector3 pos, Quaternion rot, Vector3 scale);
 
 private:
-	SpriteRender		m_shopPizzaUI;		//ピザショップのUIスプライト
-	SpriteRender		m_shopPizzaX_UI;	//ピザショップのX表示用スプライト
-	SpriteRender		m_shopPizzaGrayUI;	//ピザショップのグレー表示用スプライト
-	nsPlayer::Player*	m_player = nullptr;	//プレイヤー
-	InventoryUI*		m_inventoryUI = nullptr;	//インベントリーUI
-	SoundSource*		m_inventoryChangeSE = nullptr; //インベントリー変更の効果音
-	CollisionObject*	m_collision[2];		//衝突判定オブジェクト
-	Vector3				m_position = Vector3::Zero;	//座標
-	Quaternion			m_rotation = Quaternion(1.0f, 0.0f, 0.0f, 0.0f);	//回転					
-	Vector3				m_scale = Vector3::One;		//拡大率
-	Vector3				m_effectScale = Vector3(10.0f, 10.0f, 10.0f);		//エフェクトの拡大率
-	Vector2				m_shopPizzaUIPos = Vector2::Zero;					//UIの座標					
-	bool				m_isPizzaFull = false;		//ピザの所持数が上限に達しているか
-	bool				m_isPizzaUIMove = false;	//ピザUIが動いているかどうか
-	float				m_coolDownTimer = 0.0f;		//クールダウンタイマー
-	float				m_effectCoolTimer = 0.0f;	//エフェクトクールタイマー
-	float				m_pizzaUIMoveTimer = 0.0f;	//ピザUIが移動するタイマー
+	SpriteRender		m_shopPizzaUI;										//ピザショップのUIスプライト
+	SpriteRender		m_shopPizzaX_UI;									//ピザショップのX表示用スプライト
+	SpriteRender		m_shopPizzaGrayUI;									//ピザショップのグレー表示用スプライト
+	nsPlayer::Player*	m_player = nullptr;									//プレイヤー
+	CollisionObject*	m_collision[2];										//衝突判定オブジェクト
+	InventoryUI*		m_inventoryUI = nullptr;							//インベントリーUI
+	SoundSource*		m_inventoryChangeSE = nullptr;						//インベントリー変更の効果音
 
-public:
+	Vector3				m_position = Vector3::Zero;							//座標		
+	Vector3				m_scale = Vector3::One;								//拡大率
+	Vector3				m_effectScale = Vector3(10.0f, 10.0f, 10.0f);		//エフェクトの拡大率
+	Vector2				m_shopPizzaUIPos = Vector2::Zero;					//UIの座標	
+	Quaternion			m_rotation = Quaternion(1.0f, 0.0f, 0.0f, 0.0f);	//回転	
+
+	float				m_coolDownTimer = 0.0f;								//クールダウンタイマー
+	float				m_effectCoolTimer = 0.0f;							//エフェクトクールタイマー
+	float				m_pizzaUIMoveTimer = 0.0f;							//ピザUIが移動するタイマー
+	bool				m_isPizzaFull = false;								//ピザの所持数が上限に達しているか
+	bool				m_isPizzaUIMove = false;							//ピザUIが動いているかどうか
+
 	
 };
 
