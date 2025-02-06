@@ -37,21 +37,39 @@ void GameCamera::Update()
 	Vector3 target = m_player->GetPostion(); // プレイヤーの現在位置
 	Quaternion playerRotation = m_player->GetRotation(); //プレイヤーの回転
 
-	//プレイヤーの後方位置にカメラを配置するためのオフセット
-	Vector3 offset(m_offsetPos); //カメラのオフセット位置
-	playerRotation.Apply(offset);//プレイヤーの回転をオフセット
+	if (m_player->GetIsPathMoving())
+	{
+		// **パス移動中はカメラの位置をプレイヤーの相対位置に固定するが、追従する**
+		if (!m_isCameraFixed)
+		{
+			// **カメラの相対位置を記録**
+			m_fixedCameraOffset = g_camera3D->GetPosition() - target;
+			m_isCameraFixed = true;
+		}
 
-	// カメラ位置をプレイヤーの後ろに設定（プレイヤー位置 + カメラオフセット）
-	Vector3 cameraPosition = target + offset;
+		// **プレイヤーの位置が動いたらカメラもその分動かす**
+		Vector3 cameraPosition = target + m_fixedCameraOffset;
+		Vector3 cameraTarget = target + Vector3(0.0f, 70.0f, 0.0f); // 注視点はプレイヤーの少し上
 
-	// プレイヤーの頭上を注視点に設定
-	Vector3 cameraTarget = target;
-	cameraTarget.y += 70.0f;  // プレイヤーの少し上を注視点に
+		m_springCamera.SetPosition(cameraPosition);
+		m_springCamera.SetTarget(cameraTarget);
+	}
+	else
+	{
+		// **通常時はプレイヤーの背後を追従**
+		m_isCameraFixed = false; // 固定解除
 
-	//カメラの位置と注視点をメインカメラに設定
-	m_springCamera.SetPosition(cameraPosition);
-	m_springCamera.SetTarget(cameraTarget);
-	// カメラを更新
+		Vector3 offset(m_offsetPos); // 通常時のカメラの位置
+		playerRotation.Apply(offset); // プレイヤーの回転を適用
+
+		Vector3 cameraPosition = target + offset;
+		Vector3 cameraTarget = target;
+		cameraTarget.y += 70.0f;
+
+		m_springCamera.SetPosition(cameraPosition);
+		m_springCamera.SetTarget(cameraTarget);
+	}
+
 	m_springCamera.Update();
 
 
