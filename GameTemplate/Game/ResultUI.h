@@ -16,19 +16,33 @@ public:
 	};
 
 	//リザルトUIの座標ステート
-	enum ResultSetPos
+	enum ResultSetPosState
 	{
 		Pos_OutSide,	//画面外
 		Pos_InSide,		//画面内
 		Pos_Slide,		//スライド中
 	};
 
+	//フィニッシュスプライトの拡大率ステート
+	enum FinishScaleState
+	{
+		Scale_Double,	//倍の拡大率
+		Scale_Small,	//縮小中
+		Scale_Medium,	//等倍の拡大率
+		Scale_None,		//変更なし
+	};
+
 	ResultUI();
 	~ResultUI();
 	bool Start();
 	void Update();
-	void ScoreAdded(int addScore);
+
+	void ScoreAdded(const int& addScore);
 	void NextResultPosState();
+	void NextFinishScaleState();
+	void ScaleDouble();
+	void ScaleMedium();
+	void ScaleSmall();
 	void Render(RenderContext& rc);
 
 	/// <summary>
@@ -41,34 +55,35 @@ public:
 	}
 
 	
-
+	
 private:
-	Game* m_game = nullptr;									//ゲーム
-	GameTimer* m_gameTimer = nullptr;						//ゲームタイマー
-	ResultUI* m_resultUI = nullptr;							//リザルトUI
-	SoundSource* m_finishSE = nullptr;						//フィニッシュ時の効果音
+	//Game*			m_game = nullptr;						//ゲーム
+	GameTimer*		m_gameTimer = nullptr;					//ゲームタイマー
+	ResultUI*		m_resultUI = nullptr;					//リザルトUI
+	SoundSource*	m_finishSE = nullptr;					//フィニッシュ時の効果音
 	enResultUIState m_resultUIState = enResultUIState_Fade;	//リザルトUIのステート
-	ResultSetPos m_resultSetPosState = Pos_OutSide;			//リザルトUIの座標ステート
+	ResultSetPosState	m_resultSetPosState = Pos_OutSide;	//リザルトUIの座標ステート
+	FinishScaleState m_finishScaleState = Scale_Double;		//フィニッシュスプライトの拡大率ステート
+
+	SpriteRender	m_finishSprite;							//フィニッシュ時のスプライト
+	SpriteRender	m_resultUI_Sprite;						//リザルトUIのスプライト
+	SpriteRender	m_clearSprite;							//ゲームクリアのスプライト
+	SpriteRender	m_failedSprite;							//ゲーム失敗のスプライト
+	SpriteRender	m_rankC_Sprite;							//ランクCのスプライト
+	SpriteRender	m_rankB_Sprite;							//ランクBのスプライト
+	SpriteRender	m_rankA_Sprite;							//ランクAのスプライト
+	SpriteRender	m_rankS_Sprite;							//ランクSのスプライト
+	FontRender		m_nowScoreRender;						//現在のスコア表示用フォント
 	
-	SpriteRender m_finishSprite;		//フィニッシュ時のスプライト
-	SpriteRender m_resultUI_Sprite;		//リザルトUIのスプライト
-	SpriteRender m_clearSprite;			//ゲームクリアのスプライト
-	SpriteRender m_failedSprite;		//ゲーム失敗のスプライト
-	SpriteRender m_rankC_Sprite;		//ランクCのスプライト
-	SpriteRender m_rankB_Sprite;		//ランクBのスプライト
-	SpriteRender m_rankA_Sprite;		//ランクAのスプライト
-	SpriteRender m_rankS_Sprite;		//ランクSのスプライト
-
-	FontRender	m_nowScoreRender;		//現在のスコア表示用フォント
+	Vector3			m_position = Vector3::Zero;				//座標
+	float			m_scale = 1.0f;							//拡大率
+	float			m_finishScale = 10.0f;					//フィニッシュの拡大率
+	Vector3			m_nowScorePos = Vector3(400.0f, 730.0f, 0.0f);//現在のスコア表示の座標
 	
-	float	   m_elapsedTime = 0.0f;	//経過時間
-
-	Vector3		m_position = Vector3::Zero;	//座標
-	Vector3		m_scale = Vector3::One;		//拡大率
-	Vector3		m_nowScorePos = Vector3(400.0f, 730.0f, 0.0f);//現在のスコア表示の座標
-	bool		m_isResultEnd = false;		//リザルト表示が終了しているか
-	bool		m_isFinishSEPlayed = false;	//フィニッシュ時の効果音が再生してるか
-	int			m_nowScore = 0.0f;			//現在のスコア
-
+	float			m_elapsedTime = 0.0f;					//経過時間
+	int				m_nowScore = 0.0f;						//現在のスコア
+	bool			m_isResultEnd = false;					//リザルト表示が終了しているか
+	bool			m_isFinishSEPlayed = false;				//フィニッシュ時の効果音が再生してるか
+	bool			m_isFinishDisplayed = false;			//フィニッシュ表示済みか
 };
 

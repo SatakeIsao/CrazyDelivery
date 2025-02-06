@@ -4,6 +4,7 @@
 #include "InventoryUI.h"
 #include "Game.h"
 #include "GameSound.h"
+#include "Fade.h"
 
 namespace
 {
@@ -34,13 +35,14 @@ ResultUI::~ResultUI()
 
 bool ResultUI::Start()
 {
-	m_game = FindGO<Game>("game");
+	//m_game = FindGO<Game>("game");
 	m_gameTimer = FindGO<GameTimer>("gametimer");
 	m_resultUI = FindGO<ResultUI>("resultui");
 
 	//フィニッシュスプライトの初期化
 	m_finishSprite.Init("Assets/Sprite/Result/finish.dds", 1980.0f, 1020.0f);
 	m_finishSprite.SetPosition(Vector3::Zero);
+	m_finishSprite.SetScale(m_finishScale);
 	m_finishSprite.Update();
 
 	//リザルトUIの画像
@@ -85,7 +87,7 @@ bool ResultUI::Start()
 	m_rankC_Sprite.SetScale(m_scale);
 	m_rankC_Sprite.Update();
 
-	//現在のスコア表示
+	//現在のスコア表示の初期化
 	wchar_t wcsbuf[256];
 	swprintf_s(wcsbuf, 256, L"$ %05d", m_nowScore);
 	m_nowScoreRender.SetText(wcsbuf);
@@ -98,12 +100,31 @@ bool ResultUI::Start()
 
 void ResultUI::Update()
 {
+	//Bボタン押されたら
 	if (g_pad[0]->IsTrigger(enButtonB)) {
 		//次の座標状態に変更
 		NextResultPosState();
+		//縮小ステートに変更
+		//m_finishScaleState = Scale_Small;
 	}
 
-	//状態に基づいて座標を更新
+	//ゲームタイマーが終了していて
+	//フィニッシュ表示がまだされていないなら
+	if (m_gameTimer->GetIsTimerEnd()
+		&& m_isFinishDisplayed==false)
+	{
+		//スケールを10倍から開始
+		m_finishScale = 10.0f;
+		//縮小ステートを設定
+		m_finishScaleState = Scale_Small;
+		//フィニッシュ表示済みに設定
+		m_isFinishDisplayed = true;
+		//m_isFinishSEPlayed = false;
+	}
+	//フィニッシュスプライトの拡大率の状態を更新
+	NextFinishScaleState();
+	
+	//スライド処理
 	if (m_resultSetPosState == Pos_Slide) {
 		//Y軸を減少させて下にスライド
 		if (m_nowScorePos.y > SLIDE_TARGET_Y) {
@@ -111,37 +132,44 @@ void ResultUI::Update()
 			m_nowScorePos.y -= SLIDE_SPEED;
 		}
 		else {
-			//スライド完了時に状態を更新
+			//スライド完了
 			m_resultSetPosState = Pos_InSide;
 		
 		}
 	}
-
+	wchar_t wcsbuf[256];
+	//スコア表示の更新
 	if (m_gameTimer->GetIsTimerEnd() == true)
 	{
-		wchar_t wcsbuf[256];
+		//wchar_t wcsbuf[256];
+		//終了時のスコア表示
 		swprintf_s(wcsbuf, 256, L"$%05d", m_nowScore);
-		m_nowScoreRender.SetText(wcsbuf);
+		
 	}
 	else
 	{
 		// 現在のスコアをスプライトに反映
-		wchar_t wcsbuf[256];
+		//wchar_t wcsbuf[256];
+		//現在のスコア表示
 		swprintf_s(wcsbuf, 256, L"$ %05d", m_nowScore);
-		m_nowScoreRender.SetText(wcsbuf);
+		
 	}
-	
-
+	m_nowScoreRender.SetText(wcsbuf);
 	m_nowScoreRender.SetPosition(m_nowScorePos);
+	//スプライトの更新
+	m_finishSprite.SetScale(m_finishScale);
+	m_finishSprite.Update();
 }
 
-void ResultUI::ScoreAdded(int addScore)
+void ResultUI::ScoreAdded(const int& addScore)
 {
+	//スコアの加算
 	m_nowScore += addScore;
 }
 
 void ResultUI::NextResultPosState()
 {
+	//現在の座標状態を次の状態に切り替え
 	switch (m_resultSetPosState)
 	{
 	case Pos_OutSide:
@@ -153,6 +181,64 @@ void ResultUI::NextResultPosState()
 	default:
 		break;
 	}
+}
+
+void ResultUI::NextFinishScaleState()
+{
+	//現在の拡大率の状態を次の状態に切り替え
+	switch (m_finishScaleState)
+	{
+	case Scale_Double:
+		ScaleDouble();
+		m_finishScaleState = Scale_Medium;
+		break;
+
+	case Scale_Small:
+		ScaleSmall();
+		if (m_finishScale <= 1.0f)
+		{
+			m_finishScale = 1.0f;
+			//縮小完了
+			m_finishScaleState = Scale_None;
+		}
+		break;
+		
+	case Scale_Medium:
+		ScaleMedium();
+		m_finishScaleState = Scale_None;
+		break;
+
+	case Scale_None:
+		//何もしない
+		break;
+	default:
+		break;
+	}
+}
+
+void ResultUI::ScaleDouble()
+{
+	//拡大率を10に設定
+	m_finishSprite.SetScale(10.0f);
+}
+
+void ResultUI::ScaleMedium()
+{
+	//拡大率は等倍に設定
+	m_finishSprite.SetScale(1.0f);
+}
+
+void ResultUI::ScaleSmall()
+{
+	//拡大率を徐々に減少させる
+	m_finishScale -= 0.2f;
+	if (m_finishScale < 1.0f)
+	{
+		//最小値に固定
+		m_finishScale = 1.0f;
+	}
+
+	m_finishSprite.SetScale(m_finishScale);
 }
 
 void ResultUI::Render(RenderContext& rc)
@@ -175,12 +261,18 @@ void ResultUI::Render(RenderContext& rc)
 				m_isFinishSEPlayed = true;
 			}
 			
-
 			m_finishSprite.Draw(rc);
+			
+			//if (m_elapsedTime > 2.0f)
+			//{
+			//	//フェード処理
+			//	NewGO<Fade>(0, "fade");
+			//	
+			//}
 		}
-
 		else
 		{
+			//リザルトUIの描画
 			m_resultUI_Sprite.Draw(rc);
 			if (m_nowScore >= RESULT_SCORE_S)
 			{
@@ -208,6 +300,12 @@ void ResultUI::Render(RenderContext& rc)
 			m_nowScoreRender.SetPosition(SCORE_POS);
 			m_nowScoreRender.Draw(rc);
 			m_isResultEnd = true;
+
+			if (g_pad[0]->IsPress(enButtonB))
+			{
+				//フェード処理
+				//NewGO<Fade>(0, "fade");
+			}
 		}
 
 	}
