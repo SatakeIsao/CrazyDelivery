@@ -1,6 +1,7 @@
 #pragma once
 #include "Shadow.h"
 #include "Bloom.h"
+#include "FontRender.h"
 
 namespace nsK2EngineLow {
 
