@@ -14,6 +14,8 @@ enum SoundName
 	enSoundName_skaterJump,
 	enSoundName_skaterRun,
 	enSoundName_Finish,
+	enSoundName_Button,
+	enSoundName_Reflection,
 	enSoundName_Num,
 };
 

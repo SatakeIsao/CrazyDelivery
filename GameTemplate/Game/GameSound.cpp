@@ -17,7 +17,8 @@ bool GameSound::Start()
 	g_soundEngine->ResistWaveFileBank(enSoundName_skaterJump, "Assets/Sound/g_skaterJump.wav");
 	g_soundEngine->ResistWaveFileBank(enSoundName_skaterRun, "Assets/Sound/g_skaterRun3.wav");
 	g_soundEngine->ResistWaveFileBank(enSoundName_Finish, "Assets/Sound/g_finish.wav");
-
+	g_soundEngine->ResistWaveFileBank(enSoundName_Button, "Assets/Sound/g_button.wav");
+	g_soundEngine->ResistWaveFileBank(enSoundName_Reflection, "Assets/Sound/g_reflection.wav");
 	return true;
 }
 
