@@ -4,6 +4,7 @@
 
 GameInformation::~GameInformation()
 {
+	DeleteGO(m_gameBGM);
 }
 
 bool GameInformation::Start()
