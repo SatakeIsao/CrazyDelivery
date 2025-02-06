@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "StartButtonUI.h"
-
+#include "GameSound.h"
 namespace
 {
 	const float FADEOUT_RATE = 0.05f;		//フェードアウト:1回の減少量
@@ -22,7 +22,7 @@ bool StartButtonUI::Start()
 {
 	m_startSprite.Init("Assets/StartData/PressB.DDS", 960.0f, 540.0f);
 	m_startSprite.SetPosition(START_SPRITE_POS);
-	m_startSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
+	m_startSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_fadeAlpha });
 	m_startSprite.Update();
 	return true;
 }
@@ -32,7 +32,7 @@ void StartButtonUI::Update()
 	//状態に応じた処理
 	switch (m_startUIState)
 	{
-	case StartButtonUI::enStartUIState_FadeIn:
+	case enStartUIState_FadeIn:
 		//フェードイン処理
 		FadeProcess();
 		break;
@@ -48,9 +48,17 @@ void StartButtonUI::Update()
 		break;
 	}
 
-	//Bボタンが押されたら
-	if (g_pad[0]->IsTrigger(enButtonB))
+	//Bボタンが押されたかつ、1回も押されていなかったら
+	if (g_pad[0]->IsTrigger(enButtonB)
+		&& m_isButtonPush==false)
 	{
+		//ボタン入力SEを流す
+		m_buttonSE = NewGO<SoundSource>(0);
+		m_buttonSE->Init(enSoundName_Button);
+		m_buttonSE->SetVolume(1.0f);
+		m_buttonSE->Play(false);
+		//スタートボタンは押された
+		m_isButtonPush = true;
 		//ステートをAlphaZeroに設定
 		m_startUIState = enStartUIState_AlphaZero;
 	}
@@ -62,43 +70,44 @@ void StartButtonUI::Update()
 void StartButtonUI::FadeProcess()
 {
 	//時間を減少
-	m_time -= g_gameTime->GetFrameDeltaTime();
-	if (m_time > 0.0f)
+	m_fadeTime -= g_gameTime->GetFrameDeltaTime();
+	if (m_fadeTime > 0.0f)
 	{
 		return;
 	}
+
 	//フェードアウトを実行
-	m_alpha -= FADEOUT_RATE;
+	m_fadeAlpha -= FADEOUT_RATE;
 
 	//フェードアウト終了時の処理
-	if (m_alpha <= ALPHA_MIN)
+	if (m_fadeAlpha <= ALPHA_MIN)
 	{
-		m_alpha = ALPHA_MIN;
+		m_fadeAlpha = ALPHA_MIN;
 		//消えていく状態に設定
 		m_startUIState = enStartUIState_FadeOut;
 	}
 
 	//透明度をスプライトに適用
-	m_startSprite.SetMulColor({ 1.0f, 1.0f, 1.0f, m_alpha });
+	m_startSprite.SetMulColor({ 1.0f, 1.0f, 1.0f, m_fadeAlpha });
 }
 
 void StartButtonUI::FadeOut()
 {
 	//アルファ値の計算
-	CalcAlpha(m_alpha);
-	m_startSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
+	CalcAlpha(m_fadeAlpha);
+	m_startSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_fadeAlpha });
 	m_startSprite.Update();
 }
 
 void StartButtonUI::AlphaZero()
 {
 	//アルファ値を減少
-	m_alpha -=ALPHA_ZERO_RATE;
-	if (m_alpha <= ALPHA_MIN)
+	m_fadeAlpha -=ALPHA_ZERO_RATE;
+	if (m_fadeAlpha <= ALPHA_MIN)
 	{
-		m_alpha = ALPHA_MIN;
+		m_fadeAlpha = ALPHA_MIN;
 	}
-	m_startSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
+	m_startSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_fadeAlpha });
 	m_startSprite.Update();
 }
 

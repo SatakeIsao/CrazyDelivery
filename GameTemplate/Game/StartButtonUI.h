@@ -33,9 +33,10 @@ public:
 
 private:
 	EnStartUIState m_startUIState = enStartUIState_FadeIn;	//初期状態：FadeIn
-	//SpriteInitData m_initStartData;
 	SpriteRender m_startSprite;						 //スタートのスプライト表示用
-	float m_alpha = 1.0f;							 //アルファ値
-	float m_time = 0.5f;							 
+	SoundSource* m_buttonSE;							//ボタン入力SE
+	float m_fadeAlpha = 1.0f;							 //アルファ値
+	float m_fadeTime = 0.5f;							 //フェードを管理する時間
+	bool m_isButtonPush = false;							//スタートボタンは押されたかどうか
 };
 
