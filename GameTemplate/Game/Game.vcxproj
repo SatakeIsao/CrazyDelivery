@@ -243,6 +243,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MakeEffect.cpp" />
     <ClCompile Include="MapUI.cpp" />
+    <ClCompile Include="Path.cpp" />
+    <ClCompile Include="PathStorage.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerDriftState.cpp" />
     <ClCompile Include="PlayerIdleState.cpp" />
@@ -284,6 +286,8 @@
     <ClInclude Include="IPlayerState.h" />
     <ClInclude Include="MakeEffect.h" />
     <ClInclude Include="MapUI.h" />
+    <ClInclude Include="Path.h" />
+    <ClInclude Include="PathStorage.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerDriftState.h" />
     <ClInclude Include="PlayerIdleState.h" />

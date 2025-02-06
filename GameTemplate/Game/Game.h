@@ -23,6 +23,8 @@ class CustomerMan_Hamburger;
 class CustomerMan_Pizza;
 class CustomerMan_Sushi;
 class GameInformation;
+class Fade;
+class PathStorage;
 
 class Game : public IGameObject
 {
@@ -60,6 +62,7 @@ private:
 	MakeEffect*			m_makeEfe = nullptr;									//エフェクト作成のオブジェクト
 	ResultUI*			m_resultUI = nullptr;									//リザルトUIのオブジェクト
 	GameInformation*	m_gameInfo = nullptr;									//ゲームインフォメーションのオブジェクト
+	Fade*				m_fade = nullptr;
 
 	SpriteRender		m_scorePanelSprite;										//スコアパネルスプライト
 
@@ -73,5 +76,7 @@ private:
 	bool				m_isFinishStarted = false;								//終了処理開始しているか
 
 	float				m_finishStartTime = 0.0f;								//終了開始時間
+
+	PathStorage* m_pathSt;
 };
 

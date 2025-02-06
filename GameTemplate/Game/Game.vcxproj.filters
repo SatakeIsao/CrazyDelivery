@@ -4,6 +4,9 @@
     <Filter Include="system">
       <UniqueIdentifier>{22dd8095-74f9-46df-81a1-36675a040b1f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PathMove">
+      <UniqueIdentifier>{600d77f9-4669-4a0a-b54f-a3b630db0605}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -42,6 +45,12 @@
     <ClCompile Include="GameSound.cpp" />
     <ClCompile Include="GameInformation.cpp" />
     <ClCompile Include="Fade.cpp" />
+    <ClCompile Include="PathStorage.cpp">
+      <Filter>PathMove</Filter>
+    </ClCompile>
+    <ClCompile Include="Path.cpp">
+      <Filter>PathMove</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -81,5 +90,11 @@
     <ClInclude Include="GameSound.h" />
     <ClInclude Include="GameInformation.h" />
     <ClInclude Include="Fade.h" />
+    <ClInclude Include="PathStorage.h">
+      <Filter>PathMove</Filter>
+    </ClInclude>
+    <ClInclude Include="Path.h">
+      <Filter>PathMove</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

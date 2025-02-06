@@ -15,10 +15,15 @@
 #include "CustomerMan_Sushi.h"
 #include "MapUI.h"
 #include "GameInformation.h"
+#include "Fade.h"
+#include "Path.h"
+#include "PathStorage.h"
 
 Game::Game()
 {
-	
+	//PathStorage test;
+	//パスストレージのインスタンスを作成
+	//m_pathSt = PathStorage::CreateInstance();
 }
 
 Game::~Game()
@@ -82,17 +87,79 @@ Game::~Game()
 	DeleteGO(m_resultUI);
 	//ゲームインフォメーションの削除
 	DeleteGO(m_gameInfo);
-	
+	//パスストレージクラスのインスタンスを削除
+	m_pathSt->DeleteInstance();
+
 }
 
 bool Game::Start()
 {
+	//m_fade = NewGO<Fade>(0,"fade");
+	//m_fade->SetFadeEnd();
+
+	//パスストレージのインスタンスを作成
+	if (m_pathSt == nullptr)
+	{
+		m_pathSt = PathStorage::CreateInstance();
+	}
+
 	//エフェクトの初期化
 	m_makeEfe = NewGO<MakeEffect>(0, "makeeffect");
 	//レベルの初期化
-	m_levelRender.Init("Assets/stageData/map/map24.tkl",
-	[&](LevelObjectData_Render& objData)
+	m_levelRender.Init("Assets/stageData/map/map26.tkl",
+		[&](LevelObjectData_Render& objData)
 	{
+		if (objData.ForwardMatchName(L"Path_") == true)
+		{
+			// パスデータが見つかった。
+			// パス番号を取得する
+			const int PathNoStartPos = 6;	// パス番号が始まる文字列中の位置
+			const int Digits = 2;			// 桁数			
+			char pathNoString[Digits + 1];	// null文字を追加するために＋１
+
+			pathNoString[0] = objData.name[PathNoStartPos];
+			pathNoString[1] = objData.name[PathNoStartPos + 1];
+			pathNoString[2] = '\0';
+			int pathNo = atoi(pathNoString);
+
+
+			//ポイント番号を取得
+			const int PointNoStartPos = 9;			// ポイント番号が始まる文字列中の位置
+			const int PointDigits = 5;				// 桁数
+			char pointNoString[PointDigits + 1];	// null文字を追加するために＋１
+
+			pointNoString[0] = objData.name[PointNoStartPos];
+			pointNoString[1] = objData.name[PointNoStartPos + 1];
+			pointNoString[2] = objData.name[PointNoStartPos + 1];
+			pointNoString[3] = objData.name[PointNoStartPos + 1];
+			pointNoString[4] = objData.name[PointNoStartPos + 1];
+			pointNoString[5] = '\0';
+			int pointNo = atoi(pointNoString);
+
+			//Pathクラスのインスタンス
+			Path* editPath = nullptr;	
+
+			//PathStorageにpathNoの*パスが保存されているか調べる
+			//保存されていたら
+			if (m_pathSt->Exist(pathNo) == true)
+			{
+				//パスストレージから編集するPathクラスのインスタンスを取得する
+				editPath = m_pathSt->GetPath(pathNo);
+			}
+			//保存されていなければ
+			else 
+			{
+				//新しいPathクラスのインスタンスを作成
+				editPath = new Path;
+				//ストレージに追加する
+				m_pathSt->AddPath(pathNo, *editPath);
+			}
+		
+			//パスにポイントの座標を追加する。
+			Vector3 pointPos = objData.position;
+
+			editPath->AddPointPos(pointNo, pointPos);
+		}
 		//ハンバーガーショップの生成
 		if (objData.ForwardMatchName(L"DummyHamburger") == true)
 		{
@@ -159,6 +226,15 @@ bool Game::Start()
 		return true;
 	});
 
+	// パスのポイントの収集が終わったのでパスを構築する
+	int pathCount = PathStorage::GetPathStorage()->GetPathCount();
+	for (int i = 0; i < pathCount; i++) {
+		//シングルトンクラスからパスを取得
+		auto path = PathStorage::GetPathStorage()->GetPath(i);
+		//収集されたポイントの情報からパスを構築する
+		path->Build();
+	}
+
 	//プレイヤーのオブジェクトを作成
 	m_player = NewGO<nsPlayer::Player>(0, "player");
 	//背景のオブジェクトを作成
@@ -186,7 +262,13 @@ bool Game::Start()
 	//ゲームインフォメーションクラスの作成
 	m_gameInfo = NewGO<GameInformation>(0, "gameinformation");
 
-	
+	//PathStorage からパスを取得して Playerに設定
+	Path* path = PathStorage::GetPathStorage()->GetPath(0);
+	if (path)
+	{
+		m_player->SetPath(path);
+	}
+
 	return true;
 }
 
@@ -196,14 +278,24 @@ void Game::Update()
 	FinishTimer();
 
 	//DeleteGOできるかのテスト
-	/*if (m_resultUI->GetIsResultEnd()
-	&& g_pad[0]->IsTrigger(enButtonB))
+	if (m_resultUI->GetIsResultEnd()
+	&& g_pad[0]->IsTrigger(enButtonA))
 	{
-		DeleteGO(this);
-	}*/
+		Fade* fade = NewGO<Fade>(0, "fade");
+		//フェードインを開始
+		fade->StartFadeIn();
+		//フェードアウト完了時の処理を設定
+		fade->SetOnFadeOutComplete([this]()
+		{
+			//ゲームクラスを削除
+			DeleteGO(this);
+		});
+		
+	}
 
 	//スコアパネルのスライド処理
 	if (g_pad[0]->IsTrigger(enButtonB)) {
+		//スコアボードの位置を変更
 		NextScorePosState();
 	}
 
