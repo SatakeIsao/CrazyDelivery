@@ -2,6 +2,7 @@
 class BackGround;
 class Point;
 class GameTimer;
+class Path;
 
 namespace nsPlayer
 {
@@ -51,52 +52,150 @@ namespace nsPlayer
 		Player();
 		~Player();
 		bool Start();
+		/// <summary>
+		/// ゲームオブジェクトを初期化
+		/// </summary>
 		void InitGameObjects();
-		void InitPlayerModels();
-		void InitCharaCon();
+		/// <summary>
+		/// プレイヤーのアニメーションクリップを初期化
+		/// </summary>
 		void InitPlayerAnimationClips();
-		void InitPlayerStates();
-		void InitPlayerSound();
+		/// <summary>
+		/// 減速度の初期設定
+		/// </summary>
+		/// <returns></returns>
 		const float InitQuietTimeSet();
+		/// <summary>
+		/// プレイヤーのモデルを初期化
+		/// </summary>
+		void InitPlayerModels();
+		/// <summary>
+		/// キャラコンを初期化
+		/// </summary>
+		void InitCharaCon();
+		/// <summary>
+		/// プレイヤーのアニメーション速度を設定
+		/// </summary>
+		/// <param name="m_animationSpeed"></param>
+		void PlaySetAnimationSpeed(float m_animationSpeed);
+		/// <summary>
+		/// プレイヤーのステートを初期化
+		/// </summary>
+		void InitPlayerStates();
+		/// <summary>
+		/// プレイヤーのサウンドを初期化
+		/// </summary>
+		void InitPlayerSound();
 
+		/// <summary>
+		/// パス移動用関数
+		/// </summary>
+		/// <param name="path"></param>
+		void MoveAlongPath();
+
+		/// <summary>
+		/// パスを設定する
+		/// </summary>
+		/// <param name="path"></param>
+		void SetPath(Path* path);
+
+		/// <summary>
+		/// スロープの衝突判定
+		/// </summary>
+		void CheckCollisionWithSlope();
 		void Update();
 
-		void Move();
-		void HandleDriftRot();
-		void HandleAcceleration();
-		void HandleStateChange();
-		void AdjustVelocityDir();
-		void ApplyGravity();
-
-		void MoveLStickOn();
-		
-		void Friction();
-		void Output();
-		
-		void CheckSpeedFromMovement();
-		
-		
-		void UpdateModels();
-		void UpdatePosWithVelocity();
-		void UpdateModelPos();
-		
-		void PlayAccelerationSound();
-		void RunSEProcess();
-
-		void CheckCollisionWithWall();
-		void BackGroundCollisionCheck();
-
-		void SetJump();
+		/// <summary>
+		/// ブレーキを設定
+		/// </summary>
 		void SetBrake();
+		/// <summary>
+		/// プレイヤーのステート変更の管理
+		/// </summary>
+		void HandleStateChange();
+		/// <summary>
+		/// プレイヤーの移動処理
+		/// </summary>
+		void Move();
+		/// <summary>
+		///	進行時の効果音
+		/// </summary>
+		void RunSEProcess();
+		/// <summary>
+		/// プレイヤーが動いているかどうか
+		/// </summary>
+		/// <returns></returns>
 		bool IsPlayerMoving();
+		/// <summary>
+		/// 減速処理
+		/// </summary>
+		void Friction();
+		/// <summary>
+		/// テキストファイルに現在のパラメータを書き込む処理
+		/// </summary>
+		void Output();
+		/// <summary>
+		/// アニメーションを再生する
+		/// </summary>
+		/// <param name="currentAnimtionClip"></param>
 		void PlayAnimation(EnAnimationClip currentAnimtionClip);
-		void PlaySetAnimationSpeed(float m_animationSpeed);
+		/// <summary>
+		/// 壁との衝突チェック
+		/// </summary>
+		void CheckCollisionWithWall();
+		/// <summary>
+		/// モデルの更新
+		/// </summary>
+		void UpdateModels();
 
+
+		/// <summary>
+		/// ドリフト回転を制御する
+		/// </summary>
+		void HandleDriftRot();
+		/// <summary>
+		/// 加速処理
+		/// </summary>
+		void HandleAcceleration();
+		/// <summary>
+		/// 加速時の効果音を再生する
+		/// </summary>
+		void PlayAccelerationSound();
+		/// <summary>
+		/// 速度の方向を調整
+		/// </summary>
+		void AdjustVelocityDir();
+		/// <summary>
+		/// 重力を適用
+		/// </summary>
+		void ApplyGravity();
+		/// <summary>
+		/// 速度を使用して座標を更新
+		/// </summary>
+		void UpdatePosWithVelocity();
+		/// <summary>
+		/// モデルの更新
+		/// </summary>
+		void UpdateModelPos();
+
+		/// <summary>
+		/// プレイヤーの速度を上限値以内に制限する
+		/// </summary>
 		void ApplySpeedLimit();
+		/// <summary>
+		/// 描画処理
+		/// </summary>
+		/// <param name="rc"></param>
+		void Render(RenderContext& rc);
+
+		//使用していない関数
+		void MoveLStickOn();
+		void CheckSpeedFromMovement();
+		void BackGroundCollisionCheck();
+		void SetJump();
 		void CollisionPoint();
 		//void Jump();
-		void Render(RenderContext& rc);
-		
+			
 		/// <summary>
 		/// プレイヤーの前方方向を取得
 		/// </summary>
@@ -167,7 +266,7 @@ namespace nsPlayer
 		/// </summary>
 		/// <param name="accele">加速度</param>
 		/// <param name="delayTime">加速度の適用を開始する遅延時間（単位：秒）</param>
-		const void SetAccele(const Vector3& accele, float& delayTime)
+		const void SetAccele(const Vector3& accele, const float& delayTime)
 		{
 			this->m_acceleDelayTime = delayTime;
 			this->m_accele = accele;
@@ -180,7 +279,7 @@ namespace nsPlayer
 		/// </summary>
 		/// <param name="driftTime"></param>
 		/// <returns></returns>
-		void SetDriftTime(float driftTime)
+		void SetDriftTime(const float& driftTime)
 		{
 			this->m_driftTime = driftTime;
 		}
@@ -189,7 +288,7 @@ namespace nsPlayer
 		/// アクセル開始しているかの設定
 		/// </summary>
 		/// <param name="acceleStart"></param>
-		void SetIsAcceleStart(const bool acceleStart)
+		void SetIsAcceleStart(const bool& acceleStart)
 		{
 			m_isAcceleStart = acceleStart;
 		}
@@ -198,7 +297,7 @@ namespace nsPlayer
 		/// ドリフト開始しているかの設定
 		/// </summary>
 		/// <param name="driftStart"></param>
-		void SetIsDriftStart(bool driftStart)
+		void SetIsDriftStart(const bool& driftStart)
 		{
 			m_isDrifting = driftStart;
 		}
@@ -212,6 +311,51 @@ namespace nsPlayer
 			return m_driftTime;
 		}
 
+		/// <summary>
+		/// スロープ移動中か
+		/// </summary>
+		/// <returns></returns>
+		bool& GetIsOnSlope()
+		{
+			return m_isOnSlope;
+		}
+
+		bool& GetIsPathMoving()
+		{
+			return m_isPathMoving;
+		}
+
+		void SetIsPathMove(bool& isMove)
+		{
+			m_isPathMove = isMove;
+		}
+
+		bool& GetIsPathMove()
+		{
+			return m_isPathMove;
+		}
+	
+		bool& GetIsPathMoveStart()
+		{
+			return m_isPathMoveStart;
+		}
+
+		void SetIsPathMoveStart(bool isMoveStart)
+		{
+			m_isPathMoveStart = isMoveStart;
+		}
+
+		bool& GetIsPathMoveEnd()
+		{
+			return m_isPathMoveEnd;
+		}
+
+		void SetIsPathMoveEnd(bool isMoveEnd)
+		{
+			m_isPathMoveEnd = isMoveEnd;
+		}
+
+		bool CheckNearPathMoveStart();
 		CharacterController& GetCharacterController()
 		{
 			return m_charaCon;
@@ -230,23 +374,20 @@ namespace nsPlayer
 		Vector3				m_nextPosition = Vector3::Zero;				//次フレームの座標
 		Vector3				m_movementVector = Vector3::Zero;			//現在の座標と次のフレームの座標の移動ベクトル
 		Vector3				m_reflection = Vector3::Zero;				//反射ベクトル
-
+		Vector3 m_postPathVelocity;  // パス移動終了時の速度を保存
 		Quaternion			m_rotation;									//プレイヤーの回転量
-		
 		CharacterController m_charaCon;									//キャラクターコントローラー
-		
 		EnAnimationClip		m_currentAnimationClip = enAnimClip_Idle;	//現在設定されているアニメーションクリップ
-
 		AnimationClip		m_playerAnimClips[enAnimClip_Num];			//プレイヤーのアニメーションクリップ
 		AnimationClip		m_boardAnimClips[enAnimClip_Num];			//ボードのアニメーションクリップ
 
-		IPlayerState* m_playerState = nullptr;							//現在のプレイヤーステート
+		IPlayerState*		m_playerState = nullptr;					//現在のプレイヤーステート
+		GameTimer*			m_gameTimer = nullptr;						//ゲームタイマー
+		Path*				m_currentPath = nullptr;					//パス
+		SoundSource*		m_skaterAcceleSE = nullptr;					//加速SE
+		SoundSource*		m_skaterRunSE = nullptr;					//走行SE
+		SoundSource*		m_skaterRefSE = nullptr;					//反射SE
 
-		GameTimer* m_gameTimer = nullptr;								//ゲームタイマー
-
-		SoundSource* m_skaterAcceleSE = nullptr;						//加速音SE
-		SoundSource* m_skaterRunSE = nullptr;							//走行音SE
-		
 		float				m_complementTime = 0.0f;					//アニメーションの補間時間
 		float				m_initQuietTime = 5.0f;						//初期の静止時間(加速度1000.0fの時)
 		float				m_initQuietSeppd = 0.0f;					//初期の減速度
@@ -254,13 +395,24 @@ namespace nsPlayer
 		float				m_driftTime = 1.15f;						//ドリフトタイマー変数
 		float				m_acceleTime = 1.15f;						//アクセルタイマー変数
 		float				m_driftAngle = 0.0f;						//ドリフト中の角度
-		float				SpeedLimit = 800.0f;						//速度上限
-		float				currentSpeed = 0.0f;						//現在の速度
+		float				m_currentSpeed = 0.0f;						//現在の速度
 		float				m_movementLength = 0.0f;					//移動ベクトルの長さ
+		float				m_originalY = 10.0f;							//もとの座標を保存
+		float				m_distanceToPath = 15.0f;
+
+		int					m_currentPathIndex = 0.0f;					//現在のターゲットポイント
+		int					m_slopePathID = -1;							//スロープのID
 
 		bool				m_isAcceleStart = false;					//アクセル開始するかどうか
 		bool				m_isDrifting = false;						//ドリフト中かどうか
-	protected:
+		bool				m_isOnSlope = false;						//スロープ移動中かどうか
+		bool				m_isYOffsetApplied = false;					//Y座標を上げているか
+		bool				m_isPathMoving = false;//パス移動中か
+		bool				m_isPathMove = false;//パス移動フラグ
+		bool				m_isPathMoveStart = false;
+		bool				m_isPathMoveEnd = false;
+		
+protected:
 		CCapsuleCollider	m_capsuleCollider;							//遮蔽物確認用のコライダー
 
 	};

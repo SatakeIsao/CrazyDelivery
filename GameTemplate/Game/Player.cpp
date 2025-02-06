@@ -7,6 +7,8 @@
 //#include "GameCamera.h"
 //#include "BackGround.h"
 #include "GameTimer.h"
+#include "Path.h"
+#include "PathStorage.h"
 #include <fstream>
 #include <iostream>
 #include "GameSound.h"
@@ -24,7 +26,7 @@ namespace
 	const float MAX_DECELERATION = 0.7f;				//最大減速率
 	const float NORMAL_Y_VALUE = 0.0f;					//法線ベクトルのY成分固定値
 	const float REFLECTION_SCALAR = -2.0f;				//反射計算用のスカラー値
-	
+
 	const float CHARACON_RADIUS = 20.0f;				//キャラクターコントローラーの半径
 	const float CHARACON_HEIGHT = 50.0f;				//キャラクターコントローラーの高さ
 	const float DECELERATION_TIME = 5.0f;				//減速にかかる時間(秒)
@@ -35,6 +37,7 @@ namespace
 	const float GROUND_LEVEL = 0.0f;					//地面の高さ
 	const float SPEED_THRESHOLD = 1.5f;					//スピードリセットのしきい値
 	const float JUMP_VALUE = 600.0f;					//ジャンプする数値
+	const float SPEED_LIMIT = 800.0f;					//速度上限
 }
 
 namespace nsPlayer
@@ -57,7 +60,7 @@ namespace nsPlayer
 
 		//プレイヤーのモデルを初期化
 		InitPlayerModels();
-		
+
 		//キャラコンを初期化
 		InitCharaCon();
 
@@ -72,7 +75,7 @@ namespace nsPlayer
 
 		//プレイヤーのサウンドを初期化
 		InitPlayerSound();
-		
+
 		return true;
 	}
 
@@ -171,6 +174,71 @@ namespace nsPlayer
 		m_skaterRunSE->SetVolume(2.0f);
 	}
 
+	void Player::MoveAlongPath()
+	{
+		if (!m_currentPath) return;
+
+		const std::vector<Point>& points = m_currentPath->GetPointList();
+		if (points.empty() || m_currentPathIndex >= points.size() - 1) return;
+
+		Vector3 currentPos = m_position;
+		Vector3 nextPos = points[m_currentPathIndex + 1].position;
+
+		if (!m_isYOffsetApplied)
+		{
+			m_originalY = m_position.y;
+			m_position.y += 20.0f;
+			m_isYOffsetApplied = true;
+
+			Quaternion rotationOffset;
+			rotationOffset.SetRotationY(90.0f);
+			m_rotation *= rotationOffset;
+
+			m_isPathMoveStart = true;
+			m_isPathMoving = true;
+			
+		}
+
+		Vector3 moveDir = nextPos - currentPos;
+		float distance = moveDir.Length();
+		moveDir.Normalize();
+
+		float slopeFactor = 1.0f + moveDir.y * 0.8f;
+		float speed = 500.0f * g_gameTime->GetFrameDeltaTime() * slopeFactor;
+
+		m_velocity = moveDir * speed;
+		m_position += m_velocity;
+
+		m_charaCon.SetPosition(m_position);
+		UpdateModelPos();
+
+		if (distance < 10.0f)
+		{
+			m_currentPathIndex++;
+
+			if (m_currentPathIndex >= points.size() - 1)
+			{
+				// **パス移動の速度を保存**
+				m_postPathVelocity = m_velocity;
+
+				Quaternion rotationReset;
+				rotationReset.SetRotationY(DirectX::XMConvertToRadians(-90.0f));
+				m_rotation *= rotationReset;
+
+				m_isPathMoveEnd = true;
+				m_isPathMoving = false;
+				m_currentPath = nullptr;
+				m_isOnSlope = false;
+				m_slopePathID = -1;
+				m_position.y = m_originalY;
+				m_isYOffsetApplied = false;
+
+				// **パス移動終了時に加速度を設定**
+				SetAccele(m_forward * 30000.0f, 0.001f);
+			}
+		}
+	}
+
 	const float Player::InitQuietTimeSet()
 	{
 		//加速度を初期静止時間で割り、減速度を算出
@@ -178,25 +246,87 @@ namespace nsPlayer
 		return m_initQuietSeppd;
 	}
 
+	void Player::SetPath(Path* path)
+	{
+		if (!path) return;
+		m_currentPath = path;
+		m_currentPathIndex = 0;
+	}
+
+	void Player::CheckCollisionWithSlope()
+	{
+		float minDistance = 50.0f;
+		int nearestPathID = -1;
+		Path* nearestPath = nullptr;
+
+		// PathStorage からすべての Path を取得
+		int pathCount = PathStorage::GetPathStorage()->GetPathCount();
+		for (int i = 0; i < pathCount; i++)
+		{
+			Path* path = PathStorage::GetPathStorage()->GetPath(i);
+			if (!path) continue;
+
+			// **最初のポイント (Path_00_00) との距離をチェック**
+			const std::vector<Point>& points = path->GetPointList();
+			if (points.empty()) continue;
+
+			Vector3 startPos = points[0].position;  // Path の開始地点
+			float distance = (m_position - startPos).Length();
+
+			// **Path_00_00 に一定距離内で近づいたら開始**
+			if (distance < minDistance)
+			{
+				minDistance = distance;
+				nearestPathID = i;
+				nearestPath = path;
+			}
+		}
+
+		// **近くにスロープの Path (Path_00_00) がある場合、プレイヤーをスロープモードに設定**
+		if (nearestPath && m_slopePathID == -1)
+		{
+			SetPath(nearestPath);
+			m_slopePathID = nearestPathID;
+			m_isOnSlope = true;
+		}
+
+	}
+
 	//＊*更新関数
 	void Player::Update()
 	{
-		if (m_gameTimer->GetIsTimerEnd()==true)
+		if (m_gameTimer->GetIsTimerEnd() == true)
 		{
 			//ブレーキを設定
 			SetBrake();
 		}
+
+		//スロープの衝突判定
+		CheckCollisionWithSlope();
+
+		if (m_isOnSlope && m_currentPath)
+		{
+			MoveAlongPath();
+
+			UpdateModelPos();
+		}
+		else
+		{
+			//プレイヤーの移動処理
+			Move();
+		}
+
+
 		//プレイヤーのステート変更の管理
 		HandleStateChange();
-		//プレイヤーの移動処理
-		Move();
+
 
 		//移動ベクトルをチェックしてスピードをリセット
 		//CheckSpeedFromMovement();
-		
+
 		//進行時の効果音
 		RunSEProcess();
-		
+
 		//減速処理
 		Friction();
 
@@ -205,7 +335,7 @@ namespace nsPlayer
 
 		//現在のステートの更新
 		m_playerState->Update();
-		
+
 		//アニメーションを再生する
 		PlayAnimation(m_currentAnimationClip);
 
@@ -214,13 +344,21 @@ namespace nsPlayer
 
 		//モデルの更新
 		UpdateModels();
-		
+
 	}
 
-	
+
 
 	void Player::Move()
 	{
+		// **パス移動が終わった直後なら、その速度を維持**
+		if (m_velocity.Length() < STOP_THRESHOLD 
+			&& m_postPathVelocity.Length() > 0.0f)
+		{
+			m_velocity = m_postPathVelocity;
+			m_postPathVelocity = Vector3::Zero;  // クリア
+		}
+
 		//ドリフト回転を制御する
 		HandleDriftRot();
 
@@ -324,7 +462,7 @@ namespace nsPlayer
 		}
 	}
 
-	
+
 
 	void Player::MoveLStickOn()
 	{
@@ -364,7 +502,7 @@ namespace nsPlayer
 		auto rictionAdjustment = pow(max(0.0f, velDir.Dot(m_forward)), MAX_DOT_POWER);
 
 		// 線形補間で減衰係数を調整（ボードが真横を向いている場合は摩擦力を増加）
-		decelerationFactor *= Math::Lerp(rictionAdjustment,  MIN_FRICTION, MAX_FRICTION);
+		decelerationFactor *= Math::Lerp(rictionAdjustment, MIN_FRICTION, MAX_FRICTION);
 
 		// 速度ベクトルに減衰係数を適用して減速
 		m_velocity *= decelerationFactor;
@@ -433,9 +571,7 @@ namespace nsPlayer
 			m_position = m_charaCon.Execute(m_velocity, g_gameTime->GetFrameDeltaTime());
 			//m_position.y += m_velocity.y * g_gameTime->GetFrameDeltaTime();
 		}
-		else {
-			m_velocity = Vector3::Zero;
-		}
+		
 	}
 
 	void Player::UpdateModelPos()
@@ -531,6 +667,11 @@ namespace nsPlayer
 			float entryAngleFactor = max(0, velDir.Dot(normalXZ) * -1.0f);
 			//減速率を補間して適用
 			m_velocity = m_reflection * Math::Lerp(entryAngleFactor, MAX_DECELERATION, MIN_DECELERATION);
+			//壁とぶつかった時の効果音
+			m_skaterRefSE = NewGO<SoundSource>(0);
+			m_skaterRefSE->Init(enSoundName_Reflection);
+			m_skaterRefSE->SetVolume(1.0f);
+			m_skaterRefSE->Play(false);
 
 		}
 	}
@@ -540,7 +681,7 @@ namespace nsPlayer
 		//背景のコリジョンの配列を取得する
 		const auto& backGroundCollision = g_collisionObjectManager->FindCollisionObjects("player");
 		//コリジョンの配列をfor文で回す
-		for (auto collision : backGroundCollision){
+		for (auto collision : backGroundCollision) {
 			//コリジョンとキャラコンが衝突したら
 			if (collision->IsHit(m_charaCon))
 			{
@@ -582,10 +723,12 @@ namespace nsPlayer
 
 	void Player::ApplySpeedLimit()
 	{
-		currentSpeed = m_velocity.Length();		  //現在の速度を計算
-		if (currentSpeed > SpeedLimit) {
+		m_currentSpeed = m_velocity.Length();		  //現在の速度を計算
+
+		if (m_currentSpeed > SPEED_LIMIT)
+		{
 			m_velocity.Normalize();				  //速度ベクトルを正規化
-			m_velocity *= SpeedLimit;			  //上限速度を適用
+			m_velocity *= SPEED_LIMIT;			  //上限速度を適用
 		}
 	}
 
@@ -603,6 +746,13 @@ namespace nsPlayer
 			}
 		}
 	}
+
+	bool Player::CheckNearPathMoveStart()
+	{
+		return m_distanceToPath < 5.0f;
+	}
+
+	
 
 	void Player::Render(RenderContext& rc)
 	{
