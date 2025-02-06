@@ -5,6 +5,9 @@
 #include "PlayerIdleState.h"
 #include "PlayerDriftState.h"
 #include "PlayerJumpState.h"
+//#include "Player.h"
+#include "Path.h"
+#include "PathStorage.h"
 
 namespace
 {
@@ -22,7 +25,7 @@ namespace nsPlayer
 	{
 		//再生するアニメーションを設定
 		m_player->SetAnimation(Player::enAnimClip_Push, 1.0f);
-
+		m_player->PlaySetAnimationSpeed(2.0f);
 		/*m_skaterAcceleSE = NewGO<SoundSource>(0);
 		m_skaterAcceleSE->Init(enSoundName_skaterAccele);
 		m_skaterAcceleSE->SetVolume(1.0f);
@@ -42,6 +45,45 @@ namespace nsPlayer
 			return new PlayerRunState(m_player);
 		}
 		
+		//先頭のパスを取得
+		Path* firstPath = PathStorage::GetPathStorage()->GetFirstPath();
+		Path* firstPath2 = PathStorage::GetPathStorage()->GetFirstPath2();
+
+
+		if (firstPath)
+		{
+			// 先頭のパスの最初のポイントを取得
+			const Point& firstPathPos = firstPath->GetFirstPoint();
+			const Vector3& playerPos = m_player->GetPostion();  // 修正: GetPostion() → GetPosition()
+
+			Vector3 diff = playerPos - firstPathPos.position;
+			float distance = diff.Length();
+
+			// **先頭のパスの手前に来たらジャンプ**
+			if (distance < 90.0f)  // ←適切な距離を調整
+			{
+				return new PlayerJumpState(m_player);
+			}
+		}
+
+		if (firstPath2)
+		{
+			// 先頭のパスの最初のポイントを取得
+			const Point& firstPathPos2 = firstPath2->GetFirstPoint();
+			const Vector3& playerPos2 = m_player->GetPostion();  // 修正: GetPostion() → GetPosition()
+
+			Vector3 diff2 = playerPos2 - firstPathPos2.position;
+			float distance2 = diff2.Length();
+
+
+
+			// **先頭のパスの手前に来たらジャンプ**
+			if (distance2 < 90.0f)  // ←適切な距離を調整
+			{
+				return new PlayerJumpState(m_player);
+			}
+		}
+
 		if (g_pad[0]->IsTrigger(enButtonRB1))
 		{
 			m_player->SetDriftTime(m_player->GetDriftTime());

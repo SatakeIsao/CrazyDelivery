@@ -38,10 +38,6 @@ namespace nsPlayer
 		/// </summary>
 		void Update() override;
 		
-		/*float GetAcceleTime()
-		{
-			return acceleTime;
-		}*/
 	private:
 		float m_acceleTime = 0.6f;
 		
