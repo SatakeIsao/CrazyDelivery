@@ -17,7 +17,7 @@ namespace nsPlayer
 	{
 		//再生するアニメーションを設定
 		m_player->SetAnimation(Player::enAnimClip_Idle, 0.5f);
-		//m_player->PlaySetAnimationSpeed(1.0f);
+		m_player->PlaySetAnimationSpeed(1.0f);
 		m_player->SetIsAcceleStart(false);
 	}
 
