@@ -19,6 +19,7 @@ namespace nsPlayer {
 	{
 		//再生するアニメーションを設定
 		m_player->SetAnimation(Player::enAnimClip_Start, 0.8f);
+		m_player->PlaySetAnimationSpeed(2.0f);
 	}
 
 	IPlayerState* nsPlayer::PlayerStartState::StateChange()

@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "Player.h"
 #include "GameSound.h"
+#include "Fade.h"
 
 // K2EngineLowのグローバルアクセスポイント。
 K2EngineLow* g_k2EngineLow = nullptr;
@@ -35,6 +36,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	g_collisionObjectManager = &m_collisionObjectManager;
 
 	auto gameSound = NewGO<GameSound>(0, "gamesound");
+	//Fade* fade = NewGO<Fade>(0);
 	Game* game = NewGO<Game>(0);
 
 	// ここからゲームループ。

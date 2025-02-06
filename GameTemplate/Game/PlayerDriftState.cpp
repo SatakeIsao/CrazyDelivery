@@ -17,7 +17,7 @@ namespace nsPlayer {
 		m_player->SetIsDriftStart(true);
 		//再生するアニメーションを設定
 		m_player->SetAnimation(Player::enAnimClip_Drift, 1.0f);
-		
+		m_player->PlaySetAnimationSpeed(2.0f);
 		//ドリフト時の効果音を再生
 		m_skaterJumpSE = NewGO<SoundSource>(0);
 		m_skaterJumpSE->Init(enSoundName_skaterJump);
