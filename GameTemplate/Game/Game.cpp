@@ -106,7 +106,7 @@ bool Game::Start()
 	//エフェクトの初期化
 	m_makeEfe = NewGO<MakeEffect>(0, "makeeffect");
 	//レベルの初期化
-	m_levelRender.Init("Assets/stageData/map/map26.tkl",
+	m_levelRender.Init("Assets/stageData/map/map27.tkl",
 		[&](LevelObjectData_Render& objData)
 	{
 		if (objData.ForwardMatchName(L"Path_") == true)
