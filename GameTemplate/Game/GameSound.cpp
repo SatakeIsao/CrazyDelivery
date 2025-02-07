@@ -19,6 +19,7 @@ bool GameSound::Start()
 	g_soundEngine->ResistWaveFileBank(enSoundName_Finish, "Assets/Sound/g_finish.wav");
 	g_soundEngine->ResistWaveFileBank(enSoundName_Button, "Assets/Sound/g_button.wav");
 	g_soundEngine->ResistWaveFileBank(enSoundName_Reflection, "Assets/Sound/g_reflection.wav");
+	g_soundEngine->ResistWaveFileBank(enSoundName_Rall, "Assets/Sound/g_rall.wav");
 	return true;
 }
 

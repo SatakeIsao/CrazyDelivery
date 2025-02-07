@@ -16,6 +16,7 @@ enum SoundName
 	enSoundName_Finish,
 	enSoundName_Button,
 	enSoundName_Reflection,
+	enSoundName_Rall,
 	enSoundName_Num,
 };
 
