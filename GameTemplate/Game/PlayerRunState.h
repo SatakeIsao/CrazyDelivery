@@ -39,6 +39,7 @@ namespace nsPlayer
 		void Update() override;
 		
 	private:
+		
 		float m_acceleTime = 0.6f;
 		
 	};

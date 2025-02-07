@@ -94,6 +94,10 @@ namespace nsPlayer
 		void MoveAlongPath();
 
 		/// <summary>
+		/// パス終了時の処理
+		/// </summary>
+		void EndPathMovement();
+		/// <summary>
 		/// パスを設定する
 		/// </summary>
 		/// <param name="path"></param>
@@ -387,6 +391,7 @@ namespace nsPlayer
 		SoundSource*		m_skaterAcceleSE = nullptr;					//加速SE
 		SoundSource*		m_skaterRunSE = nullptr;					//走行SE
 		SoundSource*		m_skaterRefSE = nullptr;					//反射SE
+		SoundSource*		m_skaterRallSE = nullptr;
 
 		float				m_complementTime = 0.0f;					//アニメーションの補間時間
 		float				m_initQuietTime = 5.0f;						//初期の静止時間(加速度1000.0fの時)
@@ -399,6 +404,7 @@ namespace nsPlayer
 		float				m_movementLength = 0.0f;					//移動ベクトルの長さ
 		float				m_originalY = 10.0f;							//もとの座標を保存
 		float				m_distanceToPath = 15.0f;
+		float				m_pathExitCoolDown = 0.0f;	//パス移動時のクールタイム
 
 		int					m_currentPathIndex = 0.0f;					//現在のターゲットポイント
 		int					m_slopePathID = -1;							//スロープのID
@@ -411,7 +417,9 @@ namespace nsPlayer
 		bool				m_isPathMove = false;//パス移動フラグ
 		bool				m_isPathMoveStart = false;
 		bool				m_isPathMoveEnd = false;
-		
+		bool				m_isMovingForward = false;
+		bool				m_isPostPathAcceleration = false; //パス移動終了時に加速フラグ
+
 protected:
 		CCapsuleCollider	m_capsuleCollider;							//遮蔽物確認用のコライダー
 

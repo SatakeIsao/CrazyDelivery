@@ -48,7 +48,8 @@ namespace nsPlayer
 		//先頭のパスを取得
 		Path* firstPath = PathStorage::GetPathStorage()->GetFirstPath();
 		Path* firstPath2 = PathStorage::GetPathStorage()->GetFirstPath2();
-
+		Path* firstPath3 = PathStorage::GetPathStorage()->GetFirstPath3();
+		Path* firstPath4 = PathStorage::GetPathStorage()->GetFirstPath4();
 
 		if (firstPath)
 		{
@@ -84,9 +85,42 @@ namespace nsPlayer
 			}
 		}
 
+		if (firstPath3)
+		{
+			// 先頭のパスの最初のポイントを取得
+			const Point& firstPathPos3 = firstPath3->GetFirstPoint();
+			const Vector3& playerPos3 = m_player->GetPostion();  // 修正: GetPostion() → GetPosition()
+
+			Vector3 diff3 = playerPos3 - firstPathPos3.position;
+			float distance3 = diff3.Length();
+
+			// **先頭のパスの手前に来たらジャンプ**
+			if (distance3 < 90.0f)  // ←適切な距離を調整
+			{
+				return new PlayerJumpState(m_player);
+			}
+		}
+
+		if (firstPath4)
+		{
+			//先頭のパスの最初のポイントを取得
+			const Point& firstPathPos4 = firstPath4->GetFirstPoint();
+			const Vector3& playerPos4 = m_player->GetPostion();
+
+			Vector3 diff4 = playerPos4 - firstPathPos4.position;
+			float distance4 = diff4.Length();
+
+			//先頭のパスの手前に来たらジャンプ
+			if (distance4 < 90.0f)
+			{
+				return new PlayerJumpState(m_player);
+			}
+		}
+
 		//末尾のパスを取得
 		Path* lastPath = PathStorage::GetPathStorage()->GetLastPath();
 		Path* lastPath2 = PathStorage::GetPathStorage()->GetLastPath2();
+		Path* lastPath3 = PathStorage::GetPathStorage()->GetFirstPath3();
 
 		if (lastPath)
 		{
@@ -115,6 +149,22 @@ namespace nsPlayer
 
 			//末尾のパスの手前に来たらジャンプ
 			if (distance2 < 90.0f)
+			{
+				return new PlayerJumpState(m_player);
+			}
+		}
+
+		if (lastPath3)
+		{
+			//末尾のバスの最後のポイントを取得
+			const Point& lastPathPos3 = lastPath3->GetLastPoint();
+			const Vector3& playerPos3 = m_player->GetPostion();
+
+			Vector3 diff3 = playerPos3 - lastPathPos3.position;
+			float distance3 = diff3.Length();
+
+			//末尾のバスの手前に来たらジャンプ
+			if (distance3 < 90.0f)
 			{
 				return new PlayerJumpState(m_player);
 			}

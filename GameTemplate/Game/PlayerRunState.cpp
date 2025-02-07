@@ -49,6 +49,7 @@ namespace nsPlayer {
 			if (distance < 90.0f)  // ©“KØ‚È‹——£‚ð’²®
 			{
 				return new PlayerJumpState(m_player);
+				
 			}
 		}
 
@@ -85,6 +86,7 @@ namespace nsPlayer {
 			if (distance < 90.0f)
 			{
 				return new PlayerJumpState(m_player);
+				
 			}
 		}
 

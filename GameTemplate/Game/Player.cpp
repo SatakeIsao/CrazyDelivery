@@ -172,71 +172,158 @@ namespace nsPlayer
 		m_skaterRunSE = NewGO<SoundSource>(0);
 		m_skaterRunSE->Init(enSoundName_skaterRun);
 		m_skaterRunSE->SetVolume(2.0f);
+
+		//レール走行時の効果音
+		
 	}
 
 	void Player::MoveAlongPath()
 	{
-		if (!m_currentPath) return;
+		if (!m_currentPath || m_isPathMoveEnd) return;
 
 		const std::vector<Point>& points = m_currentPath->GetPointList();
-		if (points.empty() || m_currentPathIndex >= points.size() - 1) return;
+		if (points.empty()) return;
 
 		Vector3 currentPos = m_position;
-		Vector3 nextPos = points[m_currentPathIndex + 1].position;
+		Vector3 nextPos;
+
+		//パスが正方向か逆方向かを判定
+		//bool isMovingForward = (m_currentPathIndex == 0);
+
+		//正方向（先頭から）か逆方向（末尾から）で次のポイントを決定
+		if (m_isMovingForward)
+		{
+			if (m_currentPathIndex >= points.size() - 1)
+			{
+				//先端に到達したら逆方向に切り替え
+				EndPathMovement();
+				return;
+			}
+			nextPos = points[m_currentPathIndex + 1].position;
+		}
+		else
+		{
+			if (m_currentPathIndex <= 0)
+			{
+				//先端に到達したら逆方向に切り替え
+				EndPathMovement();
+				return;
+			}
+			nextPos = points[m_currentPathIndex - 1].position;
+		}
 
 		if (!m_isYOffsetApplied)
 		{
 			m_originalY = m_position.y;
 			m_position.y += 20.0f;
+
 			m_isYOffsetApplied = true;
 
 			Quaternion rotationOffset;
-			rotationOffset.SetRotationY(90.0f);
+			//順方向と逆方向で回転角度を変更
+			rotationOffset.SetRotationY(m_isMovingForward ? 90.0f : -90.0f);
 			m_rotation *= rotationOffset;
 
 			m_isPathMoveStart = true;
 			m_isPathMoving = true;
 
+			//パス移動開始時に効果音を再生
+			m_skaterRallSE = NewGO<SoundSource>(0);
+			m_skaterRallSE->Init(enSoundName_Rall);
+			m_skaterRallSE->SetVolume(1.0f);
+			m_skaterRallSE->Play(false);
+			
 		}
 
+		//パスに沿って移動
 		Vector3 moveDir = nextPos - currentPos;
 		float distance = moveDir.Length();
-		moveDir.Normalize();
+		
+		//移動方向が0でないことを確認
+		if (distance > 0.0f)
+		{
+			
+			moveDir.Normalize();
+			//斜面の影響を適用
+			float slopeFactor = 1.0f + moveDir.y * 0.8f;
+			float speed = 1000.0f * g_gameTime->GetFrameDeltaTime() * slopeFactor;
+			
 
-		float slopeFactor = 1.0f + moveDir.y * 0.8f;
-		float speed = 500.0f * g_gameTime->GetFrameDeltaTime() * slopeFactor;
+			m_velocity = moveDir * speed;
+			m_position += m_velocity;
 
-		m_velocity = moveDir * speed;
-		m_position += m_velocity;
+			m_charaCon.SetPosition(m_position);
+			UpdateModelPos();
+		}
+		else
+		{
+			//移動先のポイントは同じ場合、無限ループを防ぐ
+			EndPathMovement();
+			return;
+		}
+		
 
-		m_charaCon.SetPosition(m_position);
-		UpdateModelPos();
-
+		//次のポイントに到達した場合の処理
 		if (distance < 10.0f)
 		{
-			m_currentPathIndex++;
-
-			if (m_currentPathIndex >= points.size() - 1)
+			if (m_isMovingForward)
 			{
-				// **パス移動の速度を保存**
-				m_postPathVelocity = m_velocity;
-
-				Quaternion rotationReset;
-				rotationReset.SetRotationY(-90.0f);
-				m_rotation *= rotationReset;
-
-				m_isPathMoveEnd = true;
-				m_isPathMoving = false;
-				m_currentPath = nullptr;
-				m_isOnSlope = false;
-				m_slopePathID = -1;
-				m_position.y = m_originalY;
-				m_isYOffsetApplied = false;
-
-				// **パス移動終了時に加速度を設定**
-				SetAccele(m_forward * 30000.0f, 0.001f);
+				m_currentPathIndex++;
+			}
+			else
+			{
+				m_currentPathIndex--;
 			}
 		}
+	}
+
+	void Player::EndPathMovement()
+	{
+		// **パス移動の速度を保存**
+		m_postPathVelocity = m_velocity;
+
+		//Y座標をリセット
+		m_position.y = m_originalY;
+		m_isYOffsetApplied = false;
+
+		//パス移動終了時に進行方向を逆に変更
+		//m_isMovingForward = !m_isMovingForward;
+
+		//回転補正をリセット
+		/*Quaternion rotationReset;
+		rotationReset.SetRotationY(m_isMovingForward ? -90.0f : 90.0f);
+		m_rotation *= rotationReset;*/
+
+		////パス移動を終了するフラグを設定
+		//m_isPathMoving = true;
+		//m_isPathMoveEnd = false;
+		////一旦、コメントアウト
+		m_isPathMoveEnd = true;
+		m_isPathMoving = false;
+		//パス関連の情報をリセット
+		m_currentPath = nullptr;
+		m_isOnSlope = false;
+		m_slopePathID = -1;
+		
+		//パス移動終了時の加速フラグを立てる
+		m_isPostPathAcceleration = true;
+		////パスのインデックスを更新
+		//if (m_isMovingForward)
+		//{
+		//	m_currentPathIndex = 0;
+		//}
+		//else
+		//{
+		//	m_currentPathIndex = m_currentPath->GetPointList().size() - 1;
+		//}
+
+		//パス移動終了時に加速度を設定する
+		//効果音は再生しない
+		SetAccele(m_forward * 30000.0f, 0.001f);
+		
+		
+		//パスの再検出を3秒間防ぐ
+		m_pathExitCoolDown = 3.0f;
 	}
 
 
@@ -252,7 +339,28 @@ namespace nsPlayer
 	{
 		if (!path) return;
 		m_currentPath = path;
-		m_currentPathIndex = 0;
+		m_isPathMoveEnd = false;
+		//プレイヤーの位置に基づいて、開始点か終点を判定
+		const std::vector<Point>& points = path->GetPointList();
+		if (points.empty()) return;
+
+		Vector3 startPos = points[0].position;  // Path の開始地点
+		Vector3 endPos = points.back().position;//Pathの末尾地点
+
+		float startDistance = (m_position - startPos).Length();
+		float endDistance = (m_position - endPos).Length();
+
+		//スタート地点に近い場合、終点に近い場合は逆方向
+		if (startDistance < endDistance)
+		{
+			m_currentPathIndex = 0;
+			m_isMovingForward = true;
+		}
+		else
+		{
+			m_currentPathIndex = points.size() - 1;
+			m_isMovingForward = false;
+		}
 	}
 
 	void Player::CheckCollisionWithSlope()
@@ -260,6 +368,7 @@ namespace nsPlayer
 		float minDistance = 50.0f;
 		int nearestPathID = -1;
 		Path* nearestPath = nullptr;
+		bool isStartPoint = true;	//どちらの端からスタートするか判定
 
 		// PathStorage からすべての Path を取得
 		int pathCount = PathStorage::GetPathStorage()->GetPathCount();
@@ -273,23 +382,72 @@ namespace nsPlayer
 			if (points.empty()) continue;
 
 			Vector3 startPos = points[0].position;  // Path の開始地点
-			float distance = (m_position - startPos).Length();
+			Vector3 endPos = points.back().position;//Pathの末尾地点
 
-			// **Path_00_00 に一定距離内で近づいたら開始**
-			if (distance < minDistance)
+			float startDistance = (m_position - startPos).Length();
+			float endDistance = (m_position - endPos).Length();
+
+		//	// **Path_00_00 に一定距離内で近づいたら開始**
+		//	if (startDistance < endDistance)
+		//	{
+		//		if (startDistance < minDistance)
+		//		{
+		//			minDistance = startDistance;
+		//			nearestPathID = i;
+		//			nearestPath = path;
+		//			//開始点からスタート
+		//			isStartPoint = true;
+		//		}
+		//	}
+		//	else
+		//	{
+		//		if (endDistance < minDistance)
+		//		{
+		//			minDistance = endDistance;
+		//			nearestPathID = i;
+		//			nearestPath = path;
+		//			//末尾からスタート
+		//			isStartPoint = false;
+		//		}
+		//	}
+		//}
+			// 近い方のパスを選択
+			if (startDistance < minDistance || endDistance < minDistance)
 			{
-				minDistance = distance;
+				if (startDistance < endDistance)
+				{
+					minDistance = startDistance;
+					isStartPoint = true;
+				}
+				else
+				{
+					minDistance = endDistance;
+					isStartPoint = false;
+				}
 				nearestPathID = i;
 				nearestPath = path;
 			}
 		}
 
+
 		// **近くにスロープの Path (Path_00_00) がある場合、プレイヤーをスロープモードに設定**
-		if (nearestPath && m_slopePathID == -1)
+		if (nearestPath && 
+			(m_slopePathID == -1|| m_slopePathID != nearestPathID))
 		{
 			SetPath(nearestPath);
 			m_slopePathID = nearestPathID;
 			m_isOnSlope = true;
+			//スタート位置の設定
+			if (isStartPoint)
+			{
+				m_currentPathIndex = 0;
+				m_isMovingForward = true;
+			}
+			else
+			{
+				m_currentPathIndex = nearestPath->GetPointList().size() - 1;
+				m_isMovingForward = false;
+			}
 		}
 
 	}
@@ -303,8 +461,16 @@ namespace nsPlayer
 			SetBrake();
 		}
 
-		//スロープの衝突判定
-		CheckCollisionWithSlope();
+		if (m_pathExitCoolDown > 0.0f)
+		{
+			m_pathExitCoolDown -= g_gameTime->GetFrameDeltaTime();
+		}
+		else
+		{
+			//スロープの衝突判定
+			CheckCollisionWithSlope();
+		}
+		
 
 		if (m_isOnSlope && m_currentPath)
 		{
@@ -412,13 +578,19 @@ namespace nsPlayer
 			//カウントダウン終了後の加速処理
 			if (m_acceleDelayTime == 0.0f) {
 				//加速度の割合を計算
-				// 
 				m_velocity += m_accele * g_gameTime->GetFrameDeltaTime();
 
-				PlayAccelerationSound();
+				//パス移動終了時の加速でなければ効果音を再生
+				if (!m_isPostPathAcceleration)
+				{
+					//加速する時の効果音を再生
+					PlayAccelerationSound();
+				}
+				
+				//加速後はフラグをリセット
+				m_isPostPathAcceleration = false;
+
 				//加速度を半減
-				//ドリフトする回数増えるごと加速力減少してしまう理由かも
-				//原因ではない
 				m_accele *= 0.5f;
 
 				//低速以下の場合、加速度をリセット
