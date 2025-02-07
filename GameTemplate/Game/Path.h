@@ -57,6 +57,11 @@ public:
 		return m_pointList.front();
 	}
 
+	const Point& GetLastPoint() const
+	{
+		return m_pointList.back();
+	}
+
 private:
 	std::vector<Point>	m_pointList;	//ポイントのリスト
 };

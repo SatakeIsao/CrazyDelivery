@@ -196,7 +196,7 @@ namespace nsPlayer
 
 			m_isPathMoveStart = true;
 			m_isPathMoving = true;
-			
+
 		}
 
 		Vector3 moveDir = nextPos - currentPos;
@@ -222,7 +222,7 @@ namespace nsPlayer
 				m_postPathVelocity = m_velocity;
 
 				Quaternion rotationReset;
-				rotationReset.SetRotationY(DirectX::XMConvertToRadians(-90.0f));
+				rotationReset.SetRotationY(-90.0f);
 				m_rotation *= rotationReset;
 
 				m_isPathMoveEnd = true;
@@ -238,6 +238,8 @@ namespace nsPlayer
 			}
 		}
 	}
+
+
 
 	const float Player::InitQuietTimeSet()
 	{

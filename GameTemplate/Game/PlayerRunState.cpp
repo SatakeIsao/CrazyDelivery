@@ -7,8 +7,6 @@
 #include "Path.h"
 #include "PathStorage.h"
 
-#include <iostream>
-
 namespace
 {
 	float PLAYER_ACCELE = 30000.0f;
@@ -38,14 +36,6 @@ namespace nsPlayer {
 		Path* firstPath2 = PathStorage::GetPathStorage()->GetFirstPath2();
 
 
-		std::cout << "firstPath1 Address: " << firstPath << std::endl;
-		std::cout << "firstPath2 Address: " << firstPath2 << std::endl;
-
-		if (firstPath == firstPath2)
-		{
-			std::cout << "Error: firstPath1 and firstPath2 are the same!" << std::endl;
-		}
-
 		if (firstPath)
 		{
 			// 先頭のパスの最初のポイントを取得
@@ -55,15 +45,9 @@ namespace nsPlayer {
 			Vector3 diff = playerPos - firstPathPos.position;
 			float distance = diff.Length();
 
-			// **デバッグログを表示**
-			std::cout << "PlayerPos: " << playerPos.x << ", " << playerPos.y << ", " << playerPos.z << std::endl;
-			std::cout << "PathPos: " << firstPathPos.position.x << ", " << firstPathPos.position.y << ", " << firstPathPos.position.z << std::endl;
-			std::cout << "Distance: " << distance << std::endl;
-
 			// **先頭のパスの手前に来たらジャンプ**
 			if (distance < 90.0f)  // ←適切な距離を調整
 			{
-				std::cout << "Jump triggered!" << std::endl; // 確認用
 				return new PlayerJumpState(m_player);
 			}
 		}
@@ -77,19 +61,48 @@ namespace nsPlayer {
 			Vector3 diff2 = playerPos2 - firstPathPos2.position;
 			float distance2 = diff2.Length();
 
-			
-
 			// **先頭のパスの手前に来たらジャンプ**
 			if (distance2 < 90.0f)  // ←適切な距離を調整
 			{
-				std::cout << "Jump triggered!" << std::endl; // 確認用
 				return new PlayerJumpState(m_player);
 			}
 		}
 
-		else
+		//末尾のパスを取得
+		Path* lastPath = PathStorage::GetPathStorage()->GetLastPath();
+		Path* lastPath2 = PathStorage::GetPathStorage()->GetLastPath2();
+
+		if (lastPath)
 		{
-			std::cout << "firstPath is NULL" << std::endl;  // 確認用
+			//末尾のパスの最後のポイントを取得
+			const Point& lastPathPos = lastPath->GetLastPoint();
+			const Vector3& playerPos = m_player->GetPostion();
+
+			Vector3 diff = playerPos - lastPathPos.position;
+			float distance = diff.Length();
+
+			//末尾のパスの手前に来たらジャンプ
+			if (distance < 90.0f)
+			{
+				return new PlayerJumpState(m_player);
+			}
+		}
+
+		if (lastPath2)
+		{
+			//末尾のパスの最後のポイントを取得
+			const Point& lastPathPos2 = lastPath2->GetLastPoint();
+			const Vector3& playerPos2 = m_player->GetPostion();
+
+			Vector3 diff2 = playerPos2 - lastPathPos2.position;
+			float distance2 = diff2.Length();
+
+			//末尾のパスの手前に来たらジャンプ
+			if (distance2 < 90.0f)
+			{
+				return new PlayerJumpState(m_player);
+			}
+
 		}
 
 		if (g_pad[0]->IsTrigger(enButtonB)) 

@@ -84,6 +84,42 @@ namespace nsPlayer
 			}
 		}
 
+		//末尾のパスを取得
+		Path* lastPath = PathStorage::GetPathStorage()->GetLastPath();
+		Path* lastPath2 = PathStorage::GetPathStorage()->GetLastPath2();
+
+		if (lastPath)
+		{
+			//末尾のパスの最後のポイントを取得
+			const Point& lastPathPos = lastPath->GetLastPoint();
+			const Vector3& playerPos = m_player->GetPostion();
+
+			Vector3 diff = playerPos - lastPathPos.position;
+			float distance = diff.Length();
+
+			//末尾のパスの手前に来たらジャンプ
+			if (distance < 90.0f)
+			{
+				return new PlayerJumpState(m_player);
+			}
+		}
+
+		if (lastPath2)
+		{
+			//末尾のパスの最後のポイントを取得
+			const Point& lastPathPos2 = lastPath2->GetLastPoint();
+			const Vector3& playerPos2 = m_player->GetPostion();
+
+			Vector3 diff2 = playerPos2 - lastPathPos2.position;
+			float distance2 = diff2.Length();
+
+			//末尾のパスの手前に来たらジャンプ
+			if (distance2 < 90.0f)
+			{
+				return new PlayerJumpState(m_player);
+			}
+		}
+
 		if (g_pad[0]->IsTrigger(enButtonRB1))
 		{
 			m_player->SetDriftTime(m_player->GetDriftTime());
