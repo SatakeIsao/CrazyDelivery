@@ -122,6 +122,131 @@ Path* PathStorage::GetFirstPath2()
 	}
 }
 
+Path* PathStorage::GetFirstPath3()
+{
+	int pathCount = GetPathCount();
+	if (pathCount < 3) // 5つ未満なら2セット目は存在しない
+	{
+		return nullptr;
+	}
+
+	Path* firstPath1 = GetFirstPath();
+	Path* firstPath2 = GetFirstPath2();
+
+	if (!firstPath1 || !firstPath2)
+	{
+		return nullptr;
+	}
+
+	// **2セット目の最初のPathを探す**
+	Path* firstPath3 = nullptr;
+	float minDistance = 10000;
+	Vector3 referencePoint1 = firstPath1->GetFirstPoint().position; // 1セット目の開始位置を基準にする
+	Vector3 referencePoint2 = firstPath2->GetFirstPoint().position;
+
+	for (int i = 0; i < pathCount; i++)
+	{
+		Path* path = GetPath(i);
+		if (!path) continue;
+
+		const Vector3& pathStart = path->GetFirstPoint().position;
+		float distance1 = (pathStart - referencePoint1).Length();
+		float distance2 = (pathStart - referencePoint2).Length();
+
+		// **1セット目のPathより遠く、最も近いPathを探す**
+		if (distance1 > 500.0f
+			&& distance2 > 500.0f)
+		{
+			//距離が小さい方を選ぶ
+			float closerDistance;
+			if (distance1 < distance2)
+			{
+				closerDistance = distance1;
+			}
+			else
+			{
+				closerDistance = distance2;
+			}
+
+			if (closerDistance < minDistance)
+			{
+				minDistance = closerDistance;
+				firstPath3 = path;
+			}
+		}
+	}
+
+	return firstPath3;
+}
+
+Path* PathStorage::GetFirstPath4()
+{
+	int pathCount = GetPathCount();
+	//４つ未満なら４セット目は存在しない
+	if (pathCount < 4)
+	{
+		return nullptr;
+	}
+	
+	//1,2,3セット目のパスを取得
+	Path* firstPath1 = GetFirstPath();
+	Path* firstPath2 = GetFirstPath2();
+	Path* firstPath3 = GetFirstPath3();
+
+	//いずれかが存在しなければ4セット目は探せない
+	if (!firstPath1
+		|| !firstPath2
+		|| !firstPath3)
+	{
+		return nullptr;
+	}
+	
+	//1,2,3セット目の開始位置を基準点とする
+	Vector3 referencePoint1 = firstPath1->GetFirstPoint().position;
+	Vector3 referencePoint2 = firstPath2->GetFirstPoint().position;
+	Vector3 referencePoint3 = firstPath3->GetFirstPoint().position;
+
+	Path* firstPath4 = nullptr;
+	float minDistance = 10000.0f;
+
+	for (int i = 0; i < pathCount; i++)
+	{
+		Path* path = GetPath(i);
+		if (!path) continue;
+
+		const Vector3& pathStart = path->GetFirstPoint().position;
+		//各規準点からの距離を計算
+		float distance1 = (pathStart - referencePoint1).Length();
+		float distance2 = (pathStart - referencePoint2).Length();
+		float distance3 = (pathStart - referencePoint3).Length();
+
+		//すべての基準値から500.0f以上離れているかチェック
+		if (distance1 > 500.0f
+			&& distance2 > 500.0f
+			&& distance3 > 500.0f)
+		{
+			//3つの距離の中から最も近い距離を計算
+			float closerDistance = distance1;
+
+			if (distance2 < closerDistance)
+			{
+				closerDistance = distance2;
+			}
+			if (distance3 < closerDistance)
+			{
+				closerDistance = distance3;
+			}
+			//最も近いパスを更新
+			if (closerDistance < minDistance)
+			{
+				minDistance = closerDistance;
+				firstPath4 = path;
+			}
+		}
+	}
+	return firstPath4;
+}
+
 Path* PathStorage::GetLastPath()
 {
 	//コンテナ内が空っぽだったら

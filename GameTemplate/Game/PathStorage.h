@@ -75,8 +75,11 @@ public:
 
 	Path* GetFirstPath();
 	Path* GetFirstPath2();
+	Path* GetFirstPath3();
+	Path* GetFirstPath4();
 	Path* GetLastPath();
 	Path* GetLastPath2();
+	
 private:
 	static PathStorage* m_pathStorage;	//PathStorageクラスのインスタンス
 	std::map<int, Path*>	m_paths;	//番号とパス
