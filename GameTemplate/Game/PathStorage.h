@@ -1,6 +1,4 @@
 #pragma once
-#include <iostream>
-#include "Path.h"
 class Path;
 /// <summary>
 /// パスを保持するストーレジ
@@ -75,55 +73,10 @@ public:
 		return m_paths.size();
 	}
 
-	Path* GetFirstPath()
-	{
-		if (m_paths.empty())
-		{
-			return nullptr;
-		}
-		//先頭のパスを取得
-		return m_paths.begin()->second;
-	}
-
-	Path* GetFirstPath2()
-	{
-		int pathCount = GetPathCount();
-		if (pathCount < 2) // 5つ未満なら2セット目は存在しない
-		{
-			std::cout << "Error: Not enough paths for second set. Path count = " << pathCount << std::endl;
-			return nullptr;
-		}
-
-		// **2セット目の最初のPathを探す**
-		Path* firstPath2 = nullptr;
-		float minDistance = FLT_MAX;
-		Vector3 referencePoint = GetFirstPath()->GetFirstPoint().position; // 1セット目の開始位置を基準にする
-
-		for (int i = 0; i < pathCount; i++)
-		{
-			Path* path = GetPath(i);
-			if (!path) continue;
-
-			const Vector3& pathStart = path->GetFirstPoint().position;
-			float distance = (pathStart - referencePoint).Length();
-
-			// **1セット目のPathより遠く、最も近いPathを探す**
-			if (distance > 500.0f && distance < minDistance)  // 500.0f は適当な閾値
-			{
-				minDistance = distance;
-				firstPath2 = path;
-			}
-		}
-		
-		if (firstPath2)
-		{
-			return firstPath2;
-		}
-		else
-		{
-			return nullptr;
-		}
-	}
+	Path* GetFirstPath();
+	Path* GetFirstPath2();
+	Path* GetLastPath();
+	Path* GetLastPath2();
 private:
 	static PathStorage* m_pathStorage;	//PathStorageクラスのインスタンス
 	std::map<int, Path*>	m_paths;	//番号とパス

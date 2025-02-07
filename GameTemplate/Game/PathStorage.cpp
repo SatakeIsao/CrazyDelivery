@@ -73,4 +73,96 @@ void PathStorage::DeleteInstance()
 	delete m_pathStorage;
 }
 
+Path* PathStorage::GetFirstPath()
+{
+	if (m_paths.empty())
+	{
+		return nullptr;
+	}
+	//先頭のパスを取得
+	return m_paths.begin()->second;
+}
+
+Path* PathStorage::GetFirstPath2()
+{
+	int pathCount = GetPathCount();
+	if (pathCount < 2) // 5つ未満なら2セット目は存在しない
+	{
+		return nullptr;
+	}
+
+	// **2セット目の最初のPathを探す**
+	Path* firstPath2 = nullptr;
+	float minDistance = 10000;
+	Vector3 referencePoint = GetFirstPath()->GetFirstPoint().position; // 1セット目の開始位置を基準にする
+
+	for (int i = 0; i < pathCount; i++)
+	{
+		Path* path = GetPath(i);
+		if (!path) continue;
+
+		const Vector3& pathStart = path->GetFirstPoint().position;
+		float distance = (pathStart - referencePoint).Length();
+
+		// **1セット目のPathより遠く、最も近いPathを探す**
+		if (distance > 500.0f && distance < minDistance)  // 500.0f は適当な閾値
+		{
+			minDistance = distance;
+			firstPath2 = path;
+		}
+	}
+
+	if (firstPath2)
+	{
+		return firstPath2;
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+Path* PathStorage::GetLastPath()
+{
+	//コンテナ内が空っぽだったら
+	if (m_paths.empty())
+	{
+		return nullptr;
+	}
+	//末尾のパスを取得
+	return m_paths.rbegin()->second;
+	
+}
+
+Path* PathStorage::GetLastPath2()
+{
+	Path* firstPath2 = GetFirstPath2();
+	if (!firstPath2)
+	{
+		return nullptr;
+	}
+
+	int pathCount = GetPathCount();
+	Path* lastPath2 = nullptr;
+	float maxDistance = -1.0f;
+	Vector3 referencePoint = firstPath2->GetFirstPoint().position;
+
+	for (int i = 0; i < pathCount; i++)
+	{
+		Path* path = GetPath(i);
+		if (!path) continue;
+
+		const Vector3& pathStart = path->GetFirstPoint().position;
+		float distance = (pathStart - referencePoint).Length();
+
+		//１セット目から十分に離れており、最も早いパスを探す
+		if (distance > 500.0f && distance > maxDistance)
+		{
+			maxDistance = distance;
+			lastPath2 = path;
+		}
+	}
+	return lastPath2;
+}
+
 
