@@ -22,7 +22,7 @@ namespace nsK2EngineLow {
 		//void InitBloomGauss();
 		//void InitBloomBoke();
 		void Init2DSprite();
-		
+
 		void AddRenderObject(IRenderer* renderObject)
 		{
 			m_renderObjects.emplace_back(renderObject);
@@ -32,7 +32,7 @@ namespace nsK2EngineLow {
 		/// スプライトレンダーをコンテナの後ろにくっつける
 		/// </summary>
 		/// <param name="spriteRender">スプライトレンダー</param>
-		void AddSpriteRenderObject(IRenderer * spriteRender)
+		void AddSpriteRenderObject(IRenderer* spriteRender)
 		{
 			m_renderObjects.push_back(spriteRender);
 		}
@@ -74,17 +74,28 @@ namespace nsK2EngineLow {
 
 		RenderTarget& GetShadowMap()
 		{
-			return shadow.GetRenderTarget();
+			return m_shadow.GetRenderTarget();
 		}
 
-		Camera& GetLigCamera()
+		/*Camera& GetLigCamera()
 		{
 			return shadow.GetLigCamera();
+		}*/
+
+		//ライトカメラのビュープロジェクション行列
+		const Matrix& GetLigCameraViewProjection()
+		{
+			return m_shadow.GetLigCameraViewProjection();
 		}
 
 		RenderTarget& GetBloom()
 		{
-			return bloom.GetRenderTarget();
+			return m_bloom.GetRenderTarget();
+		}
+
+		Matrix& GetViewProjectionMatrix()
+		{
+			return m_viewProjectionMatrix;
 		}
 
 	private:
@@ -95,17 +106,17 @@ namespace nsK2EngineLow {
 		Sprite m_2DSprite;
 		//シャドウ用
 		//RenderTarget m_shadowMapTarget;
-		Camera lightCamera;
-		Shadow shadow;
+		Camera m_lightCamera;
+		Shadow m_shadow;
 		//ブルーム用
-		Bloom bloom;
+		Bloom m_bloom;
 		//RenderTarget* luminanceRenderTarget;
 		Sprite m_copyToFrameBufferSprite;
 		SpriteInitData m_spriteInitData;
 
-		std::vector<ModelRender*> ModelRenderObject;
+		Matrix m_viewProjectionMatrix;
+		std::vector<ModelRender*> m_modelRenderObject;
 		std::vector<IRenderer* > m_renderObjects;	//描画オブジェクトのリスト
 	};
 
 }
-

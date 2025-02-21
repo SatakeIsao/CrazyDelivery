@@ -38,6 +38,8 @@ namespace nsK2EngineLow
 			Vector3 eyePos;		//視点の位置
 			float pad1;
 			Vector3 ambientLight;	//環境光
+			float pad2;
+			Matrix m_mt;
 		};
 
 		ModelRender();
@@ -129,6 +131,11 @@ namespace nsK2EngineLow
 			SetPosition(pos);
 			SetRotation(rot);
 			SetScale(scale);
+		}
+
+		const Matrix& GetLigCameraViewProjection()
+		{
+			return m_shadow.GetLigCameraViewProjection();
 		}
 
 		//モデルを取得
@@ -248,7 +255,7 @@ namespace nsK2EngineLow
 		}
 	private:
 		Model m_model;					//モデル
-		Model m_bgModel;
+		//Model m_bgModel;
 		Model m_renderToGBufferModel;	//RenderToGBufferで描画されるモデル
 		Model m_shadowModel;			//シャドウマップ
 		Light m_light;					//シェーダーに送るライトの情報

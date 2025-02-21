@@ -4,12 +4,12 @@
 namespace nsK2EngineLow {
 	RenderingEngine::RenderingEngine()
 	{
-	
+
 	}
 
 	RenderingEngine::~RenderingEngine()
 	{
-		
+
 	}
 
 	//登録処理
@@ -44,7 +44,7 @@ namespace nsK2EngineLow {
 
 		m_copyToFrameBufferSprite.Init(spriteInitData);
 
-		bloom.InitRenderTarget(m_mainRenderingTarget);
+		m_bloom.InitRenderTarget(m_mainRenderingTarget);
 
 
 		//2D(フォントやスプライト)用の初期化
@@ -72,14 +72,14 @@ namespace nsK2EngineLow {
 
 	void RenderingEngine::InitShadowMap()
 	{
-		shadow.Init();
+		m_shadow.Init();
 	}
 
 	void RenderingEngine::InitBloom()
 	{
-		bloom.InitLumi(m_mainRenderingTarget);
-		bloom.InitGaussBlur();
-		bloom.InitBoke(m_mainRenderingTarget);
+		m_bloom.InitLumi(m_mainRenderingTarget);
+		m_bloom.InitGaussBlur();
+		m_bloom.InitBoke(m_mainRenderingTarget);
 	}
 
 	/*void RenderingEngine::InitBloomLumi()
@@ -126,7 +126,7 @@ namespace nsK2EngineLow {
 		spriteInitData.m_alphaBlendMode = AlphaBlendMode_None;
 		//レンダリングターゲットのフォーマット
 		spriteInitData.m_colorBufferFormat[0] = m_mainRenderingTarget.GetColorBufferFormat();
-		
+
 		m_2DSprite.Init(spriteInitData);
 
 		//テクスチャはメインレンダーターゲット
@@ -144,7 +144,7 @@ namespace nsK2EngineLow {
 	void RenderingEngine::Execute(RenderContext& rc)
 	{
 		//影の描画
-		shadow.Render(rc,m_renderObjects);
+		m_shadow.Render(rc, m_renderObjects);
 
 
 		//PreRender2D(rc);
@@ -167,34 +167,34 @@ namespace nsK2EngineLow {
 
 		// ブルーム///
 		////輝度抽出
-		bloom.RenderLumi(rc);
+		m_bloom.RenderLumi(rc);
 		////ボケ画像を生成
-		bloom.RenderGauss(rc);
+		m_bloom.RenderGauss(rc);
 		////ボケ画像を加算合成
 		rc.WaitUntilToPossibleSetRenderTarget(m_mainRenderingTarget);
 		//レンダリングターゲットを設定
 		rc.SetRenderTargetAndViewport(m_mainRenderingTarget);
 		//最終合成
-		bloom.FinalSpriteDraw(rc);
+		m_bloom.FinalSpriteDraw(rc);
 		//レンダリングターゲットの書き込み終了待ち
 		rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderingTarget);///
-		
+
 		//Render2D(rc);
 
 		//shadowSP.Draw(renderContext);
-		
+
 		//左上のスプライト
 		// shadow.SpriteShadowDraw(rc);
 
 		//メインレンダリングターゲットの絵をフレームバッファにコピー
 		CopyMainRenderTargetToFrameBuffer(rc);
-		
+
 		Render2DSprite(rc);
 		//登録されている描画オブジェクトをクリア
 		m_renderObjects.clear();
 	}
 
-	
+
 
 	void RenderingEngine::ModelDraw(RenderContext& rc)
 	{
@@ -219,51 +219,52 @@ namespace nsK2EngineLow {
 		//rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderingTarget);
 	}
 
-	void RenderingEngine::RenderShadowDraw(RenderContext& rc)
-	{
-		//影描画用のライトカメラを作成する
+	//void RenderingEngine::RenderShadowDraw(RenderContext& rc)
+	//{
 
-		lightCamera.SetAspectOnrFlag(true);
+	//	//影描画用のライトカメラを作成する
 
-		lightCamera.SetViewAngle(Math::DegToRad(80.0f));
+	//	lightCamera.SetAspectOnrFlag(true);
 
-		//カメラの位置を設定、これはライトの位置
-		lightCamera.SetPosition(-2000, 2000, 2000);
+	//	lightCamera.SetViewAngle(Math::DegToRad(80.0f));
 
-		//カメラの注視点を設定、これはライトが照らしている場所
-		lightCamera.SetTarget(0, 0, 0);
+	//	//カメラの位置を設定、これはライトの位置
+	//	lightCamera.SetPosition(-2000, 2000, 2000);
 
-		//上方向を設定、今回はライトが真下を向いているので、X方向を上にしている
-		lightCamera.SetUp(1, 0, 0);
+	//	//カメラの注視点を設定、これはライトが照らしている場所
+	//	lightCamera.SetTarget(0, 0, 0);
 
-		//ライトビュープロジェクション行列を計算している
-		lightCamera.Update();
+	//	//上方向を設定、今回はライトが真下を向いているので、X方向を上にしている
+	//	lightCamera.SetUp(1, 0, 0);
 
-		for (auto& renderObj : m_renderObjects)
-		{
-			renderObj->OnRenderShadowMap(rc, lightCamera.GetProjectionMatrix());
-		}
+	//	//ライトビュープロジェクション行列を計算している
+	//	lightCamera.Update();
 
-		////ターゲットをシャドウマップに変更
-		//rc.WaitUntilFinishDrawingToRenderTarget(m_shadowMapTarget);
-		//rc.SetRenderTargetAndViewport(m_shadowMapTarget);
-		//rc.ClearRenderTargetView(m_shadowMapTarget);
+	//	for (auto& renderObj : m_renderObjects)
+	//	{
+	//		renderObj->OnRenderShadowMap(rc, GetLigCameraViewProjection());
+	//	}
 
-		////まとめて影モデルレンダーを描画
-		//for (auto MobjData : ModelRenderObject)
-		//{
-		//	//主人公ならライトカメラを更新
-		//	if (MobjData->GetSyuzinkou() == true) {
-		//		//ライトカメラの更新
-		//		lightCamera.SetPosition(MobjData->GetPositionX(), MobjData->GetPositionY() + 5000.0f, MobjData->GetPositionZ());
-		//		lightCamera.SetTarget(MobjData->GetPositionX(), MobjData->GetPositionY(), MobjData->GetPositionZ());
-		//		lightCamera.Update();
-		//	}
-		//	//ライトビューセット
-		//	SetLVP
-		//	//MobjData->OnRenderShadowMap(rc, lightCamera, GetViewProjectionMatrix());
-		//}
-	}
+	//	////ターゲットをシャドウマップに変更
+	//	//rc.WaitUntilFinishDrawingToRenderTarget(m_shadowMapTarget);
+	//	//rc.SetRenderTargetAndViewport(m_shadowMapTarget);
+	//	//rc.ClearRenderTargetView(m_shadowMapTarget);
+
+	//	////まとめて影モデルレンダーを描画
+	//	//for (auto MobjData : ModelRenderObject)
+	//	//{
+	//	//	//主人公ならライトカメラを更新
+	//	//	if (MobjData->GetSyuzinkou() == true) {
+	//	//		//ライトカメラの更新
+	//	//		lightCamera.SetPosition(MobjData->GetPositionX(), MobjData->GetPositionY() + 5000.0f, MobjData->GetPositionZ());
+	//	//		lightCamera.SetTarget(MobjData->GetPositionX(), MobjData->GetPositionY(), MobjData->GetPositionZ());
+	//	//		lightCamera.Update();
+	//	//	}
+	//	//	//ライトビューセット
+	//	//	SetLVP
+	//	//	//MobjData->OnRenderShadowMap(rc, lightCamera, GetViewProjectionMatrix());
+	//	//}
+	//}
 
 	/*void RenderingEngine::InitFinalSprite()
 	{

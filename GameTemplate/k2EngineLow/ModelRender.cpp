@@ -27,12 +27,20 @@ namespace nsK2EngineLow {
 		InitAnimation(animationClips, numAnimationClips, enModelUpAcxis);
 		//モデルの初期化
 		ModelInitData initData;
+		Camera lightCamera;
 
 		initData.m_tkmFilePath = tkmFilePath;
-
+		//シャドウレシーバー（影が落とされるモデル）用のシェーダーを指定する
 		initData.m_fxFilePath = "Assets/shader/testModel.fx";
 		//initData.m_fxFilePath = "Assets/shader/shadowReceiverModel.fx";
 
+		lightCamera.SetAspectOnrFlag(true);
+		lightCamera.SetViewAngle(Math::DegToRad(80.0f));
+		lightCamera.SetPosition(-6000.0f, 500.0f, -500.0f);
+		lightCamera.SetTarget(0, 0, 0);
+		lightCamera.Update();
+
+		m_light.m_mt = lightCamera.GetViewProjectionMatrix();
 		initData.m_expandConstantBuffer = &g_sceneLight->GetLightData();
 
 		initData.m_expandConstantBufferSize = sizeof(g_sceneLight->GetLightData());
@@ -70,7 +78,7 @@ namespace nsK2EngineLow {
 	{
 		ModelInitData shadowInitData;
 		shadowInitData.m_tkmFilePath = tkmFilePath;
-		shadowInitData.m_modelUpAxis = modelUpAxis;
+		//shadowInitData.m_modelUpAxis = modelUpAxis;
 		shadowInitData.m_fxFilePath = "Assets/shader/sampleDrawShadowMap.fx";
 		shadowInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32_FLOAT;
 

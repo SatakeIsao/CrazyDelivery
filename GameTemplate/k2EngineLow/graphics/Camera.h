@@ -368,9 +368,9 @@ namespace nsK2EngineLow {
 
 	protected:
 		float		m_targetToPositionLen = 1.0f;			// 注視点と視点まで距離。
-		Vector3		m_position = { 0.0f, 0.0f, 1.0f };		// カメラ位置。
+		Vector3		m_position = { 100.0f, 1000.0f, 100.0f };		// カメラ位置。
 		Vector3		m_up = g_vec3Up;						// カメラの上方向。
-		Vector3		m_target;								// カメラの中止点。
+		Vector3		m_target = { 0.0f,50.0f,0.0f };								// カメラの中止点。
 		Matrix		m_viewMatrix;							// ビュー行列。
 		Matrix		m_projectionMatrix;						// プロジェクション行列。
 		Matrix		m_viewProjectionMatrix;					// ビュープロジェクション行列。
