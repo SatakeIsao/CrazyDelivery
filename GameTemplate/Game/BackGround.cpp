@@ -20,26 +20,39 @@ bool BackGround::Start()
 void BackGround::Init()
 {
 	//背景モデルの初期化
-	m_bgModel.Init("Assets/stageData/map/map_1218.tkm", 0, 0, enModelUpAxisY, false);
+	m_bgModel.Init("Assets/stageData/map/map.tkm", 0, 0, enModelUpAxisY, true, false);
 	m_bgModel.SetPosition(m_position);
 	m_bgModel.SetRotation(m_rotation);
 	m_bgModel.SetScale(m_scale);
 	m_bgModel.Update();
 
-	//静的物理オブジェクトを作成
-	physicsStaticObject.CreateFromModel(m_bgModel.GetModel(), m_bgModel.GetModel().GetWorldMatrix());
 
+	//地面モデルの初期化
+	m_loadModel.Init("Assets/stageData/map/load.tkm", 0, 0, enModelUpAxisY, false, true);
+	m_loadModel.SetPosition(m_position);
+	m_loadModel.SetRotation(m_rotation);
+	m_loadModel.SetScale(m_scale);
+	m_loadModel.Update();
+
+	//静的物理オブジェクトを作成
+	m_bgPhysicsStaticObject.CreateFromModel(m_bgModel.GetModel(), m_bgModel.GetModel().GetWorldMatrix());
+
+	
 	//遮蔽物という属性を付与する
-	physicsStaticObject.GetbtCollisionObject()->setUserIndex(enCollisionAttr_Wall);
+	m_bgPhysicsStaticObject.GetbtCollisionObject()->setUserIndex(enCollisionAttr_Wall);
+
+	m_roadPhyStaticObject.CreateFromModel(m_loadModel.GetModel(), m_loadModel.GetModel().GetWorldMatrix());
 }
 
 
 void BackGround::Update()
 {
 	m_bgModel.Update();
+	m_loadModel.Update();
 }
 
 void BackGround::Render(RenderContext& rc)
 {
 	m_bgModel.Draw(rc);
+	m_loadModel.Draw(rc);
 }

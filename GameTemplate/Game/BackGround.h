@@ -40,10 +40,11 @@ public:
 	
 private:
 	ModelRender			m_bgModel;					//背景モデル
-	PhysicsStaticObject m_phyStaticObject;			//静的物理オブジェクト
+	ModelRender			m_loadModel;				//地面モデル
+	PhysicsStaticObject m_roadPhyStaticObject;		//静的物理オブジェクト
 	Vector3				m_position = Vector3::Zero;	//座標
 	Quaternion			m_rotation;					//回転
 	Vector3				m_scale = Vector3::One;		//拡大率
-	PhysicsStaticObject physicsStaticObject;		//静的オブジェクトを保持させる
+	PhysicsStaticObject m_bgPhysicsStaticObject;	//静的オブジェクトを保持させる
 };
 
