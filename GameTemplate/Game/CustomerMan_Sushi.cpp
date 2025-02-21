@@ -30,7 +30,7 @@ void CustomerMan_Sushi::Init()
 	m_rotation.SetRotationDegZ(0.0f);
 
 	//ƒ‚ƒfƒ‹‚Ì‰Šú‰»
-	m_customerMan_Sushi.Init("Assets/Customer/Man2/human3.tkm", m_manAnimClips, enAnimClip_Num);
+	m_customerMan_Sushi.Init("Assets/Customer/Man2/human3.tkm", m_manAnimClips, enAnimClip_Num, enModelUpAxisY, true, false);
 	m_customerMan_Sushi.SetPosition(m_position);
 	m_customerMan_Sushi.SetRotation(m_rotation);
 	m_customerMan_Sushi.SetScale(m_scale);

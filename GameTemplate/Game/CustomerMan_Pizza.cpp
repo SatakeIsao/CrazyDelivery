@@ -31,7 +31,7 @@ void CustomerMan_Pizza::Init()
 	m_rotation.SetRotationDegZ(0.0f);
 
 	//ƒ‚ƒfƒ‹‚Ì‰Šú‰»
-	m_customerMan_Pizza.Init("Assets/Customer/Man2/human2.tkm", m_manAnimClips, enAnimClip_Num);
+	m_customerMan_Pizza.Init("Assets/Customer/Man2/human2.tkm", m_manAnimClips, enAnimClip_Num, enModelUpAxisY, true, false);
 	m_customerMan_Pizza.SetPosition(m_position);
 	m_customerMan_Pizza.SetRotation(m_rotation);
 	m_customerMan_Pizza.SetScale(m_scale);

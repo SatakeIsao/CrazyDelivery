@@ -528,6 +528,9 @@ void InventoryUI::SpriteSlideFood(FoodSprite& foodSprite)
 		{
 			m_dirPizza.Normalize();
 			foodSprite.m_foodPos += m_dirPizza * FOOD_SLIDESPEED * deltaTime;
+
+			//デバック用
+			//foodSprite.m_foodPos.x = MONEY_PLANE_ENDPOS.x;
 		}
 		else
 		{

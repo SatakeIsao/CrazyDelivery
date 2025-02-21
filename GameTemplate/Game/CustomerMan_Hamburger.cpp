@@ -32,7 +32,7 @@ void CustomerMan_Hamburger::Init()
 	m_rotation.SetRotationDegZ(0.0f);
 
 	//ƒ‚ƒfƒ‹‚Ì‰Šú‰»
-	m_customerMan_Hamburger.Init("Assets/Customer/Man2/human.tkm", m_manAnimClips, enAnimClip_Num);
+	m_customerMan_Hamburger.Init("Assets/Customer/Man2/human.tkm", m_manAnimClips, enAnimClip_Num,enModelUpAxisY,true,false);
 	m_customerMan_Hamburger.SetPosition(m_position);
 	m_customerMan_Hamburger.SetRotation(m_rotation);
 	m_customerMan_Hamburger.SetScale(m_scale);
