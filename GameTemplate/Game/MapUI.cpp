@@ -48,7 +48,7 @@ bool MapUI::Start()
 	m_spriteRender.Update();
 
 	//マップ中心の赤い画像
-	m_playerSprite.Init("Assets/MapData/player.dds", 30, 30);
+	m_playerSprite.Init("Assets/MapData/mapPlayer.dds", 640, 360);
 	m_playerSprite.SetPosition(Vector3(-600.0f, -250.0f, 0.0f));
 	m_playerSprite.SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
 	m_playerSprite.Update();
