@@ -52,11 +52,19 @@ public:
 		return m_pointList;
 	}
 
+	/// <summary>
+	/// パスの先頭ポイントリストを取得
+	/// </summary>
+	/// <returns></returns>
 	const Point& GetFirstPoint() const 
 	{ 
 		return m_pointList.front();
 	}
 
+	/// <summary>
+	/// パスの末尾ポイントリストを取得
+	/// </summary>
+	/// <returns></returns>
 	const Point& GetLastPoint() const
 	{
 		return m_pointList.back();

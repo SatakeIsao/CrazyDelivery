@@ -22,6 +22,17 @@ public:
 	}
 	
 	/// <summary>
+	/// １セット目のパス先頭取得
+	/// </summary>
+	/// <returns></returns>
+	Path* GetFirstPath();
+	Path* GetFirstPath2();
+	Path* GetFirstPath3();
+	Path* GetFirstPath4();
+	Path* GetLastPath();
+	Path* GetLastPath2();
+
+	/// <summary>
 	/// ストレージに追加するための関数
 	/// </summary>
 	/// <param name="number">検索可能なキー</param>
@@ -73,12 +84,7 @@ public:
 		return m_paths.size();
 	}
 
-	Path* GetFirstPath();
-	Path* GetFirstPath2();
-	Path* GetFirstPath3();
-	Path* GetFirstPath4();
-	Path* GetLastPath();
-	Path* GetLastPath2();
+	
 	
 private:
 	static PathStorage* m_pathStorage;	//PathStorageクラスのインスタンス

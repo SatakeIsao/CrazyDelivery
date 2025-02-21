@@ -91,10 +91,10 @@ Path* PathStorage::GetFirstPath2()
 		return nullptr;
 	}
 
-	// **2セット目の最初のPathを探す**
+	// 2セット目の最初のPathを探す
 	Path* firstPath2 = nullptr;
 	float minDistance = 10000;
-	Vector3 referencePoint = GetFirstPath()->GetFirstPoint().position; // 1セット目の開始位置を基準にする
+	Vector3 referencePoint = GetFirstPath()->GetFirstPoint().position; // 1セット目の開始位置を基準
 
 	for (int i = 0; i < pathCount; i++)
 	{
@@ -104,8 +104,8 @@ Path* PathStorage::GetFirstPath2()
 		const Vector3& pathStart = path->GetFirstPoint().position;
 		float distance = (pathStart - referencePoint).Length();
 
-		// **1セット目のPathより遠く、最も近いPathを探す**
-		if (distance > 500.0f && distance < minDistance)  // 500.0f は適当な閾値
+		// 1セット目のPathより遠く、最も近いPathを探す
+		if (distance > 500.0f && distance < minDistance)  // 500.0f は適当なしきい値
 		{
 			minDistance = distance;
 			firstPath2 = path;
@@ -138,7 +138,7 @@ Path* PathStorage::GetFirstPath3()
 		return nullptr;
 	}
 
-	// **2セット目の最初のPathを探す**
+	// 2セット目の最初のPathを探す
 	Path* firstPath3 = nullptr;
 	float minDistance = 10000;
 	Vector3 referencePoint1 = firstPath1->GetFirstPoint().position; // 1セット目の開始位置を基準にする
@@ -153,7 +153,7 @@ Path* PathStorage::GetFirstPath3()
 		float distance1 = (pathStart - referencePoint1).Length();
 		float distance2 = (pathStart - referencePoint2).Length();
 
-		// **1セット目のPathより遠く、最も近いPathを探す**
+		// 1セット目のPathより遠く、最も近いPathを探す
 		if (distance1 > 500.0f
 			&& distance2 > 500.0f)
 		{
