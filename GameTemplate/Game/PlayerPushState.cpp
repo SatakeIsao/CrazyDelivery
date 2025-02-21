@@ -55,13 +55,13 @@ namespace nsPlayer
 		{
 			// 先頭のパスの最初のポイントを取得
 			const Point& firstPathPos = firstPath->GetFirstPoint();
-			const Vector3& playerPos = m_player->GetPostion();  // 修正: GetPostion() → GetPosition()
+			const Vector3& playerPos = m_player->GetPostion();  
 
 			Vector3 diff = playerPos - firstPathPos.position;
 			float distance = diff.Length();
 
-			// **先頭のパスの手前に来たらジャンプ**
-			if (distance < 90.0f)  // ←適切な距離を調整
+			// 先頭のパスの手前に来たらジャンプ
+			if (distance < 90.0f)  // 適切な距離を調整
 			{
 				return new PlayerJumpState(m_player);
 			}
@@ -71,15 +71,15 @@ namespace nsPlayer
 		{
 			// 先頭のパスの最初のポイントを取得
 			const Point& firstPathPos2 = firstPath2->GetFirstPoint();
-			const Vector3& playerPos2 = m_player->GetPostion();  // 修正: GetPostion() → GetPosition()
+			const Vector3& playerPos2 = m_player->GetPostion(); 
 
 			Vector3 diff2 = playerPos2 - firstPathPos2.position;
 			float distance2 = diff2.Length();
 
 
 
-			// **先頭のパスの手前に来たらジャンプ**
-			if (distance2 < 90.0f)  // ←適切な距離を調整
+			// 先頭のパスの手前に来たらジャンプ
+			if (distance2 < 90.0f)  // 適切な距離を調整
 			{
 				return new PlayerJumpState(m_player);
 			}
@@ -89,13 +89,13 @@ namespace nsPlayer
 		{
 			// 先頭のパスの最初のポイントを取得
 			const Point& firstPathPos3 = firstPath3->GetFirstPoint();
-			const Vector3& playerPos3 = m_player->GetPostion();  // 修正: GetPostion() → GetPosition()
+			const Vector3& playerPos3 = m_player->GetPostion(); 
 
 			Vector3 diff3 = playerPos3 - firstPathPos3.position;
 			float distance3 = diff3.Length();
 
-			// **先頭のパスの手前に来たらジャンプ**
-			if (distance3 < 90.0f)  // ←適切な距離を調整
+			// 先頭のパスの手前に来たらジャンプ
+			if (distance3 < 90.0f)  // 適切な距離を調整
 			{
 				return new PlayerJumpState(m_player);
 			}

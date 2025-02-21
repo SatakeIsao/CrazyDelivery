@@ -88,14 +88,14 @@ namespace nsPlayer
 	void Player::InitPlayerModels()
 	{
 		//プレイヤーモデルの初期化
-		m_playerModel.Init("Assets/skaterData/player.tkm", m_playerAnimClips, enAnimClip_Num);
+		m_playerModel.Init("Assets/skaterData/player.tkm", m_playerAnimClips, enAnimClip_Num, enModelUpAxisY,true,false);
 		m_playerModel.SetPosition(m_position);
 		m_playerModel.SetRotation(m_rotation);
 		m_playerModel.SetScale(m_scale);
 		m_playerModel.Update();
 
 		//ボードモデルの初期化
-		m_boardModel.Init("Assets/skaterData/board.tkm", m_boardAnimClips, enAnimClip_Num);
+		m_boardModel.Init("Assets/skaterData/board.tkm", m_boardAnimClips, enAnimClip_Num, enModelUpAxisY, true, false);
 		m_boardModel.SetPosition(m_position);
 		m_boardModel.SetRotation(m_rotation);
 		m_boardModel.SetScale(m_scale);
@@ -173,7 +173,6 @@ namespace nsPlayer
 		m_skaterRunSE->Init(enSoundName_skaterRun);
 		m_skaterRunSE->SetVolume(2.0f);
 
-		//レール走行時の効果音
 		
 	}
 
@@ -430,7 +429,7 @@ namespace nsPlayer
 		}
 
 
-		// **近くにスロープの Path (Path_00_00) がある場合、プレイヤーをスロープモードに設定**
+		//近くにスロープの Path (Path_00_00) がある場合、プレイヤーをスロープモードに設定
 		if (nearestPath && 
 			(m_slopePathID == -1|| m_slopePathID != nearestPathID))
 		{
@@ -821,6 +820,10 @@ namespace nsPlayer
 		//壁と衝突したら
 		if (callback.m_isHit == true)
 		{
+			//デバック用
+			//m_velocity *= 0.2f;
+
+
 			//callback.normal（N）とm_velocity（F）を使って反射ベクトルを求める
 			//衝突法線ベクトル
 			Vector3 normalXZ = callback.m_normal;

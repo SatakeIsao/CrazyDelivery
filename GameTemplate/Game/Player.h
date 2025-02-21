@@ -186,6 +186,12 @@ namespace nsPlayer
 		/// プレイヤーの速度を上限値以内に制限する
 		/// </summary>
 		void ApplySpeedLimit();
+
+		/// <summary>
+		/// パスが近くにあるかのチェック
+		/// </summary>
+		/// <returns></returns>
+		bool CheckNearPathMoveStart();
 		/// <summary>
 		/// 描画処理
 		/// </summary>
@@ -316,7 +322,7 @@ namespace nsPlayer
 		}
 
 		/// <summary>
-		/// スロープ移動中か
+		/// スロープ移動中かの取得
 		/// </summary>
 		/// <returns></returns>
 		bool& GetIsOnSlope()
@@ -324,42 +330,71 @@ namespace nsPlayer
 			return m_isOnSlope;
 		}
 
+		/// <summary>
+		/// パス移動中かの取得
+		/// </summary>
+		/// <returns></returns>
 		bool& GetIsPathMoving()
 		{
 			return m_isPathMoving;
 		}
 
+		/// <summary>
+		/// パス移動フラグの設定
+		/// </summary>
+		/// <param name="isMove"></param>
 		void SetIsPathMove(bool& isMove)
 		{
 			m_isPathMove = isMove;
 		}
 
+		/// <summary>
+		/// パス移動フラグの取得
+		/// </summary>
+		/// <returns></returns>
 		bool& GetIsPathMove()
 		{
 			return m_isPathMove;
 		}
 	
+		/// <summary>
+		/// パス移動開始したかの取得
+		/// </summary>
+		/// <returns></returns>
 		bool& GetIsPathMoveStart()
 		{
 			return m_isPathMoveStart;
 		}
 
+		/// <summary>
+		/// パス移動開始したかの設定
+		/// </summary>
+		/// <param name="isMoveStart"></param>
 		void SetIsPathMoveStart(bool isMoveStart)
 		{
 			m_isPathMoveStart = isMoveStart;
 		}
 
+		/// <summary>
+		/// パス移動が終了したかの取得
+		/// </summary>
+		/// <returns></returns>
 		bool& GetIsPathMoveEnd()
 		{
 			return m_isPathMoveEnd;
 		}
 
+		/// <summary>
+		/// パス移動が終了したかの設定
+		/// </summary>
+		/// <param name="isMoveEnd"></param>
 		void SetIsPathMoveEnd(bool isMoveEnd)
 		{
 			m_isPathMoveEnd = isMoveEnd;
 		}
 
-		bool CheckNearPathMoveStart();
+
+		
 		CharacterController& GetCharacterController()
 		{
 			return m_charaCon;
@@ -402,9 +437,9 @@ namespace nsPlayer
 		float				m_driftAngle = 0.0f;						//ドリフト中の角度
 		float				m_currentSpeed = 0.0f;						//現在の速度
 		float				m_movementLength = 0.0f;					//移動ベクトルの長さ
-		float				m_originalY = 10.0f;							//もとの座標を保存
-		float				m_distanceToPath = 15.0f;
-		float				m_pathExitCoolDown = 0.0f;	//パス移動時のクールタイム
+		float				m_originalY = 10.0f;						//もとの座標を保存
+		float				m_distanceToPath = 15.0f;					//パス間の距離
+		float				m_pathExitCoolDown = 0.0f;					//パス移動時のクールタイム
 
 		int					m_currentPathIndex = 0.0f;					//現在のターゲットポイント
 		int					m_slopePathID = -1;							//スロープのID
@@ -413,12 +448,12 @@ namespace nsPlayer
 		bool				m_isDrifting = false;						//ドリフト中かどうか
 		bool				m_isOnSlope = false;						//スロープ移動中かどうか
 		bool				m_isYOffsetApplied = false;					//Y座標を上げているか
-		bool				m_isPathMoving = false;//パス移動中か
-		bool				m_isPathMove = false;//パス移動フラグ
-		bool				m_isPathMoveStart = false;
-		bool				m_isPathMoveEnd = false;
-		bool				m_isMovingForward = false;
-		bool				m_isPostPathAcceleration = false; //パス移動終了時に加速フラグ
+		bool				m_isPathMoving = false;						//パス移動中か
+		bool				m_isPathMove = false;						//パス移動フラグ
+		bool				m_isPathMoveStart = false;					//パス移動開始したか
+		bool				m_isPathMoveEnd = false;					//パス移動終了したか
+		bool				m_isMovingForward = false;					//キャラクターが前進しているか
+		bool				m_isPostPathAcceleration = false;			//パス移動終了時に加速フラグ
 
 protected:
 		CCapsuleCollider	m_capsuleCollider;							//遮蔽物確認用のコライダー
