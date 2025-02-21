@@ -1,10 +1,10 @@
 #pragma once
-#define MAX_DIRECTIONAL_LIGHT  4
-#define MAX_POINT_LIGHT  32
-#define MAX_SPOT_LIGHT  32
 
 namespace nsK2EngineLow {
 	
+	static const int MAX_DIRECTIONAL_LIGHT = 4;
+	static const int MAX_POINT_LIGHT = 32;
+	static const int MAX_SPOT_LIGHT = 32;
 	////ディレクションライトの構造体
 	//struct DirectionLight
 	//{
@@ -53,6 +53,9 @@ namespace nsK2EngineLow {
 		float pad1;
 		Vector3 color;		  //ライトのカラー
 		float pad2;
+
+		Vector3 lightPos;
+		float padlight;
 		
 		//DirectionLight directionalLight[MAX_DIRECTIONAL_LIGHT];	//ディレクションライトの配列
 		//SPointLight pointLights[MAX_POINT_LIGHT];				//ポイントライトの配列[
@@ -129,7 +132,9 @@ namespace nsK2EngineLow {
 
 	private:
 		Light m_light;	//シーンライト
-		ModelInitData bgModelInitData;	//影を受ける背景を初期化
+		Camera m_lightCamera;
+		//Shadow m_shadow;
+		//ModelInitData bgModelInitData;	//影を受ける背景を初期化
 		//DirectionLight m_dirLight; //ディレクションライト
 		//SPointLight m_pointLight; //ポイントライト
 	};

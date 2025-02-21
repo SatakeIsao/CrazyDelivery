@@ -15,8 +15,8 @@ namespace nsK2EngineLow {
 		/// <param name="rc">レンダリングコンテキスト</param>
 		/// <param name="renderObjects"></param>
 		void Render(
-		RenderContext& rc,
-		std::vector<IRenderer* >& renderObjects
+			RenderContext& rc,
+			std::vector<IRenderer* >& renderObjects
 		);
 		/// <summary>
 		/// 影の描画
@@ -26,12 +26,17 @@ namespace nsK2EngineLow {
 
 		RenderTarget& GetRenderTarget()
 		{
-			return shadowMap;
+			return m_shadowMap;
 		}
 
-		Camera& GetLigCamera()
+		/*Camera& GetLigCamera()
 		{
 			return m_lightCamera;
+		}*/
+
+		const Matrix& GetLigCameraViewProjection()
+		{
+			return m_viewProjectionMatrix;
 		}
 
 	private:
@@ -44,13 +49,12 @@ namespace nsK2EngineLow {
 		/// </summary>
 		void InitLightCamera();
 
-		
+
 	private:
 		Camera m_lightCamera;
 		//Vector3 m_lightCameraPos;
-		RenderTarget shadowMap;
-		Sprite sprite;
+		RenderTarget m_shadowMap;
+		Sprite m_sprite;
+		Matrix m_viewProjectionMatrix;
 	};
 }
-
-

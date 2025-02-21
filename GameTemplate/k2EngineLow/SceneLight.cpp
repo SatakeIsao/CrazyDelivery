@@ -16,7 +16,7 @@ namespace nsK2EngineLow {
 		//InitSpotLight();
 		InitAmbientLight();
 		InitHemisphereLight();
-		
+
 		//影描画用のライトカメラを作成する
 		Camera lightCamera;
 		//カメラの位置を設定、これはライトの位置
@@ -31,12 +31,12 @@ namespace nsK2EngineLow {
 		lightCamera.Update();
 
 		m_light.mLVP = lightCamera.GetViewProjectionMatrix();
-		
+
 
 
 		//m_light.directionalLight[0].castShadow = true;
-		
-	
+
+
 		////すべてのポイントライトを未使用にする。
 		//for (auto& pt : m_light.pointLights) {
 		//	pt.UnUse();
@@ -49,7 +49,7 @@ namespace nsK2EngineLow {
 
 	void SceneLight::Update()
 	{
-		m_light.mLVP = g_renderingEngine->GetLigCamera().GetViewProjectionMatrix();
+		m_light.mLVP = g_renderingEngine->GetLigCameraViewProjection();
 
 		//DirRot();
 	}
@@ -62,7 +62,7 @@ namespace nsK2EngineLow {
 		m_light.dirDirection.x = 1.0f;
 		m_light.dirDirection.y = -1.0f;
 		m_light.dirDirection.z = -1.0f;
-		
+
 		//正規化する
 		m_light.dirDirection.Normalize();
 
@@ -205,5 +205,5 @@ namespace nsK2EngineLow {
 	//	}
 	//}
 
-	
+
 }
