@@ -85,6 +85,7 @@ cbuffer LightCb : register(b1)
     //ディレクションライト用のデータ
     float3 dirDirection;    //ライトの方向
     float3 dirColor;        //ライトのカラー
+    float3 lightPos;
     
     //DirectionalLight directionalLights[NUM_DIRECTIONAL_LIGHT]; //ディレクションライト。
     //PointLight pointLights[MAX_POINT_LIGHT];//ポイントライト。
@@ -146,7 +147,7 @@ float3 CalcLigFromSpotLight(SPSIn psIn);
 float3 CalcLigFromLimLight(float3 lightDirection, float3 lightColor, float3 normal, float3 normalInView);
 float3 CalcLigFromHemiLight(SPSIn psIn);
 float3 CalcNormal(float3 normal, float3 tangent, float3 biNormal, float2 uv);
-float3 CalcShadowMap(SPSIn psIn);
+float CalcShadowMap(SPSIn psIn);
 
 /// <summary>
 //スキン行列を計算する。
@@ -256,7 +257,7 @@ SPSOut PSMainCore(SPSIn psIn, int isShadowReceiver) : SV_Target0
     //ディフューズマップをサンプリング
     float4 diffuseMap = g_texture.Sample(g_sampler, psIn.uv);
     //法線を計算
-    float3 normal = CalcNormal(psIn.normal, psIn.tangent, psIn.biNormal, psIn.uv);
+    //float3 normal = CalcNormal(psIn.normal, psIn.tangent, psIn.biNormal, psIn.uv);
     //環境光を計算
     //float3 ambient = ambientLight;
     //AOマップから環境光の強さをサンプリング
@@ -265,23 +266,23 @@ SPSOut PSMainCore(SPSIn psIn, int isShadowReceiver) : SV_Target0
     //ambient *= ambientPower;
     
     //各種ライトの反射光を足し算して最終的な反射光を求める
-    float3 finalLig = directionLig + hemiLig; //+ ambient;
+    float3 finalLig = directionLig + hemiLig;
     //拡散反射光を計算する
-    finalLig += max(0.0f, dot(psIn.normal, -dirDirection)) * dirColor; //+ ambient;
+    //finalLig += max(0.0f, dot(psIn.normal, -dirDirection)) * dirColor; //+ ambient;
     
     float4 finalColor = diffuseMap;
     //テクスチャカラーに求めた光を乗算して最終出力カラーを求める
     finalColor.xyz *= finalLig;
     
-    float3 shadow = (1.0f, 1.0f, 1.0f);
+    float shadowAttn = 1.0f;
     if (isShadowReceiver == 1)
     {
         
-       shadow =  CalcShadowMap(psIn);
+       shadowAttn =  CalcShadowMap(psIn);
        
     }
     
-    finalColor.xyz *= shadow;
+    finalColor.xyz *= shadowAttn;
     
     psOut.color = finalColor;
     
@@ -310,7 +311,8 @@ float3 CalcLamberDiffuse(float3 lightDirection, float3 lightColor, float3 normal
 {
     //ピクセルの法線とライトの方向の内積を計算する。
     float t = dot(normal, lightDirection) * -1.0f;
-    
+    // 内積の結果を0～1に変換して影の部分にもグラデーションをつける
+    t = t * 0.5f + 0.5f;
     //内積の結果が０より小さいときは０にする
     t = max(0.0f, t);
     
@@ -529,7 +531,7 @@ float3 CalcLigFromHemiLight(SPSIn psIn)
     //サーフェイスの法線と地面の法線と内積を計算する
     float t = dot(psIn.normal, groundNormal);
     
-    //内積の結果を０～１の範囲に変換する
+    //内積の結果を0～1の範囲に変換する
     t = (t + 1.0f) / 2.0f;
     
     //地面色と天球色を補間率t で線形補完する
@@ -550,9 +552,25 @@ float3 CalcNormal(float3 normal, float3 tangent, float3 biNormal, float2 uv)
 }
 
 //シャドウマップ
-float3 CalcShadowMap(SPSIn psIn)
+float CalcShadowMap(SPSIn psIn)
 {
-    float4 color = g_texture.Sample(g_sampler, psIn.uv);
+    float shadowAttn = 1.0f;
+    
+    //自己影を防ぐ：キャラクターの法線方向と光の方向がほぼ一致する場合
+    //影を無効化
+    //float selfShadowThreshold = 0.9f; 
+    //if(dot(psIn.normal,dirDirection) > selfShadowThreshold)
+    //{
+    //    return shadowAttn;
+    //}
+    
+    ////キャラクターのY座標が特定の範囲にある場合、影を無効化
+    //if (psIn.worldPos.y > 22.0f)
+    //{
+    //    //影を適用しない
+    //    return shadowAttn;
+    //}
+    
     //ライトビュースクリーン空間からUV空間に座標返還
     float2 shadowMapUV = psIn.posInLVP.xy / psIn.posInLVP.w;
     shadowMapUV *= float2(0.5f, -0.5f);
@@ -560,23 +578,34 @@ float3 CalcShadowMap(SPSIn psIn)
     
     //ライトビュースクリーン空間でのＺ値を計算する
     float zInLVP = psIn.posInLVP.z / psIn.posInLVP.w;
+    zInLVP -= 0.000001f;
     
     //UV座標を使ってシャドウマップから影情報をサンプリング
     float3 shadowMap = 1.0f;
-    if (shadowMapUV.x > 0.0f && shadowMapUV.x < 1.0f && shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f)
+    
+    if (shadowMapUV.x > 0.0f && shadowMapUV.x < 1.0f 
+        && shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f)
     {
         //shadowMap = g_shadowMap.Sample(g_sampler, shadowMapUV);
         //シャドウマップに書き込まれているZ値と比較
-        //計算したＵＶ座標を使って、シャドウマップから深度値をサンプリング
+        //計算したUV座標を使って、シャドウマップから深度値をサンプリング
         float zInShadowMap = g_shadowMap.Sample(g_sampler, shadowMapUV).r;
-        if(zInLVP>zInShadowMap)
+        //モデルの深度値（シャドウマップの深度値）とステージの深度値を比べて
+        //ステージの深度値がモデルの深度値よりも大きかったら影を落とす
+        if (zInLVP > zInShadowMap)
         {
             //隠蔽されている
-            color.xyz *= 0.5f;
+            shadowAttn *= 0.5f; //デフォルト値：0.5f
         }
+        // シャドウマップの境界に行くと影の減衰が弱くなるように補正をかける
+        float2 t = shadowMapUV - 0.5f; // uvを-0.5～0.5に変換する
+        t = pow(abs(t) / 0.5f, 0.8f);
+        shadowAttn = lerp(shadowAttn, 1.0f, t.x);
+        shadowAttn = lerp(shadowAttn, 1.0f, t.y);
+
     }
     
     //shadowMap = 0.2f;
     //return shadowMap;
-    return color;
+    return shadowAttn;
 }
