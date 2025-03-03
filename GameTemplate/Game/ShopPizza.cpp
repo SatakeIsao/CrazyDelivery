@@ -4,7 +4,7 @@
 
 namespace
 {
-	const Vector3	CHECKPOINT_SIZE = { 400.0f,200.0f,400.0f };
+	const Vector3	CHECKPOINT_SIZE = { 380.0f,200.0f,700.0f };
 	const float		COOLDOWN_TIME = 7.0f;
 	const float		MOVE_STOP_PIZZA = 1.5f; //PIZZA_LEFT_ENDPOS‚É“ž’B‚·‚éŽžŠÔ
 }

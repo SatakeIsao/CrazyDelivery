@@ -4,7 +4,7 @@
 
 namespace
 {
-	const Vector3 CHECKPOINT_SIZE = { 400.0f,200.0f,400.0f };
+	const Vector3 CHECKPOINT_SIZE = { 380.0f,200.0f,400.0f };
 	const float	  COOLDOWN_TIME = 7.0f;
 	const float		TRANSITION_TIME = 1.3f;	//HAMBURGER_LEFT_ENDPOS ‚É“ž’B‚·‚éŽžŠÔ‚ðÝ’è
 }
@@ -114,7 +114,7 @@ void ShopHamburger::EffectCoolTime()
 	if (m_effectCoolTimer >= 2.0f)
 	{
 		Vector3 effectPosition = m_position;
-		effectPosition.x += 130.0f;
+		effectPosition.x -= 100.0f;
 		effectPosition.y += 50.0f;
 		PlayEffect(enEffectName_ShopSushi, effectPosition, m_rotation, m_effectScale);
 

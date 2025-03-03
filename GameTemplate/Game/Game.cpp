@@ -279,7 +279,7 @@ void Game::Update()
 
 	//DeleteGOできるかのテスト
 	if (m_resultUI->GetIsResultEnd()
-	&& g_pad[0]->IsTrigger(enButtonA))
+	&& g_pad[0]->IsTrigger(enButtonB))
 	{
 		Fade* fade = NewGO<Fade>(0, "fade");
 		//フェードインを開始
