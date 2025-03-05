@@ -51,6 +51,7 @@
     <ClCompile Include="Path.cpp">
       <Filter>PathMove</Filter>
     </ClCompile>
+    <ClCompile Include="GameTitle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -96,5 +97,6 @@
     <ClInclude Include="Path.h">
       <Filter>PathMove</Filter>
     </ClInclude>
+    <ClInclude Include="GameTitle.h" />
   </ItemGroup>
 </Project>

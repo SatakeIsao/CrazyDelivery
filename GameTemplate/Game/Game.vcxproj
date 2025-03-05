@@ -239,6 +239,7 @@
     <ClCompile Include="GameInformation.cpp" />
     <ClCompile Include="GameSound.cpp" />
     <ClCompile Include="GameTimer.cpp" />
+    <ClCompile Include="GameTitle.cpp" />
     <ClCompile Include="InventoryUI.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MakeEffect.cpp" />
@@ -281,6 +282,7 @@
     <ClInclude Include="GameInformation.h" />
     <ClInclude Include="GameSound.h" />
     <ClInclude Include="GameTimer.h" />
+    <ClInclude Include="GameTitle.h" />
     <ClInclude Include="ICustomerManState.h" />
     <ClInclude Include="InventoryUI.h" />
     <ClInclude Include="IPlayerState.h" />
