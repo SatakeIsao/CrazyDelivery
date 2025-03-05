@@ -9,7 +9,6 @@
 #include "ShopHamburger.h"
 #include "ShopPizza.h"
 #include "ShopSushi.h"
-#include "CustomerMan.h"
 #include "CustomerMan_Hamburger.h"
 #include "CustomerMan_Pizza.h"
 #include "CustomerMan_Sushi.h"
@@ -18,6 +17,7 @@
 #include "Fade.h"
 #include "Path.h"
 #include "PathStorage.h"
+#include "GameTitle.h"
 
 Game::Game()
 {
@@ -277,26 +277,41 @@ void Game::Update()
 	//タイマー終了処理
 	FinishTimer();
 
-	//DeleteGOできるかのテスト
-	if (m_resultUI->GetIsResultEnd()
+	//制限時間が０で、リザルトUIが終了したらタイトルに戻る処理
+	if (m_gameTimer->GetIsTimerEnd()
+		&& m_resultUI->GetIsResultEnd()
 	&& g_pad[0]->IsTrigger(enButtonB))
 	{
 		Fade* fade = NewGO<Fade>(0, "fade");
 		//フェードインを開始
-		fade->StartFadeIn();
+		fade->StartFadeOut();
 		//フェードアウト完了時の処理を設定
 		fade->SetOnFadeOutComplete([this]()
 		{
-			//ゲームクラスを削除
-			DeleteGO(this);
+			//フェードアウト完了後にタイトルを表示(既に存在していないかチェック)
+			if (FindGO<GameTitle>("gameTitle") == nullptr)
+			{
+				NewGO<GameTitle>(0, "gameTitle");
+				//ゲームクラスを削除
+				DeleteGO(this);
+			}
+			
+			
 		});
 		
 	}
 
 	//スコアパネルのスライド処理
-	if (g_pad[0]->IsTrigger(enButtonB)) {
+	if (g_pad[0]->IsTrigger(enButtonB)
+		&& !m_gameTimer->GetIsTimerEnd()) {
 		//スコアボードの位置を変更
 		NextScorePosState();
+
+		if (m_resultUI)
+		{
+			//リザルトUIのスライド処理を開始
+			m_resultUI->NextResultPosState();
+		}
 	}
 
 	//スライドパネルのスライド処理

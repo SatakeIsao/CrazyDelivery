@@ -13,6 +13,13 @@ bool Fade::Start()
 	m_fadeSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_fadeSpriteAlpha });
 	m_fadeSprite.Update();
 
+	//ロードUIの初期化
+	m_loadSprite.Init("Assets/Sprite/Load/loading.dds", 1760.0f, 990.0f);
+	m_loadSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_fadeSpriteAlpha });
+	m_loadSprite.SetScale(0.5f);
+	m_loadSprite.SetPosition(Vector3(700.0f,-380.0f,0.0f));
+	
+	//m_loadSprite.SetRotation()
 
 	return true;
 }
@@ -20,13 +27,26 @@ bool Fade::Start()
 void Fade::Update()
 {
 	
+
 	CalcFadeAlpha();
+	CalcRotation();
 	
 	m_fadeSprite.Update();
+	m_loadSprite.Update();
 }
 
 void Fade::CalcRotation()
 {
+	//回転処理
+	m_rotLoad += 3.0f;
+	if (m_rotLoad >= 360.0f)
+	{
+		m_rotLoad = 0.0f;
+	}
+
+	m_loadRot.SetRotationDegZ(m_rotLoad);
+
+	m_loadSprite.SetRotation(m_loadRot);
 }
 
 void Fade::CalcFadeAlpha()
@@ -48,7 +68,7 @@ void Fade::CalcFadeAlpha()
 					//通知を実行
 					m_onFadeOutComplete();
 					//ゲームクラスを生成
-					MakeGame();
+					//MakeGame();
 				}
 				
 			}
@@ -68,6 +88,7 @@ void Fade::CalcFadeAlpha()
 	}
 
 	m_fadeSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_fadeSpriteAlpha });
+	m_loadSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_fadeSpriteAlpha });
 }
 
 void Fade::MakeGame()
@@ -85,6 +106,7 @@ void Fade::MakeGame()
 void Fade::Render(RenderContext& rc)
 {
 	m_fadeSprite.Draw(rc);
+	m_loadSprite.Draw(rc);
 }
 
 void Fade::SetOnFadeOutComplete(std::function<void()> callback)

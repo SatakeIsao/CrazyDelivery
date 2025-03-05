@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "GameSound.h"
 #include "Fade.h"
+#include "GameTitle.h"
 
 namespace
 {
@@ -100,12 +101,31 @@ bool ResultUI::Start()
 
 void ResultUI::Update()
 {
-	//Bボタン押されたら
-	if (g_pad[0]->IsTrigger(enButtonB)) {
+	//リザルトUIが表示された後、Bボタン押されたらタイトルに戻る
+	if (g_pad[0]->IsTrigger(enButtonB)
+		&& m_gameTimer->GetIsTimerEnd()) {
 		//次の座標状態に変更
 		NextResultPosState();
 		//縮小ステートに変更
 		//m_finishScaleState = Scale_Small;
+
+		Fade* fade = NewGO<Fade>(0, "fade");
+
+		// フェードアウト開始
+		fade->StartFadeOut();
+
+		// フェードアウト完了時に `Game` クラスを生成
+		fade->SetOnFadeOutComplete([this]()
+		{
+			if (FindGO<GameTitle>("gameTitle") == nullptr)
+			{
+				NewGO<GameTitle>(0, "gameTitle");
+			}
+			// タイトル画面の削除
+			DeleteGO(this);
+		});
+
+		
 	}
 
 	//ゲームタイマーが終了していて
