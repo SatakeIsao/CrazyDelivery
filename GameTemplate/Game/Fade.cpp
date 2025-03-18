@@ -38,8 +38,8 @@ void Fade::Update()
 void Fade::CalcRotation()
 {
 	//‰ñ“]ˆ—
-	m_rotLoad += 3.0f;
-	if (m_rotLoad >= 360.0f)
+	m_rotLoad -= 3.0f;
+	if (m_rotLoad >= 0.0f)
 	{
 		m_rotLoad = 0.0f;
 	}

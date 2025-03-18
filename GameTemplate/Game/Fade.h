@@ -36,7 +36,7 @@ private:
 	SpriteRender m_fadeSprite;					//フェード用スプライト
 	SpriteRender m_loadSprite;					//ロード用スプライト
 	float m_fadeSpriteAlpha = 0.0f;				//フェード用のアルファ値
-	float m_rotLoad = 0.0f;
+	float m_rotLoad = 360.0f;
 	Quaternion m_loadRot;
 	bool m_isFadeStart = true;					//フェードが開始されたか	
 	bool m_isFadeComplete = false;				//真っ暗になったか
