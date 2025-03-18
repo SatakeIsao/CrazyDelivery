@@ -4,7 +4,7 @@
 
 namespace
 {
-	const Vector3	CHECKPOINT_SIZE = { 380.0f,200.0f,700.0f };
+	const Vector3	CHECKPOINT_SIZE = { 478.0f,200.0f,428.0f };
 	const float		COOLDOWN_TIME = 7.0f;
 	const float		MOVE_STOP_PIZZA = 1.5f; //PIZZA_LEFT_ENDPOSに到達する時間
 }
@@ -39,11 +39,11 @@ void ShopPizza::Init()
 	//コリジョンオブジェクトが自動で削除されないようにする
 	m_collision[0]->SetIsEnableAutoDelete(false);
 	//お店のUI
-	m_shopPizzaUI.Init("Assets/MapData/ShopPizzaUI.dds", 224, 150);
+	m_shopPizzaUI.Init("Assets/Sprite/UI/ShopUI_Pizza.dds", 224, 150);
 
-	m_shopPizzaX_UI.Init("Assets/MapData/ShopPizzaXUI.dds", 224, 150);
+	m_shopPizzaX_UI.Init("Assets/Sprite/UI/ShopUI_Pizza_SoldOut.dds", 224, 150);
 
-	m_shopPizzaGrayUI.Init("Assets/MapData/ShopPizzaGrayUI.dds", 224, 150);
+	m_shopPizzaGrayUI.Init("Assets/Sprite/UI/ShopUI_Pizza_Gray.dds", 224, 150);
 }
 
 
@@ -52,7 +52,7 @@ void ShopPizza::Update()
 	//お店の前方向に画像を表示したいのでX値、Y値を調整
 	Vector3 pos = m_position;
 	pos.x += 180.0f;
-	pos.y += 90.0f;
+	pos.y += 100.0f;
 	//ワールド座標からスクリーン座標を計算
 	g_camera3D->CalcScreenPositionFromWorldPosition(m_shopPizzaUIPos, pos);
 	m_shopPizzaUI.SetPosition(Vector3(m_shopPizzaUIPos.x, m_shopPizzaUIPos.y, 0.0f));
@@ -132,9 +132,9 @@ void ShopPizza::EffectCoolTime()
 	if (m_effectCoolTimer >= 2.0f)
 	{
 		Vector3 effectPosition = m_position;
-		effectPosition.x -= 130.0f;
+		effectPosition.x += 100.0f;
 		effectPosition.y += 50.0f;
-		PlayEffect(enEffectName_ShopSushi, effectPosition, m_rotation, m_effectScale);
+		PlayEffect(enEffectName_Shop, effectPosition, m_rotation, m_effectScale);
 		//タイマーをリセット
 		m_effectCoolTimer = 0.0f;
 	}

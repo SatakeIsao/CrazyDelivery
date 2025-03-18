@@ -50,106 +50,106 @@ bool InventoryUI::Start()
 	m_customerMan_Sushi = FindGOs<CustomerMan_Sushi>("customerman_sushi");
 	auto* m_customerMan_SushiB = FindGO<CustomerMan_Sushi>("customerMan_sushiB");
 
-	//テスト用ハンバーガースプライトの初期化
-	m_humburgerSp.Init("Assets/modelData/hamburger2.DDS", 50.0f, 50.0f);
+	//ハンバーガースプライトの初期化(色付き2つ)
+	m_humburgerSp.Init("Assets/Sprite/UI/Inventory/InventoryUI_Hamburger.DDS", 50.0f, 50.0f);
 	m_humburgerSp.SetPosition(Vector3(400.0f, 270.0f, 0.0f));
 	m_humburgerSp.SetScale(2.0f);
 	m_humburgerSp.Update();
-	//ハンバーガー
-	m_humburgerGrayHalf.Init("Assets/modelData/hamburger2_gray1.DDS", 50.0f, 50.0f);
+	//ハンバーガースプライトの初期化(色付き & グレー)
+	m_humburgerGrayHalf.Init("Assets/Sprite/UI/Inventory/InventoryUI_Hamburger_GrayHalf.DDS", 50.0f, 50.0f);
 	m_humburgerGrayHalf.SetPosition(m_humburgerSp.GetPosition());
 	m_humburgerGrayHalf.SetScale(2.0f);
 	m_humburgerGrayHalf.Update();
-	//テスト用ハンバーガーグレースプライトの初期化
-	m_humburgerGrayAll.Init("Assets/modelData/hamburger2_gray2.DDS", 50.0f, 50.0f);
+	//ハンバーガースプライトの初期化(グレー2つ)
+	m_humburgerGrayAll.Init("Assets/Sprite/UI/Inventory/InventoryUI_Hamburger_GrayAll.DDS", 50.0f, 50.0f);
 	m_humburgerGrayAll.SetPosition(m_humburgerSp.GetPosition());
 	m_humburgerGrayAll.SetScale(m_scale);
 	m_humburgerGrayAll.SetMulColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 	m_humburgerGrayAll.Update();
-	//テスト用ピザスプライトの初期化
-	m_pizzaSp.Init("Assets/modelData/pizza2.DDS", 50.0f, 50.0f);
+	//ピザスプライトの初期化(色付き2つ)
+	m_pizzaSp.Init("Assets/Sprite/UI/Inventory/InventoryUI_Pizza.DDS", 50.0f, 50.0f);
 	m_pizzaSp.SetPosition(Vector3(550.0f, 270.0f, 0.0f));
 	m_pizzaSp.SetScale(2.0f);
 	m_pizzaSp.Update();
-	//テスト用ピザグレースプライトの初期化
-	m_pizzaGrayHalf.Init("Assets/modelData/pizza2_gray1.DDS", 50.0f, 50.0f);
+	//ピザスプライトの初期化(色付き & グレー)
+	m_pizzaGrayHalf.Init("Assets/Sprite/UI/Inventory/InventoryUI_Pizza_GrayHalf.DDS", 50.0f, 50.0f);
 	m_pizzaGrayHalf.SetPosition(m_pizzaSp.GetPosition());
 	m_pizzaGrayHalf.SetScale(2.0);
 	m_pizzaGrayHalf.Update();
-	//テスト用ピザグレースプライトの初期化
-	m_pizzaGrayAll.Init("Assets/modelData/pizza2_gray2.DDS", 50.0f, 50.0f);
+	//ピザスプライトの初期化(グレー2つ)
+	m_pizzaGrayAll.Init("Assets/Sprite/UI/Inventory/InventoryUI_Pizza_GrayAll.DDS", 50.0f, 50.0f);
 	m_pizzaGrayAll.SetPosition(m_pizzaSp.GetPosition());
 	m_pizzaGrayAll.SetScale(m_scale);
 	m_pizzaGrayAll.SetMulColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 	m_pizzaGrayAll.Update();
-	//テスト用寿司スプライトの初期化
-	m_sushiSp.Init("Assets/modelData/sushi2.DDS", 50.0f, 50.0f);
+	//寿司スプライトの初期化(色付き2つ)
+	m_sushiSp.Init("Assets/Sprite/UI/Inventory/InventoryUI_Sushi.DDS", 50.0f, 50.0f);
 	m_sushiSp.SetPosition(Vector3(700.0f, 270.0f, 0.0f));
 	m_sushiSp.SetScale(2.0f);
 	m_sushiSp.Update();
-	//テスト用寿司グレースプライトの初期化
-	m_sushiGrayHalf.Init("Assets/modelData/sushi2_gray1.DDS", 50.0f, 50.0f);
+	//寿司スプライトの初期化(色付き & グレー)
+	m_sushiGrayHalf.Init("Assets/Sprite/UI/Inventory/InventoryUI_Sushi_GrayHalf.DDS", 50.0f, 50.0f);
 	m_sushiGrayHalf.SetPosition(m_sushiSp.GetPosition());
 	m_sushiGrayHalf.SetScale(2.0f);
 	m_sushiGrayHalf.Update();
-	//テスト用寿司グレースプライトの初期化
-	m_sushiGrayAll.Init("Assets/modelData/sushi2_gray2.DDS", 50.0f, 50.0f);
+	//寿司スプライトの初期化(グレー2つ)
+	m_sushiGrayAll.Init("Assets/Sprite/UI/Inventory/InventoryUI_Sushi_GrayAll.DDS", 50.0f, 50.0f);
 	m_sushiGrayAll.SetPosition(m_sushiSp.GetPosition());
 	m_sushiGrayAll.SetScale(m_scale);
 	m_sushiGrayAll.SetMulColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 	m_sushiGrayAll.Update();
-	//IGotの板
-	m_gotPlane.m_reSprite.Init("Assets/skaterData/PlayerUI_Get3.dds", 1920.0f, 1080.0f);
+	//調達時の板スプライトの初期化
+	m_gotPlane.m_reSprite.Init("Assets/Sprite/UI/GetUI_Base.dds", 1920.0f, 1080.0f);
 	m_gotPlane.m_position = MONEY_PLANE_STARTPOS;
 	m_gotPlane.m_reSprite.SetPosition(m_gotPlane.m_position);
 	m_gotPlane.m_reSprite.SetScale(1.0f);
 	m_gotPlane.m_reSprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
 	m_gotPlane.m_reSprite.Update();
 
-	//ハンバーガー
-	m_gotHamburger.m_foodSprite.Init("Assets/skaterData/hamburgerGet.dds", 1920.0f, 1080.0f);
+	//調達時のハンバーガースプライトの初期化
+	m_gotHamburger.m_foodSprite.Init("Assets/Sprite/UI/GetUI_Hamburger.dds", 1920.0f, 1080.0f);
 	m_gotHamburger.m_foodPos = MONEY_PLANE_STARTPOS;
 	m_gotHamburger.m_foodSprite.SetPosition(m_gotPlane.m_position);
 	m_gotHamburger.m_foodSprite.SetScale(1.0f);
 	m_gotHamburger.m_foodSprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
 	m_gotHamburger.m_foodSprite.Update();
 
-	//ピザ
-	m_gotPizza.m_foodSprite.Init("Assets/skaterData/pizzaGet.dds", 1920.0f, 1080.0f);
+	//調達時のピザスプライトの初期化
+	m_gotPizza.m_foodSprite.Init("Assets/Sprite/UI/GetUI_Pizza.dds", 1920.0f, 1080.0f);
 	m_gotPizza.m_foodPos = MONEY_PLANE_STARTPOS;
 	m_gotPizza.m_foodSprite.SetPosition(m_gotPlane.m_position);
 	m_gotPizza.m_foodSprite.SetScale(1.0f);
 	m_gotPizza.m_foodSprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
 	m_gotPizza.m_foodSprite.Update();
 	
-	//寿司
-	m_gotSushi.m_foodSprite.Init("Assets/skaterData/sushiGet.dds", 1920.0f, 1080.0f);
+	//調達時の寿司スプライトの初期化
+	m_gotSushi.m_foodSprite.Init("Assets/Sprite/UI/GetUI_Sushi.dds", 1920.0f, 1080.0f);
 	m_gotSushi.m_foodPos = MONEY_PLANE_STARTPOS;
 	m_gotSushi.m_foodSprite.SetPosition(m_gotPlane.m_position);
 	m_gotSushi.m_foodSprite.SetScale(1.0f);
 	m_gotSushi.m_foodSprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
 	m_gotSushi.m_foodSprite.Update();
 
-	//報酬をもらった時の板
-	m_reward150.m_reSprite.Init("Assets/skaterData/Reward150_2UI.dds", 1920.0f, 1080.0f);
+	//報酬時の150ドルスプライトの初期化
+	m_reward150.m_reSprite.Init("Assets/Sprite/UI/GetUI_Reward150.dds", 1920.0f, 1080.0f);
 	m_reward150.m_reSprite.SetPosition(MONEY_PLANE_STARTPOS);
 	m_reward150.m_reSprite.SetScale(1.0f);
 	m_reward150.m_reSprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
 	m_reward150.m_reSprite.Update();
-	//報酬200
-	m_reward200.m_reSprite.Init("Assets/skaterData/Reward200_2UI.dds", 1920.0f, 1080.0f);
+	//報酬時の200ドルスプライトの初期化
+	m_reward200.m_reSprite.Init("Assets/Sprite/UI/GetUI_Reward200.dds", 1920.0f, 1080.0f);
 	m_reward200.m_reSprite.SetPosition(MONEY_PLANE_STARTPOS);
 	m_reward200.m_reSprite.SetScale(1.0f);
 	m_reward200.m_reSprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
 	m_reward200.m_reSprite.Update();
-	//報酬500
-	m_reward500.m_reSprite.Init("Assets/skaterData/Reward500_2UI.dds", 1920.0f, 1080.0f);
+	//報酬時の500ドルスプライトの初期化
+	m_reward500.m_reSprite.Init("Assets/Sprite/UI/GetUI_Reward500.dds", 1920.0f, 1080.0f);
 	m_reward500.m_reSprite.SetPosition(MONEY_PLANE_STARTPOS);
 	m_reward500.m_reSprite.SetScale(1.0f);
 	m_reward500.m_reSprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
 	m_reward500.m_reSprite.Update();
-
-	m_soldOut.m_reSprite.Init("Assets/skaterData/SoldOutUI.dds", 1920.0f, 1080.0f);
+	//売り切れ時のスプライトの初期化
+	m_soldOut.m_reSprite.Init("Assets/Sprite/UI/GetUI_Soldout.dds", 1920.0f, 1080.0f);
 	m_soldOut.m_reSprite.SetPosition(MONEY_PLANE_STARTPOS);
 	m_soldOut.m_reSprite.SetScale(1.0f);
 	m_soldOut.m_reSprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });

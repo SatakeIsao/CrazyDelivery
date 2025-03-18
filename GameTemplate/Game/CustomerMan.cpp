@@ -55,16 +55,16 @@ bool CustomerMan::Start()
 void CustomerMan::InitCustomerManAnimClips()
 {
 	//待機のアニメーション
-	m_manAnimClips[enAnimClip_Idle].Load("Assets/Customer/Man2/man_idle.tka");
+	m_manAnimClips[enAnimClip_Idle].Load("Assets/AnimData/Customer/Man_Idle.tka");
 	m_manAnimClips[enAnimClip_Idle].SetLoopFlag(true);
 	//手を振るアニメーション
-	m_manAnimClips[enAnimClip_Hand].Load("Assets/Customer/Man2/man_hand.tka");
+	m_manAnimClips[enAnimClip_Hand].Load("Assets/AnimData/Customer/Man_Hand.tka");
 	m_manAnimClips[enAnimClip_Hand].SetLoopFlag(true);
 	//嬉しいときのアニメーション
-	m_manAnimClips[enAnimClip_Happy].Load("Assets/Customer/Man2/man_happy.tka");
+	m_manAnimClips[enAnimClip_Happy].Load("Assets/AnimData/Customer/Man_Happy.tka");
 	m_manAnimClips[enAnimClip_Happy].SetLoopFlag(false);
 	//失敗した時のアニメーション
-	m_manAnimClips[enAnimClip_Failure].Load("Assets/Customer/Man2/man_failure.tka");
+	m_manAnimClips[enAnimClip_Failure].Load("Assets/AnimData/Customer/Man_Failure.tka");
 	m_manAnimClips[enAnimClip_Failure].SetLoopFlag(false);
 }
 

@@ -79,106 +79,106 @@ void GameTimer::Update()
 void GameTimer::GameTimerInit()
 {
 	//分数スプライトの初期化
-	m_timerSprite0.Init("Assets/TimerFontData/TimerFont_0.DDS", 200.0f, 200.0f);
+	m_timerSprite0.Init("Assets/Sprite/TimerFont/TimerFont_0.DDS", 200.0f, 200.0f);
 	m_timerSprite0.SetPosition(TIMER_INITAL_POS);
 	m_timerSprite0.Update();
 
-	m_timerSprite1.Init("Assets/TimerFontData/TimerFont_1.DDS", 200.0f, 200.0f);
+	m_timerSprite1.Init("Assets/Sprite/TimerFont/TimerFont_1.DDS", 200.0f, 200.0f);
 	m_timerSprite1.SetPosition(TIMER_INITAL_POS);
 	m_timerSprite1.Update();
 
-	m_timerSprite2.Init("Assets/TimerFontData/TimerFont_2.DDS", 200.0f, 200.0f);
+	m_timerSprite2.Init("Assets/Sprite/TimerFont/TimerFont_2.DDS", 200.0f, 200.0f);
 	m_timerSprite2.SetPosition(TIMER_INITAL_POS);
 	m_timerSprite2.Update();
 
-	m_timerSprite3.Init("Assets/TimerFontData/TimerFont_3.DDS", 200.0f, 200.0f);
+	m_timerSprite3.Init("Assets/Sprite/TimerFont/TimerFont_3.DDS", 200.0f, 200.0f);
 	m_timerSprite3.SetPosition(TIMER_INITAL_POS);
 	m_timerSprite3.Update();
 
 	//タイマー用コロンスプライトの初期化
-	m_timerColon.Init("Assets/TimerFontData/TimerFont_koron.DDS", 400.0f, 200.0f);
+	m_timerColon.Init("Assets/Sprite/TimerFont/TimerFont_koron.DDS", 400.0f, 200.0f);
 	m_timerColon.SetPosition(TIMER_INITAL_POS + COLON_OFFSET);
 	m_timerColon.Update();
 
 	//秒数（左側）スプライトの初期化
-	m_secondsLeft0.Init("Assets/TimerFontData/TimerFont_0.DDS", 200.0f, 200.0f);
+	m_secondsLeft0.Init("Assets/Sprite/TimerFont/TimerFont_0.DDS", 200.0f, 200.0f);
 	m_secondsLeft0.SetPosition(TIMER_INITAL_POS + SECONDS_LEFT_OFFSET);
 	m_secondsLeft0.Update();
 
-	m_secondsLeft1.Init("Assets/TimerFontData/TimerFont_1.DDS", 200.0f, 200.0f);
+	m_secondsLeft1.Init("Assets/Sprite/TimerFont/TimerFont_1.DDS", 200.0f, 200.0f);
 	m_secondsLeft1.SetPosition(TIMER_INITAL_POS + SECONDS_LEFT_OFFSET);
 	m_secondsLeft1.Update();
 
-	m_secondsLeft2.Init("Assets/TimerFontData/TimerFont_2.DDS", 200.0f, 200.0f);
+	m_secondsLeft2.Init("Assets/Sprite/TimerFont/TimerFont_2.DDS", 200.0f, 200.0f);
 	m_secondsLeft2.SetPosition(TIMER_INITAL_POS + SECONDS_LEFT_OFFSET);
 	m_secondsLeft2.Update();
 
-	m_secondsLeft3.Init("Assets/TimerFontData/TimerFont_3.DDS", 200.0f, 200.0f);
+	m_secondsLeft3.Init("Assets/Sprite/TimerFont/TimerFont_3.DDS", 200.0f, 200.0f);
 	m_secondsLeft3.SetPosition(TIMER_INITAL_POS + SECONDS_LEFT_OFFSET);
 	m_secondsLeft3.Update();
 
-	m_secondsLeft4.Init("Assets/TimerFontData/TimerFont_4.DDS", 200.0f, 200.0f);
+	m_secondsLeft4.Init("Assets/Sprite/TimerFont/TimerFont_4.DDS", 200.0f, 200.0f);
 	m_secondsLeft4.SetPosition(TIMER_INITAL_POS + SECONDS_LEFT_OFFSET);
 	m_secondsLeft4.Update();
 
-	m_secondsLeft5.Init("Assets/TimerFontData/TimerFont_5.DDS", 200.0f, 200.0f);
+	m_secondsLeft5.Init("Assets/Sprite/TimerFont/TimerFont_5.DDS", 200.0f, 200.0f);
 	m_secondsLeft5.SetPosition(TIMER_INITAL_POS + SECONDS_LEFT_OFFSET);
 	m_secondsLeft5.Update();
 
-	m_secondsLeft6.Init("Assets/TimerFontData/TimerFont_6.DDS", 200.0f, 200.0f);
+	m_secondsLeft6.Init("Assets/Sprite/TimerFont/TimerFont_6.DDS", 200.0f, 200.0f);
 	m_secondsLeft6.SetPosition(TIMER_INITAL_POS + SECONDS_LEFT_OFFSET);
 	m_secondsLeft6.Update();
 
-	m_secondsLeft7.Init("Assets/TimerFontData/TimerFont_7.DDS", 200.0f, 200.0f);
+	m_secondsLeft7.Init("Assets/Sprite/TimerFont/TimerFont_7.DDS", 200.0f, 200.0f);
 	m_secondsLeft7.SetPosition(TIMER_INITAL_POS + SECONDS_LEFT_OFFSET);
 	m_secondsLeft7.Update();
 
-	m_secondsLeft8.Init("Assets/TimerFontData/TimerFont_8.DDS", 200.0f, 200.0f);
+	m_secondsLeft8.Init("Assets/Sprite/TimerFont/TimerFont_8.DDS", 200.0f, 200.0f);
 	m_secondsLeft8.SetPosition(TIMER_INITAL_POS + SECONDS_LEFT_OFFSET);
 	m_secondsLeft8.Update();
 
-	m_secondsLeft9.Init("Assets/TimerFontData/TimerFont_9.DDS", 200.0f, 200.0f);
+	m_secondsLeft9.Init("Assets/Sprite/TimerFont/TimerFont_9.DDS", 200.0f, 200.0f);
 	m_secondsLeft9.SetPosition(TIMER_INITAL_POS + SECONDS_LEFT_OFFSET);
 	m_secondsLeft9.Update();
 
 	//秒数（右側）スプライトの初期化
-	m_secondRight0.Init("Assets/TimerFontData/TimerFont_0.DDS", 200.0f, 200.0f);
+	m_secondRight0.Init("Assets/Sprite/TimerFont/TimerFont_0.DDS", 200.0f, 200.0f);
 	m_secondRight0.SetPosition(TIMER_INITAL_POS + SECONDS_RIGHT_OFFSET);
 	m_secondRight0.Update();
 
-	m_secondRight1.Init("Assets/TimerFontData/TimerFont_1.DDS", 200.0f, 200.0f);
+	m_secondRight1.Init("Assets/Sprite/TimerFont/TimerFont_1.DDS", 200.0f, 200.0f);
 	m_secondRight1.SetPosition(TIMER_INITAL_POS + SECONDS_RIGHT_OFFSET);
 	m_secondRight1.Update();
 
-	m_secondRight2.Init("Assets/TimerFontData/TimerFont_2.DDS", 200.0f, 200.0f);
+	m_secondRight2.Init("Assets/Sprite/TimerFont/TimerFont_2.DDS", 200.0f, 200.0f);
 	m_secondRight2.SetPosition(TIMER_INITAL_POS + SECONDS_RIGHT_OFFSET);
 	m_secondRight2.Update();
 
-	m_secondRight3.Init("Assets/TimerFontData/TimerFont_3.DDS", 200.0f, 200.0f);
+	m_secondRight3.Init("Assets/Sprite/TimerFont/TimerFont_3.DDS", 200.0f, 200.0f);
 	m_secondRight3.SetPosition(TIMER_INITAL_POS + SECONDS_RIGHT_OFFSET);
 	m_secondRight3.Update();
 
-	m_secondRight4.Init("Assets/TimerFontData/TimerFont_4.DDS", 200.0f, 200.0f);
+	m_secondRight4.Init("Assets/Sprite/TimerFont/TimerFont_4.DDS", 200.0f, 200.0f);
 	m_secondRight4.SetPosition(TIMER_INITAL_POS + SECONDS_RIGHT_OFFSET);
 	m_secondRight4.Update();
 
-	m_secondRight5.Init("Assets/TimerFontData/TimerFont_5.DDS", 200.0f, 200.0f);
+	m_secondRight5.Init("Assets/Sprite/TimerFont/TimerFont_5.DDS", 200.0f, 200.0f);
 	m_secondRight5.SetPosition(TIMER_INITAL_POS + SECONDS_RIGHT_OFFSET);
 	m_secondRight5.Update();
 
-	m_secondRight6.Init("Assets/TimerFontData/TimerFont_6.DDS", 200.0f, 200.0f);
+	m_secondRight6.Init("Assets/Sprite/TimerFont/TimerFont_6.DDS", 200.0f, 200.0f);
 	m_secondRight6.SetPosition(TIMER_INITAL_POS + SECONDS_RIGHT_OFFSET);
 	m_secondRight6.Update();
 
-	m_secondRight7.Init("Assets/TimerFontData/TimerFont_7.DDS", 200.0f, 200.0f);
+	m_secondRight7.Init("Assets/Sprite/TimerFont/TimerFont_7.DDS", 200.0f, 200.0f);
 	m_secondRight7.SetPosition(TIMER_INITAL_POS + SECONDS_RIGHT_OFFSET);
 	m_secondRight7.Update();
 
-	m_secondRight8.Init("Assets/TimerFontData/TimerFont_8.DDS", 200.0f, 200.0f);
+	m_secondRight8.Init("Assets/Sprite/TimerFont/TimerFont_8.DDS", 200.0f, 200.0f);
 	m_secondRight8.SetPosition(TIMER_INITAL_POS + SECONDS_RIGHT_OFFSET);
 	m_secondRight8.Update();
 
-	m_secondRight9.Init("Assets/TimerFontData/TimerFont_9.DDS", 200.0f, 200.0f);
+	m_secondRight9.Init("Assets/Sprite/TimerFont/TimerFont_9.DDS", 200.0f, 200.0f);
 	m_secondRight9.SetPosition(TIMER_INITAL_POS + SECONDS_RIGHT_OFFSET);
 	m_secondRight9.Update();
 	

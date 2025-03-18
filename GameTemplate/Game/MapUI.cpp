@@ -42,79 +42,79 @@ MapUI::~MapUI()
 bool MapUI::Start()
 {
 	//マップの黒い画像
-	m_spriteRender.Init("Assets/MapData/map.DDS", 400, 400);
+	m_spriteRender.Init("Assets/Sprite/MapData/Map_Base.DDS", 400, 400);
 	m_spriteRender.SetPosition(Vector3(-600.0f,-250.0f,0.0f));
 	m_spriteRender.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
 	m_spriteRender.Update();
 
 	//マップ中心の赤い画像
-	m_playerSprite.Init("Assets/MapData/mapPlayer.dds", 640, 360);
+	m_playerSprite.Init("Assets/Sprite/MapData/Map_Player.dds", 640, 360);
 	m_playerSprite.SetPosition(Vector3(-600.0f, -250.0f, 0.0f));
 	m_playerSprite.SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
 	m_playerSprite.Update();
 
 	//ハンバーガー店の画像
-	m_bargerShopSprite.Init("Assets/MapData/mapHamburger.dds", 1216, 684);
+	m_bargerShopSprite.Init("Assets/Sprite/MapData/Map_Hamburger.dds", 1216, 684);
 	m_bargerShopSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
-	m_bargerShopSprite2.Init("Assets/MapData/mapHamburger.dds", 1216, 684);
+	m_bargerShopSprite2.Init("Assets/MapData/Map_Hamburger.dds", 1216, 684);
 	m_bargerShopSprite2.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
 	
-	m_bargerShopGray.Init("Assets/MapData/mapHamburgerGray.dds", 1216, 684);
+	m_bargerShopGray.Init("Assets/Sprite/MapData/Map_Hamburger_Gray.dds", 1216, 684);
 	m_bargerShopGray.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
-	m_bargerShopGray2.Init("Assets/MapData/mapHamburgerGray.dds", 1216, 684);
+	m_bargerShopGray2.Init("Assets/Sprite/MapData/Map_Hamburger_Gray.dds", 1216, 684);
 	m_bargerShopGray2.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
 
-	m_bargerShopX.Init("Assets/MapData/mapHamburgerX.dds", 1216, 684);
+	m_bargerShopX.Init("Assets/Sprite/MapData/Map_Hamburger_SoldOut.dds", 1216, 684);
 	m_bargerShopX.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
-	m_bargerShopX2.Init("Assets/MapData/mapHamburgerX.dds", 1216, 684);
+	m_bargerShopX2.Init("Assets/Sprite/MapData/Map_Hamburger_SoldOut.dds", 1216, 684);
 	m_bargerShopX2.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
 
 	//ピザ店の画像
-	m_pizzaShopSprite.Init("Assets/MapData/mapPizza.dds", 1216, 684);
+	m_pizzaShopSprite.Init("Assets/Sprite/MapData/Map_Pizza.dds", 1216, 684);
 	m_pizzaShopSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
-	m_pizzaShopSprite2.Init("Assets/MapData/mapPizza.dds", 1216, 684);
+	m_pizzaShopSprite2.Init("Assets/Sprite/MapData/Map_Pizza.dds", 1216, 684);
 	m_pizzaShopSprite2.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
 
-	m_pizzaShopGray.Init("Assets/MapData/mapPizzaGray.dds", 1216, 684);
+	m_pizzaShopGray.Init("Assets/Sprite/MapData/Map_Pizza_Gray.dds", 1216, 684);
 	m_pizzaShopGray.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
-	m_pizzaShopGray2.Init("Assets/MapData/mapPizzaGray.dds", 1216, 684);
+	m_pizzaShopGray2.Init("Assets/Sprite/MapData/Map_Pizza_Gray.dds", 1216, 684);
 	m_pizzaShopGray2.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
 
-	m_pizzaShopX.Init("Assets/MapData/mapPizzaX.dds", 1216, 684);
+	m_pizzaShopX.Init("Assets/Sprite/MapData/Map_Pizza_SoldOut.dds", 1216, 684);
 	m_pizzaShopX.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
-	m_pizzaShopX2.Init("Assets/MapData/mapPizzaX.dds", 1216, 684);
+	m_pizzaShopX2.Init("Assets/Sprite/MapData/Map_Pizza_SoldOut.dds", 1216, 684);
 	m_pizzaShopX2.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
 
 	//寿司店の画像
-	m_sushiShopSprite.Init("Assets/MapData/mapSushi.dds", 1216, 684);
+	m_sushiShopSprite.Init("Assets/Sprite/MapData/Map_Sushi.dds", 1216, 684);
 	m_sushiShopSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
-	m_sushiShopSprite2.Init("Assets/MapData/mapSushi.dds", 1216, 684);
+	m_sushiShopSprite2.Init("Assets/Sprite/MapData/Map_Sushi.dds", 1216, 684);
 	m_sushiShopSprite2.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
 
-	m_sushiShopGray.Init("Assets/MapData/mapSushiGray.dds", 1216, 684);
+	m_sushiShopGray.Init("Assets/Sprite/MapData/Map_Sushi_Gray.dds", 1216, 684);
 	m_sushiShopGray.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
-	m_sushiShopGray2.Init("Assets/MapData/mapSushiGray.dds", 1216, 684);
+	m_sushiShopGray2.Init("Assets/Sprite/MapData/Map_Sushi_Gray.dds", 1216, 684);
 	m_sushiShopGray2.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
 
-	m_sushiShopX.Init("Assets/MapData/mapSushiX.dds", 1216, 684);
+	m_sushiShopX.Init("Assets/Sprite/MapData/Map_Sushi_SoldOut.dds", 1216, 684);
 	m_sushiShopX.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
-	m_sushiShopX2.Init("Assets/MapData/mapSushiX.dds", 1216, 684);
+	m_sushiShopX2.Init("Assets/Sprite/MapData/Map_Sushi_SoldOut.dds", 1216, 684);
 	m_sushiShopX2.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
 
 	//お客さんの画像
-	m_customerHamburgerSprite.Init("Assets/MapData/mapCustomer2.dds", 480, 270);
+	m_customerHamburgerSprite.Init("Assets/Sprite/MapData/Map_Customer.dds", 480, 270);
 	m_customerHamburgerSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
-	m_customerHamburgerSprite2.Init("Assets/MapData/mapCustomer2.dds", 480, 270);
+	m_customerHamburgerSprite2.Init("Assets/Sprite/MapData/Map_Customer.dds", 480, 270);
 	m_customerHamburgerSprite2.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
 	
-	m_customerPizzaSprite.Init("Assets/MapData/mapCustomer2.dds", 480, 270);
+	m_customerPizzaSprite.Init("Assets/Sprite/MapData/Map_Customer.dds", 480, 270);
 	m_customerPizzaSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
-	m_customerPizzaSprite2.Init("Assets/MapData/mapCustomer2.dds", 480, 270);
+	m_customerPizzaSprite2.Init("Assets/MapData/Map_Customer.dds", 480, 270);
 	m_customerPizzaSprite2.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
 	
-	m_customerSushiSprite.Init("Assets/MapData/mapCustomer2.dds", 480, 270);
+	m_customerSushiSprite.Init("Assets/Sprite/MapData/Map_Customer.dds", 480, 270);
 	m_customerSushiSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
-	m_customerSushiSprite2.Init("Assets/MapData/mapCustomer2.dds", 480, 270);
+	m_customerSushiSprite2.Init("Assets/Sprite/MapData/Map_Customer.dds", 480, 270);
 	m_customerSushiSprite2.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
 	
 	

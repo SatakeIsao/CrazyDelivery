@@ -2,16 +2,13 @@
 #include "Player.h"
 #include "IPlayerState.h"
 #include "PlayerIdleState.h"
-//#include "PlayerStartState.h"
-//#include "PlayerPushState.h"
-//#include "GameCamera.h"
-//#include "BackGround.h"
 #include "GameTimer.h"
 #include "Path.h"
 #include "PathStorage.h"
 #include <fstream>
 #include <iostream>
 #include "GameSound.h"
+
 
 namespace
 {
@@ -88,14 +85,14 @@ namespace nsPlayer
 	void Player::InitPlayerModels()
 	{
 		//プレイヤーモデルの初期化
-		m_playerModel.Init("Assets/skaterData/player.tkm", m_playerAnimClips, enAnimClip_Num, enModelUpAxisY,true,false);
+		m_playerModel.Init("Assets/ModelData/SkaterData/player.tkm", m_playerAnimClips, enAnimClip_Num, enModelUpAxisY,true,false);
 		m_playerModel.SetPosition(m_position);
 		m_playerModel.SetRotation(m_rotation);
 		m_playerModel.SetScale(m_scale);
 		m_playerModel.Update();
 
 		//ボードモデルの初期化
-		m_boardModel.Init("Assets/skaterData/board.tkm", m_boardAnimClips, enAnimClip_Num, enModelUpAxisY, true, false);
+		m_boardModel.Init("Assets/ModelData/SkaterData/board.tkm", m_boardAnimClips, enAnimClip_Num, enModelUpAxisY, true, false);
 		m_boardModel.SetPosition(m_position);
 		m_boardModel.SetRotation(m_rotation);
 		m_boardModel.SetScale(m_scale);
@@ -123,39 +120,39 @@ namespace nsPlayer
 	void Player::InitPlayerAnimationClips()
 	{
 		//待機のアニメーション
-		m_playerAnimClips[enAnimClip_Idle].Load("Assets/animData/skater/idle.tka");
+		m_playerAnimClips[enAnimClip_Idle].Load("Assets/AnimData/Player/Skater/idle.tka");
 		m_playerAnimClips[enAnimClip_Idle].SetLoopFlag(true);
-		m_boardAnimClips[enAnimClip_Idle].Load("Assets/animData/board/idle.tka");
+		m_boardAnimClips[enAnimClip_Idle].Load("Assets/AnimData/Player/Board/idle.tka");
 		m_boardAnimClips[enAnimClip_Idle].SetLoopFlag(true);
 
 		//スタートランのアニメーション
-		m_playerAnimClips[enAnimClip_Start].Load("Assets/animData/skater/start.tka");
+		m_playerAnimClips[enAnimClip_Start].Load("Assets/AnimData/Player/Skater/start.tka");
 		m_playerAnimClips[enAnimClip_Start].SetLoopFlag(false);
-		m_boardAnimClips[enAnimClip_Start].Load("Assets/animData/board/start.tka");
+		m_boardAnimClips[enAnimClip_Start].Load("Assets/AnimData/Player/Board/start.tka");
 		m_boardAnimClips[enAnimClip_Start].SetLoopFlag(false);
 
 		//地面を蹴る時のアニメーション
-		m_playerAnimClips[enAnimClip_Push].Load("Assets/animData/skater/push.tka");
+		m_playerAnimClips[enAnimClip_Push].Load("Assets/AnimData/Player/Skater/push.tka");
 		m_playerAnimClips[enAnimClip_Push].SetLoopFlag(false);
-		m_boardAnimClips[enAnimClip_Push].Load("Assets/animData/board/push2.tka");
+		m_boardAnimClips[enAnimClip_Push].Load("Assets/AnimData/Player/Board/push2.tka");
 		m_boardAnimClips[enAnimClip_Push].SetLoopFlag(false);
 
 		//走っている時のアニメーション
-		m_playerAnimClips[enAnimClip_Run].Load("Assets/animData/skater/run.tka");
+		m_playerAnimClips[enAnimClip_Run].Load("Assets/AnimData/Player/Skater/run.tka");
 		m_playerAnimClips[enAnimClip_Run].SetLoopFlag(false);
-		m_boardAnimClips[enAnimClip_Run].Load("Assets/animData/board/push2.tka");
+		m_boardAnimClips[enAnimClip_Run].Load("Assets/AnimData/Player/Board/push2.tka");
 		m_boardAnimClips[enAnimClip_Run].SetLoopFlag(false);
 
 		//ジャンプする時のアニメーション
-		m_playerAnimClips[enAnimClip_Jump].Load("Assets/animData/skater/jumpFast.tka");
+		m_playerAnimClips[enAnimClip_Jump].Load("Assets/AnimData/Player/Skater/jumpFast.tka");
 		m_playerAnimClips[enAnimClip_Jump].SetLoopFlag(false);
-		m_boardAnimClips[enAnimClip_Jump].Load("Assets/animData/board/jumpFast.tka");
+		m_boardAnimClips[enAnimClip_Jump].Load("Assets/AnimData/Player/Board/jumpFast.tka");
 		m_boardAnimClips[enAnimClip_Jump].SetLoopFlag(false);
 
 		//ドリフトする時のアニメーション
-		m_playerAnimClips[enAnimClip_Drift].Load("Assets/animData/skater/drift.tka");
+		m_playerAnimClips[enAnimClip_Drift].Load("Assets/AnimData/Player/Skater/drift.tka");
 		m_playerAnimClips[enAnimClip_Drift].SetLoopFlag(false);
-		m_boardAnimClips[enAnimClip_Drift].Load("Assets/animData/board/drift.tka");
+		m_boardAnimClips[enAnimClip_Drift].Load("Assets/AnimData/Player/Board/drift.tka");
 		m_boardAnimClips[enAnimClip_Drift].SetLoopFlag(false);
 	}
 
@@ -175,6 +172,8 @@ namespace nsPlayer
 
 		
 	}
+
+	
 
 	void Player::MoveAlongPath()
 	{
@@ -386,6 +385,13 @@ namespace nsPlayer
 			float startDistance = (m_position - startPos).Length();
 			float endDistance = (m_position - endPos).Length();
 
+			
+
+			/*if (dot >= 0)
+			{
+
+			}*/
+
 		//	// **Path_00_00 に一定距離内で近づいたら開始**
 		//	if (startDistance < endDistance)
 		//	{
@@ -425,13 +431,20 @@ namespace nsPlayer
 				}
 				nearestPathID = i;
 				nearestPath = path;
+
+				//パスの前方向ベクトルを計算
+				Vector3 pathForwardVec = points[1].position - points[0].position;
+				pathForwardVec.Normalize();
+
+				m_forwardDotPath = m_forward.Dot(pathForwardVec);
 			}
 		}
 
 
 		//近くにスロープの Path (Path_00_00) がある場合、プレイヤーをスロープモードに設定
-		if (nearestPath && 
-			(m_slopePathID == -1|| m_slopePathID != nearestPathID))
+		if (m_forwardDotPath >= 0
+			&&nearestPath 
+			&& (m_slopePathID == -1|| m_slopePathID != nearestPathID))
 		{
 			SetPath(nearestPath);
 			m_slopePathID = nearestPathID;
@@ -578,6 +591,9 @@ namespace nsPlayer
 			if (m_acceleDelayTime == 0.0f) {
 				//加速度の割合を計算
 				m_velocity += m_accele * g_gameTime->GetFrameDeltaTime();
+
+				//エフェクト再生
+				PlayEffect(enEffectName_PlayerAccele, m_position, m_rotation, m_effectScale);
 
 				//パス移動終了時の加速でなければ効果音を再生
 				if (!m_isPostPathAcceleration)

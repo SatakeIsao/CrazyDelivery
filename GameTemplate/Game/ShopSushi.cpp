@@ -4,7 +4,7 @@
 
 namespace
 {
-	const Vector3 CHECKPOINT_SIZE = { 400.0f,200.0f,400.0f };
+	const Vector3 CHECKPOINT_SIZE = { 400.0f,200.0f,450.0f };
 	const float	  COOLDOWN_TIME = 7.0f;
 	const float		MOVE_STOP_SUSHI = 1.7f;	//SUSHI_LEFT_ENDPOSに到達する時間
 }
@@ -39,10 +39,10 @@ void ShopSushi::Init()
 	//コリジョンオブジェクトが自動で削除されないようにする
 	m_collision->SetIsEnableAutoDelete(false);
 	//お寿司のUI
-	m_shopSushiUI.Init("Assets/MapData/ShopSushiUI.dds", 224, 150);
+	m_shopSushiUI.Init("Assets/Sprite/UI/ShopUI_Sushi.dds", 224, 150);
 
-	m_shopSushiX_UI.Init("Assets/MapData/ShopSushiXUI.dds", 224, 150);
-	m_shopSushiGrayUI.Init("Assets/MapData/ShopSushiGrayUI.dds", 224, 150);
+	m_shopSushiX_UI.Init("Assets/Sprite/UI/ShopUI_Sushi_SoldOut.dds", 224, 150);
+	m_shopSushiGrayUI.Init("Assets/Sprite/UI/ShopUI_Sushi_Gray.dds", 224, 150);
 }
 
 void ShopSushi::Update()
@@ -131,10 +131,10 @@ void ShopSushi::EffectCoolTime()
 	if (m_effectCoolTimer >= 2.0f)
 	{
 		Vector3 effectPosition = m_position;
-		effectPosition.x += 130.0f;
+		effectPosition.x -= 100.0f;
 		effectPosition.y += 50.0f;
 		//エフェクトの再生
-		PlayEffect(enEffectName_ShopSushi, effectPosition, m_rotation, m_effectScale);
+		PlayEffect(enEffectName_Shop, effectPosition, m_rotation, m_effectScale);
 
 		//エフェクトのクールタイムをリセット
 		m_effectCoolTimer = 0.0f;

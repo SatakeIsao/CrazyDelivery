@@ -106,7 +106,7 @@ bool Game::Start()
 	//エフェクトの初期化
 	m_makeEfe = NewGO<MakeEffect>(0, "makeeffect");
 	//レベルの初期化
-	m_levelRender.Init("Assets/stageData/map/map27.tkl",
+	m_levelRender.Init("Assets/ModelData/StageData/bg.tkl",
 		[&](LevelObjectData_Render& objData)
 	{
 		if (objData.ForwardMatchName(L"Path_") == true)
@@ -159,6 +159,7 @@ bool Game::Start()
 			Vector3 pointPos = objData.position;
 
 			editPath->AddPointPos(pointNo, pointPos);
+
 		}
 		//ハンバーガーショップの生成
 		if (objData.ForwardMatchName(L"DummyHamburger") == true)
@@ -233,6 +234,7 @@ bool Game::Start()
 		auto path = PathStorage::GetPathStorage()->GetPath(i);
 		//収集されたポイントの情報からパスを構築する
 		path->Build();
+
 	}
 
 	//プレイヤーのオブジェクトを作成
@@ -255,7 +257,7 @@ bool Game::Start()
 	//SetSkyCube();
 	
 	//スコアパネルスプライトの初期化
-	m_scorePanelSprite.Init("Assets/modelData/scorePanel2.DDS", 500.0f, 500.0f);
+	m_scorePanelSprite.Init("Assets/Sprite/InGame/ScorePanel.DDS", 500.0f, 500.0f);
 	m_scorePanelSprite.SetPosition(m_scorePanelSpritePos);
 	m_scorePanelSprite.Update();
 
@@ -267,6 +269,7 @@ bool Game::Start()
 	if (path)
 	{
 		m_player->SetPath(path);
+
 	}
 
 	return true;

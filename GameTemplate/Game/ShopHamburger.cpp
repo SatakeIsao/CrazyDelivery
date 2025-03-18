@@ -39,11 +39,11 @@ void ShopHamburger::Init()
 	//コリジョンオブジェクトが自動で削除されないようにする
 	m_collision->SetIsEnableAutoDelete(false);
 
-	m_shopHamburgerUI.Init("Assets/MapData/ShopHamburgerUI.dds", 224, 150);
+	m_shopHamburgerUI.Init("Assets/Sprite/UI/ShopUI_Hamburger.dds", 224, 150);
 	
-	m_shopHamburgerX_UI.Init("Assets/MapData/ShopHamburgerXUI.dds", 224, 150);
+	m_shopHamburgerX_UI.Init("Assets/Sprite/UI/ShopUI_Hamburger_SoldOut.dds", 224, 150);
 
-	m_shopHamburgerGrayUI.Init("Assets/MapData/ShopHamburgerGrayUI.dds", 224, 150);
+	m_shopHamburgerGrayUI.Init("Assets/Sprite/UI6/ShopUI_Hamburger_Gray.dds", 224, 150);
 }
 
 void ShopHamburger::Update()
@@ -53,11 +53,11 @@ void ShopHamburger::Update()
 	pos.x -= 180.0f;
 	pos.y += 100.0f;
 	//ワールド座標からスクリーン座標を計算
-	g_camera3D->CalcScreenPositionFromWorldPosition(m_shopHamburgerUIPps, pos);
+	g_camera3D->CalcScreenPositionFromWorldPosition(m_shopHamburgerUIPos, pos);
 
-	m_shopHamburgerUI.SetPosition(Vector3(m_shopHamburgerUIPps.x, m_shopHamburgerUIPps.y, 0.0f));
-	m_shopHamburgerX_UI.SetPosition(Vector3(m_shopHamburgerUIPps.x, m_shopHamburgerUIPps.y, 0.0f));
-	m_shopHamburgerGrayUI.SetPosition(Vector3(m_shopHamburgerUIPps.x, m_shopHamburgerUIPps.y, 0.0f));
+	m_shopHamburgerUI.SetPosition(Vector3(m_shopHamburgerUIPos.x, m_shopHamburgerUIPos.y, 0.0f));
+	m_shopHamburgerX_UI.SetPosition(Vector3(m_shopHamburgerUIPos.x, m_shopHamburgerUIPos.y, 0.0f));
+	m_shopHamburgerGrayUI.SetPosition(Vector3(m_shopHamburgerUIPos.x, m_shopHamburgerUIPos.y, 0.0f));
 
 
 	
@@ -116,7 +116,7 @@ void ShopHamburger::EffectCoolTime()
 		Vector3 effectPosition = m_position;
 		effectPosition.x -= 100.0f;
 		effectPosition.y += 50.0f;
-		PlayEffect(enEffectName_ShopSushi, effectPosition, m_rotation, m_effectScale);
+		PlayEffect(enEffectName_Shop, effectPosition, m_rotation, m_effectScale);
 
 		//タイマーをリセット
 		m_effectCoolTimer = 0.0f;

@@ -32,15 +32,15 @@ void CustomerMan_Hamburger::Init()
 	m_rotation.SetRotationDegZ(0.0f);
 
 	//モデルの初期化
-	m_customerMan_Hamburger.Init("Assets/Customer/Man2/human.tkm", m_manAnimClips, enAnimClip_Num,enModelUpAxisY,true,false);
+	m_customerMan_Hamburger.Init("Assets/ModelData/Customer/Man/Man_Hamburger.tkm", m_manAnimClips, enAnimClip_Num,enModelUpAxisY,true,false);
 	m_customerMan_Hamburger.SetPosition(m_position);
 	m_customerMan_Hamburger.SetRotation(m_rotation);
 	m_customerMan_Hamburger.SetScale(m_scale);
 	m_customerMan_Hamburger.Update();
 
 	//お客さんの頭上に表示するUI
-	m_customerUI.Init("Assets/Customer/UI/CustomerHamburger.DDS",224,150);
-	m_customerUI_Thank.Init("Assets/skaterData/PlayerUI_Thank2.dds", 1920, 1080);
+	m_customerUI.Init("Assets/Sprite/UI/CustomerOrderIcon_Hamburger.DDS",224,150);
+	m_customerUI_Thank.Init("Assets/Sprite/UI/CustomerOrderIcon_Thank.dds", 1920, 1080);
 	m_customerMan = &m_customerMan_Hamburger;
 }
 void CustomerMan_Hamburger::CollisionPlayerPoint()
@@ -124,7 +124,7 @@ void CustomerMan_Hamburger::EffectCoolTime()
 			Vector3 effectPosition = m_position;
 			effectPosition.y += EFFECT_Y_OFFSET;
 			//エフェクトを再生
-			PlayEffect(enEffectName_CustomerPizza, effectPosition, m_rotation, m_effectScale);
+			PlayEffect(enEffectName_Customer, effectPosition, m_rotation, m_effectScale);
 			//タイマーをリセット
 			m_effectCoolTimer = 0.0f;
 		}
