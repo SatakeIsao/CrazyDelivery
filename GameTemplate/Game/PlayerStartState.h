@@ -39,6 +39,7 @@ namespace nsPlayer
 		void Update() override;
 
 	private:
+		Vector3 m_effectScale = Vector3(3.0f, 3.0f, 3.0f);
 		float m_acceleTime = 0.6f;
 	};
 }

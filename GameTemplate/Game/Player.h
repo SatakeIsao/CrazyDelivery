@@ -1,4 +1,5 @@
 #pragma once
+#include "MakeEffect.h"
 class BackGround;
 class Point;
 class GameTimer;
@@ -87,6 +88,7 @@ namespace nsPlayer
 		/// </summary>
 		void InitPlayerSound();
 
+		
 		/// <summary>
 		/// パス移動用関数
 		/// </summary>
@@ -385,6 +387,15 @@ namespace nsPlayer
 		}
 
 		/// <summary>
+		/// アクセル時の遅延タイマー変数
+		/// </summary>
+		/// <returns></returns>
+		float& GetAcceleDelayTimer()
+		{
+			return m_acceleDelayTime;
+		}
+
+		/// <summary>
 		/// パス移動が終了したかの設定
 		/// </summary>
 		/// <param name="isMoveEnd"></param>
@@ -393,7 +404,16 @@ namespace nsPlayer
 			m_isPathMoveEnd = isMoveEnd;
 		}
 
-
+		void PlayEffect(EffectName name, Vector3 pos, Quaternion rot, Vector3 scale)
+		{
+			//エフェクトの再生
+			EffectEmitter* effect = NewGO<EffectEmitter>(0);
+			effect->Init(name);
+			effect->SetPosition(pos);
+			effect->SetRotation(rot);
+			effect->SetScale(scale);
+			effect->Play();
+		}
 		
 		CharacterController& GetCharacterController()
 		{
@@ -413,7 +433,8 @@ namespace nsPlayer
 		Vector3				m_nextPosition = Vector3::Zero;				//次フレームの座標
 		Vector3				m_movementVector = Vector3::Zero;			//現在の座標と次のフレームの座標の移動ベクトル
 		Vector3				m_reflection = Vector3::Zero;				//反射ベクトル
-		Vector3 m_postPathVelocity;  // パス移動終了時の速度を保存
+		Vector3				m_effectScale = Vector3(2.0f, 2.0f, 2.0f);	//エフェクトのスケール
+		Vector3				m_postPathVelocity = Vector3::Zero;			//パス移動終了時の速度を保存
 		Quaternion			m_rotation;									//プレイヤーの回転量
 		CharacterController m_charaCon;									//キャラクターコントローラー
 		EnAnimationClip		m_currentAnimationClip = enAnimClip_Idle;	//現在設定されているアニメーションクリップ
@@ -440,6 +461,8 @@ namespace nsPlayer
 		float				m_originalY = 10.0f;						//もとの座標を保存
 		float				m_distanceToPath = 15.0f;					//パス間の距離
 		float				m_pathExitCoolDown = 0.0f;					//パス移動時のクールタイム
+		float				m_forwardDotPath = 0.0f;
+		float				m_effectCoolTimer = 0.0f;					//エフェクトのクールタイム
 
 		int					m_currentPathIndex = 0.0f;					//現在のターゲットポイント
 		int					m_slopePathID = -1;							//スロープのID

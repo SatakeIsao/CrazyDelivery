@@ -112,7 +112,7 @@ namespace nsPlayer {
 			const auto& forward = m_player->GetForward();
 			//‰Á‘¬‚·‚é
 			m_player->SetAccele(forward * PLAYER_ACCELE, m_acceleTime);
-
+			
 			return new PlayerPushState(m_player);
 			
 		}
