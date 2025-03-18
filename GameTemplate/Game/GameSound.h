@@ -7,6 +7,7 @@ enum SoundName
 {
 	enSoundName_GameBGM,
 	enSoundName_SoldOut,
+	enSoundName_TitleBGM,
 	enSoundName_RewardGot,
 	enSoundName_foodGot,
 	enSoundName_inventoryChange,

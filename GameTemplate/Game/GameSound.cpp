@@ -10,6 +10,7 @@ bool GameSound::Start()
 	//ƒTƒEƒ“ƒh‚ÌÝ’è
 	g_soundEngine->ResistWaveFileBank(enSoundName_GameBGM, "Assets/Sound/g_gameBGM.wav");
 	g_soundEngine->ResistWaveFileBank(enSoundName_SoldOut, "Assets/Sound/g_soldOut.wav");
+	g_soundEngine->ResistWaveFileBank(enSoundName_TitleBGM, "Assets/Sound/g_title.wav");
 	g_soundEngine->ResistWaveFileBank(enSoundName_RewardGot, "Assets/Sound/g_rewardGot.wav");
 	g_soundEngine->ResistWaveFileBank(enSoundName_foodGot, "Assets/Sound/g_foodGot.wav");
 	g_soundEngine->ResistWaveFileBank(enSoundName_inventoryChange, "Assets/Sound/g_inventoryChange.wav");
