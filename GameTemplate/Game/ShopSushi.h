@@ -103,7 +103,7 @@ private:
 	Vector3				m_position = Vector3::Zero;							//座標
 	
 	Vector3				m_scale = Vector3::One;								//拡大率
-	Vector3				m_effectScale = Vector3(10.0f, 10.0f, 10.0f);		//エフェクト用拡大率
+	Vector3				m_effectScale = Vector3(5.0f, 5.0f, 5.0f);		//エフェクト用拡大率
 	Vector2				m_shopSushiUIPos = Vector2::Zero;					//UIの座標			
 	Quaternion			m_rotation = Quaternion(1.0f, 0.0f, 0.0f, 0.0f);	//回転
 
