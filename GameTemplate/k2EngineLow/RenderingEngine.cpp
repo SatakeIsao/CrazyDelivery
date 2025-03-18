@@ -40,7 +40,7 @@ namespace nsK2EngineLow {
 		spriteInitData.m_width = frameBuffer_w;
 		spriteInitData.m_height = frameBuffer_h;
 
-		spriteInitData.m_fxFilePath = "Assets/shader/sprite.fx";
+		spriteInitData.m_fxFilePath = "Assets/Shader/sprite.fx";
 
 		m_copyToFrameBufferSprite.Init(spriteInitData);
 
@@ -119,7 +119,7 @@ namespace nsK2EngineLow {
 		spriteInitData.m_width = m_mainRenderingTarget.GetWidth();
 		spriteInitData.m_height = m_mainRenderingTarget.GetHeight();
 		//2D用シェーダーを使用する
-		spriteInitData.m_fxFilePath = "Assets/shader/sprite.fx";
+		spriteInitData.m_fxFilePath = "Assets/Shader/sprite.fx";
 		spriteInitData.m_vsEntryPointFunc = "VSMain";
 		spriteInitData.m_psEntryPoinFunc = "PSMain";
 		//上書き

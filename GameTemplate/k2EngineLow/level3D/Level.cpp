@@ -59,7 +59,7 @@ namespace nsK2EngineLow {
 
 				//パスの作成
 				wchar_t filePath[256];
-				swprintf_s(filePath, L"Assets/modelData/%s.tkm", levelObjData.name);
+				swprintf_s(filePath, L"Assets/ModelData/%s.tkm", levelObjData.name);
 				//マルチバイトに変換 wchar→ char
 				//ベースの文字列。
 				size_t origsize = wcslen(filePath) + 1;

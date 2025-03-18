@@ -8,7 +8,7 @@ namespace nsK2EngineLow {
 		//DDSファイル（画像データ）のファイルパスを指定する
 		initData.m_ddsFilePath[0] = filePath;
 		//Sprite表示用のシェーダーのファイルパスを指定する
-		initData.m_fxFilePath = "Assets/shader/sprite.fx";
+		initData.m_fxFilePath = "Assets/Shader/sprite.fx";
 		//スプライトの幅と高さを指定する
 		initData.m_width = static_cast<UINT>(w);
 		initData.m_height = static_cast<UINT>(h);

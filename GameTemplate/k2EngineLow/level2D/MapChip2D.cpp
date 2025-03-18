@@ -11,7 +11,7 @@ namespace nsK2EngineLow {
 		data.m_height = caslData->height;
 		//‰æ‘œ‚ð“Ç‚Ýž‚ÞB
 		data.m_ddsFilePath[0] = caslData->ddsFilePath.get();
-		data.m_fxFilePath = "Assets/shader/sprite.fx";
+		data.m_fxFilePath = "Assets/Shader/sprite.fx";
 		m_sprite.Init(data);
 		//À•WB
 		m_position.x = caslData->position.x;

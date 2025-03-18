@@ -8,7 +8,7 @@ void nsK2EngineLow::Shadow::Init()
 	InitLightCamera();
 	SpriteInitData spriteInitData;
 	spriteInitData.m_textures[0] = &m_shadowMap.GetRenderTargetTexture();
-	spriteInitData.m_fxFilePath = "Assets/shader/sprite.fx";
+	spriteInitData.m_fxFilePath = "Assets/Shader/sprite.fx";
 	spriteInitData.m_width = 256;
 	spriteInitData.m_height = 256;
 	m_sprite.Init(spriteInitData);

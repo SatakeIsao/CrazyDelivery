@@ -12,7 +12,7 @@ namespace nsK2EngineLow {
 		//tkmファイルのファイルパスを指定する。
 		initData.m_tkmFilePath = filePath;
 		//シェーダーファイルのファイルパスを指定する。
-		initData.m_fxFilePath = "Assets/shader/testModel.fx";
+		initData.m_fxFilePath = "Assets/Shader/testModel.fx";
 		//ノンスキンメッシュ用の頂点シェーダーのエントリーポイントを指定する。
 		initData.m_vsEntryPointFunc = "VSMain";
 

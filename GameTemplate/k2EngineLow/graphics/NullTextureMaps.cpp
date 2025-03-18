@@ -27,28 +27,28 @@ namespace nsK2EngineLow {
 			fclose(fp);
 		};
 
-		m_albedoMapFilePath = "Assets/modelData/preset/NullAlbedoMap.DDS";
+		m_albedoMapFilePath = "Assets/ModelData/preset/NullAlbedoMap.DDS";
 		//アルベドマップをロード。
 		TexLoad(
 			m_albedoMapFilePath,
 			m_albedoMap,
 			m_albedoMapSize);
 
-		m_normalMapFilePath = "Assets/modelData/preset/NullNormalMap.DDS";
+		m_normalMapFilePath = "Assets/ModelData/preset/NullNormalMap.DDS";
 		//法線マップをロード。
 		TexLoad(
 			m_normalMapFilePath,
 			m_normalMap,
 			m_normalMapSize);
 
-		m_specMapFilePath = "Assets/modelData/preset/specMap_None.DDS";
+		m_specMapFilePath = "Assets/ModelData/preset/specMap_None.DDS";
 		//スペキュラマップマップをロード。
 		TexLoad(
 			m_specMapFilePath,
 			m_specMap,
 			m_specMapSize);
 
-		m_zeroValueMapFilePath = "Assets/modelData/preset/ZeroValueMap.DDS";
+		m_zeroValueMapFilePath = "Assets/ModelData/preset/ZeroValueMap.DDS";
 		//０の値を格納しているマップをロード。
 		TexLoad(
 			m_zeroValueMapFilePath,

@@ -216,7 +216,7 @@ namespace nsK2EngineLow {
 			//DXILライブラリを作成。
 			//レイトレーシング用のシェーダーをロード。
 			Shader raytraceShader;
-			raytraceShader.LoadRaytracing(L"Assets/shader/sample.fx");
+			raytraceShader.LoadRaytracing(L"Assets/Shader/sample.fx");
 
 			D3D12_EXPORT_DESC libExport[eShader_Num];
 			for (int i = 0; i < eShader_Num; i++) {
