@@ -5,12 +5,14 @@
 /// </summary>
 enum EffectName
 {
-	enEffectName_ShopHamburger,
-	enEffectName_ShopPizza,
-	enEffectName_ShopSushi,
-	enEffectName_CustomerHamburger,
-	enEffectName_CustomerPizza,
-	enEffectName_CustomerSushi,
+	//enEffectName_ShopHamburger,
+	//enEffectName_ShopPizza,
+	enEffectName_Shop,
+	//enEffectName_CustomerHamburger,
+	enEffectName_Customer,
+	//enEffectName_CustomerSushi,
+	enEffectName_PlayerAccele,
+	enEffectName_Rail,
 	enEffectName_Num,
 };
 
