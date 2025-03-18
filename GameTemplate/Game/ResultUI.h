@@ -3,6 +3,7 @@
 class GameTimer;
 class Game;
 class InventoryUI;
+class StartButtonUI;
 class ResultUI :public IGameObject
 {
 public:
@@ -53,14 +54,13 @@ public:
 	{
 		return m_isResultEnd;
 	}
-
-	
 	
 private:
 	//Game*			m_game = nullptr;						//ゲーム
 	GameTimer*		m_gameTimer = nullptr;					//ゲームタイマー
 	ResultUI*		m_resultUI = nullptr;					//リザルトUI
 	SoundSource*	m_finishSE = nullptr;					//フィニッシュ時の効果音
+	StartButtonUI*  m_startButtonUI = nullptr;				//スタートボタンUI
 	enResultUIState m_resultUIState = enResultUIState_Fade;	//リザルトUIのステート
 	ResultSetPosState	m_resultSetPosState = Pos_OutSide;	//リザルトUIの座標ステート
 	FinishScaleState m_finishScaleState = Scale_Double;		//フィニッシュスプライトの拡大率ステート

@@ -6,6 +6,7 @@
 #include "GameSound.h"
 #include "Fade.h"
 #include "GameTitle.h"
+#include "StartButtonUI.h"
 
 namespace
 {
@@ -31,7 +32,7 @@ ResultUI::ResultUI()
 
 ResultUI::~ResultUI()
 {
-
+	DeleteGO(m_startButtonUI);
 }
 
 bool ResultUI::Start()
@@ -39,27 +40,34 @@ bool ResultUI::Start()
 	//m_game = FindGO<Game>("game");
 	m_gameTimer = FindGO<GameTimer>("gametimer");
 	m_resultUI = FindGO<ResultUI>("resultui");
+	m_startButtonUI = NewGO<StartButtonUI>(0, "startbuttonui");
+	//StartButtonUIをフェードイン状態に変更
+	if (m_startButtonUI != nullptr)
+	{
+		m_startButtonUI->SetState(StartButtonUI::enStartUIState_FadeIn);
+		m_startButtonUI->ResetButtonState();
+	}
 
 	//フィニッシュスプライトの初期化
-	m_finishSprite.Init("Assets/Sprite/Result/finish.dds", 1980.0f, 1020.0f);
+	m_finishSprite.Init("Assets/Sprite/Result/ResultUI_Finish.dds", 1980.0f, 1020.0f);
 	m_finishSprite.SetPosition(Vector3::Zero);
 	m_finishSprite.SetScale(m_finishScale);
 	m_finishSprite.Update();
 
 	//リザルトUIの画像
-	m_resultUI_Sprite.Init("Assets/Sprite/Result/ResultUI5.DDS",1440,810);
+	m_resultUI_Sprite.Init("Assets/Sprite/Result/ResultUI_Base.DDS",1440,810);
 	m_resultUI_Sprite.SetPosition(m_position);
 	m_resultUI_Sprite.SetScale(m_scale);
 	m_resultUI_Sprite.Update();
 	
 	//CLEARの画像
-	m_clearSprite.Init("Assets/Sprite/Result/ResultUI_CLEAR2.DDS", 1440, 810);
+	m_clearSprite.Init("Assets/Sprite/Result/ResultUI_Clear.DDS", 1440, 810);
 	m_clearSprite.SetPosition(m_position);
 	m_clearSprite.SetScale(m_scale);
 	m_clearSprite.Update();
 
 	//FAILEDの画像
-	m_failedSprite.Init("Assets/Sprite/Result/ResultUI_FAILED2.DDS", 1440, 810);
+	m_failedSprite.Init("Assets/Sprite/Result/ResultUI_Failed.DDS", 1440, 810);
 	m_failedSprite.SetPosition(m_position);
 	m_failedSprite.SetScale(m_scale);
 	m_failedSprite.Update();
@@ -96,14 +104,35 @@ bool ResultUI::Start()
 	m_nowScoreRender.SetScale(SCORE_SCALE);
 	m_nowScoreRender.SetColor({ 1.0f,1.0f,1.0f,1.0f });
 
+	
 	return true;
 }
 
 void ResultUI::Update()
 {
+	if (m_startButtonUI != nullptr)
+	{
+		m_startButtonUI->Update();
+	}
+
+	//ゲームタイマーが終了してリザルトUIが表示されたら、StartButtonUIをフェードインさせる
+	if (m_elapsedTime>=FINISH_DISPLAY_TIME
+		&& m_startButtonUI != nullptr)
+	{
+		if (m_startButtonUI->GetStete() == StartButtonUI::enStartUIState_AlphaZero)
+		{
+			m_startButtonUI->SetState(StartButtonUI::enStartUIState_FadeIn);
+		}
+	}
 	//リザルトUIが表示された後、Bボタン押されたらタイトルに戻る
 	if (g_pad[0]->IsTrigger(enButtonB)
 		&& m_gameTimer->GetIsTimerEnd()) {
+		//Bボタンが押されたらSEを鳴らす
+		SoundSource* buttonSE = NewGO<SoundSource>(0);
+		buttonSE->Init(enSoundName_Button);
+		buttonSE->SetVolume(0.5f);
+		buttonSE->Play(false);
+
 		//次の座標状態に変更
 		NextResultPosState();
 		//縮小ステートに変更
@@ -315,6 +344,10 @@ void ResultUI::Render(RenderContext& rc)
 				m_failedSprite.Draw(rc);
 			}
 
+			if (m_startButtonUI != nullptr)
+			{
+				m_startButtonUI->Render(rc);
+			}
 
 			m_nowScoreRender.SetScale(SCORE_SCALE);
 			m_nowScoreRender.SetPosition(SCORE_POS);

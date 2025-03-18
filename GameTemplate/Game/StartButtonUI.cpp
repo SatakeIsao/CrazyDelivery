@@ -20,7 +20,7 @@ StartButtonUI::~StartButtonUI()
 
 bool StartButtonUI::Start()
 {
-	m_startSprite.Init("Assets/StartData/PressB.DDS", 960.0f, 540.0f);
+	m_startSprite.Init("Assets/Sprite/InGame/PressB.DDS", 960.0f, 540.0f);
 	m_startSprite.SetPosition(START_SPRITE_POS);
 	m_startSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_fadeAlpha });
 	m_startSprite.Update();
@@ -36,11 +36,11 @@ void StartButtonUI::Update()
 		//フェードイン処理
 		FadeProcess();
 		break;
-	case StartButtonUI::enStartUIState_FadeOut:
+	case enStartUIState_FadeOut:
 		//フェードアウト処理
 		FadeOut();
 		break;
-	case StartButtonUI::enStartUIState_AlphaZero:
+	case enStartUIState_AlphaZero:
 		//アルファ値を0にする処理
 		AlphaZero();
 		break;
@@ -55,7 +55,7 @@ void StartButtonUI::Update()
 		//ボタン入力SEを流す
 		m_buttonSE = NewGO<SoundSource>(0);
 		m_buttonSE->Init(enSoundName_Button);
-		m_buttonSE->SetVolume(1.0f);
+		m_buttonSE->SetVolume(0.5f);
 		m_buttonSE->Play(false);
 		//スタートボタンは押された
 		m_isButtonPush = true;

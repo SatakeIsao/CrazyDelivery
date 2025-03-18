@@ -22,6 +22,8 @@ public:
 	void CalcAlpha(float& alpha);
 	void Render(RenderContext& rc);
 
+
+
 	/// <summary>
 	/// ó‘Ô‚ğİ’è
 	/// </summary>
@@ -30,6 +32,16 @@ public:
 	{
 		m_startUIState = enStartUIState;
 	};
+
+	EnStartUIState GetStete() const
+	{
+		return m_startUIState;
+	}
+
+	void ResetButtonState()
+	{
+		m_isButtonPush = false;
+	}
 
 private:
 	EnStartUIState m_startUIState = enStartUIState_FadeIn;	//‰Šúó‘ÔFFadeIn
