@@ -47,6 +47,24 @@ public:
 	void FinishTimer();
 	void NextScorePosState();
 
+	/// <summary>
+	/// エフェクトの再生
+	/// </summary>
+	/// <param name="name">名前</param>
+	/// <param name="pos">座標</param>
+	/// <param name="rot">回転</param>
+	/// <param name="scale">拡大率</param>
+	void PlayEffect(EffectName name, Vector3 pos, Quaternion rot, Vector3 scale)
+	{
+		//エフェクトの再生
+		EffectEmitter* effect = NewGO<EffectEmitter>(0);
+		effect->Init(name);
+		effect->SetPosition(pos);
+		effect->SetRotation(rot);
+		effect->SetScale(scale);
+		effect->Play();
+	}
+
 
 private:
 	LevelRender			m_levelRender;											//レベルのレンダリング
@@ -62,7 +80,8 @@ private:
 	MakeEffect*			m_makeEfe = nullptr;									//エフェクト作成のオブジェクト
 	ResultUI*			m_resultUI = nullptr;									//リザルトUIのオブジェクト
 	GameInformation*	m_gameInfo = nullptr;									//ゲームインフォメーションのオブジェクト
-	Fade*				m_fade = nullptr;
+	Fade*				m_fade = nullptr;										//フェードのオブジェクト
+	PathStorage*		m_pathSt;												//パスストレージのオブジェクト
 
 	SpriteRender		m_scorePanelSprite;										//スコアパネルスプライト
 
@@ -77,6 +96,6 @@ private:
 
 	float				m_finishStartTime = 0.0f;								//終了開始時間
 
-	PathStorage* m_pathSt;
+	
 };
 

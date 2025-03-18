@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "PathStorage.h"
 #include "Path.h"
+namespace
+{
+	//const float MIN_DISTANCE = 10000.0f; //
+}
+
 PathStorage* PathStorage::m_pathStorage = nullptr;
 
 PathStorage::PathStorage()

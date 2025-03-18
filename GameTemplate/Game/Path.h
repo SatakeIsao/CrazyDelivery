@@ -1,4 +1,6 @@
 #pragma once
+#include "MakeEffect.h"
+
 struct Point {
 	int no;	// ポイント番号
 	Vector3 position;	// 座標
@@ -25,6 +27,15 @@ public:
 	/// 収集されたポイントの情報からパスを構築する
 	/// </summary>
 	void Build();
+
+	/// <summary>
+	/// エフェクトの再生
+	/// </summary>
+	/// <param name="name">名前</param>
+	/// <param name="pos">座標</param>
+	/// <param name="rot">回転</param>
+	/// <param name="scale">拡大率</param>
+	void PlayEffect(EffectName name, Vector3 pos, Quaternion rot, Vector3 scale);
 
 	///// <summary>
 	///// 座標を設定
