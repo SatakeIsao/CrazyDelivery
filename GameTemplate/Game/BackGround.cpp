@@ -28,7 +28,7 @@ void BackGround::Init()
 
 
 	//’n–Êƒ‚ƒfƒ‹‚Ì‰Šú‰»
-	m_loadModel.Init("Assets/ModelData/StageData/bg_load.tkm", 0, 0, enModelUpAxisY, false, true);
+	m_loadModel.Init("Assets/ModelData/StageData/bg_road.tkm", 0, 0, enModelUpAxisY, false, true);
 	m_loadModel.SetPosition(m_position);
 	m_loadModel.SetRotation(m_rotation);
 	m_loadModel.SetScale(m_scale);
