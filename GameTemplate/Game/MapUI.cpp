@@ -56,7 +56,7 @@ bool MapUI::Start()
 	//ハンバーガー店の画像
 	m_bargerShopSprite.Init("Assets/Sprite/MapData/Map_Hamburger.dds", 1216, 684);
 	m_bargerShopSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
-	m_bargerShopSprite2.Init("Assets/MapData/Map_Hamburger.dds", 1216, 684);
+	m_bargerShopSprite2.Init("Assets/Sprite/MapData/Map_Hamburger.dds", 1216, 684);
 	m_bargerShopSprite2.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
 	
 	m_bargerShopGray.Init("Assets/Sprite/MapData/Map_Hamburger_Gray.dds", 1216, 684);
