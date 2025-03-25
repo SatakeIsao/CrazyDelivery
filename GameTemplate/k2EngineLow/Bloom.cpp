@@ -19,7 +19,7 @@ namespace nsK2EngineLow {
 		void Bloom::InitLumi(RenderTarget& mainRenderTarget)
 		{
 			//輝度抽出用のシェーダー
-			luminanceSpriteInitData.m_fxFilePath = "Assets/Shader/PostEffect.fx";
+			luminanceSpriteInitData.m_fxFilePath = "Assets/Shader/postEffect.fx";
 			//頂点シェーダーのファイルパスを指定する
 			luminanceSpriteInitData.m_vsEntryPointFunc = "VSMain";
 			//ピクセルシェーダーのエントリーポイントを指定する
@@ -68,7 +68,7 @@ namespace nsK2EngineLow {
 
 			//ボケ画像を合成する必要があるので、2D用のシェーダーではなく、
 			//専用シェーダーを指定
-			finalSpriteInitData.m_fxFilePath = "Assets/Shader/PostEffect.fx";
+			finalSpriteInitData.m_fxFilePath = "Assets/Shader/postEffect.fx";
 			finalSpriteInitData.m_psEntryPoinFunc = "PSBloomFinal";
 
 			//ただし、加算合成で描画するので、アルファブレンディングモードを加算する

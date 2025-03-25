@@ -10,13 +10,13 @@ PathStorage* PathStorage::m_pathStorage = nullptr;
 
 PathStorage::PathStorage()
 {
-	//本人の制御
-	//インスタンスを一つだけにする
-	if (m_pathStorage == nullptr)
-	{
-		//インスタンスの登録
-		m_pathStorage = this;
-	}
+	////本人の制御
+	////インスタンスを一つだけにする
+	//if (m_pathStorage == nullptr)
+	//{
+	//	//インスタンスの登録
+	//	m_pathStorage = this;
+	//}
 }
 
 PathStorage::~PathStorage()

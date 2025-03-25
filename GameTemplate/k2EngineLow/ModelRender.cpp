@@ -31,7 +31,7 @@ namespace nsK2EngineLow {
 
 		initData.m_tkmFilePath = tkmFilePath;
 		//シャドウレシーバー（影が落とされるモデル）用のシェーダーを指定する
-		initData.m_fxFilePath = "Assets/Shader/testModel.fx";
+		initData.m_fxFilePath = "Assets/Shader/model.fx";
 		//initData.m_fxFilePath = "Assets/shader/shadowReceiverModel.fx";
 
 		lightCamera.SetAspectOnrFlag(true);
@@ -79,7 +79,7 @@ namespace nsK2EngineLow {
 		ModelInitData shadowInitData;
 		shadowInitData.m_tkmFilePath = tkmFilePath;
 		//shadowInitData.m_modelUpAxis = modelUpAxis;
-		shadowInitData.m_fxFilePath = "Assets/Shader/sampleDrawShadowMap.fx";
+		shadowInitData.m_fxFilePath = "Assets/Shader/drawShadowMap.fx";
 		shadowInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32_FLOAT;
 
 		//アニメーションがあるならスケルトンを指定する
