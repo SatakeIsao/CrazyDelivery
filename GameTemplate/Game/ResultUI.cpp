@@ -126,7 +126,8 @@ void ResultUI::Update()
 	}
 	//リザルトUIが表示された後、Bボタン押されたらタイトルに戻る
 	if (g_pad[0]->IsTrigger(enButtonB)
-		&& m_gameTimer->GetIsTimerEnd()) {
+		&& m_gameTimer->GetIsTimerEnd()
+		&& m_elapsedTime >= FINISH_DISPLAY_TIME) {
 		//Bボタンが押されたらSEを鳴らす
 		SoundSource* buttonSE = NewGO<SoundSource>(0);
 		buttonSE->Init(enSoundName_Button);
