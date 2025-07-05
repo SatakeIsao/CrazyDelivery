@@ -6,7 +6,7 @@
 
 namespace
 {
-	const Vector3	CHECKPOINT_SIZE = { 400.0f,200.0f,450.0f };
+	Vector3	CHECKPOINT_SIZE = { 400.0f,200.0f,450.0f };
 	const Vector2	UI_SIZE = { 224.0f, 150.0f };	//UIのサイズ
 	const float		COOLDOWN_TIME = 7.0f;
 	const float		MOVE_STOP_SUSHI = 1.7f;	//SUSHI_LEFT_ENDPOSに到達する時間
@@ -30,17 +30,9 @@ bool ShopSushi::Start()
 	return true;
 }
 
-void ShopSushi::Init()
+void ShopSushi::OnInit()
 {
-	m_collision = NewGO<CollisionObject>(0);
-	m_collision->CreateBox(
-		m_position,
-		m_rotation,
-		CHECKPOINT_SIZE
-	);
-
-	//コリジョンオブジェクトが自動で削除されないようにする
-	m_collision->SetIsEnableAutoDelete(false);
+	ShopBase::InitCollision(m_position, m_rotation, CHECKPOINT_SIZE);
 	
 	//UIの初期化
 	m_shopUI.Init("Assets/Sprite/UI/ShopUI_Sushi.dds", UI_SIZE.x, UI_SIZE.y);

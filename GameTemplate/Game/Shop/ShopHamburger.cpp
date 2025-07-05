@@ -34,9 +34,6 @@ void ShopHamburger::OnInit()
 {
 	ShopBase::InitCollision(m_position,m_rotation,CHECKPOINT_SIZE);
 
-	//コリジョンオブジェクトが自動で削除されないようにする
-	m_collision->SetIsEnableAutoDelete(false);
-
 	m_shopUI.Init("Assets/Sprite/UI/ShopUI_Hamburger.dds", UI_SIZE.x, UI_SIZE.y);
 	m_shopSoldOutUI.Init("Assets/Sprite/UI/ShopUI_Hamburger_SoldOut.dds", UI_SIZE.x, UI_SIZE.y);
 	m_shopCoolDownUI.Init("Assets/Sprite/UI/ShopUI_Hamburger_Gray.dds", UI_SIZE.x, UI_SIZE.y);

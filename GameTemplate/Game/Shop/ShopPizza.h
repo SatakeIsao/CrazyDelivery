@@ -11,7 +11,7 @@ public:
 
 protected:
 	bool Start() override;
-	void Init() override;
+	void OnInit() override;
 	void OnUpdate() override;
 	/// <summary>
 	/// プレイヤーとヒット判定の衝突を更新

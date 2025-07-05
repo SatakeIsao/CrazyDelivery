@@ -6,7 +6,7 @@
 
 namespace
 {
-	const Vector3	CHECKPOINT_SIZE = { 478.0f,200.0f,428.0f };	//チェックポイントのサイズ
+	Vector3	CHECKPOINT_SIZE = { 478.0f,200.0f,428.0f };	//チェックポイントのサイズ
 	const Vector2	UI_SIZE = { 224.0f, 150.0f };				//UIのサイズ
 	const float		COOLDOWN_TIME = 7.0f;
 	const float		TRANSITION_TIME = 1.5f; //PIZZA_LEFT_ENDPOSに到達する時間
@@ -30,17 +30,9 @@ bool ShopPizza::Start()
 	return true;
 }
 
-void ShopPizza::Init()
+void ShopPizza::OnInit()
 {
-	m_collision = NewGO<CollisionObject>(0);
-	m_collision->CreateBox(
-		m_position,
-		m_rotation,
-		CHECKPOINT_SIZE
-	);
-
-	//コリジョンオブジェクトが自動で削除されないようにする
-	m_collision->SetIsEnableAutoDelete(false);
+	ShopBase::InitCollision(m_position, m_rotation, CHECKPOINT_SIZE);
 	
 	m_shopUI.Init("Assets/Sprite/UI/ShopUI_Pizza.dds", UI_SIZE.x, UI_SIZE.y);
 	m_shopSoldOutUI.Init("Assets/Sprite/UI/ShopUI_Pizza_SoldOut.dds", UI_SIZE.x, UI_SIZE.y);

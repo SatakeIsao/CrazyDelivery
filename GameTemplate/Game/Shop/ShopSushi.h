@@ -11,7 +11,7 @@ public:
 	virtual ~ShopSushi();
 protected:
 	bool Start() override;
-	void Init() override;
+	void OnInit() override;
 	void OnUpdate() override;
 	/// <summary>
 	/// プレイヤーとの衝突判定を更新する
