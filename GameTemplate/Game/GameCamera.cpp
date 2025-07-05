@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "GameCamera.h"
-#include "Player.h"
+#include "Player/Player.h"
 
 GameCamera::GameCamera()
 {
@@ -24,7 +24,7 @@ bool GameCamera::Start()
 	//ばねカメラの初期化
 	m_springCamera.Init(
 		*g_camera3D,	//ばねカメラの処理を行うカメラを指定する
-		1000.0f,		//カメラの移動速度の最大値
+		3000.0f,		//カメラの移動速度の最大値
 		true,			//カメラと地形とのあたり判定を取るかどうかのフラグ。trueだとあたり判定を行う
 		5.0f			//カメラに設定される球体コリジョンの半径。第3引数がtrueの時に有効になる
 	);
@@ -37,7 +37,7 @@ void GameCamera::Update()
 	Vector3 target = m_player->GetPostion(); // プレイヤーの現在位置
 	Quaternion playerRotation = m_player->GetRotation(); //プレイヤーの回転
 
-	if (m_player->GetIsPathMoving())
+	if (m_player->IsPathMoving())
 	{
 		// **パス移動中はカメラの位置をプレイヤーの相対位置に固定するが、追従する**
 		if (!m_isCameraFixed)

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Fade.h"
-#include "Game.h"
+#include "Scene/Game.h"
 
 Fade::~Fade()
 {

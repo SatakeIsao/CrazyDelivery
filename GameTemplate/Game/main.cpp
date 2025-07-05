@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "system/system.h"
 #include "ModelRender.h"
-#include "Game.h"
-#include "Player.h"
+#include "Scene/Game.h"
+#include "Player/Player.h"
 #include "GameSound.h"
 #include "Fade.h"
-#include "GameTitle.h"
+#include "Scene/GameTitle.h"
 
 // K2EngineLowのグローバルアクセスポイント。
 K2EngineLow* g_k2EngineLow = nullptr;
