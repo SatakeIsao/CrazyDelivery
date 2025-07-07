@@ -15,7 +15,7 @@ void CustomerManIdleState::Enter()
 
 ICustomerManState* CustomerManIdleState::StateChange()
 {
-	if (m_customerMan->HasFood())
+	if (!m_customerMan->HasFood())
 	{
 		return new CustomerManHandState(m_customerMan);
 	}
