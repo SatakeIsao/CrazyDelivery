@@ -6,7 +6,7 @@
 
 namespace
 {
-	Vector3	CHECKPOINT_SIZE = { 400.0f,200.0f,450.0f };
+	const Vector3	CHECKPOINT_SIZE = { 400.0f,200.0f,450.0f };
 	const Vector2	UI_SIZE = { 224.0f, 150.0f };	//UIのサイズ
 	const float		COOLDOWN_TIME = 7.0f;
 	const float		MOVE_STOP_SUSHI = 1.7f;	//SUSHI_LEFT_ENDPOSに到達する時間
@@ -151,6 +151,7 @@ void ShopSushi::Render(RenderContext& rc)
 		//プレイヤーの視野に入っていない場合は描画しない
 		return;
 	}
+
 	if (m_coolDownTimer <= 7.0f
 		&& m_coolDownTimer >=0.1f
 		&& !m_hasFullSushi)
@@ -158,7 +159,6 @@ void ShopSushi::Render(RenderContext& rc)
 		//クールダウン中は、クールダウンUIを表示
 		m_shopCoolDownUI.Draw(rc);
 	}
-
 	else if (m_inventoryUI->GetIsHasFullSushi())
 	{
 		//寿司の所持数が上限に達している場合は、売り切れUIを表示

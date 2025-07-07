@@ -22,18 +22,18 @@ void ShopBase::Update()
 	OnUpdate();
 }
 
-void ShopBase::InitCollision(Vector3& collisionPos, Quaternion& CollisionRot, Vector3& CollisionScale)
+void ShopBase::InitCollision(const Vector3& collisionPos, const Quaternion& CollisionRot, const Vector3& CollisionScale)
 {
-	CollisionObject* collision = NewGO<CollisionObject>(0);
-	collision->CreateBox(
+	m_collision = NewGO<CollisionObject>(0);
+	m_collision->CreateBox(
 		collisionPos, 
 		CollisionRot,
 		CollisionScale);
 	//コリジョンオブジェクトが自動で削除されないようにする
-	collision->SetIsEnableAutoDelete(false);
+	m_collision->SetIsEnableAutoDelete(false);
 }
 
-void ShopBase::PlaySoundSE(SoundName name, const float vol,const bool isPlay)
+void ShopBase::PlaySoundSE(const SoundName name, const float vol,const bool isPlay)
 {
 	SoundSource* soundSE = NewGO<SoundSource>(0);
 	soundSE->Init(name);

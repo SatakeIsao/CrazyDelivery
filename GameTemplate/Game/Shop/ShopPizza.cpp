@@ -6,7 +6,7 @@
 
 namespace
 {
-	Vector3	CHECKPOINT_SIZE = { 478.0f,200.0f,428.0f };	//チェックポイントのサイズ
+	const Vector3	CHECKPOINT_SIZE = { 478.0f,200.0f,428.0f };	//チェックポイントのサイズ
 	const Vector2	UI_SIZE = { 224.0f, 150.0f };				//UIのサイズ
 	const float		COOLDOWN_TIME = 7.0f;
 	const float		TRANSITION_TIME = 1.5f; //PIZZA_LEFT_ENDPOSに到達する時間

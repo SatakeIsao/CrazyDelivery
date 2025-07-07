@@ -33,15 +33,6 @@ protected:
 	void Render(RenderContext& rc);
 public:
 	/// <summary>
-	/// 座標を取得
-	/// </summary>
-	/// <returns></returns>
-	const Vector3& GetPosition() const
-	{
-		return m_position;
-	}
-
-	/// <summary>
 	/// 寿司の所持数が上限に達しているかの取得
 	/// </summary>
 	/// <returns></returns>
@@ -67,42 +58,10 @@ public:
 	{
 		return m_movingSushiUI;
 	}
-	/// <summary>
-	/// 座標を設定
-	/// </summary>
-	/// <param name="position">座標</param>
-	void SetPosition(const Vector3& position)
-	{
-		m_position = position;
-	}
-
-	/// <summary>
-	/// 回転を設定
-	/// </summary>
-	/// <param name="rotation">回転</param>
-	void SetRotation(const Quaternion& rotation)
-	{
-		m_rotation = rotation;
-	}
-
-	/// <summary>
-	/// 拡大率を設定
-	/// </summary>
-	/// <param name="scale">拡大率</param>
-	void SetScale(const Vector3& scale)
-	{
-		m_scale = scale;
-	}
-
 
 private:
-	CollisionObject*	m_collision = nullptr;								//衝突判定オブジェクト
-	
-	Vector3				m_position = Vector3::Zero;							//座標
-	Vector3				m_scale = Vector3::One;								//拡大率
 	Vector3				m_effectScale = Vector3(5.0f, 5.0f, 5.0f);			//エフェクト用拡大率
 	Vector2				m_shopSushiUIPos = Vector2::Zero;					//UIの座標			
-	Quaternion			m_rotation = Quaternion::Identity;					//回転
 
 	float				m_coolDownTimer = 0.0f;								//クールダウンタイマー
 	float				m_effectCoolTimer = 0.0f;							//エフェクトクールタイマー

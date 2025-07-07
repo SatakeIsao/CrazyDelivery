@@ -21,7 +21,6 @@ public:
 	virtual void Update();
 	virtual void Render(RenderContext& rc){}
 
-protected:
 public:
 	/// <summary>
 	/// 座標取得
@@ -40,7 +39,7 @@ public:
 		m_position = position;
 	}
 	/// <summary>
-	/// 回転取得
+	/// 拡縮取得
 	/// </summary>
 	/// <returns></returns>
 	inline const Vector3& GetScale() const
@@ -54,6 +53,24 @@ public:
 	inline void SetScale(const Vector3& scale)
 	{
 		m_scale = scale;
+	}
+
+	/// <summary>
+	/// 回転取得
+	/// </summary>
+	/// <returns></returns>
+	inline const Quaternion& GetRotation() const
+	{
+		return m_rotation;
+	}
+
+	/// <summary>
+	/// 回転設定
+	/// </summary>
+	/// <param name="rotation"></param>
+	inline void SetRotation(const Quaternion& rotation)
+	{
+		m_rotation = rotation;
 	}
 
 protected:
@@ -81,14 +98,14 @@ protected:
 	/// <param name="collisionPos"></param>
 	/// <param name="CollisionRot"></param>
 	/// <param name="CollisionScale"></param>
-	virtual void InitCollision(Vector3& collisionPos,Quaternion& CollisionRot,Vector3& CollisionScale);
+	virtual void InitCollision(const Vector3& collisionPos, const Quaternion& CollisionRot, const Vector3& CollisionScale);
 	/// <summary>
 	/// 指定された効果音を再生します。
 	/// </summary>
 	/// <param name="name">再生する効果音の名前</param>
 	/// <param name="vol">効果音の音量（0.0～1.0の範囲）</param>
 	/// <param name="isPlay">ループ再生するかどうか（trueでループ再生、falseで1回のみ）</param>
-	void PlaySoundSE(SoundName name, const float vol, const bool isPlay);
+	void PlaySoundSE(const SoundName name, const float vol, const bool isPlay);
 
 	/// <summary>
 	/// エフェクトの再生
@@ -97,7 +114,7 @@ protected:
 	/// <param name="pos">座標</param>
 	/// <param name="rot">回転</param>
 	/// <param name="scale">拡大率</param>
-	void PlayEffect(EffectName name, const Vector3& pos, const Quaternion& rot, const Vector3& scale);
+	void PlayEffect(const EffectName name, const Vector3& pos, const Quaternion& rot, const Vector3& scale);
 
 	/// <summary>
 	/// 有効な角度かどうか取得
@@ -109,15 +126,16 @@ protected:
 
 
 protected:
-	Vector3 m_position = Vector3::Zero;			   // 座標
-	Vector3 m_scale = Vector3::One;				   // 拡縮
-	Quaternion m_rotation = Quaternion::Identity;  // 回転
+	CollisionObject* m_collision = nullptr;			// 衝突判定オブジェクト
+	Vector3 m_position = Vector3::Zero;			    // 座標
+	Vector3 m_scale = Vector3::One;					// 拡縮
+	Quaternion m_rotation = Quaternion::Identity;	// 回転
 
-	SpriteRender m_shopUI;						   // お店のUIスプライト
+	SpriteRender m_shopUI;							// お店のUIスプライト
 	SpriteRender m_shopSoldOutUI;					// 売り切れUIスプライト
 	SpriteRender m_shopCoolDownUI;					// クールダウンUIスプライト
 
-	InventoryUI* m_inventoryUI = nullptr;			
-	nsPlayer::Player* m_player = nullptr;		   // プレイヤー
+	InventoryUI* m_inventoryUI = nullptr;			// インベントリUI
+	nsPlayer::Player* m_player = nullptr;			// プレイヤー
 };
 
