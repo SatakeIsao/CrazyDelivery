@@ -62,6 +62,8 @@
     <ClCompile Include="Player\State\DriftState.cpp" />
     <ClCompile Include="Player\State\JumpState.cpp" />
     <ClCompile Include="Player\State\RunStateBase.cpp" />
+    <ClCompile Include="UI\InventoryFoodIcon.cpp" />
+    <ClCompile Include="UI\InventoryRewardMoneyIcon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -119,5 +121,7 @@
     <ClInclude Include="Player\State\DriftState.h" />
     <ClInclude Include="Player\State\JumpState.h" />
     <ClInclude Include="Player\State\RunStateBase.h" />
+    <ClInclude Include="UI\InventoryFoodIcon.h" />
+    <ClInclude Include="UI\InventoryRewardMoneyIcon.h" />
   </ItemGroup>
 </Project>

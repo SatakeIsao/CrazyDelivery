@@ -1,4 +1,6 @@
 #pragma once
+#include "InventoryFoodIcon.h"
+#include "InventoryRewardMoneyIcon.h"
 
 class ShopHamburger;
 class ShopPizza;
@@ -36,6 +38,15 @@ private:
 		Sliding_To_HamburgerRightEnd,//ハンバーガー左端までスライド中
 		Sliding_To_PizzaLeftEnd,	//ピザ左端までスライド中
 		Sliding_To_SushiLeftEnd,	//寿司左端までスライド中
+	};
+
+	//食べ物の種類
+	enum EnFoodType
+	{
+		EnFoodTypeHamburger,
+		EnFoodTypePizza,
+		EnFoodTypeSushi,
+		EnFoodTypeMax,
 	};
 
 private:
@@ -105,11 +116,15 @@ public:
 	void RenderImmediate(SpriteRender& sprite);
 	void Render(RenderContext& rc);
 	
+private:
+	void UpdateInventoryFoodIcon();
+
+public:
 	/// <summary>
 	/// ハンバーガーを全所持かどうかの取得
 	/// </summary>
 	/// <returns></returns>
-	bool& GetIsHasHamburger()
+	bool GetIsHasHamburger() const
 	{
 		return m_isHasHamburger;
 	}
@@ -118,7 +133,7 @@ public:
 	/// ピザを全所持かどうかの取得
 	/// </summary>
 	/// <returns></returns>
-	bool& GetIsHasPizza()
+	bool GetIsHasPizza() const
 	{
 		return m_isHasPizza;
 	}
@@ -127,7 +142,7 @@ public:
 	/// 寿司を全所持かどうかの取得
 	/// </summary>
 	/// <returns></returns>
-	bool& GetIsHasSushi()
+	bool GetIsHasSushi() const
 	{
 		return m_isHasSushi;
 	}
@@ -137,7 +152,7 @@ public:
 	/// ハンバーガーを全所持かどうかの設定
 	/// </summary>
 	/// <returns></returns>
-	bool& GetIsHasFullHamburger()
+	bool GetIsHasFullHamburger() const
 	{
 		return m_isHasFullHamburger;
 	}
@@ -146,7 +161,7 @@ public:
 	/// ピザを全所持かどうかの設定
 	/// </summary>
 	/// <returns></returns>
-	bool& GetIsHasFullPizza()
+	bool GetIsHasFullPizza() const
 	{
 		return m_isHasFullPizza;
 	}
@@ -155,7 +170,7 @@ public:
 	/// 寿司を全所持かどうかの設定
 	/// </summary>
 	/// <returns></returns>
-	bool& GetIsHasFullSushi()
+	bool GetIsHasFullSushi() const
 	{
 		return m_isHasFullSushi;
 	}
@@ -172,18 +187,13 @@ private:
 	std::vector<CustomerManPizza*> m_customerManPizza;
 	std::vector<CustomerManSushi*> m_customerManSushi;
 
-	SpriteRender		m_humburgerSp;							//ハンバーガー：色あり
-	SpriteRender		m_humburgerGrayHalf;					//ハンバーガー：グレーと色あり
-	SpriteRender		m_humburgerGrayAll;						//ハンバーガー：グレー
-	SpriteRender		m_pizzaSp;								//ピザ：色あり
-	SpriteRender		m_pizzaGrayHalf;						//ピザ：グレーと色あり
-	SpriteRender		m_pizzaGrayAll;							//ピザ：グレー
-	SpriteRender		m_sushiSp;								//寿司：色あり
-	SpriteRender		m_sushiGrayHalf;						//寿司：グレーと色あり
-	SpriteRender		m_sushiGrayAll;							//寿司：グレー			
-	RewardSprite		m_reward150;							//150円用報酬スプライト
-	RewardSprite		m_reward200;							//200円用報酬スプライト
-	RewardSprite		m_reward500;							//500円用報酬スプライト
+	InventoryFoodIcon m_inventoryFoodIcons[EnFoodType::EnFoodTypeMax];	//インベントリアイコン
+
+	InventoryRewardMoneyIcon m_inventorymoneyIcon;				//報酬アイコン
+	//RewardSprite		m_reward150;							//150円用報酬スプライト
+	//RewardSprite		m_reward200;							//200円用報酬スプライト
+	//RewardSprite		m_reward500;							//500円用報酬スプライト
+
 	RewardSprite		m_gotPlane;								//獲得時のスプライト
 	RewardSprite		m_soldOut;								//売り切れ時のスプライト
 	RewardSprite*		m_currentRewardSprite = nullptr;		//現在の報酬スプライト

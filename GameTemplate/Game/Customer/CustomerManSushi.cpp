@@ -37,6 +37,7 @@ void CustomerManSushi::Render(RenderContext& rc)
 	//Playerと衝突したら
 	if (m_isHasCollidedMan)
 	{
+		//感謝を表すUIの描画
 		m_iconThank.Draw(rc);
 	}
 	else
@@ -97,10 +98,10 @@ void CustomerManSushi::OnUpdate()
 	Vector3 position = m_position;
 	position.y += UI_HEIGHT_OFFSET;
 	//ワールド座標からスクリーン座標を計算
-	g_camera3D->CalcScreenPositionFromWorldPosition(m_iconUIPos, position);
-	m_iconOrder.SetPosition(Vector3(m_iconUIPos.x, m_iconUIPos.y, 0.0f));
+	g_camera3D->CalcScreenPositionFromWorldPosition(m_iconPos, position);
+	m_iconOrder.SetPosition(Vector3(m_iconPos.x, m_iconPos.y, 0.0f));
 	m_iconOrder.Update();
-	m_iconThank.SetPosition(Vector3(m_iconUIPos.x, m_iconUIPos.y, 0.0f));
+	m_iconThank.SetPosition(Vector3(m_iconPos.x, m_iconPos.y, 0.0f));
 	m_iconThank.Update();
 }
 
@@ -115,7 +116,7 @@ void CustomerManSushi::UpdateHitPlayerCollision()
 		{
 			m_inventoryUI->PreviousSushiState();
 			m_isHasCollidedMan = true;	//衝突判定フラグを立てる
-			m_isScoreAdded = true;
+			m_isScoreAdded = true;		//スコア加算フラグを立てる
 			m_scoreResetTimer = RESET_TIME_THRESHOLD; //リセットタイマーを設定
 			//スコアの追加
 			m_resultUI->ScoreAdded(REWARD_SUSHI);

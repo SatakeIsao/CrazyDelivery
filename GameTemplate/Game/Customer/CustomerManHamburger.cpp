@@ -35,6 +35,7 @@ void CustomerManHamburger::Render(RenderContext& rc)
 	//Playerと衝突したら
 	if (m_isHasCollidedMan)
 	{
+		//感謝を表すUIの描画
 		m_iconThank.Draw(rc);
 	}
 	else
@@ -96,6 +97,7 @@ void CustomerManHamburger::OnUpdate()
 	position.y += UI_HEIGHT_OFFSET;
 	//ワールド座標からスクリーン座標を計算
 	g_camera3D->CalcScreenPositionFromWorldPosition(m_iconPos, position);
+
 	m_iconOrder.SetPosition(Vector3(m_iconPos.x, m_iconPos.y, 0.0f));
 	m_iconOrder.Update();
 	m_iconThank.SetPosition(Vector3(m_iconPos.x, m_iconPos.y, 0.0f));
@@ -113,7 +115,7 @@ void CustomerManHamburger::UpdateHitPlayerCollision()
 		{
 			m_inventoryUI->PreviousHamburgerState();
 			m_isHasCollidedMan = true;	//衝突フラグを立てる
-			m_isScoreAdded = true;
+			m_isScoreAdded = true;		//スコア加算フラグを立てる
 			m_scoreResetTimer = RESET_TIME_THRESHOLD; //リセットタイマーを設定
 			//スコアの追加
 			m_resultUI->ScoreAdded(REWARD_HAMBURGER);

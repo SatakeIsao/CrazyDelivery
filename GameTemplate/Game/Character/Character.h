@@ -3,6 +3,8 @@
  * モデル・座標・拡縮・回転情報がある
  */
 #pragma once
+#include "GameSound.h"
+#include "MakeEffect.h"
 
 class Character : public IGameObject
 {
@@ -59,6 +61,22 @@ public:
 	{
 		m_rotation = rotation;
 	}
+
+	/// <summary>
+	/// 指定された効果音を再生
+	/// </summary>
+	/// <param name="name"></param>
+	/// <param name="vol"></param>
+	/// <param name="isPlay"></param>
+	void PlaySoundSE(const SoundName name, const float vol, const bool isPlay);
+	/// <summary>
+	/// 指定されたエフェクトを再生
+	/// </summary>
+	/// <param name="name"></param>
+	/// <param name="pos"></param>
+	/// <param name="rot"></param>
+	/// <param name="scale"></param>
+	void PlayEffect(const EffectName name, const Vector3& pos, const Quaternion& rot, const Vector3& scale);
 
 protected:
 	Vector3 m_position = Vector3::Zero;				// 座標

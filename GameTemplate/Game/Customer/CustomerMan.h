@@ -74,7 +74,7 @@ protected:
 	/// <param name="pos">座標</param>
 	/// <param name="rot">回転</param>
 	/// <param name="scale">拡大率</param>
-	void PlayEffect(const EffectName name, const Vector3& pos, const Quaternion& rot, const Vector3& scale);
+//	void PlayEffect(const EffectName name, const Vector3& pos, const Quaternion& rot, const Vector3& scale);
 
 	/// <summary>
 	/// 有効な角度かどうか取得
@@ -144,31 +144,25 @@ public:
 		m_isScoreAdded = isAdded;
 	}
 
-	/// <summary>
-	/// 指定された効果音を再生
-	/// </summary>
-	/// <param name="name"></param>
-	/// <param name="vol"></param>
-	/// <param name="isPlay"></param>
-	void PlaySoundSE(const SoundName name, const float vol, const bool isPlay);
-
+	//void Flag
 protected:
 	Game*					m_game = nullptr;
 	ResultUI*				m_resultUI = nullptr;
+	InventoryUI*			m_inventoryUI = nullptr;
+	SoundSource*			m_rewardGot = nullptr;
+	CollisionObject*		m_collision=nullptr;								//コリジョン
 	nsPlayer::Player*		m_player = nullptr;
+	ICustomerManState*		m_customerManState = nullptr;				//ステート
 
 	EnAnimationClip			m_currentAnimationClip = enAnimClip_Idle;	//アニメーションクリップ
 	AnimationClip			m_manAnimClips[enAnimClip_Num];				//現在設定されているアニメーション
 	
-	InventoryUI*			m_inventoryUI = nullptr;
-	ICustomerManState*		m_customerManState = nullptr;				//ステート
 	CharacterController		m_charaCon;									//キャラクターコントローラー
-	CollisionObject*		m_collision;								//コリジョン
-	Vector3					m_collisionSize = Vector3::Zero;			//コリジョンの大きさ
-	SoundSource*			m_rewardGot = nullptr;
 	
 	SpriteRender			m_iconOrder;								//お客さんの頭上に置くUI
-	SpriteRender			m_iconThank;								//感謝を表すUIスプライト
+	SpriteRender			m_iconThank;								//感謝を表すUI
+
+	Vector3					m_collisionSize = Vector3::Zero;			//コリジョンの大きさ
 	float					m_complementTime = 0.0f;					//アニメーションの補間時間
 	bool					m_isHasCollidedMan = false;					//Playerとの衝突判定
 	bool					m_isHasFood = false;						//商品を受け取ったか

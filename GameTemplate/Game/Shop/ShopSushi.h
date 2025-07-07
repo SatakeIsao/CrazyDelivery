@@ -33,15 +33,6 @@ protected:
 	void Render(RenderContext& rc);
 public:
 	/// <summary>
-	/// 寿司の所持数が上限に達しているかの取得
-	/// </summary>
-	/// <returns></returns>
-	bool HasFullSushi() const
-	{
-		return m_hasFullSushi;
-	}
-
-	/// <summary>
 	/// クールダウンタイマーの取得
 	/// </summary>
 	/// <returns></returns>
@@ -49,7 +40,14 @@ public:
 	{
 		return m_coolDownTimer;
 	}
-
+	/// <summary>
+	/// 寿司の所持数が上限に達しているかの取得
+	/// </summary>
+	/// <returns></returns>
+	bool HasFullSushi() const
+	{
+		return m_hasFullSushi;
+	}
 	/// <summary>
 	/// 寿司UIが動いているかどうかの取得
 	/// </summary>

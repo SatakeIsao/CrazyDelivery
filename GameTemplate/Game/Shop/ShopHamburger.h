@@ -35,21 +35,20 @@ protected:
 	void Render(RenderContext& rc);
 public:
 	/// <summary>
-	/// ハンバーガーの所持数が上限に達しているかの取得
-	/// </summary>
-	/// <returns></returns>
-	bool HasFullHamburger() const
-	{
-		return m_hasFullHamburger;
-	}
-
-	/// <summary>
 	/// クールダウンタイマーの値を取得
 	/// </summary>
 	/// <returns></returns>
 	float GetCoolDownTimer() const
 	{
 		return m_coolDownTimer;
+	}
+	/// <summary>
+	/// ハンバーガーの所持数が上限に達しているかの取得
+	/// </summary>
+	/// <returns></returns>
+	bool HasFullHamburger() const
+	{
+		return m_hasFullHamburger;
 	}
 	/// <summary>
 	/// ハンバーガーUIが移動中かどうか

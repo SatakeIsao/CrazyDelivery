@@ -68,10 +68,6 @@ namespace nsPlayer
 		/// プレイヤーのステートを初期化
 		/// </summary>
 		void InitPlayerStates();
-		/// <summary>
-		/// プレイヤーのサウンドを初期化
-		/// </summary>
-		void InitPlayerSound();
 
 
 		/// <summary>
@@ -148,10 +144,6 @@ namespace nsPlayer
 		/// 加速処理
 		/// </summary>
 		void HandleAcceleration();
-		/// <summary>
-		/// 加速時の効果音を再生する
-		/// </summary>
-		void PlayAccelerationSound();
 		/// <summary>
 		/// 速度の方向を調整
 		/// </summary>
@@ -389,17 +381,6 @@ namespace nsPlayer
 			m_isPathMoveEnd = isMoveEnd;
 		}
 
-		void PlayEffect(const EffectName name, const Vector3& pos, const Quaternion& rot, const Vector3& scale)
-		{
-			//エフェクトの再生
-			EffectEmitter* effect = NewGO<EffectEmitter>(0);
-			effect->Init(name);
-			effect->SetPosition(pos);
-			effect->SetRotation(rot);
-			effect->SetScale(scale);
-			effect->Play();
-		}
-
 		const Vector3& GetEffectScale() const
 		{
 			return m_effectScale;
@@ -438,12 +419,8 @@ namespace nsPlayer
 		AnimationClip		m_boardAnimClips[enAnimClip_Num];			//ボードのアニメーションクリップ
 
 
-		GameTimer* m_gameTimer = nullptr;						//ゲームタイマー
-		Path* m_currentPath = nullptr;					//パス
-		SoundSource* m_skaterAcceleSE = nullptr;					//加速SE
-		SoundSource* m_skaterRunSE = nullptr;					//走行SE
-		SoundSource* m_skaterRefSE = nullptr;					//反射SE
-		SoundSource* m_skaterRallSE = nullptr;
+		GameTimer*			m_gameTimer = nullptr;						//ゲームタイマー
+		Path*				m_currentPath = nullptr;					//パス
 
 		float				m_complementTime = 0.0f;					//アニメーションの補間時間
 		float				m_initQuietTime = 5.0f;						//初期の静止時間(加速度1000.0fの時)
@@ -477,7 +454,6 @@ namespace nsPlayer
 	protected:
 		nsPlayer::IPlayerState* m_playerState = nullptr;			//現在のプレイヤーステート
 		CCapsuleCollider			m_capsuleCollider;					//遮蔽物確認用のコライダー
-
 	};
 }
 	

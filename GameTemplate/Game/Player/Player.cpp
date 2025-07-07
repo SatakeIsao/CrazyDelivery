@@ -102,9 +102,6 @@ namespace nsPlayer
 		//プレイヤーステートを初期化
 		InitPlayerStates();
 
-		//プレイヤーのサウンドを初期化
-		InitPlayerSound();
-
 		return true;
 	}
 
@@ -275,18 +272,7 @@ namespace nsPlayer
 		m_playerState = new PlayerIdleState(this);
 		m_playerState->Enter();		//待機状態の初期処理
 		m_forward = Vector3::Right;
-	}
-
-	void Player::InitPlayerSound()
-	{
-		m_skaterRunSE = NewGO<SoundSource>(0);
-		m_skaterRunSE->Init(enSoundName_skaterRun);
-		m_skaterRunSE->SetVolume(2.0f);
-
-		
-	}
-
-	
+	}	
 
 	void Player::MoveAlongPath()
 	{
@@ -339,10 +325,11 @@ namespace nsPlayer
 			m_isPathMoving = true;
 
 			//パス移動開始時に効果音を再生
-			m_skaterRallSE = NewGO<SoundSource>(0);
+			PlaySoundSE(enSoundName_Rall, 1.0f, false);
+			/*m_skaterRallSE = NewGO<SoundSource>(0);
 			m_skaterRallSE->Init(enSoundName_Rall);
 			m_skaterRallSE->SetVolume(1.0f);
-			m_skaterRallSE->Play(false);
+			m_skaterRallSE->Play(false);*/
 			
 		}
 
@@ -647,7 +634,7 @@ namespace nsPlayer
 				if (!m_isPostPathAcceleration)
 				{
 					//加速する時の効果音を再生
-					PlayAccelerationSound();
+					PlaySoundSE(enSoundName_skaterAccele, 0.5f, false);
 				}
 				
 				//加速後はフラグをリセット
@@ -808,7 +795,6 @@ namespace nsPlayer
 			m_position = m_charaCon.Execute(m_velocity, g_gameTime->GetFrameDeltaTime());
 			//m_position.y += m_velocity.y * g_gameTime->GetFrameDeltaTime();
 		}
-		
 	}
 
 	void Player::UpdateModelPos()
@@ -819,32 +805,17 @@ namespace nsPlayer
 		m_charaCon.SetPosition(m_position);
 	}
 
-	void Player::PlayAccelerationSound()
-	{
-		//加速する時の効果音を再生
-		m_skaterAcceleSE = NewGO<SoundSource>(0);
-		m_skaterAcceleSE->Init(enSoundName_skaterAccele);
-		m_skaterAcceleSE->SetVolume(0.5f);
-		m_skaterAcceleSE->Play(false);
-	}
-
+	/*ToDO:効果音が重複しているので調整*/
 	void Player::RunSEProcess()
 	{
 		if (IsPlayerMoving()) {
-			// プレイヤーが動いている場合、再生
-			if (!m_skaterRunSE->IsPlaying()) {
-				m_skaterRunSE->Play(true);
-			}
+			PlaySoundSE(enSoundName_skaterRun, 2.0f, false);
 		}
 		else {
 			// プレイヤーが停止している場合、停止
-			if (m_skaterRunSE->IsPlaying()) {
-				m_skaterRunSE->Stop();
-			}
+			PlaySoundSE(enSoundName_skaterRun, 0.0f, false);
 		}
 	}
-
-
 
 	void Player::CheckCollisionWithWall()
 	{
@@ -909,10 +880,11 @@ namespace nsPlayer
 			//減速率を補間して適用
 			m_velocity = m_reflection * Math::Lerp(entryAngleFactor, MAX_DECELERATION, MIN_DECELERATION);
 			//壁とぶつかった時の効果音
-			m_skaterRefSE = NewGO<SoundSource>(0);
+			PlaySoundSE(enSoundName_Reflection, 1.0f, false);
+			/*m_skaterRefSE = NewGO<SoundSource>(0);
 			m_skaterRefSE->Init(enSoundName_Reflection);
 			m_skaterRefSE->SetVolume(1.0f);
-			m_skaterRefSE->Play(false);
+			m_skaterRefSE->Play(false);*/
 
 		}
 	}

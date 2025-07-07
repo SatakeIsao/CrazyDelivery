@@ -125,17 +125,6 @@ void CustomerMan::PlaySetAnimationSpeed(const float animationSpeed)
 	m_modelRender.SetAnimationSpeed(animationSpeed);
 }
 
-void CustomerMan::PlayEffect(const EffectName name, const Vector3& pos, const Quaternion& rot, const Vector3& scale)
-{
-	//エフェクトの再生
-	EffectEmitter* effect = NewGO<EffectEmitter>(0);
-	effect->Init(name);
-	effect->SetPosition(pos);
-	effect->SetRotation(rot);
-	effect->SetScale(scale);
-	effect->Play();
-}
-
 bool CustomerMan::IsEnableAngle(const float cameraAngleView, const float maxRenderDistance) const
 {
 	//カメラからお客さんの位置へのベクトルを求める
@@ -188,12 +177,4 @@ bool CustomerMan::HasAnyFood() const
 		return false;
 	}
 	return true;
-}
-
-void CustomerMan::PlaySoundSE(const SoundName name, const float vol, const bool isPlay)
-{
-	SoundSource* soundSE = NewGO<SoundSource>(0);
-	soundSE->Init(name);
-	soundSE->SetVolume(vol);
-	soundSE->Play(isPlay);
 }

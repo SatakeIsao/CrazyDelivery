@@ -34,15 +34,6 @@ protected:
 	void Render(RenderContext& rc);
 public:
 	/// <summary>
-	/// ピザの所持数が上限に達しているかの取得
-	/// </summary>
-	/// <returns></returns>
-	bool HasFullPizza() const
-	{
-		return m_hasFullPizza;
-	}
-
-	/// <summary>
 	/// クールダウンタイマーの値を取得
 	/// </summary>
 	/// <returns></returns>
@@ -50,7 +41,14 @@ public:
 	{
 		return m_coolDownTimer;
 	}
-
+	/// <summary>
+	/// ピザの所持数が上限に達しているかの取得
+	/// </summary>
+	/// <returns></returns>
+	bool HasFullPizza() const
+	{
+		return m_hasFullPizza;
+	}
 	/// <summary>
 	/// ピザUIが動いているかどうかの取得
 	/// </summary>
