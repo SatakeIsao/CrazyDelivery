@@ -6,8 +6,8 @@ namespace nsPlayer
 	{
 		playerState(RunState);
 	public:
-		//RunState(Player* owner);
-		//virtual ~RunState();
+		RunState(Player* owner);
+		virtual ~RunState();
 
 		void Enter() override;
 		void Update() override;

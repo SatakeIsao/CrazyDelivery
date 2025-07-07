@@ -7,8 +7,8 @@ namespace nsPlayer
 	{
 		playerState(PushState);
 	public:
-		//PushState(Player* owner);
-		//virtual ~PushState();
+		PushState(Player* owner);
+		virtual ~PushState();
 
 		void Enter() override;
 		void Update() override;

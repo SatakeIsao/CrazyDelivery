@@ -13,12 +13,13 @@ namespace
 }
 namespace nsPlayer
 {
-	/*RunState::RunState(Player* owner){
+	RunState::RunState(Player* owner)
+	:RunStateBase(owner){
 	}
 
 	RunState::~RunState()
 	{
-	}*/
+	}
 
 	void RunState::Enter()
 	{
@@ -61,34 +62,9 @@ namespace nsPlayer
 		//		return false;
 		//	};
 
-		// レールの先頭に近づいたらジャンプする
-		{
-			Path* firstPath = nullptr;
-			firstPath = PathStorage::GetPathStorage()->GetFirstPath();
-			if (CanJump(firstPath, m_owner->GetPostion())) {
-				id = JumpState::ID();
-				return true;
-			}
-			firstPath = PathStorage::GetPathStorage()->GetFirstPath2();
-			if (CanJump(firstPath, m_owner->GetPostion())) {
-				id = JumpState::ID();
-				return true;
-			}
-		}
-		// レールの最後尾に近づいたらジャンプする
-		{
-			
-			Path* lastPath = nullptr;
-			lastPath = PathStorage::GetPathStorage()->GetLastPath();
-			if (CanJump(lastPath, m_owner->GetPostion())) {
-				id = JumpState::ID();
-				return true;
-			}
-			lastPath = PathStorage::GetPathStorage()->GetLastPath2();
-			if (CanJump(lastPath, m_owner->GetPostion())) {
-				id = JumpState::ID();
-				return true;
-			}
+		//基底クラス側の共通処理を実行
+		if (RunStateBase::RequestState(id)) {
+			return true;
 		}
 		
 		if (g_pad[0]->IsTrigger(enButtonB))

@@ -9,13 +9,13 @@
 
 namespace nsPlayer
 {
-	/*PushState::PushState(Player* owner)
-		: IState(owner)
+	PushState::PushState(Player* owner)
+		: RunStateBase(owner)
 	{
 	}
 	PushState::~PushState()
 	{
-	}*/
+	}
 
 	void PushState::Enter()
 	{
@@ -26,11 +26,9 @@ namespace nsPlayer
 
 	void PushState::Update()
 	{
-
 	}
 	void PushState::Exit()
 	{
-
 	}
 
 	bool PushState::RequestState(uint32_t& id)
@@ -40,37 +38,12 @@ namespace nsPlayer
 		{
 			//スタートステートに遷移する
 			id = RunState::ID();
-			//return new PlayerRunState(m_owner);
+			return true;
 		}
 
-		//レールの先頭に近づいたらジャンプする
-		{
-			Path* firstPath = nullptr;
-			firstPath = PathStorage::GetPathStorage()->GetFirstPath();
-			if (CanJump(firstPath, m_owner->GetPostion())) {
-				id = JumpState::ID();
-				return true;
-			}
-			firstPath = PathStorage::GetPathStorage()->GetFirstPath2();
-			if (CanJump(firstPath, m_owner->GetPosition())) {
-				id = JumpState::ID();
-				return true;
-			}
-		}
-
-		//レールの最後尾に近づいたらジャンプする
-		{
-			Path* lastPath = nullptr;
-			lastPath = PathStorage::GetPathStorage()->GetLastPath();
-			if (CanJump(lastPath, m_owner->GetPostion())) {
-				id = JumpState::ID();
-				return true;
-			}
-			lastPath = PathStorage::GetPathStorage()->GetLastPath2();
-			if (CanJump(lastPath, m_owner->GetPosition())) {
-				id = JumpState::ID();
-				return true;
-			}
+		//基底クラス側の共通処理を実行
+		if(RunStateBase::RequestState(id)) {
+			return true;
 		}
 
 		if (g_pad[0]->IsTrigger(enButtonRB1))

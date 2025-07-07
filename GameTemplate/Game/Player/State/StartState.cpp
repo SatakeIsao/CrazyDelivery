@@ -49,8 +49,8 @@ namespace nsPlayer
 			m_owner->SetAccele(forward * PLAYER_ACCELE, m_owner->GetAcceleTimer());
 
 			id = PushState::ID();
-
+			return true;
 		}
-		return true;
+		return false;
 	}
 }

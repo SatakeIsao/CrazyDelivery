@@ -14,7 +14,7 @@ namespace nsPlayer
 		void Exit() override;
 		bool RequestState(uint32_t& id)override;
 	protected:
-		bool CanJump(Path* path,const Vector3& playerPosition);
+		bool CanJump(Path* path);
 	};
 }
 
