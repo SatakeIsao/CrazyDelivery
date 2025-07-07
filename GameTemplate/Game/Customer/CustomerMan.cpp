@@ -189,3 +189,11 @@ bool CustomerMan::HasAnyFood() const
 	}
 	return true;
 }
+
+void CustomerMan::PlaySoundSE(const SoundName name, const float vol, const bool isPlay)
+{
+	SoundSource* soundSE = NewGO<SoundSource>(0);
+	soundSE->Init(name);
+	soundSE->SetVolume(vol);
+	soundSE->Play(isPlay);
+}

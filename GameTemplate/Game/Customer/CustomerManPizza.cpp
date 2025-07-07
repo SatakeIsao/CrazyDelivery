@@ -38,12 +38,12 @@ void CustomerManPizza::Render(RenderContext& rc)
 	//Playerと衝突したら
 	if (m_isHasCollidedMan)
 	{
-		m_customerUIThank.Draw(rc);
+		m_iconThank.Draw(rc);
 	}
 	else
 	{
 		//通常UIの描画
-		m_customerUI.Draw(rc);
+		m_iconOrder.Draw(rc);
 	}
 }
 
@@ -60,8 +60,8 @@ void CustomerManPizza::Init()
 	m_modelRender.Update();
 
 	//お客さんの頭上に表示するUIの初期化
-	m_customerUI.Init("Assets/Sprite/UI/CustomerOrderIcon_Pizza.DDS", 224, 150);
-	m_customerUIThank.Init("Assets/Sprite/UI/CustomerOrderIcon_Thank.dds", 1920, 1080);
+	m_iconOrder.Init("Assets/Sprite/UI/CustomerOrderIcon_Pizza.DDS", 224, 150);
+	m_iconThank.Init("Assets/Sprite/UI/CustomerOrderIcon_Thank.dds", 1920, 1080);
 }
 
 void CustomerManPizza::OnUpdate()
@@ -98,11 +98,12 @@ void CustomerManPizza::OnUpdate()
 	Vector3 position = m_position;
 	position.y += UI_HEIGHT_OFFSET;
 	//ワールド座標からスクリーン座標を計算
-	g_camera3D->CalcScreenPositionFromWorldPosition(m_customerUIPos, position);
-	m_customerUI.SetPosition(Vector3(m_customerUIPos.x, m_customerUIPos.y, 0.0f));
-	m_customerUIThank.SetPosition(Vector3(m_customerUIPos.x, m_customerUIPos.y, 0.0f));
-	m_customerUI.Update();
-	m_customerUIThank.Update();
+	g_camera3D->CalcScreenPositionFromWorldPosition(m_iconUIPos, position);
+
+	m_iconOrder.SetPosition(Vector3(m_iconUIPos.x, m_iconUIPos.y, 0.0f));
+	m_iconOrder.Update();
+	m_iconThank.SetPosition(Vector3(m_iconUIPos.x, m_iconUIPos.y, 0.0f));
+	m_iconThank.Update();
 }
 
 void CustomerManPizza::UpdateHitPlayerCollision()
@@ -128,11 +129,7 @@ void CustomerManPizza::UpdateHitPlayerCollision()
 			// プレイヤーと衝突したらサウンド再生
 			if (m_isSoundPlayed == false)
 			{
-				m_rewardGot = NewGO<SoundSource>(0);
-				m_rewardGot->Init(enSoundName_RewardGot);
-				m_rewardGot->SetVolume(1.0f);
-
-				m_rewardGot->Play(false);
+				PlaySoundSE(enSoundName_RewardGot, 1.0f, false);
 				m_isSoundPlayed = true;
 			}
 		}

@@ -3,12 +3,11 @@
 #include "Scene/Game.h"
 #include "UI/ResultUI.h"
 #include "UI/InventoryUI.h"
-#include "GameSound.h"
 
 namespace
 {
+	const int	REWARD_SUSHI = 500.0f;						//寿司を届けた時の報酬
 	const float RESET_TIME_THRESHOLD = 3.0f;				//リセットタイムのしきい値
-	const int	REWARD_SUSHI = 500.0f;						//ハンバーガーを届けた時の報酬
 	const float MAX_RENDER_DISTANCE = 2000.0f;				//プレイヤーとお客さんの最大距離
 	const float CAMERA_VIEW_ANGLE = Math::DegToRad(50.0f);	//カメラの視野角
 	const float EFFECT_COOL_TIME = 2.0f;					//エフェクト再生間隔
@@ -38,12 +37,12 @@ void CustomerManSushi::Render(RenderContext& rc)
 	//Playerと衝突したら
 	if (m_isHasCollidedMan)
 	{
-		m_customerUIThank.Draw(rc);
+		m_iconThank.Draw(rc);
 	}
 	else
 	{
 		//通常UIの描画
-		m_customerUI.Draw(rc);
+		m_iconOrder.Draw(rc);
 	}
 }
 
@@ -61,8 +60,8 @@ void CustomerManSushi::Init()
 	m_modelRender.Update();
 
 	//お客さんの頭上に表示するUI
-	m_customerUI.Init("Assets/Sprite/UI/CustomerOrderIcon_Sushi.DDS", 224, 150);
-	m_customerUIThank.Init("Assets/Sprite/UI/CustomerOrderIcon_Thank.dds", 1920, 1080);
+	m_iconOrder.Init("Assets/Sprite/UI/CustomerOrderIcon_Sushi.DDS", 224, 150);
+	m_iconThank.Init("Assets/Sprite/UI/CustomerOrderIcon_Thank.dds", 1920, 1080);
 }
 
 void CustomerManSushi::OnUpdate()
@@ -98,11 +97,11 @@ void CustomerManSushi::OnUpdate()
 	Vector3 position = m_position;
 	position.y += UI_HEIGHT_OFFSET;
 	//ワールド座標からスクリーン座標を計算
-	g_camera3D->CalcScreenPositionFromWorldPosition(m_customerUIPos, position);
-	m_customerUI.SetPosition(Vector3(m_customerUIPos.x, m_customerUIPos.y, 0.0f));
-	m_customerUIThank.SetPosition(Vector3(m_customerUIPos.x, m_customerUIPos.y, 0.0f));
-	m_customerUI.Update();
-	m_customerUIThank.Update();
+	g_camera3D->CalcScreenPositionFromWorldPosition(m_iconUIPos, position);
+	m_iconOrder.SetPosition(Vector3(m_iconUIPos.x, m_iconUIPos.y, 0.0f));
+	m_iconOrder.Update();
+	m_iconThank.SetPosition(Vector3(m_iconUIPos.x, m_iconUIPos.y, 0.0f));
+	m_iconThank.Update();
 }
 
 void CustomerManSushi::UpdateHitPlayerCollision()
@@ -126,10 +125,7 @@ void CustomerManSushi::UpdateHitPlayerCollision()
 			// サウンド再生
 			if (m_isSEPlayed == false)
 			{
-				m_rewardGot = NewGO<SoundSource>(0);
-				m_rewardGot->Init(enSoundName_RewardGot);
-				m_rewardGot->SetVolume(1.0f);
-				m_rewardGot->Play(false);
+				PlaySoundSE(enSoundName_RewardGot, 1.0f, false);
 				m_isSEPlayed = true;
 			}
 		}
@@ -174,5 +170,4 @@ void CustomerManSushi::UpdateCoolTime()
 			m_scoreResetTimer = 0.0f; //タイマーをリセット
 		}
 	}
-
 }

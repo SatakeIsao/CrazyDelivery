@@ -100,7 +100,7 @@ protected:
 	/// <param name="CollisionScale"></param>
 	virtual void InitCollision(const Vector3& collisionPos, const Quaternion& CollisionRot, const Vector3& CollisionScale);
 	/// <summary>
-	/// 指定された効果音を再生します。
+	/// 指定された効果音を再生
 	/// </summary>
 	/// <param name="name">再生する効果音の名前</param>
 	/// <param name="vol">効果音の音量（0.0～1.0の範囲）</param>

@@ -1,5 +1,6 @@
 #pragma once
 #include "MakeEffect.h"		// TODO:cpp側に置くかも？
+#include "GameSound.h"
 #include "Character/Character.h"
 class Game;
 class InventoryUI;
@@ -112,14 +113,6 @@ public:
 	}
 
 	/// <summary>
-	/// スコアが加算されたかの取得
-	/// </summary>
-	bool IsScoreAddedBur() const
-	{
-		return m_isScoreAddedBur;
-	}
-
-	/// <summary>
 	/// 当たり判定の取得
 	/// </summary>
 	bool HasCollidedMan() const
@@ -151,6 +144,14 @@ public:
 		m_isScoreAdded = isAdded;
 	}
 
+	/// <summary>
+	/// 指定された効果音を再生
+	/// </summary>
+	/// <param name="name"></param>
+	/// <param name="vol"></param>
+	/// <param name="isPlay"></param>
+	void PlaySoundSE(const SoundName name, const float vol, const bool isPlay);
+
 protected:
 	Game*					m_game = nullptr;
 	ResultUI*				m_resultUI = nullptr;
@@ -166,10 +167,10 @@ protected:
 	Vector3					m_collisionSize = Vector3::Zero;			//コリジョンの大きさ
 	SoundSource*			m_rewardGot = nullptr;
 	
+	SpriteRender			m_iconOrder;								//お客さんの頭上に置くUI
+	SpriteRender			m_iconThank;								//感謝を表すUIスプライト
 	float					m_complementTime = 0.0f;					//アニメーションの補間時間
 	bool					m_isHasCollidedMan = false;					//Playerとの衝突判定
-	bool					m_isScoreAddedBur = false;					//スコアを加算したか
 	bool					m_isHasFood = false;						//商品を受け取ったか
-
 	bool					m_isScoreAdded = false;						//スコアを加算したか
 };

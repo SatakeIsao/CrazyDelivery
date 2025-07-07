@@ -44,10 +44,10 @@ public:
 	}
 
 private:
-	ModelRender			m_customerMan_Hamburger;					//お客さん(ハンバーガー)のモデル
-	SpriteRender		m_customerUI;								//お客さんの頭上に置くUI
-	SpriteRender		m_customerUIThank;							//感謝を表すUIスプライト
-	Vector2				m_customerUIPos = Vector2::Zero;			//UIの座標
+	//ModelRender			m_customerMan_Hamburger;					//お客さん(ハンバーガー)のモデル
+	//SpriteRender		m_customerUI;								//お客さんの頭上に置くUI
+	//SpriteRender		m_customerUIThank;							//感謝を表すUIスプライト
+	Vector2				m_iconPos = Vector2::Zero;			//UIの座標
 	Vector3				m_effectScale = Vector3(3.0f, 3.0f, 3.0f);	//エフェクトの拡大率
 	Vector3				m_forward = Vector3::Front;					//お客さんの前方向を示すベクトル
 		
