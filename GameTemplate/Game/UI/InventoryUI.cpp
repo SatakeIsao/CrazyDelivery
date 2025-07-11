@@ -9,22 +9,10 @@
 #include "Customer/CustomerManSushi.h"
 #include "GameSound.h"
 #include "GameTimer.h"
+#include "UI/UITypes.h"
 
 namespace
 {
-	
-	const Vector3 MONEY_PLANE_STARTPOS = Vector3(1920.0f, 100.0f, 0.0f);	//お金アイコンの移動開始位置(画面右外)
-	const Vector3 MONEY_PLANE_STOPPOS = Vector3(0.0f, 100.0f, 0.0f);		//お金アイコンの停止位置(画面左外)
-	const Vector3 MONEY_PLANE_ENDPOS = Vector3(-1920.0f, 100.0f, 0.0f);		//お金アイコンの終了位置(画面左外)
-	
-	const Vector3 HAMBURGER_LEFT_ENDPOS = Vector3(325.0f, 270.0f, 0.0f);	//ハンバーガーアイコンの移動終了位置(画面左外)
-	const Vector3 PIZZA_LEFT_ENDPOS = Vector3(507.0f, 270.0f, 0.0f);		//ピザアイコンの移動終了位置(画面左外)
-	const Vector3 SUSHI_LEFT_ENDPOS = Vector3(686.0f, 270.0f, 0.0f);		//寿司アイコンの移動終了位置(画面左外)
-
-	const float	  FOOD_SLIDESPEED = 1000.0f;								//食べ物アイコンがスライドする速度
-	const float   MONEY_PLANE_SLIDESPEED = 4000.0f;							//お金アイコンがスライドする速度
-	const float   REWARD_PLANE_STOPDURATION = 0.5f;							//報酬アイコンが停止する時間(秒)
-
 	/** インベントリのフードアイコン用 */
 	const Vector2 FOOD_ICON_SIZE = Vector2(50.0f, 50.0f);
 	const float FOOD_ICON_SCALE = 2.0f;
@@ -55,21 +43,21 @@ bool InventoryUI::Start()
 
 	// ハンバーガー用のアイコン初期化
 	{
-		m_inventoryFoodIcons[EnFoodType::EnFoodTypeHamburger].InitializeSprite(InventoryFoodIcon::enFoodIconTypeAll, "Assets/Sprite/UI/Inventory/InventoryUI_Hamburger.DDS", FOOD_ICON_SIZE, HUMBURGER_ICON_POSITION, FOOD_ICON_SCALE);
-		m_inventoryFoodIcons[EnFoodType::EnFoodTypeHamburger].InitializeSprite(InventoryFoodIcon::enFoodIconTypeHalf, "Assets/Sprite/UI/Inventory/InventoryUI_Hamburger_GrayHalf.DDS", FOOD_ICON_SIZE, HUMBURGER_ICON_POSITION, FOOD_ICON_SCALE);
-		m_inventoryFoodIcons[EnFoodType::EnFoodTypeHamburger].InitializeSprite(InventoryFoodIcon::enFoodIconTypeGray, "Assets/Sprite/UI/Inventory/InventoryUI_Hamburger_GrayAll.DDS", FOOD_ICON_SIZE, HUMBURGER_ICON_POSITION, FOOD_ICON_SCALE);
+		m_inventoryFoodIcons[enFoodTypeHamburger].InitializeSprite(enItemStateAll,      "Assets/Sprite/UI/Inventory/InventoryUI_Hamburger.DDS", FOOD_ICON_SIZE, HUMBURGER_ICON_POSITION, FOOD_ICON_SCALE);
+		m_inventoryFoodIcons[enFoodTypeHamburger].InitializeSprite(enItemStateGrayHalf, "Assets/Sprite/UI/Inventory/InventoryUI_Hamburger_GrayHalf.DDS", FOOD_ICON_SIZE, HUMBURGER_ICON_POSITION, FOOD_ICON_SCALE);
+		m_inventoryFoodIcons[enFoodTypeHamburger].InitializeSprite(enItemStateGrayAll, "Assets/Sprite/UI/Inventory/InventoryUI_Hamburger_GrayAll.DDS", FOOD_ICON_SIZE, HUMBURGER_ICON_POSITION, FOOD_ICON_SCALE);
 	}
 	// ピザ用のアイコン初期化
 	{
-		m_inventoryFoodIcons[EnFoodType::EnFoodTypePizza].InitializeSprite(InventoryFoodIcon::enFoodIconTypeAll, "Assets/Sprite/UI/Inventory/InventoryUI_Pizza.DDS", FOOD_ICON_SIZE, PIZA_ICON_POSITION, FOOD_ICON_SCALE);
-		m_inventoryFoodIcons[EnFoodType::EnFoodTypePizza].InitializeSprite(InventoryFoodIcon::enFoodIconTypeHalf, "Assets/Sprite/UI/Inventory/InventoryUI_Pizza_GrayHalf.DDS", FOOD_ICON_SIZE, PIZA_ICON_POSITION, FOOD_ICON_SCALE);
-		m_inventoryFoodIcons[EnFoodType::EnFoodTypePizza].InitializeSprite(InventoryFoodIcon::enFoodIconTypeGray, "Assets/Sprite/UI/Inventory/InventoryUI_Pizza_GrayAll.DDS", FOOD_ICON_SIZE, PIZA_ICON_POSITION, FOOD_ICON_SCALE);
+		m_inventoryFoodIcons[enFoodTypePizza].InitializeSprite(enItemStateAll, "Assets/Sprite/UI/Inventory/InventoryUI_Pizza.DDS", FOOD_ICON_SIZE, PIZA_ICON_POSITION, FOOD_ICON_SCALE);
+		m_inventoryFoodIcons[enFoodTypePizza].InitializeSprite(enItemStateGrayHalf, "Assets/Sprite/UI/Inventory/InventoryUI_Pizza_GrayHalf.DDS", FOOD_ICON_SIZE, PIZA_ICON_POSITION, FOOD_ICON_SCALE);
+		m_inventoryFoodIcons[enFoodTypePizza].InitializeSprite(enItemStateGrayAll, "Assets/Sprite/UI/Inventory/InventoryUI_Pizza_GrayAll.DDS", FOOD_ICON_SIZE, PIZA_ICON_POSITION, FOOD_ICON_SCALE);
 	}
 	// 寿司用のアイコン初期化
 	{
-		m_inventoryFoodIcons[EnFoodType::EnFoodTypeSushi].InitializeSprite(InventoryFoodIcon::enFoodIconTypeAll, "Assets/Sprite/UI/Inventory/InventoryUI_Sushi.DDS", FOOD_ICON_SIZE, SUSHI_ICON_POSITION, FOOD_ICON_SCALE);
-		m_inventoryFoodIcons[EnFoodType::EnFoodTypeSushi].InitializeSprite(InventoryFoodIcon::enFoodIconTypeHalf, "Assets/Sprite/UI/Inventory/InventoryUI_Sushi_GrayHalf.DDS", FOOD_ICON_SIZE, SUSHI_ICON_POSITION, FOOD_ICON_SCALE);
-		m_inventoryFoodIcons[EnFoodType::EnFoodTypeSushi].InitializeSprite(InventoryFoodIcon::enFoodIconTypeGray, "Assets/Sprite/UI/Inventory/InventoryUI_Sushi_GrayAll.DDS", FOOD_ICON_SIZE, SUSHI_ICON_POSITION, FOOD_ICON_SCALE);
+		m_inventoryFoodIcons[enFoodTypeSushi].InitializeSprite(enItemStateAll, "Assets/Sprite/UI/Inventory/InventoryUI_Sushi.DDS", FOOD_ICON_SIZE, SUSHI_ICON_POSITION, FOOD_ICON_SCALE);
+		m_inventoryFoodIcons[enFoodTypeSushi].InitializeSprite(enItemStateGrayHalf, "Assets/Sprite/UI/Inventory/InventoryUI_Sushi_GrayHalf.DDS", FOOD_ICON_SIZE, SUSHI_ICON_POSITION, FOOD_ICON_SCALE);
+		m_inventoryFoodIcons[enFoodTypeSushi].InitializeSprite(enItemStateGrayAll, "Assets/Sprite/UI/Inventory/InventoryUI_Sushi_GrayAll.DDS", FOOD_ICON_SIZE, SUSHI_ICON_POSITION, FOOD_ICON_SCALE);
 	}
 	//調達時の板スプライトの初期化
 	m_gotPlane.m_reSprite.Init("Assets/Sprite/UI/GetUI_Base.dds", 1920.0f, 1080.0f);
@@ -192,20 +180,14 @@ void InventoryUI::Update()
 			{
 				SetRewardSprite(&m_gotPlane);
 				SetFoodSprite(&m_gotHamburger);
-
-				m_foodGotSE = NewGO<SoundSource>(0);
-				m_foodGotSE->Init(enSoundName_foodGot);
-				m_foodGotSE->SetVolume(1.0f);
-				m_foodGotSE->Play(false);
+				//食べ物獲得時の効果音を再生
+				PlaySoundSE(enSoundName_foodGot, 1.0f, false);
 			}
 			else if (shop->HasFullHamburger())
 			{
-				m_soldOutSE = NewGO <SoundSource>(0);
-				m_soldOutSE->Init(enSoundName_SoldOut);
-				m_soldOutSE->SetVolume(1.0f);
-				m_soldOutSE->Play(false);
-
 				SetRewardSprite(&m_soldOut);
+				//売り切れ時の効果音を再生
+				PlaySoundSE(enSoundName_SoldOut, 1.0f, false);
 			}
 		}
 	}
@@ -220,20 +202,14 @@ void InventoryUI::Update()
 			{
 				SetRewardSprite(&m_gotPlane);
 				SetFoodSprite(&m_gotPizza);
-
-				m_foodGotSE = NewGO<SoundSource>(0);
-				m_foodGotSE->Init(enSoundName_foodGot);
-				m_foodGotSE->SetVolume(1.0f);
-				m_foodGotSE->Play(false);
+				//食べ物獲得時の効果音を再生
+				PlaySoundSE(enSoundName_foodGot, 1.0f, false);
 			}
 			else if (shopPizza->HasFullPizza())
 			{
 				SetRewardSprite(&m_soldOut);
-
-				m_soldOutSE = NewGO <SoundSource>(0);
-				m_soldOutSE->Init(enSoundName_SoldOut);
-				m_soldOutSE->SetVolume(1.0f);
-				m_soldOutSE->Play(false);
+				//売り切れ時の効果音を再生
+				PlaySoundSE(enSoundName_SoldOut, 1.0f, false);
 			}
 		}
 	}
@@ -247,21 +223,15 @@ void InventoryUI::Update()
 			{
 				SetRewardSprite(&m_gotPlane);
 				SetFoodSprite(&m_gotSushi);
-
-				m_foodGotSE = NewGO<SoundSource>(0);
-				m_foodGotSE->Init(enSoundName_foodGot);
-				m_foodGotSE->SetVolume(1.0f);
-				m_foodGotSE->Play(false);
+				//食べ物獲得時の効果音を再生
+				PlaySoundSE(enSoundName_foodGot, 1.0f, false);
 			}
 			
 			else if(shopSushi->HasFullSushi())
 			{
 				SetRewardSprite(&m_soldOut);
-
-				m_soldOutSE = NewGO <SoundSource>(0);
-				m_soldOutSE->Init(enSoundName_SoldOut);
-				m_soldOutSE->SetVolume(1.0f);
-				m_soldOutSE->Play(false);
+				//売り切れ時の効果音を再生
+				PlaySoundSE(enSoundName_SoldOut, 1.0f, false);
 			}
 		}
 	}
@@ -302,9 +272,9 @@ void InventoryUI::Update()
 	UpdateInventoryFoodIcon();
 
 	//各アイテムの状態に基づいてフラグを更新
-	m_isHasHamburger = (m_hamburgerState != Item_Gray_All);
-	m_isHasPizza = (m_pizzaState != Item_Gray_All);
-	m_isHasSushi = (m_sushiState != Item_Gray_All);
+	m_isHasHamburger = (m_hamburgerState != enItemStateGrayAll);
+	m_isHasPizza = (m_pizzaState != enItemStateGrayAll);
+	m_isHasSushi = (m_sushiState != enItemStateGrayAll);
 }
 
 void InventoryUI::SpriteScale()
@@ -390,7 +360,8 @@ void InventoryUI::SpriteSlideFood(FoodSprite& foodSprite)
 	float deltaTime = g_gameTime->GetFrameDeltaTime();
 
 	switch (foodSprite.m_foodState) {
-	case Sliding_To_Stop: {
+	case Sliding_To_Stop:
+	{
 		//停止位置に向かって移動
 		foodSprite.m_foodPos.x -= MONEY_PLANE_SLIDESPEED * deltaTime;
 
@@ -406,7 +377,6 @@ void InventoryUI::SpriteSlideFood(FoodSprite& foodSprite)
 	{
 		//停止時間をカウント
 		foodSprite.m_stopTimer += deltaTime;
-		m_isNextOn = false;
 
 		if (foodSprite.m_stopTimer >= REWARD_PLANE_STOPDURATION)
 		{
@@ -452,6 +422,8 @@ void InventoryUI::SpriteSlideFood(FoodSprite& foodSprite)
 	{
 		m_targetScale = foodSprite.m_foodScale * 0.5;
 		foodSprite.m_foodScale += (m_targetScale - foodSprite.m_foodScale) * 0.1;
+
+
 
 		//目標位置への方向ベクトルを計算
 		m_dirHamburger = HAMBURGER_LEFT_ENDPOS - foodSprite.m_foodPos;
@@ -562,14 +534,14 @@ void InventoryUI::CalcAlphaAndScale(float& alpha, float& scale)
 void InventoryUI::NextHamburgerState()
 {
 	switch (m_hamburgerState) {
-		case Item_All:
+		case enItemStateAll:
 			break;
-		case Item_Gray_Half:
-			m_hamburgerState = Item_All;
+		case enItemStateGrayHalf:
+			m_hamburgerState = enItemStateAll;
 			m_isHasFullHamburger = true;
 			break;
-		case Item_Gray_All:
-			m_hamburgerState = Item_Gray_Half;
+		case enItemStateGrayAll:
+			m_hamburgerState = enItemStateGrayHalf;
 			m_isHasFullHamburger = false;
 			break;
 	}
@@ -578,14 +550,14 @@ void InventoryUI::NextHamburgerState()
 void InventoryUI::NextPizzaState()
 {
 	switch (m_pizzaState) {
-	case Item_All:
+	case enItemStateAll:
 		break;
-	case Item_Gray_Half:
-		m_pizzaState = Item_All;
+	case enItemStateGrayHalf:
+		m_pizzaState = enItemStateAll;
 		m_isHasFullPizza = true;
 		break;
-	case Item_Gray_All:
-		m_pizzaState = Item_Gray_Half;
+	case enItemStateGrayAll:
+		m_pizzaState = enItemStateGrayHalf;
 		m_isHasFullPizza = false;
 		break;
 	}
@@ -594,14 +566,14 @@ void InventoryUI::NextPizzaState()
 void InventoryUI::NextSushiState()
 {
 	switch (m_sushiState) {
-	case Item_All:
+	case enItemStateAll:
 		break;
-	case Item_Gray_Half:
-		m_sushiState = Item_All;
+	case enItemStateGrayHalf:
+		m_sushiState = enItemStateAll;
 		m_isHasFullSushi = true;
 		break;
-	case Item_Gray_All:
-		m_sushiState = Item_Gray_Half;
+	case enItemStateGrayAll:
+		m_sushiState = enItemStateGrayHalf;
 		m_isHasFullSushi = false;
 		break;
 	}
@@ -627,14 +599,14 @@ void InventoryUI::NextScaleState()
 void InventoryUI::PreviousHamburgerState()
 {
 	switch (m_hamburgerState) {
-	case Item_All:
-		m_hamburgerState = Item_Gray_Half;
+	case enItemStateAll:
+		m_hamburgerState = enItemStateGrayHalf;
 		m_isHasFullHamburger = false;
 		break;
 	case Item_Gray_Half:
-		m_hamburgerState = Item_Gray_All;
+		m_hamburgerState = enItemStateGrayAll;
 		break;
-	case Item_Gray_All:
+	case enItemStateGrayAll:
 		break;
 	}
 }
@@ -642,14 +614,14 @@ void InventoryUI::PreviousHamburgerState()
 void InventoryUI::PreviousPizzaState()
 {
 	switch (m_pizzaState) {
-	case Item_All:
-		m_pizzaState = Item_Gray_Half;
+	case enItemStateAll:
+		m_pizzaState = enItemStateGrayHalf;
 		m_isHasFullPizza = false;
 		break;
-	case Item_Gray_Half:
-		m_pizzaState = Item_Gray_All;
+	case enItemStateGrayHalf:
+		m_pizzaState = enItemStateGrayAll;
 		break;
-	case Item_Gray_All:
+	case enItemStateGrayAll:
 		break;
 	}
 }
@@ -657,14 +629,14 @@ void InventoryUI::PreviousPizzaState()
 void InventoryUI::PreviousSushiState()
 {
 	switch (m_sushiState) {
-	case Item_All:
-		m_sushiState = Item_Gray_Half;
+	case enItemStateAll:
+		m_sushiState = enItemStateGrayHalf;
 		m_isHasFullSushi = false;
 		break;
-	case Item_Gray_Half:
-		m_sushiState = Item_Gray_All;
+	case enItemStateGrayHalf:
+		m_sushiState = enItemStateGrayAll;
 		break;
-	case Item_Gray_All:
+	case enItemStateGrayAll:
 		break;
 	}
 }
@@ -692,6 +664,14 @@ void InventoryUI::SetFoodSprite(FoodSprite* foodSprite)
 	m_currentFoodSprite->m_foodSprite.SetScale(m_currentFoodSprite->m_foodScale);
 	m_currentFoodSprite->m_foodSprite.Update();
 	RenderImmediate(m_currentFoodSprite->m_foodSprite);
+}
+
+void InventoryUI::PlaySoundSE(const SoundName& name, const float vol, const bool isLoop)
+{
+	SoundSource* soundSE = NewGO<SoundSource>(0);
+	soundSE->Init(name);
+	soundSE->SetVolume(vol);
+	soundSE->Play(isLoop);
 }
 
 void InventoryUI::RenderImmediate(SpriteRender& sprite)
@@ -728,22 +708,9 @@ void InventoryUI::Render(RenderContext& rc)
 
 void InventoryUI::UpdateInventoryFoodIcon()
 {
-	// Enumを対応するEnumに変換する
-	static auto computeState = [](ItemState itemState)
-		{
-			switch (itemState) {
-				case Item_All:			return InventoryFoodIcon::enFoodIconTypeAll;
-				case Item_Gray_Half:	return InventoryFoodIcon::enFoodIconTypeHalf;
-				case Item_Gray_All:		return InventoryFoodIcon::enFoodIconTypeGray;
-			}
-			// 本来ここに来るはずはない
-			K2_ASSERT(false, "対応したEnumがありません。");
-			return InventoryFoodIcon::enFoodIconTypeAll;
-		};
-
-	m_inventoryFoodIcons[EnFoodTypeHamburger].SetCurrentType(computeState(m_hamburgerState));
-	m_inventoryFoodIcons[EnFoodTypePizza].SetCurrentType(computeState(m_pizzaState));
-	m_inventoryFoodIcons[EnFoodTypeSushi].SetCurrentType(computeState(m_sushiState));
+	m_inventoryFoodIcons[enFoodTypeHamburger].SetCurrentType(m_hamburgerState);
+	m_inventoryFoodIcons[enFoodTypePizza].SetCurrentType(m_pizzaState);
+	m_inventoryFoodIcons[enFoodTypeSushi].SetCurrentType(m_sushiState);
 }
 
 void InventoryUI::SetRewardSpriteToGetPlane()

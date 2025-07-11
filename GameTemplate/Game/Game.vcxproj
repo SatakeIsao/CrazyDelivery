@@ -234,6 +234,7 @@
     <ClCompile Include="Customer\CustomerManPizza.cpp" />
     <ClCompile Include="Customer\CustomerManSushi.cpp" />
     <ClCompile Include="Customer\CustomerWoman.cpp" />
+    <ClCompile Include="UI\UIAnimationManager.cpp" />
     <ClCompile Include="UI\InventoryRewardMoneyIcon.cpp" />
     <ClCompile Include="UI\InventoryFoodIcon.cpp" />
     <ClCompile Include="Player\State\JumpState.cpp" />
@@ -289,6 +290,7 @@
     <ClInclude Include="Customer\CustomerManPizza.h" />
     <ClInclude Include="Customer\CustomerManSushi.h" />
     <ClInclude Include="Customer\CustomerWoman.h" />
+    <ClInclude Include="UI\UIAnimationManager.h" />
     <ClInclude Include="UI\InventoryRewardMoneyIcon.h" />
     <ClInclude Include="UI\InventoryFoodIcon.h" />
     <ClInclude Include="Player\State\JumpState.h" />
@@ -328,6 +330,7 @@
     <ClInclude Include="UI\StartButtonUI.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
+    <ClInclude Include="UI\UITypes.h" />
     <ClInclude Include="Utill\CRC32.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

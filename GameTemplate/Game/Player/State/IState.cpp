@@ -4,12 +4,12 @@
 
 namespace nsPlayer
 {
-	void IState::PlaySoundSE(SoundName name, const float vol, const bool isPlay)
+	void IState::PlaySoundSE(const SoundName& name, const float vol, const bool isLoop)
 	{
 		SoundSource* soundSE = NewGO<SoundSource>(0);
 		soundSE->Init(name);
 		soundSE->SetVolume(vol);
-		soundSE->Play(isPlay);
+		soundSE->Play(isLoop);
 	}
 	
 }

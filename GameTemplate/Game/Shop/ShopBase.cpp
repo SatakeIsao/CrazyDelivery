@@ -33,15 +33,15 @@ void ShopBase::InitCollision(const Vector3& collisionPos, const Quaternion& Coll
 	m_collision->SetIsEnableAutoDelete(false);
 }
 
-void ShopBase::PlaySoundSE(const SoundName name, const float vol,const bool isPlay)
+void ShopBase::PlaySoundSE(const SoundName& name, const float vol,const bool isLoop)
 {
 	SoundSource* soundSE = NewGO<SoundSource>(0);
 	soundSE->Init(name);
 	soundSE->SetVolume(vol);
-	soundSE->Play(isPlay);
+	soundSE->Play(isLoop);
 }
 
-void ShopBase::PlayEffect(const EffectName name, const Vector3& pos, const Quaternion& rot, const Vector3& scale)
+void ShopBase::PlayEffect(const EffectName& name, const Vector3& pos, const Quaternion& rot, const Vector3& scale)
 {
 	//エフェクトの再生
 	EffectEmitter* m_effect = NewGO<EffectEmitter>(0);

@@ -68,7 +68,7 @@ public:
 	/// <param name="name"></param>
 	/// <param name="vol"></param>
 	/// <param name="isPlay"></param>
-	void PlaySoundSE(const SoundName name, const float vol, const bool isPlay);
+	void PlaySoundSE(const SoundName& name, const float vol, const bool isLoop);
 	/// <summary>
 	/// 指定されたエフェクトを再生
 	/// </summary>
@@ -76,7 +76,7 @@ public:
 	/// <param name="pos"></param>
 	/// <param name="rot"></param>
 	/// <param name="scale"></param>
-	void PlayEffect(const EffectName name, const Vector3& pos, const Quaternion& rot, const Vector3& scale);
+	void PlayEffect(const EffectName& name, const Vector3& pos, const Quaternion& rot, const Vector3& scale);
 
 protected:
 	Vector3 m_position = Vector3::Zero;				// 座標
