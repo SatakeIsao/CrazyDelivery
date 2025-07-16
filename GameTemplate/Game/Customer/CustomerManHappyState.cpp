@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Customer/CustomerManHappyState.h"
 #include "Customer/CustomerMan.h"
+#include "CustomerManHandState.h"
 
 CustomerManHappyState::~CustomerManHappyState()
 {
@@ -14,6 +15,11 @@ void CustomerManHappyState::Enter()
 
 ICustomerManState* CustomerManHappyState::StateChange()
 {
+	//TODO:‘JˆÚ•”•ªÀ‘•‚µ‚Ü‚µ‚å‚¤
+	/*if (m_customerMan->)
+	{
+		return new CustomerManHandState(m_customerMan);
+	}*/
 	return nullptr;
 }
 

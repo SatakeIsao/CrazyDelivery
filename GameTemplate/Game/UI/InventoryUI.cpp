@@ -137,8 +137,7 @@ void InventoryUI::Update()
 		CustomerManHamburger* customerHamburger = m_customerManHamburger[i];
 		//if (customerHamburger->HasCollidedMan()
 		//	&& customerHamburger->GetScoreResetTimer() >= 3.0f)
-		if ( /*customerHamburger->HasCollidedMan()*/
-		/* && */ customerHamburger->GetScoreResetTimer() >= 3.0f)
+		if (customerHamburger->GetScoreResetTimer() >= 3.0f)
 		{
 			////d•¡İ’è‚ğ–h‚®
 			//if (m_currentRewardSprite != &m_reward150)

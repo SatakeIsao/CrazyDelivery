@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Customer/CustomerManHandState.h"
+#include "Customer/CustomerManHappyState.h"
 #include "Customer/CustomerMan.h"
 
 CustomerManHandState::~CustomerManHandState()
@@ -14,6 +15,10 @@ void CustomerManHandState::Enter()
 
 ICustomerManState* CustomerManHandState::StateChange()
 {
+	if (m_customerMan->IsScoreAdded())
+	{
+		return new CustomerManHappyState(m_customerMan);
+	}
 	return nullptr;
 }
 
