@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "UIAnimationManager.h"
+#include "InventoryRewardMoneyIcon.h"
 
 namespace
 {
@@ -16,6 +17,8 @@ namespace
 
 	const float	  FOOD_SLIDE_SPEED = 1000.0f;								//食べ物アイコンがスライドする速度
 	const float   REWARD_PLANE_STOP_DURATION = 0.5f;						//報酬アイコンが停止する時間(秒)
+
+	const float FOOD_ICON_DISTANCE_SQ = 50.1f * 50.1f;					//食べ物アイコン用の距離SQ
 }
 
 namespace _internal
@@ -32,23 +35,23 @@ namespace _internal
 	{
 	}
 
-	void RewardUIAnimation::Update()
+	bool RewardUIAnimation::Update()
 	{
 		if (m_spriteRender == nullptr) {
-			return;
+			return false;
 		}
+		bool isProcessing = false;
 		const float deltaTime = g_gameTime->GetFrameDeltaTime();
-
 		switch(m_type)
 		{
-			case enTypeReward:
+			case enRewardAnimationTypeMoney:
 			{
-				UpdateSlideReward(deltaTime);
+				isProcessing = UpdateSlideReward(deltaTime);
 				break;
 			}
-			case enTypeFood:
+			case enRewardAnimationTypeFood:
 			{
-				UpdateSlideFood(deltaTime);
+				isProcessing = UpdateSlideFood(deltaTime);
 				break;
 			}
 			default:
@@ -57,6 +60,7 @@ namespace _internal
 			}
 		}		
 		
+		isProcessing = true;
 	}
 
 	void RewardUIAnimation::Render(RenderContext& rc)
@@ -67,11 +71,12 @@ namespace _internal
 		m_spriteRender->Draw(rc);
 	}
 
-	void RewardUIAnimation::UpdateSlideReward(const float deltaTime)
+	bool RewardUIAnimation::UpdateSlideReward(const float deltaTime)
 	{
+		bool isProcessing = false;
 		switch (m_state)
 		{
-			case EnStateSlidingToStop:
+			case enStateSlidingToStop:
 			{
 				//停止位置に向かって移動
 				m_position.x -= COMMON_SLIDE_SPEED * deltaTime;
@@ -100,7 +105,8 @@ namespace _internal
 				if (m_position.x <= MONEY_PLANE_END_POS.x)
 				{
 					m_position.x = MONEY_PLANE_END_POS.x;
-					m_state = enStateStopped;
+					// 終了位置なので処理(アニメーション)が終わる
+					isProcessing = true;
 				}
 				break;
 			}
@@ -112,9 +118,13 @@ namespace _internal
 		}
 		m_spriteRender->SetPosition(m_position);
 		m_spriteRender->Update();
+
+		return isProcessing;
 	}
-	void RewardUIAnimation::UpdateSlideFood(const float deltaTime)
+
+	bool RewardUIAnimation::UpdateSlideFood(const float deltaTime)
 	{
+		bool isProcessing = false;
 		switch (m_state)
 		{
 			case enStateSlidingToStop:
@@ -136,15 +146,25 @@ namespace _internal
 				m_stopTimer += deltaTime;
 				if (m_stopTimer >= REWARD_PLANE_STOP_DURATION)
 				{
-					if (m_shopHamburger[0]->MovingHamburgerUI() || m_shopHamburger[1]->MovingHamburgerUI())
+					auto isMovingUI = [&](EnFoodType type)
+						{
+							for (auto moving : m_movingShopUI[type]) {
+								if (moving) {
+									return true;
+								}
+							}
+							return false;
+						};
+
+					if (isMovingUI(enFoodTypeHamburger))
 					{
 						m_state = enStateSlidingToHamburgerLeftEnd;
 					}
-					else if (m_shopPizza[0]->MovingPizzaUI() || m_shopPizza[1]->MovingPizzaUI())
+					else if (isMovingUI(enFoodTypePizza))
 					{
 						m_state = enStateSlidingToPizzaLeftEnd;
 					}
-					else if (m_shopSushi[0]->MovingSushiUI() || m_shopSushi[1]->MovingSushiUI())
+					else if (isMovingUI(enFoodTypeSushi))
 					{
 						m_state = enStateSlidingToSushiLeftEnd;
 					}
@@ -154,72 +174,39 @@ namespace _internal
 				break;
 			}
 			case enStateSlidingToHamburgerLeftEnd:
+			case enStateSlidingToPizzaLeftEnd:
+			case enStateSlidingToSushiLeftEnd:
 			{
+				auto getLeftEndPos = [](EnState state)
+					{
+						if (state == enStateSlidingToHamburgerLeftEnd) {
+							return HAMBURGER_LEFT_ENDPOS;
+						}
+						if (state == enStateSlidingToPizzaLeftEnd) {
+							return PIZZA_LEFT_END_POS;
+						}
+						// enStateSlidingToSushiLeftEnd
+						return SUSHI_LEFT_END_POS;
+					};
+
 				const float targetScale = m_scale * 0.5;
 				m_scale += (targetScale - m_scale) * 0.1;
 
 				//目標位置への方向ベクトルを計算
-				m_dirHamburger = HAMBURGER_LEFT_ENDPOS - foodSprite.m_foodPos;
-				m_distance = m_dirHamburger.Length();
+				Vector3 direction = getLeftEndPos(m_state) - m_position;
+				const float distanceSq = direction.LengthSq();
 
-				if (m_distance > 50.1f)
+				if (distanceSq > FOOD_ICON_DISTANCE_SQ)
 				{
-					m_dirHamburger.Normalize();
-					foodSprite.m_foodPos += m_dirHamburger * COMMON_SLIDE_SPEED * deltaTime;
+					direction.Normalize();
+					m_position += direction * COMMON_SLIDE_SPEED * deltaTime;
 
 				}
 				else
 				{
-
-					foodSprite.m_foodPos = COMMON_PLANE_START_POS;
-					foodSprite.m_foodScale = 1.0f;
-					foodSprite.m_foodState = Stopped;
-				}
-				break;
-			}
-			case enStateSlidingToPizzaLeftEnd:
-			{
-				m_targetPizzaScale = foodSprite.m_foodScale * 0.5f;
-				foodSprite.m_foodScale += (m_targetPizzaScale - foodSprite.m_foodScale) * 0.1f;
-
-				//目標位置へのベクトルを計算
-				m_dirPizza = PIZZA_LEFT_END_POS - foodSprite.m_foodPos;
-				m_distancePizza = m_dirPizza.Length();
-
-				if (m_distancePizza > 50.1f)
-				{
-					m_dirPizza.Normalize();
-					foodSprite.m_foodPos += m_dirPizza * COMMON_SLIDE_SPEED * deltaTime;
-
-					//デバック用
-					//foodSprite.m_foodPos.x = MONEY_PLANE_ENDPOS.x;
-				}
-				else
-				{
-					foodSprite.m_foodPos = COMMON_PLANE_START_POS;
-					foodSprite.m_foodScale = 1.0f;
-					foodSprite.m_foodState = Stopped;
-				}
-				break;
-			}
-			case enStateSlidingToSushiLeftEnd:
-			{
-				m_targetSushiScale = foodSprite.m_foodScale * 0.5f;
-				foodSprite.m_foodScale += (m_targetSushiScale - foodSprite.m_foodScale) * 0.1f;
-				//目標位置へのベクトルを計算
-				m_dirSushi = SUSHI_LEFT_END_POS - foodSprite.m_foodPos;
-				m_distanceSushi = m_dirSushi.Length();
-
-				if (m_distanceSushi > 50.1f)
-				{
-					m_dirSushi.Normalize();
-					foodSprite.m_foodPos += m_dirSushi * COMMON_SLIDE_SPEED * deltaTime;
-				}
-				else
-				{
-					foodSprite.m_foodPos = COMMON_PLANE_START_POS;
-					foodSprite.m_foodScale = 1.0f;
-					foodSprite.m_foodState = Stopped;
+					m_position = COMMON_PLANE_START_POS;
+					m_scale = 1.0f;
+					isProcessing = true;
 				}
 				break;
 			}
@@ -228,19 +215,27 @@ namespace _internal
 				break;
 			}
 		}
+
+		// 毎フレーム情報を消して、外から受け取るようにする
+		for (auto& moving : m_movingShopUI) {
+			moving.clear();
+		}
+
 		m_spriteRender->SetPosition(m_position);
 		m_spriteRender->SetScale(m_scale);
 		m_spriteRender->Update();
+
+		return isProcessing;
 	}
 
-	void RewardUIAnimation::Initialize(SpriteRender* spritRender, const EnType type)
+	void RewardUIAnimation::Initialize(SpriteRender* spritRender, const EnRewardAnimationType type)
 	{
 		// それぞれ初期化
 		m_spriteRender = spritRender;
 		m_position = COMMON_PLANE_START_POS;
 		m_scale = 1.0f;
 		m_stopTimer = 0.0f;
-		m_state = EnStateSlidingToStop;
+		m_state = enStateSlidingToStop;
 
 		// 報酬の種類設定
 		m_type = type;
@@ -263,10 +258,73 @@ bool UIAnimationManager::Start()
 
 void UIAnimationManager::Update()
 {
-	m_rewardUIAnimation.Update();
+	bool isAnimation = false;
+	// インスタンスが生成されている場合はアニメーション中
+	if (m_rewardUIAnimationA) {
+		isAnimation = true;
+		if (m_rewardUIAnimationA->Update()) {
+			delete m_rewardUIAnimationA;
+			m_rewardUIAnimationA = nullptr;
+		}
+	}
+	if (m_rewardUIAnimationB) {
+		isAnimation = true;
+		if (m_rewardUIAnimationB->Update()) {
+			delete m_rewardUIAnimationB;
+			m_rewardUIAnimationB = nullptr;
+		}
+	}
+
+	if (!isAnimation && m_requestAnimationType != _internal::enRewardAnimationTypeNone) {
+		if (m_rewardUIAnimationA) {
+			delete m_rewardUIAnimationA;
+			m_rewardUIAnimationA = nullptr;
+		}
+		if (m_rewardUIAnimationB) {
+			delete m_rewardUIAnimationB;
+			m_rewardUIAnimationB = nullptr;
+		}
+		m_rewardUIAnimationA = new _internal::RewardUIAnimation();
+		IInventoryRewardIcon* icon = nullptr;
+		switch (m_requestAnimationType)
+		{
+			case _internal::enRewardAnimationTypeMoney:
+			{
+				m_moneyIcon = new InventoryRewardMoneyIcon();
+				m_moneyIcon->SetRequestType(static_cast<InventoryRewardMoneyIcon::EnMoneyType>(m_animationCommonType));
+				icon = m_moneyIcon;
+				//m_moneyIcon->SetRequestType();
+				break;
+			}
+			case _internal::enRewardAnimationTypeFood:
+			{
+				m_rewardUIAnimationB = new _internal::RewardUIAnimation();
+				m_foodIcon = new InventoryRewardFoodIcon();
+				m_foodIcon->SetRequestType(static_cast<EnFoodType>(m_animationCommonType));
+				icon = m_foodIcon;
+				break;
+			}
+		}
+		// TODO:後で書き替えよう。StartとUpdateじゃなくてInitializeとかにしたい
+		icon->Start();
+		icon->Update();
+		// 生成したアイコンを基にアニメーションさせる
+		m_rewardUIAnimationA->Initialize(icon->GetSpritRender(), m_requestAnimationType);
+		if (m_rewardUIAnimationB) {
+			// 背景はありなしがあるのでifチェック
+			m_rewardUIAnimationB->Initialize(icon->GetBaseSpritRender(), m_requestAnimationType);
+		}
+
+		m_requestAnimationType = _internal::enRewardAnimationTypeNone;
+	}
 }
 
 void UIAnimationManager::Render(RenderContext& rc)
 {
-	m_rewardUIAnimation.Render(rc);
+	if (m_rewardUIAnimationA) {
+		m_rewardUIAnimationA->Render(rc);
+	}
+	if (m_rewardUIAnimationB) {
+		m_rewardUIAnimationB->Render(rc);
+	}
 }

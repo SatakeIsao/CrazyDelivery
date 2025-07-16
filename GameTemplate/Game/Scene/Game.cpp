@@ -6,6 +6,7 @@
 #include "UI/InventoryUI.h"
 #include "UI/StartButtonUI.h"
 #include "UI/MapUI.h"
+#include "UI/UIAnimationManager.h"
 #include "Shop/ShopHamburger.h"
 #include "Shop/ShopPizza.h"
 #include "Shop/ShopSushi.h"
@@ -270,6 +271,9 @@ bool Game::Start()
 		m_player->SetPath(path);
 
 	}
+
+	// TODO: アニメーションマネージャーテスト
+	auto* animationManager = NewGO<UIAnimationManager>(0, "uianimationmanager");
 
 	return true;
 }

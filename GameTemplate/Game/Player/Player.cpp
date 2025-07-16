@@ -154,12 +154,14 @@ namespace nsPlayer
 		//移動ベクトルをチェックしてスピードをリセット
 		//CheckSpeedFromMovement();
 
+		//@todo for 他の効果音と衝突しているので、様子見でコメントアウト
 		//進行時の効果音
-		RunSEProcess();
+		//RunSEProcess();
 
 		//減速処理
 		Friction();
 
+		//@todo for ベクトルを調べるためのデバッグ用
 		//テキストファイルに現在のパラメータを書き込む処理
 		//Output();
 
@@ -809,7 +811,7 @@ namespace nsPlayer
 	void Player::RunSEProcess()
 	{
 		if (IsPlayerMoving()) {
-			PlaySoundSE(enSoundName_skaterRun, 2.0f, false);
+			PlaySoundSE(enSoundName_skaterRun, 1.0f, false);
 		}
 		else {
 			// プレイヤーが停止している場合、停止
@@ -881,11 +883,6 @@ namespace nsPlayer
 			m_velocity = m_reflection * Math::Lerp(entryAngleFactor, MAX_DECELERATION, MIN_DECELERATION);
 			//壁とぶつかった時の効果音
 			PlaySoundSE(enSoundName_Reflection, 1.0f, false);
-			/*m_skaterRefSE = NewGO<SoundSource>(0);
-			m_skaterRefSE->Init(enSoundName_Reflection);
-			m_skaterRefSE->SetVolume(1.0f);
-			m_skaterRefSE->Play(false);*/
-
 		}
 	}
 
@@ -955,7 +952,6 @@ namespace nsPlayer
 			if (collision->IsHit(m_charaCon))
 			{
 				m_velocity = Vector3::Zero;
-				//return true;
 			}
 		}
 	}

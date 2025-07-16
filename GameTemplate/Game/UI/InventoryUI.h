@@ -1,6 +1,7 @@
 #pragma once
 #include "InventoryFoodIcon.h"
 #include "InventoryRewardMoneyIcon.h"
+#include "GameSound.h"
 
 class ShopHamburger;
 class ShopPizza;
@@ -34,8 +35,8 @@ public:
 	bool Start();
 	void Update();
 	void SpriteScale();
-	void SpriteSlide(RewardSprite& rewardSprite);
-	void SpriteSlideFood(FoodSprite& foodSprite);
+	//void SpriteSlide(RewardSprite& rewardSprite);
+	//void SpriteSlideFood(FoodSprite& foodSprite);
 	void SetRewardSpriteToGetPlane();
 	//void ButtonTest();
 	void CalcAlphaAndScale(float& alpha,float& scale);
@@ -46,8 +47,8 @@ public:
 	void PreviousHamburgerState();
 	void PreviousPizzaState();
 	void PreviousSushiState();
-	void SetRewardSprite(RewardSprite* rewardSprite);
-	void SetFoodSprite(FoodSprite* foodSprite);
+	//void SetRewardSprite(RewardSprite* rewardSprite);
+	//void SetFoodSprite(FoodSprite* foodSprite);
 	void PlaySoundSE(const SoundName& name, const float vol, const bool isLoop);
 	void RenderImmediate(SpriteRender& sprite);
 	void Render(RenderContext& rc);
@@ -129,25 +130,25 @@ private:
 	//RewardSprite		m_reward200;							//200円用報酬スプライト
 	//RewardSprite		m_reward500;							//500円用報酬スプライト
 
-	RewardSprite		m_gotPlane;								//獲得時のスプライト
-	RewardSprite		m_soldOut;								//売り切れ時のスプライト
-	RewardSprite*		m_currentRewardSprite = nullptr;		//現在の報酬スプライト
-	
-	FoodSprite			m_gotSushi;								//寿司スプライト
-	FoodSprite			m_gotPizza;								//ピザスプライト
-	FoodSprite			m_gotHamburger;							//ハンバーガースプライト
-	FoodSprite*			m_currentFoodSprite = nullptr;			//現在の食べ物スプライト
+	//RewardSprite		m_gotPlane;								//獲得時のスプライト
+	//RewardSprite		m_soldOut;								//売り切れ時のスプライト
+	//RewardSprite*		m_currentRewardSprite = nullptr;		//現在の報酬スプライト
+	//
+	//FoodSprite			m_gotSushi;								//寿司スプライト
+	//FoodSprite			m_gotPizza;								//ピザスプライト
+	//FoodSprite			m_gotHamburger;							//ハンバーガースプライト
+	//FoodSprite*			m_currentFoodSprite = nullptr;			//現在の食べ物スプライト
 	float				m_scale = 0.0f;							//現在の拡大率
-	float				m_targetScale = 0.0f;					//ターゲットの拡大率
-	float				m_distance = 0.0f;						//ターゲットまでの距離
-	float				m_targetPizzaScale = 0.0f;				//ピザのターゲットスケール
-	float				m_distancePizza = 0.0f;					//ピザのターゲットまでの距離
-	float				m_targetSushiScale = 0.0f;				//寿司のターゲットスケール
-	float				m_distanceSushi = 0.0f;					//寿司のターゲットまでの距離
-	Vector3				m_dirPizza = Vector3::Zero;				//ピザスプライトの方向
-	Vector3				m_dirSushi = Vector3::Zero;				//寿司スプライトの方向
+	//float				m_targetScale = 0.0f;					//ターゲットの拡大率
+	//float				m_distance = 0.0f;						//ターゲットまでの距離
+	//float				m_targetPizzaScale = 0.0f;				//ピザのターゲットスケール
+	//float				m_distancePizza = 0.0f;					//ピザのターゲットまでの距離
+	//float				m_targetSushiScale = 0.0f;				//寿司のターゲットスケール
+	//float				m_distanceSushi = 0.0f;					//寿司のターゲットまでの距離
+	//Vector3				m_dirPizza = Vector3::Zero;				//ピザスプライトの方向
+	//Vector3				m_dirSushi = Vector3::Zero;				//寿司スプライトの方向
 
-	Vector3				m_dirHamburger = Vector3::Zero;			//ハンバーガースプライトの方向
+	//Vector3				m_dirHamburger = Vector3::Zero;			//ハンバーガースプライトの方向
 	
 	
 	
