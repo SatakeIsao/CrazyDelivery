@@ -11,6 +11,7 @@
 #include "UI/UITypes.h"
 #include "UI/UIAnimationManager.h"
 #include "UI/InventoryRewardMoneyIcon.h"
+#include "UI/HasFoodManager.h"
 
 namespace
 {
@@ -41,6 +42,7 @@ bool InventoryUI::Start()
 	m_customerManHamburger = FindGOs<CustomerManHamburger>("customerman_hamburger");
 	m_customerManPizza = FindGOs<CustomerManPizza>("customerman_pizza");
 	m_customerManSushi = FindGOs<CustomerManSushi>("customerman_sushi");
+	m_hasFoodManager = FindGO<HasFoodManager>("hasfoodmanager");
 
 	// ハンバーガー用のアイコン初期化
 	{
@@ -284,9 +286,9 @@ void InventoryUI::Update()
 	UpdateInventoryFoodIcon();
 
 	//各アイテムの状態に基づいてフラグを更新
-	m_isHasHamburger = (m_hamburgerState != enItemStateGrayAll);
-	m_isHasPizza = (m_pizzaState != enItemStateGrayAll);
-	m_isHasSushi = (m_sushiState != enItemStateGrayAll);
+	m_hasHamburger = (m_hamburgerState != enItemStateGrayAll);
+	m_hasPizza = (m_pizzaState != enItemStateGrayAll);
+	m_hasSushi = (m_sushiState != enItemStateGrayAll);
 }
 
 void InventoryUI::SpriteScale()
@@ -550,11 +552,11 @@ void InventoryUI::NextHamburgerState()
 			break;
 		case enItemStateGrayHalf:
 			m_hamburgerState = enItemStateAll;
-			m_isHasFullHamburger = true;
+			m_hasFullHamburger = true;
 			break;
 		case enItemStateGrayAll:
 			m_hamburgerState = enItemStateGrayHalf;
-			m_isHasFullHamburger = false;
+			m_hasFullHamburger = false;
 			break;
 	}
 }
@@ -566,11 +568,11 @@ void InventoryUI::NextPizzaState()
 		break;
 	case enItemStateGrayHalf:
 		m_pizzaState = enItemStateAll;
-		m_isHasFullPizza = true;
+		m_hasFullPizza = true;
 		break;
 	case enItemStateGrayAll:
 		m_pizzaState = enItemStateGrayHalf;
-		m_isHasFullPizza = false;
+		m_hasFullPizza = false;
 		break;
 	}
 }
@@ -582,11 +584,13 @@ void InventoryUI::NextSushiState()
 		break;
 	case enItemStateGrayHalf:
 		m_sushiState = enItemStateAll;
-		m_isHasFullSushi = true;
+		m_hasFoodManager->SetHasFullSushi(true);
+		//m_hasFullSushi = true;
 		break;
 	case enItemStateGrayAll:
 		m_sushiState = enItemStateGrayHalf;
-		m_isHasFullSushi = false;
+		m_hasFoodManager->SetHasFullSushi(false);
+		//m_hasFullSushi = false;
 		break;
 	}
 }
@@ -613,7 +617,7 @@ void InventoryUI::PreviousHamburgerState()
 	switch (m_hamburgerState) {
 	case enItemStateAll:
 		m_hamburgerState = enItemStateGrayHalf;
-		m_isHasFullHamburger = false;
+		m_hasFullHamburger = false;
 		break;
 	case enItemStateGrayHalf:
 		m_hamburgerState = enItemStateGrayAll;
@@ -628,7 +632,7 @@ void InventoryUI::PreviousPizzaState()
 	switch (m_pizzaState) {
 	case enItemStateAll:
 		m_pizzaState = enItemStateGrayHalf;
-		m_isHasFullPizza = false;
+		m_hasFullPizza = false;
 		break;
 	case enItemStateGrayHalf:
 		m_pizzaState = enItemStateGrayAll;
@@ -643,7 +647,8 @@ void InventoryUI::PreviousSushiState()
 	switch (m_sushiState) {
 	case enItemStateAll:
 		m_sushiState = enItemStateGrayHalf;
-		m_isHasFullSushi = false;
+		m_hasFoodManager->SetHasFullSushi(false);
+		//m_hasFullSushi = false;
 		break;
 	case enItemStateGrayHalf:
 		m_sushiState = enItemStateGrayAll;

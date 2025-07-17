@@ -13,6 +13,7 @@ class CustomerManSushi;
 class GameTimer;
 class GameSound;
 class UITypes;
+class HasFoodManager;
 
 class InventoryUI : public IGameObject
 {
@@ -61,55 +62,55 @@ public:
 	/// ハンバーガーを全所持かどうかの取得
 	/// </summary>
 	/// <returns></returns>
-	bool GetIsHasHamburger() const
+	bool HasHamburger() const
 	{
-		return m_isHasHamburger;
+		return m_hasHamburger;
 	}
 
 	/// <summary>
 	/// ピザを全所持かどうかの取得
 	/// </summary>
 	/// <returns></returns>
-	bool GetIsHasPizza() const
+	bool HasPizza() const
 	{
-		return m_isHasPizza;
+		return m_hasPizza;
 	}
 
 	/// <summary>
 	/// 寿司を全所持かどうかの取得
 	/// </summary>
 	/// <returns></returns>
-	bool GetIsHasSushi() const
+	bool HasSushi() const
 	{
-		return m_isHasSushi;
+		return m_hasSushi;
 	}
 
 	
 	/// <summary>
-	/// ハンバーガーを全所持かどうかの設定
+	/// ハンバーガーを全所持かどうかの取得
 	/// </summary>
 	/// <returns></returns>
-	bool GetIsHasFullHamburger() const
+	bool HasFullHamburger() const
 	{
-		return m_isHasFullHamburger;
+		return m_hasFullHamburger;
 	}
 	
 	/// <summary>
-	/// ピザを全所持かどうかの設定
+	/// ピザを全所持かどうかの取得
 	/// </summary>
 	/// <returns></returns>
-	bool GetIsHasFullPizza() const
+	bool HasFullPizza() const
 	{
-		return m_isHasFullPizza;
+		return m_hasFullPizza;
 	}
 
 	/// <summary>
-	/// 寿司を全所持かどうかの設定
+	/// 寿司を全所持かどうかの取得
 	/// </summary>
 	/// <returns></returns>
-	bool GetIsHasFullSushi() const
+	bool HasFullSushi() const
 	{
-		return m_isHasFullSushi;
+		return m_hasFullSushi;
 	}
 
 	
@@ -153,12 +154,12 @@ private:
 	
 	
 	
-	bool				m_isHasHamburger = false;				//ハンバーガー所有フラグ
-	bool				m_isHasPizza = false;					//ピザ所有フラグ
-	bool				m_isHasSushi = false;					//寿司所有フラグ
-	bool				m_isHasFullHamburger = false;			//ハンバーガーを全所持かどうか
-	bool				m_isHasFullPizza = false;				//ピザを全所持かどうか
-	bool				m_isHasFullSushi = false;				//寿司を全所持かどうか
+	bool				m_hasHamburger = false;				//ハンバーガー所有フラグ
+	bool				m_hasPizza = false;					//ピザ所有フラグ
+	bool				m_hasSushi = false;					//寿司所有フラグ
+	bool				m_hasFullHamburger = false;			//ハンバーガーを全所持かどうか
+	bool				m_hasFullPizza = false;				//ピザを全所持かどうか
+	bool				m_hasFullSushi = false;				//寿司を全所持かどうか
 	
 	bool				m_isRewardSpriteInitialized = false;	//報酬スプライト初期化フラグ
 
@@ -170,5 +171,6 @@ private:
 	GameTimer*			m_gameTimer = nullptr;					//ゲームタイマー
 	SoundSource*		m_soldOutSE = nullptr;					//売り切れサウンド効果
 	SoundSource*		m_foodGotSE = nullptr;					//食べ物取得サウンド効果
+	HasFoodManager*		m_hasFoodManager = nullptr;				//持っている食べ物管理クラス
 };
 

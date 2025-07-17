@@ -110,7 +110,7 @@ void CustomerManHamburger::UpdateHitPlayerCollision()
 	if (m_collision->IsHit(m_player->GetCharacterController()))
 	{
 		//衝突可能かつ、ハンバーガを持っている場合
-		if (m_inventoryUI->GetIsHasHamburger() 
+		if (m_inventoryUI->HasHamburger() 
 			&&  !m_isHasCollidedMan)
 		{
 			m_inventoryUI->PreviousHamburgerState();

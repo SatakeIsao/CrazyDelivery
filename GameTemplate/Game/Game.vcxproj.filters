@@ -65,6 +65,7 @@
     <ClCompile Include="UI\InventoryFoodIcon.cpp" />
     <ClCompile Include="UI\InventoryRewardMoneyIcon.cpp" />
     <ClCompile Include="UI\UIAnimationManager.cpp" />
+    <ClCompile Include="UI\HasFoodManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -126,5 +127,6 @@
     <ClInclude Include="UI\InventoryRewardMoneyIcon.h" />
     <ClInclude Include="UI\UIAnimationManager.h" />
     <ClInclude Include="UI\UITypes.h" />
+    <ClInclude Include="UI\HasFoodManager.h" />
   </ItemGroup>
 </Project>

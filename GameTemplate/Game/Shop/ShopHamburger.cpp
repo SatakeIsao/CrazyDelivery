@@ -160,7 +160,7 @@ void ShopHamburger::Render(RenderContext& rc)
 		//クールダウン中はクールダウンUIを表示
 		m_shopCoolDownUI.Draw(rc);
 	}
-	else if (m_inventoryUI->GetIsHasFullHamburger())
+	else if (m_inventoryUI->HasFullHamburger())
 	{
 		//ハンバーガーの所持数が上限に達している場合は、売り切れUIを表示
 		m_shopSoldOutUI.Draw(rc);

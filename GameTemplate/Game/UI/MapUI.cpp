@@ -517,7 +517,7 @@ void MapUI::Render(RenderContext& rc)
 			m_bargerShopGray.Draw(rc);
 		}
 		//else if(g_pad[0]->IsPress(enButtonA))
-		else if (m_inventoryUI->GetIsHasFullHamburger())
+		else if (m_inventoryUI->HasFullHamburger())
 		{
 			m_bargerShopX.Draw(rc);
 		}
@@ -541,7 +541,7 @@ void MapUI::Render(RenderContext& rc)
 			m_bargerShopGray2.Draw(rc);
 		}
 		//else if (g_pad[0]->IsPress(enButtonA))
-		else if (m_inventoryUI->GetIsHasFullHamburger())
+		else if (m_inventoryUI->HasFullHamburger())
 		{
 			m_bargerShopX2.Draw(rc);
 		}
@@ -565,7 +565,7 @@ void MapUI::Render(RenderContext& rc)
 		{
 			m_pizzaShopGray.Draw(rc);
 		}
-		else if (m_inventoryUI->GetIsHasFullPizza())
+		else if (m_inventoryUI->HasFullPizza())
 		{
 			m_pizzaShopX.Draw(rc);
 		}
@@ -583,7 +583,7 @@ void MapUI::Render(RenderContext& rc)
 		{
 			m_pizzaShopGray2.Draw(rc);
 		}
-		else if (m_inventoryUI->GetIsHasFullPizza())
+		else if (m_inventoryUI->HasFullPizza())
 		{
 			m_pizzaShopX2.Draw(rc);
 		}
@@ -609,7 +609,7 @@ void MapUI::Render(RenderContext& rc)
 		{
 			m_sushiShopGray.Draw(rc);
 		}
-		else if (m_inventoryUI->GetIsHasFullSushi())
+		else if (m_inventoryUI->HasFullSushi())
 		{
 			m_sushiShopX.Draw(rc);
 		}
@@ -628,7 +628,7 @@ void MapUI::Render(RenderContext& rc)
 		{
 			m_sushiShopGray2.Draw(rc);
 		}
-		else if (m_inventoryUI->GetIsHasFullSushi())
+		else if (m_inventoryUI->HasFullSushi())
 		{
 			m_sushiShopX2.Draw(rc);
 		}

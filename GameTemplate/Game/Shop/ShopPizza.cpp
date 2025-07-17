@@ -156,7 +156,7 @@ void ShopPizza::Render(RenderContext& rc)
 		//クールダウン中はクールダウンUIを表示
 		m_shopCoolDownUI.Draw(rc);
 	}
-	else if (m_inventoryUI->GetIsHasFullPizza())
+	else if (m_inventoryUI->HasFullPizza())
 	{
 		//ピザの所持数が上限に達している場合は売り切れUIを表示
 		m_shopSoldOutUI.Draw(rc);

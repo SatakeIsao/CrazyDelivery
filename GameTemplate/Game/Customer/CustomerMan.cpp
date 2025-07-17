@@ -167,13 +167,13 @@ void CustomerMan::UpdateHasFood()
 
 bool CustomerMan::HasAnyFood() const
 {
-	if (!m_inventoryUI->GetIsHasHamburger()) {
+	if (!m_inventoryUI->HasHamburger()) {
 		return false;
 	}
-	if (!m_inventoryUI->GetIsHasPizza()) {
+	if (!m_inventoryUI->HasPizza()) {
 		return false;
 	}
-	if (!m_inventoryUI->GetIsHasSushi()) {
+	if (!m_inventoryUI->HasSushi()) {
 		return false;
 	}
 	return true;

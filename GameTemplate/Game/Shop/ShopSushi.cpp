@@ -2,6 +2,7 @@
 #include "Shop/ShopSushi.h"
 #include "Player/Player.h"
 #include "UI/InventoryUI.h"
+#include "UI/HasFoodManager.h"
 #include "GameSound.h"
 
 namespace
@@ -136,7 +137,8 @@ void ShopSushi::UpdateSushiTransition()
 		m_movingSushiUI = false;
 		m_inventoryUI->NextSushiState();
 		//寿司の所持数が上限に達していないなら
-		if (!HasFullSushi())
+		if(!m_hasFoodManager->HasFullSushi())
+		//if (!HasFullSushi())
 		{
 			//インベントリー変更の効果音を再生
 			PlaySoundSE(enSoundName_inventoryChange,1.0f,false);
@@ -154,22 +156,26 @@ void ShopSushi::Render(RenderContext& rc)
 
 	if (m_coolDownTimer <= 7.0f
 		&& m_coolDownTimer >=0.1f
-		&& !m_hasFullSushi)
+		//&& !m_hasFullSushi)
+		&& !m_hasFoodManager->HasFullSushi())
 	{
 		//クールダウン中は、クールダウンUIを表示
 		m_shopCoolDownUI.Draw(rc);
 	}
-	else if (m_inventoryUI->GetIsHasFullSushi())
+	else if(m_hasFoodManager->HasFullSushi())
+	//else if (m_inventoryUI->HasFullSushi())
 	{
 		//寿司の所持数が上限に達している場合は、売り切れUIを表示
 		m_shopSoldOutUI.Draw(rc);
-		m_hasFullSushi = true;
+		m_hasFoodManager->SetHasFullSushi(true);
+		//m_hasFullSushi = true;
 	}
 	else
 	{
 		//寿司の所持数が上限に達していない場合は、通常のUIを表示
 		m_shopUI.Draw(rc);
-		m_hasFullSushi = false;
+		m_hasFoodManager->SetHasFullSushi(false);
+		//m_hasFullSushi = false;
 	}
 	
 }

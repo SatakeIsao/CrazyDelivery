@@ -113,7 +113,7 @@ void CustomerManPizza::UpdateHitPlayerCollision()
 	if (m_collision->IsHit(m_player->GetCharacterController()))
 	{
 		//衝突可能かつ、ピザを持っている場合
-		if (m_inventoryUI->GetIsHasPizza()
+		if (m_inventoryUI->HasPizza()
 			&& !m_isHasCollidedMan)
 		{
 			m_inventoryUI->PreviousPizzaState();

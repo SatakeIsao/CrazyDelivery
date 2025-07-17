@@ -2,12 +2,14 @@
 #include "ShopBase.h"
 #include "Player/Player.h"
 #include "UI/InventoryUI.h"
+#include "UI/HasFoodManager.h"
 #include "GameSound.h"
 
 bool ShopBase::Start()
 {
 	m_player = FindGO<nsPlayer::Player>("player");
 	m_inventoryUI = FindGO<InventoryUI>("inventoryui");
+	m_hasFoodManager = NewGO<HasFoodManager>(0,"hasfoodmanager");
 
 	return true;
 }

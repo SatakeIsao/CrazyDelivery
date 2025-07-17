@@ -111,7 +111,7 @@ void CustomerManSushi::UpdateHitPlayerCollision()
 	if (m_collision->IsHit(m_player->GetCharacterController()))
 	{
 		//Õ“Ë‰Â”\‚©‚ÂAŽõŽi‚ðŽ‚Á‚Ä‚¢‚é‚©
-		if (m_inventoryUI->GetIsHasSushi()
+		if (m_inventoryUI->HasSushi()
 			&& !m_isHasCollidedMan)
 		{
 			m_inventoryUI->PreviousSushiState();
