@@ -3,6 +3,7 @@
 #include "Scene/Game.h"
 #include "UI/ResultUI.h"
 #include "UI/InventoryUI.h"
+#include "UI/HasFoodManager.h"
 #include "GameSound.h"
 
 namespace
@@ -113,7 +114,8 @@ void CustomerManPizza::UpdateHitPlayerCollision()
 	if (m_collision->IsHit(m_player->GetCharacterController()))
 	{
 		//衝突可能かつ、ピザを持っている場合
-		if (m_inventoryUI->HasPizza()
+		if(m_hasFoodManager->HasAnyPizza()
+		//if (m_inventoryUI->HasPizza()
 			&& !m_isHasCollidedMan)
 		{
 			m_inventoryUI->PreviousPizzaState();

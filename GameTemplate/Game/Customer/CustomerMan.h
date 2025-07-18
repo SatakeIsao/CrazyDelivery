@@ -6,6 +6,7 @@ class Game;
 class InventoryUI;
 class ResultUI;
 class ICustomerManState;
+class HasFoodManager;
 namespace nsPlayer {
 	class Player;
 }
@@ -149,6 +150,7 @@ protected:
 	Game*					m_game = nullptr;
 	ResultUI*				m_resultUI = nullptr;
 	InventoryUI*			m_inventoryUI = nullptr;
+	HasFoodManager*			m_hasFoodManager = nullptr;					//食べ物を持っているか管理するクラス
 	SoundSource*			m_rewardGot = nullptr;
 	CollisionObject*		m_collision=nullptr;								//コリジョン
 	nsPlayer::Player*		m_player = nullptr;

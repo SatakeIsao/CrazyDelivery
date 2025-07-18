@@ -2,6 +2,7 @@
 #include "Shop/ShopPizza.h"
 #include "Player/Player.h"
 #include "UI/InventoryUI.h"
+#include "UI/HasFoodManager.h"
 #include "GameSound.h"
 
 namespace
@@ -151,21 +152,25 @@ void ShopPizza::Render(RenderContext& rc)
 	
 	if (m_coolDownTimer <= 7.0f
 		&& m_coolDownTimer >= 0.1f
-		&& !m_hasFullPizza)
+		&& !m_hasFoodManager->HasFullPizza())
+		//	&& !m_hasFullPizza)
 	{
 		//クールダウン中はクールダウンUIを表示
 		m_shopCoolDownUI.Draw(rc);
 	}
-	else if (m_inventoryUI->HasFullPizza())
+	else if(m_hasFoodManager->HasFullPizza())
+	//else if (m_inventoryUI->HasFullPizza())
 	{
 		//ピザの所持数が上限に達している場合は売り切れUIを表示
 		m_shopSoldOutUI.Draw(rc);
-		m_hasFullPizza = true;
+		m_hasFoodManager->SetHasFullPizza(true);
+		//m_hasFullPizza = true;
 	}
 	else
 	{
 		//ピザの所持数が上限に達していない場合は通常のUIを表示
 		m_shopUI.Draw(rc);
-		m_hasFullPizza = false;
+		m_hasFoodManager->SetHasFullPizza(false);
+		//m_hasFullPizza = false;
 	}
 }

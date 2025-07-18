@@ -57,61 +57,63 @@ public:
 private:
 	void UpdateInventoryFoodIcon();
 
+
+/*TODO:　後で消す*/
 public:
-	/// <summary>
-	/// ハンバーガーを全所持かどうかの取得
-	/// </summary>
-	/// <returns></returns>
+//	/// <summary>
+//	/// ハンバーガーを全所持かどうかの取得
+//	/// </summary>
+//	/// <returns></returns>
 	bool HasHamburger() const
 	{
 		return m_hasHamburger;
 	}
-
-	/// <summary>
-	/// ピザを全所持かどうかの取得
-	/// </summary>
-	/// <returns></returns>
-	bool HasPizza() const
-	{
-		return m_hasPizza;
-	}
-
-	/// <summary>
-	/// 寿司を全所持かどうかの取得
-	/// </summary>
-	/// <returns></returns>
-	bool HasSushi() const
-	{
-		return m_hasSushi;
-	}
-
-	
-	/// <summary>
-	/// ハンバーガーを全所持かどうかの取得
-	/// </summary>
-	/// <returns></returns>
-	bool HasFullHamburger() const
-	{
-		return m_hasFullHamburger;
-	}
-	
-	/// <summary>
-	/// ピザを全所持かどうかの取得
-	/// </summary>
-	/// <returns></returns>
-	bool HasFullPizza() const
-	{
-		return m_hasFullPizza;
-	}
-
-	/// <summary>
-	/// 寿司を全所持かどうかの取得
-	/// </summary>
-	/// <returns></returns>
-	bool HasFullSushi() const
-	{
-		return m_hasFullSushi;
-	}
+//
+//	/// <summary>
+//	/// ピザを全所持かどうかの取得
+//	/// </summary>
+//	/// <returns></returns>
+//	bool HasPizza() const
+//	{
+//		return m_hasPizza;
+//	}
+//
+//	/// <summary>
+//	/// 寿司を全所持かどうかの取得
+//	/// </summary>
+//	/// <returns></returns>
+//	bool HasSushi() const
+//	{
+//		return m_hasSushi;
+//	}
+//
+//	
+//	/// <summary>
+//	/// ハンバーガーを全所持かどうかの取得
+//	/// </summary>
+//	/// <returns></returns>
+//	bool HasFullHamburger() const
+//	{
+//		return m_hasFullHamburger;
+//	}
+//	
+//	/// <summary>
+//	/// ピザを全所持かどうかの取得
+//	/// </summary>
+//	/// <returns></returns>
+//	bool HasFullPizza() const
+//	{
+//		return m_hasFullPizza;
+//	}
+//
+//	/// <summary>
+//	/// 寿司を全所持かどうかの取得
+//	/// </summary>
+//	/// <returns></returns>
+//	bool HasFullSushi() const
+//	{
+//		return m_hasFullSushi;
+//	}
 
 	
 	
@@ -153,13 +155,14 @@ private:
 	
 	
 	
-	
+	//TODO:　後で消す
 	bool				m_hasHamburger = false;				//ハンバーガー所有フラグ
-	bool				m_hasPizza = false;					//ピザ所有フラグ
-	bool				m_hasSushi = false;					//寿司所有フラグ
-	bool				m_hasFullHamburger = false;			//ハンバーガーを全所持かどうか
-	bool				m_hasFullPizza = false;				//ピザを全所持かどうか
-	bool				m_hasFullSushi = false;				//寿司を全所持かどうか
+	//bool				m_hasPizza = false;					//ピザ所有フラグ
+	//bool				m_hasSushi = false;					//寿司所有フラグ
+	
+	//bool				m_hasFullHamburger = false;			//ハンバーガーを全所持かどうか
+	//bool				m_hasFullPizza = false;				//ピザを全所持かどうか
+	//bool				m_hasFullSushi = false;				//寿司を全所持かどうか
 	
 	bool				m_isRewardSpriteInitialized = false;	//報酬スプライト初期化フラグ
 

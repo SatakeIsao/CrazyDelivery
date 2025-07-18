@@ -10,6 +10,7 @@
 #include "Customer/CustomerManSushi.h"
 #include "InventoryUI.h"
 #include "GameTimer.h"
+#include "UI/HasFoodManager.h"
 namespace
 {
 	const Vector3 MAP_CENTER_POSITION = Vector3(-600.0f, -250.0f, 0.0f);
@@ -131,6 +132,8 @@ bool MapUI::Start()
 	m_customerManSushi = FindGOs<CustomerManSushi>("customerman_sushi");
 
 	m_gameTimer = FindGO<GameTimer>("gametimer");
+	m_hasFoodManager = FindGO<HasFoodManager>("hasfoodmanager");
+
 
 	return true;
 }
@@ -516,8 +519,8 @@ void MapUI::Render(RenderContext& rc)
 		{
 			m_bargerShopGray.Draw(rc);
 		}
-		//else if(g_pad[0]->IsPress(enButtonA))
-		else if (m_inventoryUI->HasFullHamburger())
+		else if(m_hasFoodManager->HasFullHamburger())
+		//else if (m_inventoryUI->HasFullHamburger())
 		{
 			m_bargerShopX.Draw(rc);
 		}
@@ -540,8 +543,8 @@ void MapUI::Render(RenderContext& rc)
 		{
 			m_bargerShopGray2.Draw(rc);
 		}
-		//else if (g_pad[0]->IsPress(enButtonA))
-		else if (m_inventoryUI->HasFullHamburger())
+		else if(m_hasFoodManager->HasFullHamburger())
+		//else if (m_inventoryUI->HasFullHamburger())
 		{
 			m_bargerShopX2.Draw(rc);
 		}
@@ -565,7 +568,8 @@ void MapUI::Render(RenderContext& rc)
 		{
 			m_pizzaShopGray.Draw(rc);
 		}
-		else if (m_inventoryUI->HasFullPizza())
+		//else if (m_inventoryUI->HasFullPizza())
+		else if(m_hasFoodManager->HasFullPizza())
 		{
 			m_pizzaShopX.Draw(rc);
 		}
@@ -583,7 +587,8 @@ void MapUI::Render(RenderContext& rc)
 		{
 			m_pizzaShopGray2.Draw(rc);
 		}
-		else if (m_inventoryUI->HasFullPizza())
+		//else if (m_inventoryUI->HasFullPizza())
+		else if(m_hasFoodManager->HasFullPizza())
 		{
 			m_pizzaShopX2.Draw(rc);
 		}
@@ -609,7 +614,8 @@ void MapUI::Render(RenderContext& rc)
 		{
 			m_sushiShopGray.Draw(rc);
 		}
-		else if (m_inventoryUI->HasFullSushi())
+		//else if (m_inventoryUI->HasFullSushi())
+		else if(m_hasFoodManager->HasFullSushi())
 		{
 			m_sushiShopX.Draw(rc);
 		}
@@ -628,7 +634,8 @@ void MapUI::Render(RenderContext& rc)
 		{
 			m_sushiShopGray2.Draw(rc);
 		}
-		else if (m_inventoryUI->HasFullSushi())
+		//else if (m_inventoryUI->HasFullSushi())
+		else if(m_hasFoodManager->HasFullSushi())
 		{
 			m_sushiShopX2.Draw(rc);
 		}

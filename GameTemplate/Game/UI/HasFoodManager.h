@@ -14,7 +14,7 @@ public:
 	/// <summary>
 	/// ハンバーガーを持っているか
 	/// </summary>
-	inline bool HasAnyHamburger() const
+	inline bool HasAnyHamburger()
 	{
 		return m_hasAnyHamburger;
 	}
@@ -36,7 +36,7 @@ public:
 	/// <summary>
 	/// ハンバーガーを上限まで持っているか
 	/// </summary>
-	inline bool HasFullHamburger() const
+	inline bool HasFullHamburger()
 	{
 		return m_hasFullHamburger;
 	}

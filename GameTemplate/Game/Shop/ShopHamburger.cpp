@@ -2,6 +2,7 @@
 #include "Shop/ShopHamburger.h"
 #include "Player/Player.h"
 #include "UI/InventoryUI.h"
+#include "UI/HasFoodManager.h"
 #include "GameSound.h"
 
 namespace
@@ -155,21 +156,24 @@ void ShopHamburger::Render(RenderContext& rc)
 	}
 	if (m_coolDownTimer<=7.0f
 		&& m_coolDownTimer>=0.1f
-		&& !m_hasFullHamburger)
+		&& !m_hasFoodManager->HasFullHamburger())
 	{
 		//クールダウン中はクールダウンUIを表示
 		m_shopCoolDownUI.Draw(rc);
 	}
-	else if (m_inventoryUI->HasFullHamburger())
+	else if (m_hasFoodManager->HasFullHamburger())
+	//else if (m_inventoryUI->HasFullHamburger())
 	{
 		//ハンバーガーの所持数が上限に達している場合は、売り切れUIを表示
 		m_shopSoldOutUI.Draw(rc);
-		m_hasFullHamburger = true;
+		//m_hasFoodManager->SetHasFullHamburger(true);
+		//m_hasFullHamburger = true;
 	}
 	else
 	{
 		//ハンバーガーの所持数が上限に達していない場合は、通常のUIを表示
 		m_shopUI.Draw(rc);
-		m_hasFullHamburger = false;
+		//m_hasFoodManager->SetHasFullHamburger(false);
+		//m_hasFullHamburger = false;
 	}	
 }

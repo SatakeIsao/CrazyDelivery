@@ -5,6 +5,7 @@
 #include "Customer/CustomerManHandState.h"
 #include "UI/InventoryUI.h"
 #include "UI/ResultUI.h"
+#include "UI/HasFoodManager.h"
 #include "Player/Player.h"
 
 namespace
@@ -34,6 +35,7 @@ bool CustomerMan::Start()
 	m_player = FindGO<nsPlayer::Player>("player");
 	m_inventoryUI = FindGO<InventoryUI>("inventoryui");
 	m_resultUI = FindGO<ResultUI>("resultui");
+	m_hasFoodManager = FindGO<HasFoodManager>("hasfoodmanager");
 	//ƒLƒƒƒ‰ƒRƒ“‚ð‰Šú‰»
 	m_charaCon.Init(
 		20.0f,
@@ -167,13 +169,16 @@ void CustomerMan::UpdateHasFood()
 
 bool CustomerMan::HasAnyFood() const
 {
-	if (!m_inventoryUI->HasHamburger()) {
+	if(!m_hasFoodManager->HasAnyHamburger()){
+	//if (!m_inventoryUI->HasHamburger()) {
 		return false;
 	}
-	if (!m_inventoryUI->HasPizza()) {
+	if(!m_hasFoodManager->HasAnyPizza()){
+	//if (!m_inventoryUI->HasPizza()) {
 		return false;
 	}
-	if (!m_inventoryUI->HasSushi()) {
+	if(!m_hasFoodManager->HasAnySushi()){
+	//if (!m_inventoryUI->HasSushi()) {
 		return false;
 	}
 	return true;
