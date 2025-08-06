@@ -1,6 +1,7 @@
 #pragma once
 #include "Customer/CustomerMan.h"
 
+class HasFoodManager;
 class CustomerManPizza : public CustomerMan
 {
 public:
@@ -36,6 +37,7 @@ public:
 	}
 
 private:
+	HasFoodManager*		m_hasFoodManager = nullptr;				//ピザを持っているか管理するクラス
 	Vector2				m_iconPos = Vector2::Zero;					//UIの座標
 	Vector3				m_effectScale = Vector3(3.0f, 3.0f, 3.0f);	//エフェクトの拡大率
 	Vector3				m_forward = Vector3::Front;					//お客さんの前方向を示すベクトル

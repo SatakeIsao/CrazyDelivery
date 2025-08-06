@@ -4,7 +4,6 @@
 #include "UI/ResultUI.h"
 #include "UI/InventoryUI.h"
 #include "UI/HasFoodManager.h"
-#include "GameSound.h"
 
 namespace
 {
@@ -23,7 +22,7 @@ CustomerManPizza::CustomerManPizza()
 
 CustomerManPizza::~CustomerManPizza()
 {
-	DeleteGO(m_collision);
+	//DeleteGO(m_collision);
 }
 
 void CustomerManPizza::Render(RenderContext& rc)
@@ -51,6 +50,7 @@ void CustomerManPizza::Render(RenderContext& rc)
 
 void CustomerManPizza::Init()
 {
+	m_hasFoodManager = FindGO<HasFoodManager>("hasfoodmanager");
 	//‰Šú‰ñ“]‚ğİ’è
 	m_rotation.SetRotationDegZ(0.0f);
 

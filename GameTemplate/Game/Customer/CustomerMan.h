@@ -6,7 +6,7 @@ class Game;
 class InventoryUI;
 class ResultUI;
 class ICustomerManState;
-class HasFoodManager;
+//class HasFoodManager;
 namespace nsPlayer {
 	class Player;
 }
@@ -87,11 +87,11 @@ private:
 	/// <summary>
 	/// 食べ物を持っているか更新
 	/// </summary>
-	void UpdateHasFood();
+	//void UpdateHasFood();
 	/// <summary>
 	/// 何かしら食べ物を持っているか
 	/// </summary>
-	inline bool HasAnyFood() const;
+	//inline bool HasAnyFood() const;
 
 public:
 	/// <summary>
@@ -150,7 +150,7 @@ protected:
 	Game*					m_game = nullptr;
 	ResultUI*				m_resultUI = nullptr;
 	InventoryUI*			m_inventoryUI = nullptr;
-	HasFoodManager*			m_hasFoodManager = nullptr;					//食べ物を持っているか管理するクラス
+	//HasFoodManager*			m_hasFoodManager = nullptr;					//食べ物を持っているか管理するクラス
 	SoundSource*			m_rewardGot = nullptr;
 	CollisionObject*		m_collision=nullptr;								//コリジョン
 	nsPlayer::Player*		m_player = nullptr;

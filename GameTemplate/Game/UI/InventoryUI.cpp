@@ -183,27 +183,29 @@ void InventoryUI::Update()
 	}
 
 	//// gotPlane の描画処理
-	//for (int i = 0; i < m_shopHamburger.size(); i++)
-	//{
-	//	ShopHamburger* shop = m_shopHamburger[i];
-	//	if (shop->MovingHamburgerUI()
-	//		&& shop->GetCoolDownTimer() >= 7.0f)
-	//	{
-	//		if (!shop->HasFullHamburger())
-	//		{
+	for (int i = 0; i < m_shopHamburger.size(); i++)
+	{
+		ShopHamburger* shop = m_shopHamburger[i];
+		if (shop->MovingHamburgerUI()
+			&& shop->GetCoolDownTimer() >= 7.0f)
+	{
+			if (!shop->HasFullHamburger())
+			{
+				uiAnimationManager->RequestAnimationFood(EnFoodType::enFoodTypeHamburger);
 	//			SetRewardSprite(&m_gotPlane);
 	//			SetFoodSprite(&m_gotHamburger);
 	//			//食べ物獲得時の効果音を再生
+				PlaySoundSE(enSoundName_FoodGot, 1.0f, false);
 	//			PlaySoundSE(enSoundName_foodGot, 1.0f, false);
-	//		}
+			}
 	//		else if (shop->HasFullHamburger())
 	//		{
 	//			SetRewardSprite(&m_soldOut);
 	//			//売り切れ時の効果音を再生
 	//			PlaySoundSE(enSoundName_SoldOut, 1.0f, false);
 	//		}
-	//	}
-	//}
+		}
+	}
 	//
 	//for (int i = 0; i < m_shopPizza.size(); i++)
 	//{
@@ -285,8 +287,26 @@ void InventoryUI::Update()
 
 	//TODO: フラグを更新する処理→お客さんに届けるときに必須ですた
 	//各アイテムの状態に基づいてフラグを更新
-	//m_hasFoodManager->SetHasAnyHamburger()
-	m_hasHamburger = (m_hamburgerState != enItemStateGrayAll);
+	//m_hasFoodManager->SetHasAnyHamburger(true) = (m_hamburgerState != enItemStateGrayAll);
+	if(m_hamburgerState == enItemStateGrayAll) {
+		m_hasFoodManager->SetHasAnyHamburger(false);
+	} else {
+		m_hasFoodManager->SetHasAnyHamburger(true);
+	}
+
+	//m_hasHamburger = (m_hamburgerState != enItemStateGrayAll);
+	 
+	if (m_pizzaState == enItemStateGrayAll) {
+		m_hasFoodManager->SetHasAnyPizza(false);
+	}else {
+		m_hasFoodManager->SetHasAnyPizza(true);
+	}
+
+	if (m_sushiState == enItemStateGrayAll) {
+		m_hasFoodManager->SetHasAnySushi(false);
+	}else {
+		m_hasFoodManager->SetHasAnySushi(true);
+	}
 	//m_hasPizza = (m_pizzaState != enItemStateGrayAll);
 	//m_hasSushi = (m_sushiState != enItemStateGrayAll);
 }

@@ -7,12 +7,12 @@
 
 namespace
 {
-	const Vector3	CHECKPOINT_SIZE = { 380.0f,200.0f,400.0f };
-	const Vector2	UI_SIZE = { 224.0f, 150.0f };	//UIのサイズ
-	const float		COOLDOWN_TIME = 7.0f;
-	const float		TRANSITION_TIME = 1.3f;	//HAMBURGER_LEFT_ENDPOS に到達する時間を設定
-	const float		MAX_RENDER_DISTANCE = 2000.0f;				//プレイヤーとお客さんの最大距離
-	const float		CAMERA_VIEW_ANGLE = Math::DegToRad(50.0f);	//カメラの視野角
+	const Vector3	CHECKPOINT_SIZE = { 380.0f,200.0f,400.0f };		//チェックポイントの範囲
+	const Vector2	UI_SIZE = { 224.0f, 150.0f };					//UIのサイズ
+	const float		COOLDOWN_TIME = 7.0f;							//クールダウン時間
+	const float		TRANSITION_TIME = 1.3f;							//HAMBURGER_LEFT_ENDPOS に到達する時間を設定
+	const float		MAX_RENDER_DISTANCE = 2000.0f;					//プレイヤーとお客さんの最大距離
+	const float		CAMERA_VIEW_ANGLE = Math::DegToRad(50.0f);		//カメラの視野角
 }
 
 ShopHamburger::ShopHamburger()
@@ -27,6 +27,7 @@ ShopHamburger::~ShopHamburger()
 bool ShopHamburger::Start()
 {
 	ShopBase::Start();
+	m_hasFoodManager = FindGO<HasFoodManager>("hasfoodmanager");
 	Init();
 	return true;
 }
@@ -83,9 +84,8 @@ void ShopHamburger::UpdateHitPlayerCollision()
 	{
 		if (!m_movingHamburgerUI)
 		{
-			//衝突したらハンバーガーUIを移動させるフラグを立てる
-			m_movingHamburgerUI = true;
-			m_hamburgerUIMoveTimer = 0.0f;	//タイマーリセット
+			m_movingHamburgerUI = true;			//衝突したらハンバーガーUIを移動させるフラグを立てる
+			m_hamburgerUIMoveTimer = 0.0f;		//タイマーリセット
 			m_coolDownTimer = COOLDOWN_TIME;	//クールダウンタイマーリセット
 		}
 		else
@@ -135,15 +135,15 @@ void ShopHamburger::UpdateHamburgerTransition()
 	{
 		//フラグをリセットして状態を進める
 		m_movingHamburgerUI = false;
-		m_inventoryUI->NextHamburgerState();	//次の状態へ進む
+		//次の状態へ進む
+		m_inventoryUI->NextHamburgerState();
 
 		//ハンバーガーの所持数が上限に達していないなら
 		if (!HasFullHamburger())
 		{
 			//インベントリー変更の効果音を再生
-			PlaySoundSE(enSoundName_inventoryChange,1.0f,false);
+			PlaySoundSE(enSoundName_InventoryChange,1.0f,false);
 		}
-		
 	};
 }
 
@@ -154,26 +154,21 @@ void ShopHamburger::Render(RenderContext& rc)
 		//プレイヤーの視野に入っていない場合は描画しない
 		return;
 	}
-	if (m_coolDownTimer<=7.0f
+	if (m_hasFoodManager->HasFullHamburger())
+	{
+		//ハンバーガーの所持数が上限に達している場合は、売り切れUIを表示
+		m_shopSoldOutUI.Draw(rc);
+	}
+	else if (m_coolDownTimer<=7.0f
 		&& m_coolDownTimer>=0.1f
 		&& !m_hasFoodManager->HasFullHamburger())
 	{
 		//クールダウン中はクールダウンUIを表示
 		m_shopCoolDownUI.Draw(rc);
 	}
-	else if (m_hasFoodManager->HasFullHamburger())
-	//else if (m_inventoryUI->HasFullHamburger())
-	{
-		//ハンバーガーの所持数が上限に達している場合は、売り切れUIを表示
-		m_shopSoldOutUI.Draw(rc);
-		//m_hasFoodManager->SetHasFullHamburger(true);
-		//m_hasFullHamburger = true;
-	}
 	else
 	{
 		//ハンバーガーの所持数が上限に達していない場合は、通常のUIを表示
 		m_shopUI.Draw(rc);
-		//m_hasFoodManager->SetHasFullHamburger(false);
-		//m_hasFullHamburger = false;
 	}	
 }

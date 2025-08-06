@@ -61,21 +61,21 @@ public:
 	/// </summary>
 	inline bool SetHasAnyHamburger(bool anyHas)
 	{
-		m_hasAnyHamburger = anyHas;
+		return m_hasAnyHamburger = anyHas;
 	}
 	/// <summary>
 	/// ピザを持っているかを設定
 	/// </summary>
 	inline bool SetHasAnyPizza(bool anyHas)
 	{
-		m_hasAnyPizza = anyHas;
+		return m_hasAnyPizza = anyHas;
 	}
 	/// <summary>
 	/// 寿司を持っているかを設定
 	/// </summary>
 	inline bool SetHasAnySushi(bool anyHas)
 	{
-		m_hasAnySushi = anyHas;
+		return m_hasAnySushi = anyHas;
 	}
 public:
 	/// <summary>
@@ -108,6 +108,5 @@ private:
 	bool m_hasFullHamburger = false;	// ハンバーガーを上限まで持っているか
 	bool m_hasFullPizza = false;		// ピザを上限まで持っているか
 	bool m_hasFullSushi = false;		// 寿司を上限まで持っているか
-
 };
 

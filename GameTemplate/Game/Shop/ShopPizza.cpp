@@ -7,10 +7,10 @@
 
 namespace
 {
-	const Vector3	CHECKPOINT_SIZE = { 478.0f,200.0f,428.0f };	//チェックポイントのサイズ
+	const Vector3	CHECKPOINT_SIZE = { 478.0f,200.0f,428.0f };	//チェックポイントの範囲
 	const Vector2	UI_SIZE = { 224.0f, 150.0f };				//UIのサイズ
-	const float		COOLDOWN_TIME = 7.0f;
-	const float		TRANSITION_TIME = 1.5f; //PIZZA_LEFT_ENDPOSに到達する時間
+	const float		COOLDOWN_TIME = 7.0f;						//クールダウン時間
+	const float		TRANSITION_TIME = 1.5f;						//PIZZA_LEFT_ENDPOSに到達する時間
 	const float		MAX_RENDER_DISTANCE = 2000.0f;				//プレイヤーとお客さんの最大距離
 	const float		CAMERA_VIEW_ANGLE = Math::DegToRad(50.0f);	//カメラの視野角
 }
@@ -27,6 +27,7 @@ ShopPizza::~ShopPizza()
 bool ShopPizza::Start()
 {
 	ShopBase::Start();
+	m_hasFoodManager = FindGO<HasFoodManager>("hasfoodmanager");
 	Init();
 	return true;
 }
@@ -137,7 +138,7 @@ void ShopPizza::UpdatePizzaTransition()
 		if (!HasFullPizza())
 		{
 			//インベントリー変更の効果音の再生
-			PlaySoundSE(enSoundName_inventoryChange, 1.0f, false);
+			PlaySoundSE(enSoundName_InventoryChange, 1.0f, false);
 		}
 	}
 }
@@ -149,28 +150,23 @@ void ShopPizza::Render(RenderContext& rc)
 		//プレイヤーからの距離が遠い、または視野角外なら描画しない
 		return;
 	}
-	
 	if (m_coolDownTimer <= 7.0f
 		&& m_coolDownTimer >= 0.1f
 		&& !m_hasFoodManager->HasFullPizza())
-		//	&& !m_hasFullPizza)
 	{
 		//クールダウン中はクールダウンUIを表示
 		m_shopCoolDownUI.Draw(rc);
 	}
 	else if(m_hasFoodManager->HasFullPizza())
-	//else if (m_inventoryUI->HasFullPizza())
 	{
 		//ピザの所持数が上限に達している場合は売り切れUIを表示
 		m_shopSoldOutUI.Draw(rc);
 		m_hasFoodManager->SetHasFullPizza(true);
-		//m_hasFullPizza = true;
 	}
 	else
 	{
 		//ピザの所持数が上限に達していない場合は通常のUIを表示
 		m_shopUI.Draw(rc);
 		m_hasFoodManager->SetHasFullPizza(false);
-		//m_hasFullPizza = false;
 	}
 }

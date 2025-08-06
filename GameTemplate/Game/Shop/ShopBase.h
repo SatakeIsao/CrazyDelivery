@@ -6,7 +6,7 @@
 #include "MakeEffect.h"
 #include "GameSound.h"
 class InventoryUI;
-class HasFoodManager;
+//class HasFoodManager;
 namespace nsPlayer {
 	class Player;
 }
@@ -137,7 +137,7 @@ protected:
 	SpriteRender m_shopCoolDownUI;					// クールダウンUIスプライト
 
 	InventoryUI* m_inventoryUI = nullptr;			// インベントリUI
-	HasFoodManager* m_hasFoodManager = nullptr;		// 食材管理クラス
+	//HasFoodManager* m_hasFoodManager = nullptr;		// 食材管理クラス
 	nsPlayer::Player* m_player = nullptr;			// プレイヤー
 };
 

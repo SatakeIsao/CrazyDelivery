@@ -73,19 +73,19 @@ public:
 //	/// ピザを全所持かどうかの取得
 //	/// </summary>
 //	/// <returns></returns>
-//	bool HasPizza() const
-//	{
-//		return m_hasPizza;
-//	}
+	bool HasPizza() const
+	{
+		return m_hasPizza;
+	}
 //
 //	/// <summary>
 //	/// 寿司を全所持かどうかの取得
 //	/// </summary>
 //	/// <returns></returns>
-//	bool HasSushi() const
-//	{
-//		return m_hasSushi;
-//	}
+	bool HasSushi() const
+	{
+		return m_hasSushi;
+	}
 //
 //	
 //	/// <summary>
@@ -157,8 +157,8 @@ private:
 	
 	//TODO:　後で消す
 	bool				m_hasHamburger = false;				//ハンバーガー所有フラグ
-	//bool				m_hasPizza = false;					//ピザ所有フラグ
-	//bool				m_hasSushi = false;					//寿司所有フラグ
+	bool				m_hasPizza = false;					//ピザ所有フラグ
+	bool				m_hasSushi = false;					//寿司所有フラグ
 	
 	//bool				m_hasFullHamburger = false;			//ハンバーガーを全所持かどうか
 	//bool				m_hasFullPizza = false;				//ピザを全所持かどうか

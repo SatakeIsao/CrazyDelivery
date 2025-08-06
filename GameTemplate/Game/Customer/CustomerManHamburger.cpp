@@ -48,6 +48,7 @@ void CustomerManHamburger::Render(RenderContext& rc)
 
 void CustomerManHamburger::Init()
 {
+	m_hasFoodManager = FindGO<HasFoodManager>("hasfoodmanager");
 	//初期回転を設定
 	m_rotation.SetRotationDegZ(0.0f);
 
@@ -111,8 +112,8 @@ void CustomerManHamburger::UpdateHitPlayerCollision()
 	if (m_collision->IsHit(m_player->GetCharacterController()))
 	{
 		//衝突可能かつ、ハンバーガを持っている場合
-		//if(m_hasFoodManager->HasAnyHamburger()
-		if (m_inventoryUI->HasHamburger() 
+		if(m_hasFoodManager->HasAnyHamburger()
+		//if (m_inventoryUI->HasHamburger() 
 			&&  !m_isHasCollidedMan)
 		{
 			m_inventoryUI->PreviousHamburgerState();

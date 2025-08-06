@@ -3,6 +3,7 @@
 #include "Shop/ShopBase.h"
 
 class GameSound;
+class HasFoodManager;
 
 class ShopSushi : public ShopBase
 {
@@ -58,6 +59,8 @@ public:
 	}
 
 private:
+	HasFoodManager*		m_hasFoodManager = nullptr;							//HasFoodManagerの参照
+
 	Vector3				m_effectScale = Vector3(5.0f, 5.0f, 5.0f);			//エフェクト用拡大率
 	Vector2				m_shopSushiUIPos = Vector2::Zero;					//UIの座標			
 

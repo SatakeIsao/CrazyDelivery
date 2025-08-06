@@ -50,7 +50,7 @@ void CustomerManSushi::Render(RenderContext& rc)
 
 void CustomerManSushi::Init()
 {
-
+	m_hasFoodManager = FindGO<HasFoodManager>("hasfoodmanager");
 	//‰Šú‰ñ“]‚ğİ’è
 	m_rotation.SetRotationDegZ(0.0f);
 
