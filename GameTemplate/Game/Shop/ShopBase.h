@@ -6,6 +6,7 @@
 #include "MakeEffect.h"
 #include "GameSound.h"
 class InventoryUI;
+//class HasFoodManager;
 namespace nsPlayer {
 	class Player;
 }
@@ -105,7 +106,7 @@ protected:
 	/// <param name="name">再生する効果音の名前</param>
 	/// <param name="vol">効果音の音量（0.0～1.0の範囲）</param>
 	/// <param name="isPlay">ループ再生するかどうか（trueでループ再生、falseで1回のみ）</param>
-	void PlaySoundSE(const SoundName name, const float vol, const bool isPlay);
+	void PlaySoundSE(const SoundName& name, const float vol, const bool isPlay);
 
 	/// <summary>
 	/// エフェクトの再生
@@ -114,7 +115,7 @@ protected:
 	/// <param name="pos">座標</param>
 	/// <param name="rot">回転</param>
 	/// <param name="scale">拡大率</param>
-	void PlayEffect(const EffectName name, const Vector3& pos, const Quaternion& rot, const Vector3& scale);
+	void PlayEffect(const EffectName& name, const Vector3& pos, const Quaternion& rot, const Vector3& scale);
 
 	/// <summary>
 	/// 有効な角度かどうか取得
@@ -136,6 +137,7 @@ protected:
 	SpriteRender m_shopCoolDownUI;					// クールダウンUIスプライト
 
 	InventoryUI* m_inventoryUI = nullptr;			// インベントリUI
+	//HasFoodManager* m_hasFoodManager = nullptr;		// 食材管理クラス
 	nsPlayer::Player* m_player = nullptr;			// プレイヤー
 };
 

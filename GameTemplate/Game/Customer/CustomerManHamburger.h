@@ -1,6 +1,7 @@
 #pragma once
 #include "Customer/CustomerMan.h"
 
+class HasFoodManager;
 class CustomerManHamburger : public CustomerMan
 {
 public:
@@ -44,6 +45,7 @@ public:
 	}
 
 private:
+	HasFoodManager*		m_hasFoodManager = nullptr;		//ハンバーガーを持っているか管理するクラス
 	//ModelRender			m_customerMan_Hamburger;					//お客さん(ハンバーガー)のモデル
 	//SpriteRender		m_customerUI;								//お客さんの頭上に置くUI
 	//SpriteRender		m_customerUIThank;							//感謝を表すUIスプライト

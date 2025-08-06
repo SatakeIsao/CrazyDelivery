@@ -3,6 +3,7 @@
 #include "Shop/ShopBase.h"
 
 class GameSound;
+class HasFoodManager;
 class ShopPizza : public ShopBase
 {
 public:
@@ -69,6 +70,6 @@ private:
 	bool				m_hasFullPizza = false;								//ピザの所持数が上限に達しているか
 	bool				m_movingPizzaUI = false;							//ピザUIが動いているかどうか
 
-	
+	HasFoodManager* m_hasFoodManager = nullptr;							//ピザの所持数を管理するクラスへのポインタ
 };
 

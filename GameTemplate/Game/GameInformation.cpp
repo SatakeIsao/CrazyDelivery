@@ -15,7 +15,6 @@ bool GameInformation::Start()
 	m_gameBGM->SetVolume(0.15f);
 	m_gameBGM->Play(true);
 
-
 	return true;
 }
 

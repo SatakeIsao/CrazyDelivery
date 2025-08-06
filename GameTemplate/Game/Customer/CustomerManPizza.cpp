@@ -3,7 +3,7 @@
 #include "Scene/Game.h"
 #include "UI/ResultUI.h"
 #include "UI/InventoryUI.h"
-#include "GameSound.h"
+#include "UI/HasFoodManager.h"
 
 namespace
 {
@@ -22,7 +22,7 @@ CustomerManPizza::CustomerManPizza()
 
 CustomerManPizza::~CustomerManPizza()
 {
-	DeleteGO(m_collision);
+	//DeleteGO(m_collision);
 }
 
 void CustomerManPizza::Render(RenderContext& rc)
@@ -50,6 +50,7 @@ void CustomerManPizza::Render(RenderContext& rc)
 
 void CustomerManPizza::Init()
 {
+	m_hasFoodManager = FindGO<HasFoodManager>("hasfoodmanager");
 	//初期回転を設定
 	m_rotation.SetRotationDegZ(0.0f);
 
@@ -113,7 +114,8 @@ void CustomerManPizza::UpdateHitPlayerCollision()
 	if (m_collision->IsHit(m_player->GetCharacterController()))
 	{
 		//衝突可能かつ、ピザを持っている場合
-		if (m_inventoryUI->GetIsHasPizza()
+		if(m_hasFoodManager->HasAnyPizza()
+		//if (m_inventoryUI->HasPizza()
 			&& !m_isHasCollidedMan)
 		{
 			m_inventoryUI->PreviousPizzaState();

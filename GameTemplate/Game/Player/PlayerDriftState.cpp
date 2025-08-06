@@ -20,7 +20,7 @@ namespace nsPlayer {
 		m_player->PlaySetAnimationSpeed(2.0f);
 		//ƒhƒŠƒtƒg‚ÌŒø‰Ê‰¹‚ğÄ¶
 		m_skaterJumpSE = NewGO<SoundSource>(0);
-		m_skaterJumpSE->Init(enSoundName_skaterJump);
+		m_skaterJumpSE->Init(enSoundName_SkaterJump);
 		m_skaterJumpSE->SetVolume(0.5f);
 		m_skaterJumpSE->Play(false);
 

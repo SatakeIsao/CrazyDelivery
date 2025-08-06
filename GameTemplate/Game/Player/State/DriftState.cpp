@@ -26,7 +26,7 @@ namespace nsPlayer
 		m_owner->SetAnimation(Player::enAnimClip_Drift, 1.0f);
 		m_owner->PlaySetAnimationSpeed(2.0f);
 		//ƒhƒŠƒtƒg‚ÌŒø‰Ê‰¹‚ğÄ¶
-		PlaySoundSE(enSoundName_skaterJump,0.5f,false);
+		PlaySoundSE(enSoundName_SkaterJump,0.5f,false);
 	}
 
 	void DriftState::Update()

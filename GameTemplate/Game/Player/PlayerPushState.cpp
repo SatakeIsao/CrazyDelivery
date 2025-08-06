@@ -178,12 +178,16 @@ namespace nsPlayer
 			return new PlayerDriftState(m_player);
 		}
 
-		if (g_pad[0]->IsTrigger(enButtonA))
+		if (m_player->CheckNearPathMoveStart())
 		{
-			//player->SetJump();
-			//m_player->PlaySetAnimationSpeed(1.0f);
 			return new PlayerJumpState(m_player);
 		}
+		//if (g_pad[0]->IsTrigger(enButtonA))
+		//{
+		//	//player->SetJump();
+		//	//m_player->PlaySetAnimationSpeed(1.0f);
+		//	return new PlayerJumpState(m_player);
+		//}
 
 		//ここまで来たらステートを遷移しない
 		return nullptr;

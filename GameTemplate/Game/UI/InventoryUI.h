@@ -1,6 +1,7 @@
 #pragma once
 #include "InventoryFoodIcon.h"
 #include "InventoryRewardMoneyIcon.h"
+#include "GameSound.h"
 
 class ShopHamburger;
 class ShopPizza;
@@ -10,17 +11,13 @@ class CustomerManHamburger;
 class CustomerManPizza;
 class CustomerManSushi;
 class GameTimer;
+class GameSound;
+class UITypes;
+class HasFoodManager;
 
 class InventoryUI : public IGameObject
 {
 private:
-	//アイテムの状態を表す列挙型
-	enum ItemState {
-		Item_All,					//すべてのアイテムを収集済み
-		Item_Gray_Half,				//アイテムの半分がグレー
-		Item_Gray_All				//アイテムのすべてグレー
-	};
-
 	//アイテムのスケール状態を表す列挙型
 	enum ItemScaleState {
 		Item_Scale_Zero,			//拡大率がゼロ
@@ -28,69 +25,9 @@ private:
 		Item_Scale_Default,			//拡大率が等倍
 		Item_Scale_Final,			//拡大率が最終的
 	};
-
-	//報酬の板の状態を列挙型
-	enum RewardPlaneState {
-		Sliding_To_Stop,			//停止位置までスライド中
-		Stopped,					//停止状態
-		Sliding_To_End,				//終了位置までスライド中
-		Sliding_To_HamburgerLeftEnd,//ハンバーガー左端までスライド中
-		Sliding_To_HamburgerRightEnd,//ハンバーガー左端までスライド中
-		Sliding_To_PizzaLeftEnd,	//ピザ左端までスライド中
-		Sliding_To_SushiLeftEnd,	//寿司左端までスライド中
-	};
-
-	//食べ物の種類
-	enum EnFoodType
-	{
-		EnFoodTypeHamburger,
-		EnFoodTypePizza,
-		EnFoodTypeSushi,
-		EnFoodTypeMax,
-	};
-
+	
 private:
-	//報酬スプライト用構造体
-	struct RewardSprite
-	{
-		SpriteRender			m_reSprite;					//描画用スプライト
-		Vector3					m_position = Vector3::Zero;	//スプライトの位置
-		float					m_stopTimer = 0.0f;			//停止状態のタイマー
-		RewardPlaneState		m_state = Sliding_To_Stop;	//報酬スプライトの現在の状態
-	};
-
-	//食べ物スプライト用構造体
-	struct FoodSprite
-	{
-		//スプライトの可視性を設定
-		void SetVisible(const bool isVisible) 
-		{
-			m_isVisible = isVisible; 
-		}
-		//スプライトが可視かどうか
-		bool& GetIsVisible()
-		{
-			return m_isVisible; 
-		}
-		
-		//スプライトを描画
-		void Draw(RenderContext& rc)
-		{
-			if (m_isVisible)
-			{
-				m_foodSprite.Draw(rc);
-			}
-		}
-		
-		SpriteRender			m_foodSprite;					//食べ物取得時のスプライト
-		Vector3					m_foodPos = Vector3::Zero;		//食べ物取得時のスプライトの位置
-		float					m_foodScale = 1.0f;				//食べ物取得時のスプライトの拡大率
-		float					m_stopTimer = 0.0f;				//停止状態のタイマー
-		RewardPlaneState		m_foodState = Sliding_To_Stop;	//食べ物取得時のスプライトの現在の状態
-		bool					m_isVisible = true;				//スプライトの可視状態
-	};
-
-
+	
 public:
 	
 	InventoryUI();
@@ -99,8 +36,8 @@ public:
 	bool Start();
 	void Update();
 	void SpriteScale();
-	void SpriteSlide(RewardSprite& rewardSprite);
-	void SpriteSlideFood(FoodSprite& foodSprite);
+	//void SpriteSlide(RewardSprite& rewardSprite);
+	//void SpriteSlideFood(FoodSprite& foodSprite);
 	void SetRewardSpriteToGetPlane();
 	//void ButtonTest();
 	void CalcAlphaAndScale(float& alpha,float& scale);
@@ -111,69 +48,72 @@ public:
 	void PreviousHamburgerState();
 	void PreviousPizzaState();
 	void PreviousSushiState();
-	void SetRewardSprite(RewardSprite* rewardSprite);
-	void SetFoodSprite(FoodSprite* foodSprite);
+	//void SetRewardSprite(RewardSprite* rewardSprite);
+	//void SetFoodSprite(FoodSprite* foodSprite);
+	void PlaySoundSE(const SoundName& name, const float vol, const bool isLoop);
 	void RenderImmediate(SpriteRender& sprite);
 	void Render(RenderContext& rc);
 	
 private:
 	void UpdateInventoryFoodIcon();
 
+
+/*TODO:　後で消す*/
 public:
-	/// <summary>
-	/// ハンバーガーを全所持かどうかの取得
-	/// </summary>
-	/// <returns></returns>
-	bool GetIsHasHamburger() const
+//	/// <summary>
+//	/// ハンバーガーを全所持かどうかの取得
+//	/// </summary>
+//	/// <returns></returns>
+	bool HasHamburger() const
 	{
-		return m_isHasHamburger;
+		return m_hasHamburger;
 	}
-
-	/// <summary>
-	/// ピザを全所持かどうかの取得
-	/// </summary>
-	/// <returns></returns>
-	bool GetIsHasPizza() const
+//
+//	/// <summary>
+//	/// ピザを全所持かどうかの取得
+//	/// </summary>
+//	/// <returns></returns>
+	bool HasPizza() const
 	{
-		return m_isHasPizza;
+		return m_hasPizza;
 	}
-
-	/// <summary>
-	/// 寿司を全所持かどうかの取得
-	/// </summary>
-	/// <returns></returns>
-	bool GetIsHasSushi() const
+//
+//	/// <summary>
+//	/// 寿司を全所持かどうかの取得
+//	/// </summary>
+//	/// <returns></returns>
+	bool HasSushi() const
 	{
-		return m_isHasSushi;
+		return m_hasSushi;
 	}
-
-	
-	/// <summary>
-	/// ハンバーガーを全所持かどうかの設定
-	/// </summary>
-	/// <returns></returns>
-	bool GetIsHasFullHamburger() const
-	{
-		return m_isHasFullHamburger;
-	}
-	
-	/// <summary>
-	/// ピザを全所持かどうかの設定
-	/// </summary>
-	/// <returns></returns>
-	bool GetIsHasFullPizza() const
-	{
-		return m_isHasFullPizza;
-	}
-
-	/// <summary>
-	/// 寿司を全所持かどうかの設定
-	/// </summary>
-	/// <returns></returns>
-	bool GetIsHasFullSushi() const
-	{
-		return m_isHasFullSushi;
-	}
+//
+//	
+//	/// <summary>
+//	/// ハンバーガーを全所持かどうかの取得
+//	/// </summary>
+//	/// <returns></returns>
+//	bool HasFullHamburger() const
+//	{
+//		return m_hasFullHamburger;
+//	}
+//	
+//	/// <summary>
+//	/// ピザを全所持かどうかの取得
+//	/// </summary>
+//	/// <returns></returns>
+//	bool HasFullPizza() const
+//	{
+//		return m_hasFullPizza;
+//	}
+//
+//	/// <summary>
+//	/// 寿司を全所持かどうかの取得
+//	/// </summary>
+//	/// <returns></returns>
+//	bool HasFullSushi() const
+//	{
+//		return m_hasFullSushi;
+//	}
 
 	
 	
@@ -187,53 +127,53 @@ private:
 	std::vector<CustomerManPizza*> m_customerManPizza;
 	std::vector<CustomerManSushi*> m_customerManSushi;
 
-	InventoryFoodIcon m_inventoryFoodIcons[EnFoodType::EnFoodTypeMax];	//インベントリアイコン
+	InventoryFoodIcon m_inventoryFoodIcons[EnFoodType::enFoodTypeMax];	//インベントリアイコン
 
-	InventoryRewardMoneyIcon m_inventorymoneyIcon;				//報酬アイコン
 	//RewardSprite		m_reward150;							//150円用報酬スプライト
 	//RewardSprite		m_reward200;							//200円用報酬スプライト
 	//RewardSprite		m_reward500;							//500円用報酬スプライト
 
-	RewardSprite		m_gotPlane;								//獲得時のスプライト
-	RewardSprite		m_soldOut;								//売り切れ時のスプライト
-	RewardSprite*		m_currentRewardSprite = nullptr;		//現在の報酬スプライト
-	
-	FoodSprite			m_gotSushi;								//寿司スプライト
-	FoodSprite			m_gotPizza;								//ピザスプライト
-	FoodSprite			m_gotHamburger;							//ハンバーガースプライト
-	FoodSprite*			m_currentFoodSprite = nullptr;			//現在の食べ物スプライト
+	//RewardSprite		m_gotPlane;								//獲得時のスプライト
+	//RewardSprite		m_soldOut;								//売り切れ時のスプライト
+	//RewardSprite*		m_currentRewardSprite = nullptr;		//現在の報酬スプライト
+	//
+	//FoodSprite			m_gotSushi;								//寿司スプライト
+	//FoodSprite			m_gotPizza;								//ピザスプライト
+	//FoodSprite			m_gotHamburger;							//ハンバーガースプライト
+	//FoodSprite*			m_currentFoodSprite = nullptr;			//現在の食べ物スプライト
 	float				m_scale = 0.0f;							//現在の拡大率
-	float				m_targetScale = 0.0f;					//ターゲットの拡大率
-	float				m_distance = 0.0f;						//ターゲットまでの距離
-	float				m_targetPizzaScale = 0.0f;				//ピザのターゲットスケール
-	float				m_distancePizza = 0.0f;					//ピザのターゲットまでの距離
-	float				m_targetSushiScale = 0.0f;				//寿司のターゲットスケール
-	float				m_distanceSushi = 0.0f;					//寿司のターゲットまでの距離
-	Vector3				m_dirPizza = Vector3::Zero;				//ピザスプライトの方向
-	Vector3				m_dirSushi = Vector3::Zero;				//寿司スプライトの方向
+	//float				m_targetScale = 0.0f;					//ターゲットの拡大率
+	//float				m_distance = 0.0f;						//ターゲットまでの距離
+	//float				m_targetPizzaScale = 0.0f;				//ピザのターゲットスケール
+	//float				m_distancePizza = 0.0f;					//ピザのターゲットまでの距離
+	//float				m_targetSushiScale = 0.0f;				//寿司のターゲットスケール
+	//float				m_distanceSushi = 0.0f;					//寿司のターゲットまでの距離
+	//Vector3				m_dirPizza = Vector3::Zero;				//ピザスプライトの方向
+	//Vector3				m_dirSushi = Vector3::Zero;				//寿司スプライトの方向
 
-	Vector3				m_dirHamburger = Vector3::Zero;			//ハンバーガースプライトの方向
+	//Vector3				m_dirHamburger = Vector3::Zero;			//ハンバーガースプライトの方向
 	
 	
 	
+	//TODO:　後で消す
+	bool				m_hasHamburger = false;				//ハンバーガー所有フラグ
+	bool				m_hasPizza = false;					//ピザ所有フラグ
+	bool				m_hasSushi = false;					//寿司所有フラグ
 	
-	bool				m_isHasHamburger = false;				//ハンバーガー所有フラグ
-	bool				m_isHasPizza = false;					//ピザ所有フラグ
-	bool				m_isHasSushi = false;					//寿司所有フラグ
-	bool				m_isHasFullHamburger = false;			//ハンバーガーを全所持かどうか
-	bool				m_isHasFullPizza = false;				//ピザを全所持かどうか
-	bool				m_isHasFullSushi = false;				//寿司を全所持かどうか
+	//bool				m_hasFullHamburger = false;			//ハンバーガーを全所持かどうか
+	//bool				m_hasFullPizza = false;				//ピザを全所持かどうか
+	//bool				m_hasFullSushi = false;				//寿司を全所持かどうか
 	
 	bool				m_isRewardSpriteInitialized = false;	//報酬スプライト初期化フラグ
-	bool				m_isNextOn = false;						//次の状態フラグ
 
-	ItemState			m_hamburgerState = Item_Gray_All;		//ハンバーガーの初期状態
-	ItemState			m_pizzaState = Item_Gray_All;			//ピザの初期状態
-	ItemState			m_sushiState = Item_Gray_All;			//寿司の初期状態
+	EnItemState			m_hamburgerState = enItemStateGrayAll;	//ハンバーガーの初期状態
+	EnItemState			m_pizzaState = enItemStateGrayAll;		//ピザの初期状態
+	EnItemState			m_sushiState = enItemStateGrayAll;		//寿司の初期状態
 	ItemScaleState		m_scaleState = Item_Scale_Zero;			//拡大率の初期状態
 ;
 	GameTimer*			m_gameTimer = nullptr;					//ゲームタイマー
 	SoundSource*		m_soldOutSE = nullptr;					//売り切れサウンド効果
 	SoundSource*		m_foodGotSE = nullptr;					//食べ物取得サウンド効果
+	HasFoodManager*		m_hasFoodManager = nullptr;				//持っている食べ物管理クラス
 };
 

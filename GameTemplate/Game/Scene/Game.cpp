@@ -6,6 +6,8 @@
 #include "UI/InventoryUI.h"
 #include "UI/StartButtonUI.h"
 #include "UI/MapUI.h"
+#include "UI/UIAnimationManager.h"
+#include "UI/HasFoodManager.h"
 #include "Shop/ShopHamburger.h"
 #include "Shop/ShopPizza.h"
 #include "Shop/ShopSushi.h"
@@ -29,7 +31,6 @@ Game::Game()
 
 Game::~Game()
 {
-	
 	//ハンバーガーショップの削除
 	std::vector<ShopHamburger*>  shopHamburger = FindGOs<ShopHamburger>("shophamburger");
 	for (auto shHamGo : shopHamburger) {
@@ -84,18 +85,16 @@ Game::~Game()
 	DeleteGO(m_startButtonUI);
 	//リザルトUIの削除
 	DeleteGO(m_resultUI);
+	//食べ物を所持しているかの管理クラスの削除
+	DeleteGO(m_hasFoodManager);
 	//ゲームインフォメーションの削除
 	DeleteGO(m_gameInfo);
 	//パスストレージクラスのインスタンスを削除
 	m_pathSt->DeleteInstance();
-
 }
 
 bool Game::Start()
 {
-	//m_fade = NewGO<Fade>(0,"fade");
-	//m_fade->SetFadeEnd();
-
 	//パスストレージのインスタンスを作成
 	if (m_pathSt == nullptr)
 	{
@@ -168,8 +167,6 @@ bool Game::Start()
 			shopHamburger->SetPosition(objData.position);
 			shopHamburger->SetRotation(objData.rotation);
 			shopHamburger->SetScale(objData.scale);
-
-	
 			return true;
 		}
 		//ピザショップの生成
@@ -198,7 +195,6 @@ bool Game::Start()
 			customerHamburger->SetPosition(objData.position);
 			customerHamburger->SetRotation(objData.rotation);
 			customerHamburger->SetGamePointer(this);
-
 			return true;
 		}
 
@@ -209,7 +205,6 @@ bool Game::Start()
 			customerPizza->SetPosition(objData.position);
 			customerPizza->SetRotation(objData.rotation);
 			customerPizza->SetGamePointer(this);
-		
 			return true;
 		}
 
@@ -220,7 +215,6 @@ bool Game::Start()
 			customerSushi->SetPosition(objData.position);
 			customerSushi->SetRotation(objData.rotation);
 			customerSushi->SetGamePointer(this);
-		
 			return true;
 		}
 		return true;
@@ -233,7 +227,6 @@ bool Game::Start()
 		auto path = PathStorage::GetPathStorage()->GetPath(i);
 		//収集されたポイントの情報からパスを構築する
 		path->Build();
-
 	}
 
 	//プレイヤーのオブジェクトを作成
@@ -250,8 +243,10 @@ bool Game::Start()
 	m_mapUI = NewGO<MapUI>(0, "mapui");
 	//スタート時のUIのオブジェクトを作成
 	m_startButtonUI = NewGO<StartButtonUI>(0, "startbuttonui");
-	////リザルトUIのオブジェクトを作成
+	//リザルトUIのオブジェクトを作成
 	m_resultUI = NewGO<ResultUI>(0, "resultui");
+	//食べ物を所持しているかの管理クラスのオブジェクトを作成
+	m_hasFoodManager = NewGO<HasFoodManager>(0, "hasfoodmanager");
 	//スカイキューブの作成
 	//SetSkyCube();
 	
@@ -259,6 +254,11 @@ bool Game::Start()
 	m_scorePanelSprite.Init("Assets/Sprite/InGame/ScorePanel.DDS", 500.0f, 500.0f);
 	m_scorePanelSprite.SetPosition(m_scorePanelSpritePos);
 	m_scorePanelSprite.Update();
+
+	//操作バネルスプライトの初期化
+	m_optionPanelSprite.Init("Assets/Sprite/InGame/OperationManual.DDS", 1600.0f, 900.0f);
+	m_optionPanelSprite.SetPosition({ 0.0f,0.0f,0.0f });
+	m_optionPanelSprite.Update();
 
 	//ゲームインフォメーションクラスの作成
 	m_gameInfo = NewGO<GameInformation>(0, "gameinformation");
@@ -268,8 +268,10 @@ bool Game::Start()
 	if (path)
 	{
 		m_player->SetPath(path);
-
 	}
+
+	// TODO: アニメーションマネージャーテスト
+	auto* animationManager = NewGO<UIAnimationManager>(0, "uianimationmanager");
 
 	return true;
 }
@@ -279,10 +281,10 @@ void Game::Update()
 	//タイマー終了処理
 	FinishTimer();
 
-	//制限時間が０で、リザルトUIが終了したらタイトルに戻る処理
+	//制限時間が0で、リザルトUIが終了したらタイトルに戻る処理
 	if (m_gameTimer->GetIsTimerEnd()
 		&& m_resultUI->GetIsResultEnd()
-	&& g_pad[0]->IsTrigger(enButtonB))
+		&& g_pad[0]->IsTrigger(enButtonB))
 	{
 		Fade* fade = NewGO<Fade>(0, "fade");
 		//フェードインを開始
@@ -297,10 +299,7 @@ void Game::Update()
 				//ゲームクラスを削除
 				DeleteGO(this);
 			}
-			
-			
 		});
-		
 	}
 
 	//スコアパネルのスライド処理
@@ -308,7 +307,6 @@ void Game::Update()
 		&& !m_gameTimer->GetIsTimerEnd()) {
 		//スコアボードの位置を変更
 		NextScorePosState();
-
 		if (m_resultUI)
 		{
 			//リザルトUIのスライド処理を開始
@@ -383,13 +381,12 @@ void Game::NextScorePosState()
 
 void Game::Render(RenderContext& rc)
 {
-
 	if (m_gameTimer->GetIsTimerEnd() == true)
 	{
 		return;
 	}
-	
 	m_scorePanelSprite.Draw(rc);
+	m_optionPanelSprite.Draw(rc);
 }
 
 

@@ -24,7 +24,7 @@ namespace nsPlayer
 		/// <param name="name">再生する効果音の名前</param>
 		/// <param name="vol">効果音の音量（0.0～1.0の範囲）</param>
 		/// <param name="isPlay">ループ再生するかどうか（trueでループ再生、falseで1回のみ）</param>
-		void PlaySoundSE(SoundName name, const float vol, const bool isPlay);
+		void PlaySoundSE(const SoundName& name, const float vol, const bool isPlay);
 	public:
 		IState(Player* owner) : m_owner(owner) {}
 		virtual ~IState() {}

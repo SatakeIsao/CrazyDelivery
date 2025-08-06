@@ -14,6 +14,7 @@ class CustomerManSushi;
 class InventoryUI;
 class ResultUI;
 class GameTimer;
+class HasFoodManager;
 
 
 class MapUI : public IGameObject
@@ -177,6 +178,7 @@ private:
 	std::vector<CustomerManPizza*> m_customerManPizza;
 	std::vector<CustomerManSushi*> m_customerManSushi;
 	GameTimer* m_gameTimer = nullptr;
+	HasFoodManager* m_hasFoodManager = nullptr;
 
 	//CoolTimeSpriteData m_coolTimeSpriteData;
 	float	m_alpha = 0.0f;					//ミニマップのアルファ値

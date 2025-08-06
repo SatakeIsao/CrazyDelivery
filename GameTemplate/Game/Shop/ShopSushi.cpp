@@ -2,14 +2,15 @@
 #include "Shop/ShopSushi.h"
 #include "Player/Player.h"
 #include "UI/InventoryUI.h"
+#include "UI/HasFoodManager.h"
 #include "GameSound.h"
 
 namespace
 {
-	const Vector3	CHECKPOINT_SIZE = { 400.0f,200.0f,450.0f };
-	const Vector2	UI_SIZE = { 224.0f, 150.0f };	//UIのサイズ
-	const float		COOLDOWN_TIME = 7.0f;
-	const float		MOVE_STOP_SUSHI = 1.7f;	//SUSHI_LEFT_ENDPOSに到達する時間
+	const Vector3	CHECKPOINT_SIZE = { 400.0f,200.0f,450.0f };	//チェックポイントの範囲
+	const Vector2	UI_SIZE = { 224.0f, 150.0f };				//UIのサイズ
+	const float		COOLDOWN_TIME = 7.0f;						//クールダウン時間
+	const float		MOVE_STOP_SUSHI = 1.7f;						//SUSHI_LEFT_ENDPOSに到達する時間
 	const float		MAX_RENDER_DISTANCE = 2000.0f;				//プレイヤーとお客さんの最大距離
 	const float		CAMERA_VIEW_ANGLE = Math::DegToRad(50.0f);	//カメラの視野角
 }
@@ -25,6 +26,7 @@ ShopSushi::~ShopSushi()
 
 bool ShopSushi::Start()
 {
+	m_hasFoodManager = FindGO<HasFoodManager>("hasfoodmanager");	//食べ物を所持しているかの管理クラスを取得
 	ShopBase::Start();
 	Init();
 	return true;
@@ -33,7 +35,6 @@ bool ShopSushi::Start()
 void ShopSushi::OnInit()
 {
 	ShopBase::InitCollision(m_position, m_rotation, CHECKPOINT_SIZE);
-	
 	//UIの初期化
 	m_shopUI.Init("Assets/Sprite/UI/ShopUI_Sushi.dds", UI_SIZE.x, UI_SIZE.y);
 	m_shopSoldOutUI.Init("Assets/Sprite/UI/ShopUI_Sushi_SoldOut.dds", UI_SIZE.x, UI_SIZE.y);
@@ -136,10 +137,10 @@ void ShopSushi::UpdateSushiTransition()
 		m_movingSushiUI = false;
 		m_inventoryUI->NextSushiState();
 		//寿司の所持数が上限に達していないなら
-		if (!HasFullSushi())
+		if(!m_hasFoodManager->HasFullSushi())
 		{
 			//インベントリー変更の効果音を再生
-			PlaySoundSE(enSoundName_inventoryChange,1.0f,false);
+			PlaySoundSE(enSoundName_InventoryChange,1.0f,false);
 		}
 	}
 }
@@ -154,24 +155,21 @@ void ShopSushi::Render(RenderContext& rc)
 
 	if (m_coolDownTimer <= 7.0f
 		&& m_coolDownTimer >=0.1f
-		&& !m_hasFullSushi)
+		&& !m_hasFoodManager->HasFullSushi())
 	{
 		//クールダウン中は、クールダウンUIを表示
 		m_shopCoolDownUI.Draw(rc);
 	}
-	else if (m_inventoryUI->GetIsHasFullSushi())
+	else if(m_hasFoodManager->HasFullSushi())
 	{
 		//寿司の所持数が上限に達している場合は、売り切れUIを表示
 		m_shopSoldOutUI.Draw(rc);
-		m_hasFullSushi = true;
+		m_hasFoodManager->SetHasFullSushi(true);
 	}
 	else
 	{
 		//寿司の所持数が上限に達していない場合は、通常のUIを表示
 		m_shopUI.Draw(rc);
-		m_hasFullSushi = false;
+		m_hasFoodManager->SetHasFullSushi(false);
 	}
-	
 }
-
-

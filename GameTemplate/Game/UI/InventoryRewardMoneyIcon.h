@@ -1,6 +1,32 @@
 #pragma once
+#include "UITypes.h"
+#include "UIAnimationManager.h"
 
-class InventoryRewardMoneyIcon
+class IInventoryRewardIcon
+{
+public:
+	IInventoryRewardIcon();
+	virtual ~IInventoryRewardIcon();
+	virtual bool Start() = 0;
+	virtual void Update() = 0;
+	virtual void Render(RenderContext& rc) = 0;
+
+public:
+	SpriteRender* GetSpritRender()
+	{
+		return m_spriteRender;
+	}
+	SpriteRender* GetBaseSpritRender()
+	{
+		return m_baseSpriteRender;
+	}
+
+protected:
+	SpriteRender* m_spriteRender;
+	SpriteRender* m_baseSpriteRender;			//”wŒi‰æ‘œ
+};
+
+class InventoryRewardMoneyIcon : public IInventoryRewardIcon
 {
 public:
 	enum EnMoneyType
@@ -21,8 +47,33 @@ public:
 	inline void SetRequestType(const EnMoneyType type) { m_requestType = type; }
 
 private:
-	SpriteRender* m_spriteRender;
 	EnMoneyType m_currentType = enMoneyTypeMax;
-	EnMoneyType m_requestType = enMoneyType150;
+	EnMoneyType m_requestType = enMoneyTypeMax;
 };
 
+class InventoryRewardFoodIcon : public IInventoryRewardIcon
+{
+public:
+	/*enum EnFoodType
+	{
+		enFoodTypeHamburger,
+		enFoodTypePizza,
+		enFoodTypeSushi,
+		enFoodTypeMax,
+	};*/
+public:
+	InventoryRewardFoodIcon();
+	~InventoryRewardFoodIcon();
+	bool Start();
+	void Update();
+	void Render(RenderContext& rc);
+
+	inline void SetRequestType(const EnFoodType type) { m_requestType = type; }
+	inline EnFoodType GetRequestType() const
+	{
+		return m_requestType;
+	}
+private:
+	EnFoodType m_currentType = enFoodTypeMax;
+	EnFoodType m_requestType = enFoodTypeMax;
+};

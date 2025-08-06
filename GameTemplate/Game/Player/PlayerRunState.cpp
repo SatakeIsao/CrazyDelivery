@@ -117,8 +117,7 @@ namespace nsPlayer {
 			
 		}
 
-		if (g_pad[0]->IsTrigger(enButtonA)
-			|| m_player->CheckNearPathMoveStart())
+		if ( m_player->CheckNearPathMoveStart())
 		{
 			return new PlayerJumpState(m_player);
 		}

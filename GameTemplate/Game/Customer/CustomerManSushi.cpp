@@ -2,7 +2,8 @@
 #include "Customer/CustomerManSushi.h"
 #include "Scene/Game.h"
 #include "UI/ResultUI.h"
-#include "UI/InventoryUI.h"
+#include "UI/InventoryUI.h""
+#include "UI/HasFoodManager.h"
 
 namespace
 {
@@ -49,7 +50,7 @@ void CustomerManSushi::Render(RenderContext& rc)
 
 void CustomerManSushi::Init()
 {
-
+	m_hasFoodManager = FindGO<HasFoodManager>("hasfoodmanager");
 	//‰Šú‰ñ“]‚ðÝ’è
 	m_rotation.SetRotationDegZ(0.0f);
 
@@ -111,7 +112,8 @@ void CustomerManSushi::UpdateHitPlayerCollision()
 	if (m_collision->IsHit(m_player->GetCharacterController()))
 	{
 		//Õ“Ë‰Â”\‚©‚ÂAŽõŽi‚ðŽ‚Á‚Ä‚¢‚é‚©
-		if (m_inventoryUI->GetIsHasSushi()
+		if(m_hasFoodManager->HasAnySushi()
+		//if (m_inventoryUI->HasSushi()
 			&& !m_isHasCollidedMan)
 		{
 			m_inventoryUI->PreviousSushiState();

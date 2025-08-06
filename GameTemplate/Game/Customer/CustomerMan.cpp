@@ -5,6 +5,7 @@
 #include "Customer/CustomerManHandState.h"
 #include "UI/InventoryUI.h"
 #include "UI/ResultUI.h"
+#include "UI/HasFoodManager.h"
 #include "Player/Player.h"
 
 namespace
@@ -34,6 +35,7 @@ bool CustomerMan::Start()
 	m_player = FindGO<nsPlayer::Player>("player");
 	m_inventoryUI = FindGO<InventoryUI>("inventoryui");
 	m_resultUI = FindGO<ResultUI>("resultui");
+	//m_hasFoodManager = FindGO<HasFoodManager>("hasfoodmanager");
 	//キャラコンを初期化
 	m_charaCon.Init(
 		20.0f,
@@ -78,7 +80,7 @@ void CustomerMan::Update()
 	//アニメーションの速度設定
 	PlaySetAnimationSpeed(0.5f);
 	//食べ物を持っているかのチェック
-	UpdateHasFood();
+	//UpdateHasFood();
 	//モデルの座標設定
 	m_modelRender.SetPosition(m_position);
 	//モデルの拡大率設定
@@ -152,29 +154,32 @@ bool CustomerMan::IsEnableAngle(const float cameraAngleView, const float maxRend
 	return false;
 }
 
-void CustomerMan::UpdateHasFood()
-{
-	//いずれかの食べ物を持っているなら
-	if (HasAnyFood())
-	{
-		m_isHasFood = true;		//食べ物を持っている
-	}
-	else
-	{
-		m_isHasFood = false;	//食べ物を持っていない
-	}
-}
-
-bool CustomerMan::HasAnyFood() const
-{
-	if (!m_inventoryUI->GetIsHasHamburger()) {
-		return false;
-	}
-	if (!m_inventoryUI->GetIsHasPizza()) {
-		return false;
-	}
-	if (!m_inventoryUI->GetIsHasSushi()) {
-		return false;
-	}
-	return true;
-}
+//void CustomerMan::UpdateHasFood()
+//{
+//	//いずれかの食べ物+を持っているなら
+//	if (HasAnyFood())
+//	{
+//		m_isHasFood = true;		//食べ物を持っている
+//	}
+//	else
+//	{
+//		m_isHasFood = false;	//食べ物を持っていない
+//	}
+//}
+//
+//bool CustomerMan::HasAnyFood() const
+//{
+//	if(!m_hasFoodManager->HasAnyHamburger()){
+//	//if (!m_inventoryUI->HasHamburger()) {
+//		return false;
+//	}
+//	if(!m_hasFoodManager->HasAnyPizza()){
+//	//if (!m_inventoryUI->HasPizza()) {
+//		return false;
+//	}
+//	if(!m_hasFoodManager->HasAnySushi()){
+//	//if (!m_inventoryUI->HasSushi()) {
+//		return false;
+//	}
+//	return true;
+//}
