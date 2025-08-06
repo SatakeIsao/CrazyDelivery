@@ -636,7 +636,7 @@ namespace nsPlayer
 				if (!m_isPostPathAcceleration)
 				{
 					//加速する時の効果音を再生
-					PlaySoundSE(enSoundName_skaterAccele, 0.5f, false);
+					PlaySoundSE(enSoundName_SkaterAccele, 0.5f, false);
 				}
 				
 				//加速後はフラグをリセット
@@ -811,11 +811,11 @@ namespace nsPlayer
 	void Player::RunSEProcess()
 	{
 		if (IsPlayerMoving()) {
-			PlaySoundSE(enSoundName_skaterRun, 1.0f, false);
+			PlaySoundSE(enSoundName_SkaterRun, 1.0f, false);
 		}
 		else {
 			// プレイヤーが停止している場合、停止
-			PlaySoundSE(enSoundName_skaterRun, 0.0f, false);
+			PlaySoundSE(enSoundName_SkaterRun, 0.0f, false);
 		}
 	}
 
