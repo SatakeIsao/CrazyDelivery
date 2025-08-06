@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "UITypes.h"
 #include "UIAnimationManager.h"
 #include "InventoryRewardMoneyIcon.h"
 
@@ -18,7 +19,7 @@ namespace
 	const float	  FOOD_SLIDE_SPEED = 1000.0f;								//食べ物アイコンがスライドする速度
 	const float   REWARD_PLANE_STOP_DURATION = 0.5f;						//報酬アイコンが停止する時間(秒)
 
-	const float FOOD_ICON_DISTANCE_SQ = 50.1f * 50.1f;					//食べ物アイコン用の距離SQ
+	const float	  FOOD_ICON_DISTANCE_SQ = 50.1f * 50.1f;					//食べ物アイコン用の距離SQ
 }
 
 namespace _internal
@@ -59,8 +60,7 @@ namespace _internal
 				break;
 			}
 		}		
-		
-		isProcessing = true;
+		return isProcessing;
 	}
 
 	void RewardUIAnimation::Render(RenderContext& rc)
@@ -156,6 +156,7 @@ namespace _internal
 							return false;
 						};
 
+					//if(true)
 					if (isMovingUI(enFoodTypeHamburger))
 					{
 						m_state = enStateSlidingToHamburgerLeftEnd;
@@ -170,6 +171,10 @@ namespace _internal
 					}
 					m_scale = 1.0f;
 					m_stopTimer = 0.0f;
+					
+					for (auto& moving : m_movingShopUI) {
+						moving.clear();
+					}
 				}
 				break;
 			}
@@ -193,7 +198,8 @@ namespace _internal
 				m_scale += (targetScale - m_scale) * 0.1;
 
 				//目標位置への方向ベクトルを計算
-				Vector3 direction = getLeftEndPos(m_state) - m_position;
+				const Vector3 targetPosition = getLeftEndPos(m_state);
+				Vector3 direction = targetPosition - m_position;
 				const float distanceSq = direction.LengthSq();
 
 				if (distanceSq > FOOD_ICON_DISTANCE_SQ)
@@ -204,7 +210,7 @@ namespace _internal
 				}
 				else
 				{
-					m_position = COMMON_PLANE_START_POS;
+					m_position = targetPosition;
 					m_scale = 1.0f;
 					isProcessing = true;
 				}
@@ -214,11 +220,6 @@ namespace _internal
 			{
 				break;
 			}
-		}
-
-		// 毎フレーム情報を消して、外から受け取るようにする
-		for (auto& moving : m_movingShopUI) {
-			moving.clear();
 		}
 
 		m_spriteRender->SetPosition(m_position);
@@ -302,6 +303,8 @@ void UIAnimationManager::Update()
 				m_foodIcon = new InventoryRewardFoodIcon();
 				m_foodIcon->SetRequestType(static_cast<EnFoodType>(m_animationCommonType));
 				icon = m_foodIcon;
+				
+				m_rewardUIAnimationA->SetMovingShopUI(m_foodIcon->GetRequestType(), true);
 				break;
 			}
 		}
@@ -311,20 +314,19 @@ void UIAnimationManager::Update()
 		// 生成したアイコンを基にアニメーションさせる
 		m_rewardUIAnimationA->Initialize(icon->GetSpritRender(), m_requestAnimationType);
 		if (m_rewardUIAnimationB) {
-			// 背景はありなしがあるのでifチェック
-			m_rewardUIAnimationB->Initialize(icon->GetBaseSpritRender(), m_requestAnimationType);
+			// お金用の処理を使いまわして背景のアニメーションを行う
+			m_rewardUIAnimationB->Initialize(icon->GetBaseSpritRender(), _internal::EnRewardAnimationType::enRewardAnimationTypeMoney);
 		}
-
 		m_requestAnimationType = _internal::enRewardAnimationTypeNone;
 	}
 }
 
 void UIAnimationManager::Render(RenderContext& rc)
 {
-	if (m_rewardUIAnimationA) {
-		m_rewardUIAnimationA->Render(rc);
-	}
 	if (m_rewardUIAnimationB) {
 		m_rewardUIAnimationB->Render(rc);
+	}
+	if (m_rewardUIAnimationA) {
+		m_rewardUIAnimationA->Render(rc);
 	}
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "UITypes.h"
+#include "UIAnimationManager.h"
 
 class IInventoryRewardIcon
 {
@@ -53,6 +54,14 @@ private:
 class InventoryRewardFoodIcon : public IInventoryRewardIcon
 {
 public:
+	/*enum EnFoodType
+	{
+		enFoodTypeHamburger,
+		enFoodTypePizza,
+		enFoodTypeSushi,
+		enFoodTypeMax,
+	};*/
+public:
 	InventoryRewardFoodIcon();
 	~InventoryRewardFoodIcon();
 	bool Start();
@@ -60,7 +69,10 @@ public:
 	void Render(RenderContext& rc);
 
 	inline void SetRequestType(const EnFoodType type) { m_requestType = type; }
-
+	inline EnFoodType GetRequestType() const
+	{
+		return m_requestType;
+	}
 private:
 	EnFoodType m_currentType = enFoodTypeMax;
 	EnFoodType m_requestType = enFoodTypeMax;
