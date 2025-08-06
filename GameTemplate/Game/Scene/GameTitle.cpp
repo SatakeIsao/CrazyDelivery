@@ -57,9 +57,6 @@ void GameTitle::Update()
 			//ƒ^ƒCƒgƒ‹‰æ–Ê‚Ìíœ
 			DeleteGO(this);
 		});
-
-		
-
 		//MakeGame();
 	}
 }

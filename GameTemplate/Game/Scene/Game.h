@@ -18,6 +18,7 @@ class ShopPizza;
 class ShopSushi;
 class CustomerMan;
 class GameInformation;
+class HasFoodManager;
 class Fade;
 class PathStorage;
 class Player;
@@ -60,8 +61,6 @@ public:
 		effect->SetScale(scale);
 		effect->Play();
 	}
-
-
 private:
 	LevelRender			m_levelRender;											//レベルのレンダリング
 	SkyCube*			m_skyCube = nullptr;									//スカイキューブのオブジェクト
@@ -74,23 +73,22 @@ private:
 	StartButtonUI*		m_startButtonUI = nullptr;								//スタートボタンUIのオブジェクト
 	MakeEffect*			m_makeEfe = nullptr;									//エフェクト作成のオブジェクト
 	ResultUI*			m_resultUI = nullptr;									//リザルトUIのオブジェクト
+	HasFoodManager*		m_hasFoodManager = nullptr;									//食材管理クラス
 	GameInformation*	m_gameInfo = nullptr;									//ゲームインフォメーションのオブジェクト
 	Fade*				m_fade = nullptr;										//フェードのオブジェクト
 	PathStorage*		m_pathSt;												//パスストレージのオブジェクト
 
 	SpriteRender		m_scorePanelSprite;										//スコアパネルスプライト
+	SpriteRender		m_optionPanelSprite;									//スコアパネルスプライト2
 
 	Vector3				m_scorePanelSpritePos = Vector3(1050.0f, 550.0f, 0.0f);	//スコアパネルの座標
 
 	ScorePanelSetPos	m_setScorePosState = POS_SCORE_OUTSIDE;					//スコアパネルの座標の状態
 
+	float				m_finishStartTime = 0.0f;								//終了開始時間
 	int					m_nowScore = 0.0f;										//現在のスコア
 	
 	bool				m_isFinish = false;										//ゲーム終了しているか
 	bool				m_isFinishStarted = false;								//終了処理開始しているか
-
-	float				m_finishStartTime = 0.0f;								//終了開始時間
-
-	
 };
 
