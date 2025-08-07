@@ -1,6 +1,10 @@
 #pragma once
 #include "MakeEffect.h"
 #include "CharaCter/Character.h"
+#include "json.hpp"
+#include <iostream>
+#include <fstream>
+
 class BackGround;
 class Point;
 class GameTimer;
