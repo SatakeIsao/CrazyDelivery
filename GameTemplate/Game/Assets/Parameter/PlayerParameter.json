@@ -1,0 +1,24 @@
+[
+    {
+        "addAccele": 10000,
+        "minDecelerationFactor": 0,
+        "maxDotPower":0.9,
+        "minFriction":0.998,
+        "maxFriction":1.0,
+        "minDeceleration":0.2,
+        "maxDeceleration":0.7,
+        "normalYValue":0.0,
+        "reflectionScale":-2.0,
+        "characonRadius":20.0,
+        "characonHeight":50.0,
+        "decelerationTime":5.0,
+        "stopThreshold":0.1,
+        "rotSpeed":-0.01,
+        "driftRotSpeedMultPlaer":5.0,
+        "gravity":15.0,
+        "groundLevel":0.0,
+        "speedThreshold":1.5,
+        "jumpValue":600.0,
+        "speedLimit":800.0
+    }
+]

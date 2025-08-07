@@ -34,6 +34,7 @@ public:
 		enMoneyType150,
 		enMoneyType200,
 		enMoneyType500,
+		//enMoneyTypeSoldout,
 		enMoneyTypeMax,
 	};
 
@@ -53,14 +54,6 @@ private:
 
 class InventoryRewardFoodIcon : public IInventoryRewardIcon
 {
-public:
-	/*enum EnFoodType
-	{
-		enFoodTypeHamburger,
-		enFoodTypePizza,
-		enFoodTypeSushi,
-		enFoodTypeMax,
-	};*/
 public:
 	InventoryRewardFoodIcon();
 	~InventoryRewardFoodIcon();
