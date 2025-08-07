@@ -10,7 +10,7 @@ namespace
 		const char* path;
 		Vector3 position;
 		float scale;
-		//
+		// コンストラクタ
 		RewardParameter(const char* p, const Vector3& pos, const float s)
 			: path(p)
 			, position(pos)
@@ -23,8 +23,9 @@ namespace
 		RewardParameter("Assets/Sprite/UI/GetUI_Reward150.dds", DEFAULT_PLANE_STARTPOS, 1.0f),		//報酬時の150円スプライトの初期化
 		RewardParameter("Assets/Sprite/UI/GetUI_Reward200.dds", DEFAULT_PLANE_STARTPOS, 1.0f),		//報酬時の200円スプライトの初期化
 		RewardParameter("Assets/Sprite/UI/GetUI_Reward500.dds", DEFAULT_PLANE_STARTPOS, 1.0f)		//報酬時の500円スプライトの初期化
+		//RewardParameter("Asssts/Sprite/UI/GetUI_Soldout.dds",DEFAULT_PLANE_STARTPOS,1.0f)
 	};
-	//TODO:ここがおかしいのでは！？
+	
 	// 食べ物用パラメータ
 	const RewardParameter REWARD_FOOD_PARAMETER[EnFoodType::enFoodTypeMax] = {
 		RewardParameter("Assets/Sprite/UI/GetUI_Hamburger.dds", DEFAULT_PLANE_STARTPOS, 1.0f),		//調達時のハンバーガースプライトの初期化
@@ -91,13 +92,11 @@ void InventoryRewardMoneyIcon::Render(RenderContext& rc)
 	}
 }
 
-
 /// <summary>
 /// 食べ物用
 /// </summary>
 InventoryRewardFoodIcon::InventoryRewardFoodIcon()
 {
-
 }
 
 InventoryRewardFoodIcon::~InventoryRewardFoodIcon()

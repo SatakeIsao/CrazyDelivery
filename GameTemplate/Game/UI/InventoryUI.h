@@ -36,10 +36,6 @@ public:
 	bool Start();
 	void Update();
 	void SpriteScale();
-	//void SpriteSlide(RewardSprite& rewardSprite);
-	//void SpriteSlideFood(FoodSprite& foodSprite);
-	void SetRewardSpriteToGetPlane();
-	//void ButtonTest();
 	void CalcAlphaAndScale(float& alpha,float& scale);
 	void NextHamburgerState();
 	void NextPizzaState();
@@ -86,34 +82,6 @@ public:
 	{
 		return m_hasSushi;
 	}
-//
-//	
-//	/// <summary>
-//	/// ハンバーガーを全所持かどうかの取得
-//	/// </summary>
-//	/// <returns></returns>
-//	bool HasFullHamburger() const
-//	{
-//		return m_hasFullHamburger;
-//	}
-//	
-//	/// <summary>
-//	/// ピザを全所持かどうかの取得
-//	/// </summary>
-//	/// <returns></returns>
-//	bool HasFullPizza() const
-//	{
-//		return m_hasFullPizza;
-//	}
-//
-//	/// <summary>
-//	/// 寿司を全所持かどうかの取得
-//	/// </summary>
-//	/// <returns></returns>
-//	bool HasFullSushi() const
-//	{
-//		return m_hasFullSushi;
-//	}
 
 	
 	
@@ -121,59 +89,28 @@ private:
 	std::vector<ShopHamburger*> m_shopHamburger;
 	std::vector<ShopPizza*> m_shopPizza;
 	std::vector<ShopSushi*> m_shopSushi;
-
-	CustomerMan* m_customerMan = nullptr;
 	std::vector<CustomerManHamburger*> m_customerManHamburger;
 	std::vector<CustomerManPizza*> m_customerManPizza;
 	std::vector<CustomerManSushi*> m_customerManSushi;
 
-	InventoryFoodIcon m_inventoryFoodIcons[EnFoodType::enFoodTypeMax];	//インベントリアイコン
-
-	//RewardSprite		m_reward150;							//150円用報酬スプライト
-	//RewardSprite		m_reward200;							//200円用報酬スプライト
-	//RewardSprite		m_reward500;							//500円用報酬スプライト
-
-	//RewardSprite		m_gotPlane;								//獲得時のスプライト
-	//RewardSprite		m_soldOut;								//売り切れ時のスプライト
-	//RewardSprite*		m_currentRewardSprite = nullptr;		//現在の報酬スプライト
-	//
-	//FoodSprite			m_gotSushi;								//寿司スプライト
-	//FoodSprite			m_gotPizza;								//ピザスプライト
-	//FoodSprite			m_gotHamburger;							//ハンバーガースプライト
-	//FoodSprite*			m_currentFoodSprite = nullptr;			//現在の食べ物スプライト
-	float				m_scale = 0.0f;							//現在の拡大率
-	//float				m_targetScale = 0.0f;					//ターゲットの拡大率
-	//float				m_distance = 0.0f;						//ターゲットまでの距離
-	//float				m_targetPizzaScale = 0.0f;				//ピザのターゲットスケール
-	//float				m_distancePizza = 0.0f;					//ピザのターゲットまでの距離
-	//float				m_targetSushiScale = 0.0f;				//寿司のターゲットスケール
-	//float				m_distanceSushi = 0.0f;					//寿司のターゲットまでの距離
-	//Vector3				m_dirPizza = Vector3::Zero;				//ピザスプライトの方向
-	//Vector3				m_dirSushi = Vector3::Zero;				//寿司スプライトの方向
-
-	//Vector3				m_dirHamburger = Vector3::Zero;			//ハンバーガースプライトの方向
-	
-	
-	
-	//TODO:　後で消す
-	bool				m_hasHamburger = false;				//ハンバーガー所有フラグ
-	bool				m_hasPizza = false;					//ピザ所有フラグ
-	bool				m_hasSushi = false;					//寿司所有フラグ
-	
-	//bool				m_hasFullHamburger = false;			//ハンバーガーを全所持かどうか
-	//bool				m_hasFullPizza = false;				//ピザを全所持かどうか
-	//bool				m_hasFullSushi = false;				//寿司を全所持かどうか
-	
-	bool				m_isRewardSpriteInitialized = false;	//報酬スプライト初期化フラグ
+	CustomerMan* m_customerMan = nullptr;
+	GameTimer* m_gameTimer = nullptr;					//ゲームタイマー
+	SoundSource* m_soldOutSE = nullptr;					//売り切れサウンド効果
+	SoundSource* m_foodGotSE = nullptr;					//食べ物取得サウンド効果
+	HasFoodManager* m_hasFoodManager = nullptr;				//持っている食べ物管理クラス
 
 	EnItemState			m_hamburgerState = enItemStateGrayAll;	//ハンバーガーの初期状態
 	EnItemState			m_pizzaState = enItemStateGrayAll;		//ピザの初期状態
 	EnItemState			m_sushiState = enItemStateGrayAll;		//寿司の初期状態
 	ItemScaleState		m_scaleState = Item_Scale_Zero;			//拡大率の初期状態
-;
-	GameTimer*			m_gameTimer = nullptr;					//ゲームタイマー
-	SoundSource*		m_soldOutSE = nullptr;					//売り切れサウンド効果
-	SoundSource*		m_foodGotSE = nullptr;					//食べ物取得サウンド効果
-	HasFoodManager*		m_hasFoodManager = nullptr;				//持っている食べ物管理クラス
+
+	InventoryFoodIcon m_inventoryFoodIcons[EnFoodType::enFoodTypeMax];	//インベントリアイコン
+
+	float				m_scale = 0.0f;							//現在の拡大率
+	//TODO:　後で消す
+	bool				m_hasHamburger = false;				//ハンバーガー所有フラグ
+	bool				m_hasPizza = false;					//ピザ所有フラグ
+	bool				m_hasSushi = false;					//寿司所有フラグ	
+	bool				m_isRewardSpriteInitialized = false;	//報酬スプライト初期化フラグ
 };
 
