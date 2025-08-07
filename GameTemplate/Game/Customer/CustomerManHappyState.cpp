@@ -15,7 +15,7 @@ void CustomerManHappyState::Enter()
 
 ICustomerManState* CustomerManHappyState::StateChange()
 {
-	//TODO:‘JˆÚ•”•ªÀ‘•‚µ‚Ü‚µ‚å‚¤
+	//TODO:‘JˆÚ•”•ªÀ‘•
 	/*if (m_customerMan->)
 	{
 		return new CustomerManHandState(m_customerMan);

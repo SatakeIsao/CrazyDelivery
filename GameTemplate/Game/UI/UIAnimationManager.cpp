@@ -14,7 +14,7 @@ namespace
 	const Vector3 PIZZA_LEFT_END_POS = Vector3(507.0f, 270.0f, 0.0f);		//ピザアイコンの移動終了位置(画面左外)
 	const Vector3 SUSHI_LEFT_END_POS = Vector3(686.0f, 270.0f, 0.0f);		//寿司アイコンの移動終了位置(画面左外)
 
-	const float   COMMON_SLIDE_SPEED = 4000.0f;								//獲得時に使用するアイコンがスライドする速度
+	const float   COMMON_SLIDE_SPEED = 3000.0f;								//獲得時に使用するアイコンがスライドする速度
 
 	const float	  FOOD_SLIDE_SPEED = 1000.0f;								//食べ物アイコンがスライドする速度
 	const float   REWARD_PLANE_STOP_DURATION = 0.5f;						//報酬アイコンが停止する時間(秒)
@@ -205,7 +205,7 @@ namespace _internal
 				if (distanceSq > FOOD_ICON_DISTANCE_SQ)
 				{
 					direction.Normalize();
-					m_position += direction * COMMON_SLIDE_SPEED * deltaTime;
+					m_position += direction * 2000.0f * deltaTime;
 
 				}
 				else

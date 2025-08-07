@@ -15,10 +15,10 @@ void CustomerManHandState::Enter()
 
 ICustomerManState* CustomerManHandState::StateChange()
 {
-	if (m_customerMan->IsScoreAdded())
+	/*if (m_customerMan->IsScoreAdded())
 	{
 		return new CustomerManHappyState(m_customerMan);
-	}
+	}*/
 	return nullptr;
 }
 

@@ -9,10 +9,12 @@
 #include <fstream>
 #include <iostream>
 #include "GameSound.h"
+#include "json.hpp"
 
 
 namespace
 {
+	constexpr const char* PLAYER_PARAMETER_FILE = "Assets/Parameter/PlayerParameter.json";	//プレイヤーのパラメータファイル
 	// 定数の定義
 	const float ADD_ACCELE = 10000.0f;					//追加加速度
 	const float MIN_DECELERATION_FACTOR = 0.0f;			//減衰係数の最小値
