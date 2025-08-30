@@ -24,7 +24,6 @@ namespace nsPlayer {
 
 	IPlayerState* nsPlayer::PlayerStartState::StateChange()
 	{
-
 		if (m_player->IsPlayingAnimation() == false)
 		{
 			const auto& forward = m_player->GetForward();
@@ -47,8 +46,6 @@ namespace nsPlayer {
 			//エフェクト再生
 			m_player->PlayEffect(enEffectName_PlayerAccele, m_player->GetPostion(), m_player->GetRotation(), m_effectScale);
 		}
-
-		
 	}
 
 }

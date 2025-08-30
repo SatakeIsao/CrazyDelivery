@@ -35,7 +35,5 @@ namespace nsPlayer {
 	void PlayerJumpState::Update()
 	{
 	}
-
-
 }
 

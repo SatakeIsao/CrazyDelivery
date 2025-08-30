@@ -4,8 +4,10 @@
 #include "PlayerPushState.h"
 #include "PlayerJumpState.h"
 #include "PlayerDriftState.h"
+#include "PlayerAngryState.h"
 #include "Path.h"
 #include "PathStorage.h"
+#include "GameEvents.h"
 
 namespace
 {
@@ -26,6 +28,8 @@ namespace nsPlayer {
 		m_player->SetAnimation(Player::enAnimClip_Run, 0.8f);
 		m_player->PlaySetAnimationSpeed(2.0f);
 		m_player->SetIsAcceleStart(true);
+		//リザルトUIのインスタンスを探す
+		m_resultUI = FindGO<ResultUI>("resultui");
 	}
 
 	IPlayerState* PlayerRunState::StateChange()
@@ -34,7 +38,6 @@ namespace nsPlayer {
 		//先頭のパスを取得
 		Path* firstPath = PathStorage::GetPathStorage()->GetFirstPath();
 		Path* firstPath2 = PathStorage::GetPathStorage()->GetFirstPath2();
-
 
 		if (firstPath)
 		{
@@ -129,6 +132,14 @@ namespace nsPlayer {
 			return new PlayerDriftState(m_player);
 		}
 
+		//finish表示が終わったら怒りアニメーション遷移
+		//if(m_resultUI->GetRankC())
+		if (m_resultUI->GetFinishDisplayed()
+			&& m_resultUI->GetRankC())
+		{
+			return new PlayerAngryState(m_player);
+		}
+
 		//パス移動の開始判定
 		/*if (m_player->GetIsPathMoveStart())
 		{
@@ -141,7 +152,6 @@ namespace nsPlayer {
 
 	void PlayerRunState::Update()
 	{
-		
 	}
 }
 

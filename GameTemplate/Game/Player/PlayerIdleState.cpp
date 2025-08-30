@@ -10,7 +10,6 @@ namespace nsPlayer
 {
 	PlayerIdleState::~PlayerIdleState()
 	{
-
 	}
 
 	void PlayerIdleState::Enter()
@@ -28,14 +27,11 @@ namespace nsPlayer
 			//スタートランステートに遷移する
 			return new PlayerStartState(m_player);
 		}
-
-	
 		//ここまで来たらステートを遷移しない。
 		return nullptr;
 	}
 
 	void PlayerIdleState::Update()
 	{
-
 	}
 }
