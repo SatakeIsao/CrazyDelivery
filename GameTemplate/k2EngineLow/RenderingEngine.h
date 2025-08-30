@@ -53,7 +53,7 @@ namespace nsK2EngineLow {
 		//事前2Dモデルの描画
 		//void PreRender2D(RenderContext& rc);
 		//シャドウマップ描画処理
-		void RenderShadowDraw(RenderContext& rc);
+		//void RenderShadowDraw(RenderContext& rc);
 		//実行
 		void Execute(RenderContext& rc);
 

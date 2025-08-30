@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "GameCamera.h"
 #include "Player/Player.h"
+#include "UI/ResultUI.h"
+#include "Fade.h"
+#include "GameEvents.h"
 
 GameCamera::GameCamera()
 {
@@ -14,9 +17,13 @@ bool GameCamera::Start()
 {
 	//注視点から視点までのベクトルを設定
 	m_toCameraPos.Set(0.0f, 70.0f, -200.0f);
-	//m_toCameraPos *= 0.5f;
 	//プレイヤーのインスタンスを探す
 	m_player = FindGO<nsPlayer::Player>("player");
+	//リザルトUIのインスタンスを探す
+	m_resultUI = FindGO<ResultUI>("resultui");
+
+	//フェードのインスタンスを探す
+	//m_fade = FindGO<Fade>("fade");
 	//カメラのニアクリップとファークリップを設定
 	g_camera3D->SetNear(1.0f);
 	g_camera3D->SetFar(80000.0f);
@@ -24,45 +31,86 @@ bool GameCamera::Start()
 	//ばねカメラの初期化
 	m_springCamera.Init(
 		*g_camera3D,	//ばねカメラの処理を行うカメラを指定する
-		3000.0f,		//カメラの移動速度の最大値
+		5000.0f,		//カメラの移動速度の最大値
 		true,			//カメラと地形とのあたり判定を取るかどうかのフラグ。trueだとあたり判定を行う
 		5.0f			//カメラに設定される球体コリジョンの半径。第3引数がtrueの時に有効になる
 	);
+
 	return true;
 }
 
 void GameCamera::Update()
 {
 	// プレイヤーの位置と回転を取得
-	Vector3 target = m_player->GetPostion(); // プレイヤーの現在位置
-	Quaternion playerRotation = m_player->GetRotation(); //プレイヤーの回転
+	Vector3 target = m_player->GetPostion();
+	Quaternion playerRotation = m_player->GetRotation();
+	if (m_resultUI->GetFinishDisplayed())
+	{
+		m_timer += g_gameTime->GetFrameDeltaTime();
+	}else
+	{
+		m_timer = 0.0f;
+	}
 
+	
 	if (m_player->IsPathMoving())
 	{
-		// **パス移動中はカメラの位置をプレイヤーの相対位置に固定するが、追従する**
+		// パス移動中はカメラの位置をプレイヤーの相対位置に固定するが、追従する
 		if (!m_isCameraFixed)
 		{
-			// **カメラの相対位置を記録**
+			// カメラの相対位置を記録
 			m_fixedCameraOffset = g_camera3D->GetPosition() - target;
 			m_isCameraFixed = true;
 		}
 
-		// **プレイヤーの位置が動いたらカメラもその分動かす**
+		// プレイヤーの位置が動いたらカメラもその分動かす
 		Vector3 cameraPosition = target + m_fixedCameraOffset;
 		Vector3 cameraTarget = target + Vector3(0.0f, 70.0f, 0.0f); // 注視点はプレイヤーの少し上
 
 		m_springCamera.SetPosition(cameraPosition);
 		m_springCamera.SetTarget(cameraTarget);
 	}
+	//TODO：ここ変更
+	//フェードが始まってからに変更
+	else if (m_timer >= 3.0f)
+	{
+		m_offsetPos.x = Math::Lerp(0.5f, m_offsetPos.x, m_finishOffsetX);
+		m_offsetPos.z = Math::Lerp(0.5f, m_offsetPos.z, m_finishOffsetZ);
+
+		// プレイヤーの位置が動いたらカメラもその分動かす
+		Vector3 cameraPosition = target + m_offsetPos;
+		Vector3 cameraTarget = target + Vector3(-120.0f, 70.0f, 0.0f); // 注視点はプレイヤーの少し上
+
+		m_springCamera.SetPosition(cameraPosition);
+		m_springCamera.SetTarget(cameraTarget);
+
+		m_isCameraMoveFinished = true; // カメラの移動が完了
+	}
 	else
 	{
-		// **通常時はプレイヤーの背後を追従**
+		//EventManager::GetInstance().Subscribe(GameEvents::GameFinished, [&]() {
+		//this->ResetForCameraMove();
+		//});
+		
+		// 通常時はプレイヤーの背後を追従
 		m_isCameraFixed = false; // 固定解除
 
-		Vector3 offset(m_offsetPos); // 通常時のカメラの位置
-		playerRotation.Apply(offset); // プレイヤーの回転を適用
+		//プレイヤーのスピード状態を取得
+		float maxSpeedPer = 1.0f;
+		//プレイヤーの速度を取得
+		float velocity = m_player->GetVelocity().Length();
+		//プレイヤーの最大速度を取得
+		float maxSpeed = m_player->GetStatus().GetSpeedMax() * maxSpeedPer;
+		//速度を最大速度で割る
+		velocity = min((velocity / maxSpeed), 1.0f);
 
-		Vector3 cameraPosition = target + offset;
+		//加速時はカメラオフセットを加速用オフセットに近づける
+		m_offsetPos.z = Math::Lerp(velocity, m_defaultOffsetZ, m_accelOffsetZ);
+
+		Vector3 currentOffset = m_offsetPos;;// 通常時のカメラの位置
+		playerRotation.Apply(currentOffset); // プレイヤーの回転を適用
+
+		Vector3 cameraPosition = target + currentOffset;
 		Vector3 cameraTarget = target;
 		cameraTarget.y += 70.0f;
 
@@ -71,27 +119,23 @@ void GameCamera::Update()
 	}
 
 	m_springCamera.Update();
+}
 
+void GameCamera::ResetForCameraMove()
+{
+	// プレイヤーの位置と回転を取得
+	Vector3 target = m_player->GetPostion();
+	Quaternion playerRotation = m_player->GetRotation();
 
-	//// 右スティックの入力でカメラを左右に回転させる
-	//m_stickPowerX = g_pad[0]->GetRStickXF(); // X軸のスティック入力
-	//// プレイヤーの周りをY軸回転でカメラを移動
-	//Quaternion yRotation;
-	//yRotation.SetRotationDeg(Vector3::AxisY, 2.4f * m_stickPowerX); // Y軸周りに回転
-	//yRotation.Apply(m_toCameraPos); // カメラのオフセットに回転を適用
+	Vector3 currentOffset = m_offsetPos;;// 通常時のカメラの位置
+	playerRotation.Apply(currentOffset); // プレイヤーの回転を適用
 
-	//プレイヤーの向きをカメラが向いている方向にする
-	//カメラの正面ベクトルを取得する
-	//Vector3 forward = g_camera3D->GetForward();
-	//プレイヤーが斜めを向かないようにyをゼロにする
-	//forward.y = 0.0f;
-	//正規化
-	//forward.Normalize();
+	Vector3 cameraPosition = target + currentOffset;
+	Vector3 cameraTarget = target;
+	cameraTarget.y += 70.0f;
 
-	////用意した情報でプレイヤーのローテーションを用意する
-	//Quaternion playerRotation;
-	////正面ベクトル(0,0,1)からカメラの正面ベクトルに向かう回転を作る
-	//playerRotation.SetRotation(Vector3::AxisZ, forward);
-	////プレイヤーのローテーションに適用する
-	//m_player->SetRotation(playerRotation);
+	m_springCamera.SetPosition(cameraPosition);
+	m_springCamera.SetTarget(cameraTarget);
+
+	m_springCamera.Update();
 }

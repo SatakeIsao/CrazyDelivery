@@ -234,6 +234,10 @@
     <ClCompile Include="Customer\CustomerManPizza.cpp" />
     <ClCompile Include="Customer\CustomerManSushi.cpp" />
     <ClCompile Include="Customer\CustomerWoman.cpp" />
+    <ClCompile Include="FocusLine.cpp" />
+    <ClCompile Include="GameEvents.cpp" />
+    <ClCompile Include="ParameterManager.cpp" />
+    <ClCompile Include="Player\PlayerAngryState.cpp" />
     <ClCompile Include="UI\HasFoodManager.cpp" />
     <ClCompile Include="UI\UIAnimationManager.cpp" />
     <ClCompile Include="UI\InventoryRewardMoneyIcon.cpp" />
@@ -291,6 +295,11 @@
     <ClInclude Include="Customer\CustomerManPizza.h" />
     <ClInclude Include="Customer\CustomerManSushi.h" />
     <ClInclude Include="Customer\CustomerWoman.h" />
+    <ClInclude Include="FocusLine.h" />
+    <ClInclude Include="GameEvents.h" />
+    <ClInclude Include="json.hpp" />
+    <ClInclude Include="ParameterManager.h" />
+    <ClInclude Include="Player\PlayerAngryState.h" />
     <ClInclude Include="UI\HasFoodManager.h" />
     <ClInclude Include="UI\UIAnimationManager.h" />
     <ClInclude Include="UI\InventoryRewardMoneyIcon.h" />
@@ -334,6 +343,9 @@
     <ClInclude Include="system\system.h" />
     <ClInclude Include="UI\UITypes.h" />
     <ClInclude Include="Utill\CRC32.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Parameter\PlayerParameter.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

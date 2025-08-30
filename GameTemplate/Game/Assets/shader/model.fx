@@ -359,13 +359,13 @@ float3 CalcLigFromDirectionLight(SPSIn psIn)
     float3 diffDirection = CalcLamberDiffuse(dirDirection, dirColor, psIn.normal);
     
     //ディレクションライトによるPhong鏡面反射光を計算する
-    float3 specDirection = CalcPhongSpecular(dirDirection, dirColor, psIn.worldPos, psIn.normal,psIn.uv);
+    //float3 specDirection = CalcPhongSpecular(dirDirection, dirColor, psIn.worldPos, psIn.normal,psIn.uv);
     
     //ディレクションライトによるリムライトを計算する
-    // float3 limLight = CalcLigFromLimLight(dirDirection, dirColor, psIn.normal, psIn.normalInView);
+    float3 limLight = CalcLigFromLimLight(dirDirection, dirColor, psIn.normal, psIn.normalInView);
     
     //ディレクションライトの最終的な反射光を返す
-    return diffDirection + specDirection;
+    return diffDirection + limLight;//diffDirection + specDirection;
 
 }
 

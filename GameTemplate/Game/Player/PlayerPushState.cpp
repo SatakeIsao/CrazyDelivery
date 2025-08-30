@@ -76,8 +76,6 @@ namespace nsPlayer
 			Vector3 diff2 = playerPos2 - firstPathPos2.position;
 			float distance2 = diff2.Length();
 
-
-
 			// 先頭のパスの手前に来たらジャンプ
 			if (distance2 < 90.0f)  // 適切な距離を調整
 			{
@@ -195,6 +193,5 @@ namespace nsPlayer
 
 	void PlayerPushState::Update()
 	{
-
 	}
 }

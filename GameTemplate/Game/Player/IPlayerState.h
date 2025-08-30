@@ -3,6 +3,7 @@
 #include "GameCamera.h"
 #include "Scene/Game.h"
 #include "GameSound.h"
+#include "UI/ResultUI.h"
 
 /// <summary>
 /// プレイヤーの名前空間
@@ -50,6 +51,7 @@ namespace nsPlayer
 		GameCamera*		m_gameCamera = nullptr; //ゲームカメラ
 		Game*			m_game = nullptr;		//ゲーム
 		SoundSource*	m_skaterJumpSE = nullptr;//効果音
+		ResultUI*		m_resultUI = nullptr;		//リザルトUI
 		//SoundSource* m_skaterRunSE = nullptr;
 		//SoundSource* m_skaterAcceleSE = nullptr;
 	};

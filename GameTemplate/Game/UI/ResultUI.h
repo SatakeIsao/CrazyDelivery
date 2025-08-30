@@ -39,6 +39,7 @@ public:
 	void Update();
 
 	void ScoreAdded(const int& addScore);
+	int EarnedScoreDisplay();
 	void NextResultPosState();
 	void NextFinishScaleState();
 	void ScaleDouble();
@@ -49,11 +50,21 @@ public:
 	/// <summary>
 	/// リザルト表示が終了しているかの取得
 	/// </summary>
-	/// <returns></returns>
-	bool& GetIsResultEnd()
+	bool GetIsResultEnd()
 	{
 		return m_isResultEnd;
 	}
+	/// <summary>
+	/// フィニッシュ表示済みか
+	/// </summary>
+	bool GetFinishDisplayed()
+	{
+		return m_isFinishDisplayed;
+	}
+	/// <summary>
+	/// ランクCの取得
+	/// </summary>
+	bool GetRankC();
 	
 private:
 	//Game*			m_game = nullptr;						//ゲーム
@@ -76,12 +87,15 @@ private:
 	FontRender		m_nowScoreRender;						//現在のスコア表示用フォント
 	
 	Vector3			m_position = Vector3::Zero;				//座標
+	Vector3			m_nowScorePos = Vector3(500.0f, 730.0f, 0.0f);//現在のスコア表示の座標
+
 	float			m_scale = 1.0f;							//拡大率
 	float			m_finishScale = 10.0f;					//フィニッシュの拡大率
-	Vector3			m_nowScorePos = Vector3(400.0f, 730.0f, 0.0f);//現在のスコア表示の座標
-	
 	float			m_elapsedTime = 0.0f;					//経過時間
-	int				m_nowScore = 0.0f;						//現在のスコア
+	float			m_displayScore = 0.0f;					//補間用の表示スコア
+	float			m_displayTotalScore = 0.0f;				//補間用の合計スコア
+	int				m_nowScore = 1.0f;						//実際の現在のスコア
+	int				m_saveNowScore = 0.0f;					//前回のスコア
 	bool			m_isResultEnd = false;					//リザルト表示が終了しているか
 	bool			m_isFinishSEPlayed = false;				//フィニッシュ時の効果音が再生してるか
 	bool			m_isFinishDisplayed = false;			//フィニッシュ表示済みか

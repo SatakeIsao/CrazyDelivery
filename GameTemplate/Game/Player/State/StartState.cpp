@@ -5,7 +5,7 @@
 
 namespace
 {
-	const float PLAYER_ACCELE = 30000.0f;
+	const float PLAYER_ACCELE = 3.0f;
 }
 namespace nsPlayer
 {
