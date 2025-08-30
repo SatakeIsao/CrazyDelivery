@@ -1,54 +1,212 @@
 #pragma once
 #include "json.hpp"
-#include "Utill/CRC32.h"
+#include "Util/CRC32.h"
 #include <iostream>
 #include <fstream>
 
 /**
- * NOTE:すべてのパラメータに付ける
+ * NOTE: すべてのパラメーターに付ける
  */
 #define appParameter(name)\
 public:\
-	static constexpr uint32_t ID(){return Hash32(#name);}
+	static constexpr uint32_t ID() { return Hash32(#name); }
 
-/*基底クラス。必ず継承すること*/
+
+ /** 基底クラス。必ず継承すること！ */
 struct IMasterParameter {};
 
-/*プレイヤーのステータス*/
+/** プレイヤーのステータス */
 struct MasterPlayerStatus : public IMasterParameter
 {
 	appParameter(MasterPlayerStatus);
-
-	
+	//加速度
+	float m_addAccele;
+	//回転速度
+	float m_rotSpeed;
+	// ドリフト中の回転速度倍率
+	float m_driftRotSpeedMultiplaer;
+	//地面の高さ
+	float m_groundHeight;
+	//重力
+	float m_gravity;
+	//減速にかかる時間
+	float m_decelerationTime;
+	//減速係数の最小値
+	float m_minDecelerationFactor;
+	//内積のべき乗の指数
+	float m_maxDotPower;
+	//摩擦力の最小値
+	float m_minFriction;
+	//摩擦力の最大値
+	float m_maxFriction;
+	//最小減速率
+	float m_minDeceleration;
+	//最大減衰率
+	float m_maxDeceleration;
+	//法線ベクトルのY値(固定)
+	float m_normalYValue;
+	//反射計算用のスカラー値
+	float m_reflectionScale;
+	//キャラクターコントローラーの半径
+	float m_charaConRadius;
+	//キャラクターコントローラーの高さ
+	float m_charaConHeight;
+	//速度停止のしきい値
+	float m_stopThreshold;
+	//スピードリセットのしきい値
+	float m_speedThreshold;
+	//ジャンプする数値
+	float m_jumpPower;
+	//速度上限
+	float m_speedMax;
+	//ダッシュによって得られるブースト
+	float m_dashBoost;
+	//ブースト適用を開始する遅延時間
+	float m_startBoostDelay;
 };
-/* defineの使用終了 */
+
+
+/** defineの使用終了 */
 #undef appParameter
 
+
 /**
- * パラメータ管理クラス
+ * パラメーター管理クラス
  */
 class ParameterManager
 {
 private:
-	//複数パラメータがあっても良いように、IDをuint32_tで定義
+	// 複数パラメーターがあっても良いように
 	using ParameterVector = std::vector<IMasterParameter*>;
-	//各パラメータごとに保持
-	using ParameterMap = std::map<uint32_t,ParameterVector>;
-	ParameterMap m_parameterMap;
+	// 各パラメーターごとに保持する
+	using ParameterMap = std::map<uint32_t, ParameterVector>;
 
 private:
-	ParameterMap m_parameterMap; // パラメータを保持するマップ
+	ParameterMap m_parameterMap;		// パラメーターを保持
+
 private:
 	ParameterManager();
 	~ParameterManager();
 
 public:
-	static void CreateInstance();
-	static ParameterManager& Get();
-	static void DestroyInstance();
+	/// <summary>
+	/// パラメーター読み込み
+	/// NOTE: Unloadも呼ぶことを忘れないように
+	///       第2引数のラムダ式でテンプレートで指定する型の情報に変換する
+	/// </summary>
+	template <typename T>
+	void LoadParameter(const char* path, const std::function<void(const nlohmann::json& j, T& p)>& func)
+	{
+		std::ifstream file(path);
+		if (!file.is_open()) {
+			return;
+		}
+
+		nlohmann::json jsonRoot;
+		file >> jsonRoot;
+
+		std::vector<IMasterParameter*> parameters;
+		for (const auto& j : jsonRoot) {
+			T* parameter = new T();
+			func(j, *parameter);
+			parameters.push_back(static_cast<IMasterParameter*>(parameter));
+		}
+
+		m_parameterMap.emplace(T::ID(), parameters);
+	}
+
+	/// <summary>
+	/// パラメーター解放
+	/// </summary>
+	template <typename T>
+	void UnloadParameter()
+	{
+		auto it = m_parameterMap.find(T::ID());
+		if (it != m_parameterMap.end()) {
+			auto& parameters = it->second;
+			for (auto* p : parameters) {
+				delete p;
+			}
+			m_parameterMap.erase(it);
+		}
+	}
+
+	/// <summary>
+	/// 1つだけパラメーターを取得する
+	/// </summary>
+	template <typename T>
+	const T* GetParameter(const int index = 0) const
+	{
+		const auto parameters = GetParameters<T>();
+		if (parameters.size() == 0) { return nullptr; }
+		if (parameters.size() <= index) { return nullptr; }
+		return parameters[index];
+	}
+	/// <summary>
+	/// 複数パラメーターを取得する
+	/// </summary>
+	template <typename T>
+	inline const std::vector<T*> GetParameters() const
+	{
+		std::vector<T*> parameters;
+		auto it = m_parameterMap.find(T::ID());
+		if (it != m_parameterMap.end()) {
+			for (auto* parameter : it->second) {
+				parameters.push_back(reinterpret_cast<T*>(parameter));
+			}
+		}
+		return parameters;
+	}
+	/// <summary>
+	/// パラメーターをラムダ式で回すForEach
+	/// </summary>
+	template <typename T>
+	void ForEach(std::function<void(const T&)> func) const
+	{
+		const std::vector<T*> parameters = GetParameters<T>();
+		for (const T* paramter : parameters) {
+			func(*paramter);
+		}
+	}
+
+
+
+
+	/**
+	 * シングルトン用
+	 */
+public:
+	/// <summary>
+	/// インスタンスを作る
+	/// </summary>
+	static void CreateInstance()
+	{
+		if (m_instance == nullptr)
+		{
+			m_instance = new ParameterManager();
+		}
+	}
+
+	/// <summary>
+	/// インスタンスを取得
+	/// </summary>
+	static ParameterManager& Get()
+	{
+		return *m_instance;
+	}
+
+	/// <summary>
+	/// インスタンスを破棄
+	/// </summary>
+	static void DestroyInstance()
+	{
+		if (m_instance != nullptr)
+		{
+			delete m_instance;
+			m_instance = nullptr;
+		}
+	}
+
 private:
-	static ParameterManager* m_instance;
-
+	static ParameterManager* m_instance; //シングルトンインスタンス
 };
-
-

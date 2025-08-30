@@ -66,6 +66,10 @@
     <ClCompile Include="UI\InventoryRewardMoneyIcon.cpp" />
     <ClCompile Include="UI\UIAnimationManager.cpp" />
     <ClCompile Include="UI\HasFoodManager.cpp" />
+    <ClCompile Include="ParameterManager.cpp" />
+    <ClCompile Include="FocusLine.cpp" />
+    <ClCompile Include="Player\PlayerAngryState.cpp" />
+    <ClCompile Include="GameEvents.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -128,5 +132,13 @@
     <ClInclude Include="UI\UIAnimationManager.h" />
     <ClInclude Include="UI\UITypes.h" />
     <ClInclude Include="UI\HasFoodManager.h" />
+    <ClInclude Include="json.hpp" />
+    <ClInclude Include="ParameterManager.h" />
+    <ClInclude Include="FocusLine.h" />
+    <ClInclude Include="Player\PlayerAngryState.h" />
+    <ClInclude Include="GameEvents.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Parameter\PlayerParameter.json" />
   </ItemGroup>
 </Project>
