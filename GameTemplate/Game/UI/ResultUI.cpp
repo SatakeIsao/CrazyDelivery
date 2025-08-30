@@ -7,10 +7,11 @@
 #include "Fade.h"
 #include "Scene/GameTitle.h"
 #include "StartButtonUI.h"
+#include "GameEvents.h"
 
 namespace
 {
-	const Vector3 SCORE_POS(50.0f, 100.0f, 0.0f);	//スコアテキストの座標
+	const Vector3 SCORE_POS(150.0f, 100.0f, 0.0f);	//スコアテキストの座標
 
 	const float RESULT_SCORE_S = 4000.0f;			//スコア条件値：Sランク
 	const float RESULT_SCORE_A = 3000.0f;			//スコア条件値：Aランク
@@ -27,7 +28,6 @@ namespace
 
 ResultUI::ResultUI()
 {
-
 }
 
 ResultUI::~ResultUI()
@@ -37,7 +37,6 @@ ResultUI::~ResultUI()
 
 bool ResultUI::Start()
 {
-	//m_game = FindGO<Game>("game");
 	m_gameTimer = FindGO<GameTimer>("gametimer");
 	m_resultUI = FindGO<ResultUI>("resultui");
 	m_startButtonUI = NewGO<StartButtonUI>(0, "startbuttonui");
@@ -55,43 +54,43 @@ bool ResultUI::Start()
 	m_finishSprite.Update();
 
 	//リザルトUIの画像
-	m_resultUI_Sprite.Init("Assets/Sprite/Result/ResultUI_Base.DDS",1440,810);
+	m_resultUI_Sprite.Init("Assets/Sprite/Result/ResultUI_Base.DDS",1440.0f,810.0f);
 	m_resultUI_Sprite.SetPosition(m_position);
 	m_resultUI_Sprite.SetScale(m_scale);
 	m_resultUI_Sprite.Update();
 	
 	//CLEARの画像
-	m_clearSprite.Init("Assets/Sprite/Result/ResultUI_Clear.DDS", 1440, 810);
+	m_clearSprite.Init("Assets/Sprite/Result/ResultUI_Clear.DDS", 1440.0f, 810.0f);
 	m_clearSprite.SetPosition(m_position);
 	m_clearSprite.SetScale(m_scale);
 	m_clearSprite.Update();
 
 	//FAILEDの画像
-	m_failedSprite.Init("Assets/Sprite/Result/ResultUI_Failed.DDS", 1440, 810);
+	m_failedSprite.Init("Assets/Sprite/Result/ResultUI_Failed.DDS", 1440.0f, 810.0f);
 	m_failedSprite.SetPosition(m_position);
 	m_failedSprite.SetScale(m_scale);
 	m_failedSprite.Update();
 
 	//ランクSの画像
-	m_rankS_Sprite.Init("Assets/Sprite/Result/ResultUI_RankS.DDS", 1440, 810);
+	m_rankS_Sprite.Init("Assets/Sprite/Result/ResultUI_RankS.DDS", 1440.0f, 810.0f);
 	m_rankS_Sprite.SetPosition(m_position);
 	m_rankS_Sprite.SetScale(m_scale);
 	m_rankS_Sprite.Update();
 
 	//ランクAの画像
-	m_rankA_Sprite.Init("Assets/Sprite/Result/ResultUI_RankA.DDS", 1440, 810);
+	m_rankA_Sprite.Init("Assets/Sprite/Result/ResultUI_RankA.DDS", 1440.0f, 810.0f);
 	m_rankA_Sprite.SetPosition(m_position);
 	m_rankA_Sprite.SetScale(m_scale);
 	m_rankA_Sprite.Update();
 
 	//ランクBの画像
-	m_rankB_Sprite.Init("Assets/Sprite/Result/ResultUI_RankB.DDS", 1440, 810);
+	m_rankB_Sprite.Init("Assets/Sprite/Result/ResultUI_RankB.DDS", 1440.0f, 810.0f);
 	m_rankB_Sprite.SetPosition(m_position);
 	m_rankB_Sprite.SetScale(m_scale);
 	m_rankB_Sprite.Update();
 
 	//ランクCの画像
-	m_rankC_Sprite.Init("Assets/Sprite/Result/ResultUI_RankC.DDS", 1440, 810);
+	m_rankC_Sprite.Init("Assets/Sprite/Result/ResultUI_RankC.DDS", 1440.0f, 810.0f);
 	m_rankC_Sprite.SetPosition(m_position);
 	m_rankC_Sprite.SetScale(m_scale);
 	m_rankC_Sprite.Update();
@@ -103,24 +102,24 @@ bool ResultUI::Start()
 	m_nowScoreRender.SetPosition(m_nowScorePos);
 	m_nowScoreRender.SetScale(SCORE_SCALE);
 	m_nowScoreRender.SetColor({ 1.0f,1.0f,1.0f,1.0f });
-
 	
 	return true;
 }
 
 void ResultUI::Update()
 {
-	if (m_startButtonUI != nullptr)
-	{
+	//if (m_gameTimer->GetIsTimerEnd() == true) {
+	//	//ゲーム終了イベントを送る
+	//	EventManager::GetInstance().Trigger(GameEvents::GameFinished);
+	//}
+	if (m_startButtonUI != nullptr){
 		m_startButtonUI->Update();
 	}
 
 	//ゲームタイマーが終了してリザルトUIが表示されたら、StartButtonUIをフェードインさせる
 	if (m_elapsedTime>=FINISH_DISPLAY_TIME
-		&& m_startButtonUI != nullptr)
-	{
-		if (m_startButtonUI->GetStete() == StartButtonUI::enStartUIState_AlphaZero)
-		{
+		&& m_startButtonUI != nullptr){
+		if (m_startButtonUI->GetStete() == StartButtonUI::enStartUIState_AlphaZero){
 			m_startButtonUI->SetState(StartButtonUI::enStartUIState_FadeIn);
 		}
 	}
@@ -140,36 +139,28 @@ void ResultUI::Update()
 		//m_finishScaleState = Scale_Small;
 
 		Fade* fade = NewGO<Fade>(0, "fade");
-
 		// フェードアウト開始
 		fade->StartFadeOut();
-
 		// フェードアウト完了時に `Game` クラスを生成
-		fade->SetOnFadeOutComplete([this]()
-		{
-			if (FindGO<GameTitle>("gameTitle") == nullptr)
-			{
+		fade->SetOnFadeOutComplete([this](){
+			if (FindGO<GameTitle>("gameTitle") == nullptr){
 				NewGO<GameTitle>(0, "gameTitle");
 			}
 			// タイトル画面の削除
 			DeleteGO(this);
 		});
-
-		
 	}
 
 	//ゲームタイマーが終了していて
 	//フィニッシュ表示がまだされていないなら
 	if (m_gameTimer->GetIsTimerEnd()
-		&& m_isFinishDisplayed==false)
-	{
+		&& m_isFinishDisplayed==false)	{
 		//スケールを10倍から開始
 		m_finishScale = 10.0f;
 		//縮小ステートを設定
 		m_finishScaleState = Scale_Small;
 		//フィニッシュ表示済みに設定
 		m_isFinishDisplayed = true;
-		//m_isFinishSEPlayed = false;
 	}
 	//フィニッシュスプライトの拡大率の状態を更新
 	NextFinishScaleState();
@@ -180,29 +171,27 @@ void ResultUI::Update()
 		if (m_nowScorePos.y > SLIDE_TARGET_Y) {
 			//スライド速度
 			m_nowScorePos.y -= SLIDE_SPEED;
-		}
-		else {
+		} else {
 			//スライド完了
 			m_resultSetPosState = Pos_InSide;
-		
 		}
 	}
+	
+	const float interpolationRate = 0.1f;
+	
+
 	wchar_t wcsbuf[256];
 	//スコア表示の更新
-	if (m_gameTimer->GetIsTimerEnd() == true)
-	{
-		//wchar_t wcsbuf[256];
+	if (m_gameTimer->GetIsTimerEnd() == true)	{
+		//表示スコアを実際のスコアに向かって補間
+		m_displayTotalScore = Math::Lerp(0.015, m_displayTotalScore, (float)m_nowScore);
 		//終了時のスコア表示
-		swprintf_s(wcsbuf, 256, L"$%05d", m_nowScore);
-		
-	}
-	else
-	{
-		// 現在のスコアをスプライトに反映
-		//wchar_t wcsbuf[256];
+		swprintf_s(wcsbuf, 256, L"$%04d",(int)m_displayTotalScore);
+	}else{
+		//表示スコアを実際のスコアに向かって補間
+		m_displayScore = Math::Lerp(interpolationRate, m_displayScore, (float)m_nowScore);
 		//現在のスコア表示
-		swprintf_s(wcsbuf, 256, L"$ %05d", m_nowScore);
-		
+		swprintf_s(wcsbuf, 256, L"$ %04d", (int)m_displayScore);
 	}
 	m_nowScoreRender.SetText(wcsbuf);
 	m_nowScoreRender.SetPosition(m_nowScorePos);
@@ -217,11 +206,16 @@ void ResultUI::ScoreAdded(const int& addScore)
 	m_nowScore += addScore;
 }
 
+int ResultUI::EarnedScoreDisplay()
+{
+	m_saveNowScore = m_nowScore;
+	return m_nowScore = Math::Lerp(0.01f, 0.0f, (float)m_nowScore);
+}
+
 void ResultUI::NextResultPosState()
 {
 	//現在の座標状態を次の状態に切り替え
-	switch (m_resultSetPosState)
-	{
+	switch (m_resultSetPosState){
 	case Pos_OutSide:
 		m_resultSetPosState = Pos_Slide;
 		break;
@@ -236,31 +230,24 @@ void ResultUI::NextResultPosState()
 void ResultUI::NextFinishScaleState()
 {
 	//現在の拡大率の状態を次の状態に切り替え
-	switch (m_finishScaleState)
-	{
+	switch (m_finishScaleState){
 	case Scale_Double:
 		ScaleDouble();
 		m_finishScaleState = Scale_Medium;
 		break;
-
 	case Scale_Small:
 		ScaleSmall();
-		if (m_finishScale <= 1.0f)
-		{
+		if (m_finishScale <= 1.0f){
 			m_finishScale = 1.0f;
 			//縮小完了
 			m_finishScaleState = Scale_None;
 		}
 		break;
-		
 	case Scale_Medium:
 		ScaleMedium();
 		m_finishScaleState = Scale_None;
 		break;
-
 	case Scale_None:
-		//何もしない
-		break;
 	default:
 		break;
 	}
@@ -268,7 +255,7 @@ void ResultUI::NextFinishScaleState()
 
 void ResultUI::ScaleDouble()
 {
-	//拡大率を10に設定
+	//拡大率を10倍に設定
 	m_finishSprite.SetScale(10.0f);
 }
 
@@ -282,8 +269,7 @@ void ResultUI::ScaleSmall()
 {
 	//拡大率を徐々に減少させる
 	m_finishScale -= 0.2f;
-	if (m_finishScale < 1.0f)
-	{
+	if (m_finishScale < 1.0f){
 		//最小値に固定
 		m_finishScale = 1.0f;
 	}
@@ -293,80 +279,53 @@ void ResultUI::ScaleSmall()
 
 void ResultUI::Render(RenderContext& rc)
 {
-	if (m_gameTimer->GetIsTimerEnd() == true)
-	{
+	if (m_gameTimer->GetIsTimerEnd() == true){
 		//タイマーの累計時間を更新
 		m_elapsedTime += g_gameTime->GetFrameDeltaTime();
 		
-		if (m_elapsedTime < FINISH_DISPLAY_TIME)
-		{
-			if (!m_isFinishSEPlayed)
-			{
+		if (m_elapsedTime < FINISH_DISPLAY_TIME){
+			if (!m_isFinishSEPlayed){
 				//フィニッシュの音声再生
 				m_finishSE = NewGO<SoundSource>(0);
 				m_finishSE->Init(enSoundName_Finish);
 				m_finishSE->SetVolume(1.0f);
 				m_finishSE->Play(false);
-
+				//フィニッシュの音声再生済みに設定
 				m_isFinishSEPlayed = true;
 			}
-			
 			m_finishSprite.Draw(rc);
-			
-			//if (m_elapsedTime > 2.0f)
-			//{
-			//	//フェード処理
-			//	NewGO<Fade>(0, "fade");
-			//	
-			//}
-		}
-		else
-		{
+		}else{
 			//リザルトUIの描画
 			m_resultUI_Sprite.Draw(rc);
-			if (m_nowScore >= RESULT_SCORE_S)
-			{
+			if (m_nowScore >= RESULT_SCORE_S){
 				m_rankS_Sprite.Draw(rc);
 				m_clearSprite.Draw(rc);
-			}
-			else if (m_nowScore >= RESULT_SCORE_A)
-			{
+			}else if (m_nowScore >= RESULT_SCORE_A){
 				m_rankA_Sprite.Draw(rc);
 				m_clearSprite.Draw(rc);
-			}
-			else if (m_nowScore >= RESULT_SCORE_B)
-			{
+			}else if (m_nowScore >= RESULT_SCORE_B){
 				m_rankB_Sprite.Draw(rc);
 				m_clearSprite.Draw(rc);
-			}
-			else
-			{
+			}else{
 				m_rankC_Sprite.Draw(rc);
 				m_failedSprite.Draw(rc);
 			}
 
-			if (m_startButtonUI != nullptr)
-			{
+			if (m_startButtonUI != nullptr){
 				m_startButtonUI->Render(rc);
 			}
-
+			//
 			m_nowScoreRender.SetScale(SCORE_SCALE);
 			m_nowScoreRender.SetPosition(SCORE_POS);
 			m_nowScoreRender.Draw(rc);
 			m_isResultEnd = true;
-
-			if (g_pad[0]->IsPress(enButtonB))
-			{
-				//フェード処理
-				//NewGO<Fade>(0, "fade");
-			}
 		}
-
-	}
-	else
-	{
+	}else{
 		m_nowScoreRender.Draw(rc);
 	}
 }
 
-
+bool ResultUI::GetRankC()
+{
+	return (m_nowScore < RESULT_SCORE_B);
+}

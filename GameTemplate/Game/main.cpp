@@ -6,6 +6,7 @@
 #include "GameSound.h"
 #include "Fade.h"
 #include "Scene/GameTitle.h"
+#include "ParameterManager.h"
 
 // K2EngineLowのグローバルアクセスポイント。
 K2EngineLow* g_k2EngineLow = nullptr;
@@ -35,6 +36,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	CollisionObjectManager m_collisionObjectManager;
 	g_collisionObjectManager = &m_collisionObjectManager;
+
+	ParameterManager::CreateInstance();
 
 	auto gameSound = NewGO<GameSound>(0, "gamesound");
 	GameTitle* gameTitle = NewGO<GameTitle>(0);
@@ -71,6 +74,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		// フレームの終了時に呼び出す必要がある処理を実行。
 		g_k2EngineLow->EndFrame();
 	}
+
+	ParameterManager::DestroyInstance();
 
 	delete g_k2EngineLow;
 
