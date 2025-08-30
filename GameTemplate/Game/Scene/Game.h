@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SkyCube.h"
+//#include "SkyCube.h"
 #include "Player/Player.h"
 #include "LevelRender.h"
 #include "MakeEffect.h"
@@ -22,6 +22,8 @@ class HasFoodManager;
 class Fade;
 class PathStorage;
 class Player;
+class ParameterManager;
+class FocusLine;
 
 class Game : public IGameObject
 {
@@ -35,14 +37,16 @@ public:
 		POS_SCORE_SLIDE,	//スコアがスライドする状態
 	};
 
+public:
 	Game();
 	~Game();
 	bool Start();
 	void Update();
 	void Render(RenderContext& rc);
-	//void SetSkyCube();
+	void SetSkyCube();
 	void FinishTimer();
 	void NextScorePosState();
+	void UpdateFocusLine();
 
 	/// <summary>
 	/// エフェクトの再生
@@ -61,6 +65,7 @@ public:
 		effect->SetScale(scale);
 		effect->Play();
 	}
+
 private:
 	LevelRender			m_levelRender;											//レベルのレンダリング
 	SkyCube*			m_skyCube = nullptr;									//スカイキューブのオブジェクト
@@ -77,15 +82,17 @@ private:
 	GameInformation*	m_gameInfo = nullptr;									//ゲームインフォメーションのオブジェクト
 	Fade*				m_fade = nullptr;										//フェードのオブジェクト
 	PathStorage*		m_pathSt;												//パスストレージのオブジェクト
+	FocusLine*			m_focusLine = nullptr;									//集中線のオブジェクト
 
 	SpriteRender		m_scorePanelSprite;										//スコアパネルスプライト
-	SpriteRender		m_optionPanelSprite;									//スコアパネルスプライト2
+	SpriteRender		m_optionPanelSprite;									//操作説明パネルスプライト
 
 	Vector3				m_scorePanelSpritePos = Vector3(1050.0f, 550.0f, 0.0f);	//スコアパネルの座標
 
 	ScorePanelSetPos	m_setScorePosState = POS_SCORE_OUTSIDE;					//スコアパネルの座標の状態
-
+	
 	float				m_finishStartTime = 0.0f;								//終了開始時間
+	float				m_blinkTimer = 0.0f;
 	int					m_nowScore = 0.0f;										//現在のスコア
 	
 	bool				m_isFinish = false;										//ゲーム終了しているか

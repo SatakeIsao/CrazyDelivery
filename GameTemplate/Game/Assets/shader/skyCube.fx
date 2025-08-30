@@ -1,47 +1,47 @@
 
 ///////////////////////////////////////
-// \‘¢‘ÌB
+// æ§‹é€ ä½“ã€‚
 ///////////////////////////////////////
 
-// ƒsƒNƒZƒ‹ƒVƒF[ƒ_[‚Ö‚Ì“ü—Í
+// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã¸ã®å…¥åŠ›
 struct SPSIn
 {
-    float4 pos : SV_POSITION; //À•WB
-    float3 normal : NORMAL; //–@üB
-    float3 tangent : TANGENT; //ÚƒxƒNƒgƒ‹B
-    float3 biNormal : BINORMAL; //]ƒxƒNƒgƒ‹B
-    float2 uv : TEXCOORD0; //UVÀ•WB
-    float3 worldPos : TEXCOORD1; // ƒ[ƒ‹ƒhÀ•W
+    float4 pos : SV_POSITION; //åº§æ¨™ã€‚
+    float3 normal : NORMAL; //æ³•ç·šã€‚
+    float3 tangent : TANGENT; //æ¥ãƒ™ã‚¯ãƒˆãƒ«ã€‚
+    float3 biNormal : BINORMAL; //å¾“ãƒ™ã‚¯ãƒˆãƒ«ã€‚
+    float2 uv : TEXCOORD0; //UVåº§æ¨™ã€‚
+    float3 worldPos : TEXCOORD1; // ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™
 };
 cbuffer SkyCubeCb : register(b1)
 {
-    float luminance; // –¾‚é‚³B
+    float luminance; // æ˜ã‚‹ã•ã€‚
 };
 
 ///////////////////////////////////////
-// ’¸“_ƒVƒF[ƒ_[‚Ì‹¤’Êˆ—‚ğƒCƒ“ƒNƒ‹[ƒh‚·‚éB
+// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®å…±é€šå‡¦ç†ã‚’ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ã™ã‚‹ã€‚
 ///////////////////////////////////////
 #include "ModelVSCommon.h"
 
 ///////////////////////////////////////
-// ƒVƒF[ƒ_[ƒŠƒ\[ƒX
+// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ãƒªã‚½ãƒ¼ã‚¹
 ///////////////////////////////////////
-Texture2D<float4> g_albedo : register(t0); //ƒAƒ‹ƒxƒhƒ}ƒbƒv
-Texture2D<float4> g_normal : register(t1); //–@üƒ}ƒbƒv
-Texture2D<float4> g_spacular : register(t2); //ƒXƒyƒLƒ…ƒ‰ƒ}ƒbƒv
+Texture2D<float4> g_albedo : register(t0); //ã‚¢ãƒ«ãƒ™ãƒ‰ãƒãƒƒãƒ—
+Texture2D<float4> g_normal : register(t1); //æ³•ç·šãƒãƒƒãƒ—
+Texture2D<float4> g_spacular : register(t2); //ã‚¹ãƒšã‚­ãƒ¥ãƒ©ãƒãƒƒãƒ—
 TextureCube<float4> g_skyCubeMap : register(t10);
 
 ///////////////////////////////////////
-// ƒTƒ“ƒvƒ‰[ƒXƒe[ƒg
+// ã‚µãƒ³ãƒ—ãƒ©ãƒ¼ã‚¹ãƒ†ãƒ¼ãƒˆ
 ///////////////////////////////////////
 sampler g_sampler : register(s0);
 
 
 ////////////////////////////////////////////////
-// ŠÖ”’è‹`B
+// é–¢æ•°å®šç¾©ã€‚
 ////////////////////////////////////////////////
 
-// –@üƒ}ƒbƒv‚©‚ç–@ü‚ğæ“¾B
+// æ³•ç·šãƒãƒƒãƒ—ã‹ã‚‰æ³•ç·šã‚’å–å¾—ã€‚
 float3 GetNormalFromNormalMap(float3 normal, float3 tangent, float3 biNormal, float2 uv)
 {
     float3 binSpaceNormal = g_normal.SampleLevel(g_sampler, uv, 0.0f).xyz;
@@ -52,19 +52,19 @@ float3 GetNormalFromNormalMap(float3 normal, float3 tangent, float3 biNormal, fl
     return newNormal;
 }
 
-// ƒ‚ƒfƒ‹—p‚Ì’¸“_ƒVƒF[ƒ_[‚ÌƒGƒ“ƒgƒŠ[ƒ|ƒCƒ“ƒg
+// ãƒ¢ãƒ‡ãƒ«ç”¨ã®é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ã‚¨ãƒ³ãƒˆãƒªãƒ¼ãƒã‚¤ãƒ³ãƒˆ
 SPSIn VSMainCore(SVSIn vsIn, float4x4 mWorldLocal, uniform bool isUsePreComputedVertexBuffer)
 {
     SPSIn psIn;
-	// ’¸“_À•W‚ğƒ[ƒ‹ƒhÀ•WŒn‚É•ÏŠ·‚·‚éB
+	// é ‚ç‚¹åº§æ¨™ã‚’ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ç³»ã«å¤‰æ›ã™ã‚‹ã€‚
     psIn.pos = CalcVertexPositionInWorldSpace(vsIn.pos, mWorldLocal, isUsePreComputedVertexBuffer);
 
-	// ’¸“_ƒVƒF[ƒ_[‚©‚çƒ[ƒ‹ƒhÀ•W‚ğo—Í
+	// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‹ã‚‰ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’å‡ºåŠ›
     psIn.worldPos = (float3) psIn.pos;
-    psIn.pos = mul(mView, psIn.pos); // ƒ[ƒ‹ƒhÀ•WŒn‚©‚çƒJƒƒ‰À•WŒn‚É•ÏŠ·
-    psIn.pos = mul(mProj, psIn.pos); // ƒJƒƒ‰À•WŒn‚©‚çƒXƒNƒŠ[ƒ“À•WŒn‚É•ÏŠ·
+    psIn.pos = mul(mView, psIn.pos); // ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ç³»ã‹ã‚‰ã‚«ãƒ¡ãƒ©åº§æ¨™ç³»ã«å¤‰æ›
+    psIn.pos = mul(mProj, psIn.pos); // ã‚«ãƒ¡ãƒ©åº§æ¨™ç³»ã‹ã‚‰ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ç³»ã«å¤‰æ›
 
-	// ƒ[ƒ‹ƒh‹óŠÔ‚Ì–@üAÚƒxƒNƒgƒ‹A]ƒxƒNƒgƒ‹‚ğŒvZ‚·‚éB
+	// ãƒ¯ãƒ¼ãƒ«ãƒ‰ç©ºé–“ã®æ³•ç·šã€æ¥ãƒ™ã‚¯ãƒˆãƒ«ã€å¾“ãƒ™ã‚¯ãƒˆãƒ«ã‚’è¨ˆç®—ã™ã‚‹ã€‚
     CalcVertexNormalTangentBiNormalInWorldSpace(
 		psIn.normal,
 		psIn.tangent,
@@ -82,7 +82,7 @@ SPSIn VSMainCore(SVSIn vsIn, float4x4 mWorldLocal, uniform bool isUsePreComputed
 }
 
 /// <summary>
-/// ƒsƒNƒZƒ‹ƒVƒF[ƒ_[‚ÌƒGƒ“ƒgƒŠ[ŠÖ”B
+/// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ã‚¨ãƒ³ãƒˆãƒªãƒ¼é–¢æ•°ã€‚
 /// </summary>
 float4 PSMain(SPSIn psIn) : SV_Target0
 {

@@ -21,12 +21,17 @@
 #include "PathStorage.h"
 #include "GameTitle.h"
 #include "Player/Player.h"
+#include "ParameterManager.h"
+#include "FocusLine.h"
+#include "SkyCube.h"
+
+namespace
+{
+	const float		BLINK_INTERVAL = 0.1f;	//点滅間隔
+}
 
 Game::Game()
 {
-	//PathStorage test;
-	//パスストレージのインスタンスを作成
-	//m_pathSt = PathStorage::CreateInstance();
 }
 
 Game::~Game()
@@ -36,31 +41,26 @@ Game::~Game()
 	for (auto shHamGo : shopHamburger) {
 		DeleteGO(shHamGo);
 	}
-
 	//ピザショップの削除
 	std::vector<ShopPizza*> shopPizza = FindGOs<ShopPizza>("shoppizza");
 	for (auto shPizGo : shopPizza) {
 		DeleteGO(shPizGo);
 	}
-	
 	//寿司店の削除
 	std::vector<ShopSushi*> shopSushi = FindGOs<ShopSushi>("shopsushi");
 	for (auto shSusGo : shopSushi){
 		DeleteGO(shSusGo);
 	}
-	
 	//お客さん（ハンバーガー）の削除
 	std::vector<CustomerManHamburger*> customerManHam = FindGOs<CustomerManHamburger>("customerman_hamburger");
 	for (auto csHamGo : customerManHam) {
 		DeleteGO(csHamGo);
 	}
-	
 	//お客さん（ピザ）の削除
 	std::vector<CustomerManPizza*> customerManPiz = FindGOs<CustomerManPizza>("customerman_pizza");
 	for (auto csPizGo : customerManPiz) {
 		DeleteGO(csPizGo);
 	}
-
 	//お客さん（寿司）の削除
 	std::vector<CustomerManSushi*> customerManSus = FindGOs<CustomerManSushi>("customerman_sushi");
 	for (auto csSusGo : customerManSus) {
@@ -91,13 +91,18 @@ Game::~Game()
 	DeleteGO(m_gameInfo);
 	//パスストレージクラスのインスタンスを削除
 	m_pathSt->DeleteInstance();
+	//集中線のオブジェクトを削除
+	DeleteGO(m_focusLine);
+	//スカイキューブの削除
+	DeleteGO(m_skyCube);
+	//フェードの削除
+	//DeleteGO(m_fade);
 }
 
 bool Game::Start()
 {
 	//パスストレージのインスタンスを作成
-	if (m_pathSt == nullptr)
-	{
+	if (m_pathSt == nullptr){
 		m_pathSt = PathStorage::CreateInstance();
 	}
 
@@ -105,10 +110,8 @@ bool Game::Start()
 	m_makeEfe = NewGO<MakeEffect>(0, "makeeffect");
 	//レベルの初期化
 	m_levelRender.Init("Assets/ModelData/StageData/bg.tkl",
-		[&](LevelObjectData_Render& objData)
-	{
-		if (objData.ForwardMatchName(L"Path_") == true)
-		{
+		[&](LevelObjectData_Render& objData){
+		if (objData.ForwardMatchName(L"Path_") == true){
 			// パスデータが見つかった。
 			// パス番号を取得する
 			const int PathNoStartPos = 6;	// パス番号が始まる文字列中の位置
@@ -119,7 +122,6 @@ bool Game::Start()
 			pathNoString[1] = objData.name[PathNoStartPos + 1];
 			pathNoString[2] = '\0';
 			int pathNo = atoi(pathNoString);
-
 
 			//ポイント番号を取得
 			const int PointNoStartPos = 9;			// ポイント番号が始まる文字列中の位置
@@ -136,33 +138,26 @@ bool Game::Start()
 
 			//Pathクラスのインスタンス
 			Path* editPath = nullptr;	
-
 			//PathStorageにpathNoの*パスが保存されているか調べる
 			//保存されていたら
-			if (m_pathSt->Exist(pathNo) == true)
-			{
-				//パスストレージから編集するPathクラスのインスタンスを取得する
+			if (m_pathSt->Exist(pathNo) == true){
+				//パスストレージから編集するPathクラスのインスタンスを取得
 				editPath = m_pathSt->GetPath(pathNo);
 			}
 			//保存されていなければ
-			else 
-			{
+			else {
 				//新しいPathクラスのインスタンスを作成
 				editPath = new Path;
-				//ストレージに追加する
+				//ストレージに追加
 				m_pathSt->AddPath(pathNo, *editPath);
 			}
-		
-			//パスにポイントの座標を追加する。
+			//パスにポイントの座標を追加
 			Vector3 pointPos = objData.position;
-
+			
 			editPath->AddPointPos(pointNo, pointPos);
-
 		}
 		//ハンバーガーショップの生成
-		if (objData.ForwardMatchName(L"DummyHamburger") == true)
-		{
-			//std::vector<ShopHamburger*> ins = FindGOs<ShopHamburger>("shophamburger");
+		if (objData.ForwardMatchName(L"DummyHamburger") == true){
 			ShopHamburger* shopHamburger = NewGO<ShopHamburger>(0, "shophamburger");
 			shopHamburger->SetPosition(objData.position);
 			shopHamburger->SetRotation(objData.rotation);
@@ -170,8 +165,7 @@ bool Game::Start()
 			return true;
 		}
 		//ピザショップの生成
-		else if (objData.ForwardMatchName(L"DummyPizza") == true)
-		{
+		else if (objData.ForwardMatchName(L"DummyPizza") == true){
 			ShopPizza* shopPizza = NewGO<ShopPizza>(0, "shoppizza");
 			shopPizza->SetPosition(objData.position);
 			shopPizza->SetRotation(objData.rotation);
@@ -179,38 +173,31 @@ bool Game::Start()
 			return true;
 		}
 		//寿司店の生成
-		else if (objData.ForwardMatchName(L"DummySushi") == true)
-		{
+		else if (objData.ForwardMatchName(L"DummySushi") == true){
 			ShopSushi* shopSushi = NewGO<ShopSushi>(0, "shopsushi");
 			shopSushi->SetPosition(objData.position);
 			shopSushi->SetRotation(objData.rotation);
 			shopSushi->SetScale(objData.scale);
 			return true;
 		}
-		
 		//ハンバーガー待ちのお客さん
-		else if (objData.ForwardMatchName(L"DummyManHamburger") == true)
-		{
+		else if (objData.ForwardMatchName(L"DummyManHamburger") == true){
 			CustomerManHamburger* customerHamburger = NewGO<CustomerManHamburger>(0, "customerman_hamburger");
 			customerHamburger->SetPosition(objData.position);
 			customerHamburger->SetRotation(objData.rotation);
 			customerHamburger->SetGamePointer(this);
 			return true;
 		}
-
 		//ピザ待ちのお客さん
-		else if (objData.ForwardMatchName(L"DummyManPizza") == true)
-		{
+		else if (objData.ForwardMatchName(L"DummyManPizza") == true){
 			CustomerManPizza* customerPizza = NewGO<CustomerManPizza>(0, "customerman_pizza");
 			customerPizza->SetPosition(objData.position);
 			customerPizza->SetRotation(objData.rotation);
 			customerPizza->SetGamePointer(this);
 			return true;
 		}
-
 		//寿司待ちのお客さん
-		else if (objData.ForwardMatchName(L"DummyManSushi") == true)
-		{
+		else if (objData.ForwardMatchName(L"DummyManSushi") == true){
 			CustomerManSushi* customerSushi = NewGO<CustomerManSushi>(0, "customerman_sushi");
 			customerSushi->SetPosition(objData.position);
 			customerSushi->SetRotation(objData.rotation);
@@ -231,6 +218,8 @@ bool Game::Start()
 
 	//プレイヤーのオブジェクトを作成
 	m_player = NewGO<nsPlayer::Player>(0, "player");
+	//集中線のオブジェクトを作成
+	m_focusLine = NewGO<FocusLine>(0, "focusline");
 	//背景のオブジェクトを作成
 	m_backGround = NewGO<BackGround>(0, "background");
 	//ゲームカメラのオブジェクトを作成
@@ -247,8 +236,10 @@ bool Game::Start()
 	m_resultUI = NewGO<ResultUI>(0, "resultui");
 	//食べ物を所持しているかの管理クラスのオブジェクトを作成
 	m_hasFoodManager = NewGO<HasFoodManager>(0, "hasfoodmanager");
+	//フェードのオブジェクトを作成
+	//m_fade = NewGO<Fade>(0, "fade");
 	//スカイキューブの作成
-	//SetSkyCube();
+	SetSkyCube();
 	
 	//スコアパネルスプライトの初期化
 	m_scorePanelSprite.Init("Assets/Sprite/InGame/ScorePanel.DDS", 500.0f, 500.0f);
@@ -265,12 +256,14 @@ bool Game::Start()
 
 	//PathStorage からパスを取得して Playerに設定
 	Path* path = PathStorage::GetPathStorage()->GetPath(0);
-	if (path)
-	{
+	if (path){
 		m_player->SetPath(path);
 	}
 
-	// TODO: アニメーションマネージャーテスト
+	//パラメーターマネージャーの初期化
+	ParameterManager::CreateInstance();
+
+	// TODO: アニメーションマネージャーが作動するかテスト
 	auto* animationManager = NewGO<UIAnimationManager>(0, "uianimationmanager");
 
 	return true;
@@ -278,23 +271,41 @@ bool Game::Start()
 
 void Game::Update()
 {
+	m_blinkTimer += g_gameTime->GetFrameDeltaTime();
 	//タイマー終了処理
 	FinishTimer();
+	//集中線の更新
+	UpdateFocusLine();
+	
+	//リザルトが最大まで表示されたら、フェードイン
+	
+
+	////カメラの移動が終われば、フェードアウト
+	//if (m_gameCamera->GetIsCameraMoveFinished())
+	//{
+	//	Fade* fade = NewGO<Fade>(0, "fade");
+	//	//フェードインを開始
+	//	fade->StartFadeOut();
+
+	//	fade->SetOnFadeOutComplete([this]()
+	//		{
+	//			Fade* fade = FindGO<Fade>("fade");
+	//			fade->StartFadeIn();
+	//		}
+	//	);
+	//}
 
 	//制限時間が0で、リザルトUIが終了したらタイトルに戻る処理
 	if (m_gameTimer->GetIsTimerEnd()
 		&& m_resultUI->GetIsResultEnd()
-		&& g_pad[0]->IsTrigger(enButtonB))
-	{
+		&& g_pad[0]->IsTrigger(enButtonB)){
 		Fade* fade = NewGO<Fade>(0, "fade");
 		//フェードインを開始
 		fade->StartFadeOut();
 		//フェードアウト完了時の処理を設定
-		fade->SetOnFadeOutComplete([this]()
-		{
+		fade->SetOnFadeOutComplete([this](){
 			//フェードアウト完了後にタイトルを表示(既に存在していないかチェック)
-			if (FindGO<GameTitle>("gameTitle") == nullptr)
-			{
+			if (FindGO<GameTitle>("gameTitle") == nullptr){
 				NewGO<GameTitle>(0, "gameTitle");
 				//ゲームクラスを削除
 				DeleteGO(this);
@@ -307,8 +318,7 @@ void Game::Update()
 		&& !m_gameTimer->GetIsTimerEnd()) {
 		//スコアボードの位置を変更
 		NextScorePosState();
-		if (m_resultUI)
-		{
+		if (m_resultUI){
 			//リザルトUIのスライド処理を開始
 			m_resultUI->NextResultPosState();
 		}
@@ -318,8 +328,7 @@ void Game::Update()
 	if (m_setScorePosState == POS_SCORE_SLIDE) {
 		if (m_scorePanelSpritePos.x > 550.0f) {
 			m_scorePanelSpritePos.x -= 130.0f;
-		}
-		else {
+		}else {
 			m_setScorePosState = POS_SCORE_INSIDE;
 		}
 	}
@@ -330,26 +339,23 @@ void Game::Update()
 	
 }
 
-//void Game::SetSkyCube()
-//{
-//	m_skyCube = NewGO<SkyCube>(0, "skycube");
-//	m_skyCube->SetLuminance(1.0f);
-//	m_skyCube->SetScale(2000.0f);
-//	m_skyCube->SetPosition({ 1000.0f,500.0f,15500.0f });
-//	m_skyCube->SetType((EnSkyCubeType)enSkyCubeType_Day);
-//
-//	// 環境光の計算のためのIBLテクスチャをセットする。
-//	//g_renderingEngine->SetAmbientByIBLTexture(m_skyCube->GetTextureFilePath(), 0.1f);
-//
-//}
+void Game::SetSkyCube()
+{
+	m_skyCube = NewGO<SkyCube>(0, "skycube");
+	//明るさを設定
+	m_skyCube->SetLuminance(1.0f);
+	m_skyCube->SetScale(2000.0f);
+	m_skyCube->SetPosition({ 1000.0f,500.0f,15500.0f });
+	//スカイキューブの種類を設定
+	m_skyCube->SetType((EnSkyCubeType)enSkyCubeType_Day);
+}
 
 void Game::FinishTimer()
 {
 	//タイマーが終了している場合
 	if (m_gameTimer->GetIsTimerEnd()) {
 		//終了処理開始していない場合
-		if (m_isFinishStarted = false)
-		{
+		if (m_isFinishStarted = false){
 			//ゲームを終了処理開始
 			m_isFinishStarted = true;
 			//フィニッシュ開始時間を記録
@@ -357,8 +363,7 @@ void Game::FinishTimer()
 		}
 		//終了処理が開始されてから３秒経過した場合
 		if (m_isFinishStarted
-			&& g_gameTime->GetFrameDeltaTime() - m_finishStartTime >= 3.0f)
-		{
+			&& g_gameTime->GetFrameDeltaTime() - m_finishStartTime >= 3.0f){
 			//ゲームを終了状態に設定
 			m_isFinish = true;
 		}
@@ -379,14 +384,39 @@ void Game::NextScorePosState()
 	}
 }
 
+void Game::UpdateFocusLine()
+{
+	if (m_player->DrawBoostEffect()){
+		//加速中なら集中線を表示
+		m_focusLine->SetScale(1.0);
+	}else{
+		// 最大速度の遊びとなるパーセント(一定値以上を集中線最大にしたいから)
+		constexpr float maxSpeedPer = 0.8f;
+		//集中線の最大拡大率
+		constexpr float maxFocusLineScale = 20.0f;
+		//集中線の最小拡大率
+		constexpr float minFocusLineScale = 1.0f;
+
+		//プレイヤーの速度を取得
+		float velocity = m_player->GetVelocity().Length();
+		//プレイヤーの最大速度を取得
+		float maxSpeed = m_player->GetStatus().GetSpeedMax() * maxSpeedPer;
+		//速度を最大速度で割る
+		velocity = min((velocity / maxSpeed), 1.0f);
+		//線形補間で拡大率を計算
+		//float currentScale = Math::Lerp(velocity, maxFocusLineScale, minFocusLineScale);
+		float currentScale = Math::Lerp(velocity, maxFocusLineScale, minFocusLineScale);
+		//集中線の拡大率を設定
+		m_focusLine->SetScale(currentScale);
+	}
+}
+
 void Game::Render(RenderContext& rc)
 {
-	if (m_gameTimer->GetIsTimerEnd() == true)
-	{
+	if (m_gameTimer->GetIsTimerEnd()){
+		//タイマーが終了している場合、スコアパネルと操作パネルを描画しない
 		return;
 	}
 	m_scorePanelSprite.Draw(rc);
 	m_optionPanelSprite.Draw(rc);
 }
-
-

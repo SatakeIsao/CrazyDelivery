@@ -9,6 +9,8 @@ class BackGround;
 class Point;
 class GameTimer;
 class Path;
+class ResultUI;
+
 namespace nsPlayer
 {
 	class IPlayerState;
@@ -16,6 +18,199 @@ namespace nsPlayer
 
 	class Player : public Character
 	{
+	private:
+		class Status
+		{
+		private:
+			//加速度
+			float m_addAccele;
+			//回転速度
+			float m_rotSpeed;
+			// ドリフト中の回転速度倍率
+			float m_driftRotSpeedMultiplaer;
+			//地面の高さ
+			float m_groundHeight;
+			//重力
+			float m_gravity;
+			//減速にかかる時間
+			float m_decelerationTime;
+			//減速係数の最小値
+			float m_minDecelerationFactor;
+			//内積のべき乗の指数
+			float m_maxDotPower;
+			//摩擦力の最小値
+			float m_minFriction;
+			//摩擦力の最大値
+			float m_maxFriction;
+			//最小減速率
+			float m_minDeceleration;
+			//最大減衰率
+			float m_maxDeceleration;
+			//法線ベクトルのY値(固定)
+			float m_normalYValue;
+			//反射計算用のスカラー値
+			float m_reflectionScale;
+			//キャラクターコントローラーの半径
+			float m_charaConRadius;
+			//キャラクターコントローラーの高さ
+			float m_charaConHeight;
+			//速度停止のしきい値
+			float m_stopThreshold;
+			//スピードリセットのしきい値
+			float m_speedThreshold;
+			//ジャンプする数値
+			float m_jumpPower;
+			//速度上限
+			float m_speedMax;
+			//ダッシュによって得られるブースト
+			float m_dashBoost;
+			//ブースト適用を開始する遅延時間
+			float m_startBoostDelay;
+
+		public:
+
+			Status() {}
+			~Status() {}
+
+			void Init(
+				const float addAccele,
+				const float rotSpeed,
+				const float driftRotSpeedMultiplaer, 
+				const float groundHeight, 
+				const float gravity, 
+				const float decelerationTime,
+				const float minDecelerationFactor,
+				const float maxDotPower,
+				const float minFriction,
+				const float maxFriction,
+				const float minDeceleration,
+				const float maxDeceleration,
+				const float normalYValue,
+				const float reflectionScale,
+				const float charaConRadius,
+				const float charaConHeight,
+				const float stopThreshold,
+				const float speedThreshold,
+				const float jumpPower,
+				const float speedMax,
+				const float dashBoost,
+				const float startBoostDelay)
+			{
+				m_addAccele = addAccele;
+				m_rotSpeed = rotSpeed;
+				m_driftRotSpeedMultiplaer = driftRotSpeedMultiplaer;
+				m_groundHeight = groundHeight;
+				m_gravity = gravity;
+				m_decelerationTime = decelerationTime;
+				m_minDecelerationFactor = minDecelerationFactor;
+				m_maxDotPower = maxDotPower;
+				m_minFriction = minFriction;
+				m_maxFriction = maxFriction;
+				m_minDeceleration = minDeceleration;
+				m_maxDeceleration = maxDeceleration;
+				m_normalYValue = normalYValue;
+				m_reflectionScale = reflectionScale;
+				m_charaConRadius = charaConRadius;
+				m_charaConHeight = charaConHeight;
+				m_stopThreshold = stopThreshold;
+				m_speedThreshold = speedThreshold;
+				m_jumpPower = jumpPower;
+				m_speedMax = speedMax;
+				m_dashBoost = dashBoost;
+				m_startBoostDelay = startBoostDelay;
+			}
+			
+			/// <summary>
+			/// 追加加速度を取得
+			/// </summary>
+			float GetAddAccele() const { return m_addAccele; }
+			/// <summary>
+			/// 回転速度を取得
+			/// </summary>
+			float GetRotSpeed() const { return m_rotSpeed; }
+			/// <summary>
+			/// ドリフト中の回転速度倍率を取得
+			/// </summary>
+			float GetDriftRotSpeedMultiplaer() const { return m_driftRotSpeedMultiplaer; }
+			/// <summary>
+			/// 地面の高さを取得
+			/// </summary>
+			float GetGroundHeight() const { return m_groundHeight; }
+			/// <summary>
+			/// 重力を取得
+			/// </summary>
+			float GetGravity() const { return m_gravity; }
+			/// <summary>
+			/// 減速にかかる時間を取得
+			/// </summary>
+			float GetDecelerarionTime() const { return m_decelerationTime; }
+			/// <summary>
+			/// 減速係数の最小値を取得
+			/// </summary>
+			float GetMinDecelerationFactor() const { return m_minDecelerationFactor; }
+			/// <summary>
+			/// 内積のべき乗の指数を取得
+			/// </summary>
+			float GetMaxDotPower() const { return m_maxDotPower; }
+			/// <summary>
+			/// 摩擦力の最小値を取得
+			/// </summary>
+			float GetMinFriction() const { return m_minFriction; }
+			/// <summary>
+			/// 摩擦力の最大値を取得
+			/// </summary>
+			float GetMaxFriction() const { return m_maxFriction; }
+			/// <summary>
+			/// 最小減速率を取得
+			/// </summary>
+			float GetMinDeceleration() const { return m_minDeceleration; }
+			/// <summary>
+			/// 最大減速率を取得
+			/// </summary>
+			float GetMaxDeceleration() const { return m_maxDeceleration; }
+			/// <summary>
+			/// 法線ベクトルのY値(固定)を取得
+			/// </summary>
+			/// <returns></returns>
+			float GetNormalYValue() const { return m_normalYValue; }
+			/// <summary>
+			/// 反射計算用のスカラー値を取得
+			/// </summary>
+			float GetReflectionScale() const { return m_reflectionScale; }
+			/// <summary>
+			/// キャラクターコントローラーの半径を取得
+			/// </summary>
+			float GetCharaConRadius() const { return m_charaConRadius; }
+			/// <summary>
+			/// キャラクターコントローラーの高さを取得
+			/// </summary>
+			float GetCharaConHeight() const { return m_charaConHeight; }
+			/// <summary>
+			/// 速度停止のしきい値を取得
+			/// </summary>
+			float GetStopThreshold() const { return m_stopThreshold; }
+			/// <summary>
+			/// スピードアップリセットのしきい値を取得
+			/// </summary>
+			float GetSpeedThreshold() const { return m_speedThreshold; }
+			/// <summary>
+			/// ジャンプする数値を取得
+			/// </summary>
+			float GetJumpPower() const { return m_jumpPower; }
+			/// <summary>
+			/// 速度上限を取得
+			/// </summary>
+			float GetSpeedMax()const { return m_speedMax; }
+			/// <summary>
+			/// ダッシュによって得られるブーストを取得
+			/// </summary>
+			float GetDashBoost() const { return m_dashBoost; }
+			/// <summary>
+			/// ブースト適用を開始する遅延時間を取得
+			/// </summary>
+			float GetStartBoostDelay() const { return m_startBoostDelay; }
+		};
+
 	public:
 		//アニメーションクリップ
 		enum EnAnimationClip
@@ -26,7 +221,7 @@ namespace nsPlayer
 			enAnimClip_Run,		//走行アニメーション
 			enAnimClip_Jump,	//ジャンプアニメーション
 			enAnimClip_Drift,	//ドリフトアニメーション
-			//enAnimClip_Angry,	//怒っているアニメーション
+			enAnimClip_Angry,	//怒っているアニメーション
 			enAnimClip_Num		//アニメーションクリップの数
 		};
 	
@@ -42,6 +237,7 @@ namespace nsPlayer
 	protected:
 	
 	public:
+		void InitStatus();
 		/// <summary>
 		/// ゲームオブジェクトを初期化
 		/// </summary>
@@ -54,7 +250,7 @@ namespace nsPlayer
 		/// 減速度の初期設定
 		/// </summary>
 		/// <returns></returns>
-		const float InitQuietTimeSet();
+		const float InitDeceleration();
 		/// <summary>
 		/// プレイヤーのモデルを初期化
 		/// </summary>
@@ -75,7 +271,7 @@ namespace nsPlayer
 
 
 		/// <summary>
-		/// パス移動用関数
+		/// パスに沿って移動する
 		/// </summary>
 		/// <param name="path"></param>
 		void MoveAlongPath();
@@ -161,7 +357,7 @@ namespace nsPlayer
 		/// </summary>
 		void UpdatePosWithVelocity();
 		/// <summary>
-		/// モデルの更新
+		/// モデルの座標を更新
 		/// </summary>
 		void UpdateModelPos();
 
@@ -175,7 +371,10 @@ namespace nsPlayer
 		/// </summary>
 		/// <returns></returns>
 		bool CheckNearPathMoveStart();
-		
+		/// <summary>
+		/// プレイヤーの位置と向きをリセット
+		/// </summary>
+		void ResetforGameEnd();
 
 		//使用していない関数
 		void MoveLStickOn();
@@ -193,6 +392,16 @@ namespace nsPlayer
 		{
 			return m_forward;
 		}
+
+		/// <summary>
+		/// 現在の速度を取得
+		/// </summary>
+		/// <returns></returns>
+		const Vector3& GetVelocity() const
+		{
+			return m_velocity;
+		}
+
 		/// <summary>
 		/// 座標の設定
 		/// </summary>
@@ -395,7 +604,21 @@ namespace nsPlayer
 			return m_charaCon;
 		}
 
+	
+		/// <summary>
+		/// 加速時のエフェクトを描画するか
+		/// </summary>
+		bool DrawBoostEffect() const
+		{
+			return m_drawBoostEffect;
+		}
+
+		Status& GetStatus()
+		{
+			return m_status;
+		}
 	private:
+		Status m_status;
 		// 分かりやすいように名前を付ける
 		// あまり意味はない
 		using StateMap = std::map<uint32_t, IState*>;
@@ -425,10 +648,11 @@ namespace nsPlayer
 
 		GameTimer*			m_gameTimer = nullptr;						//ゲームタイマー
 		Path*				m_currentPath = nullptr;					//パス
+		ResultUI*			m_resultUI = nullptr;						//リザルトUI
 
 		float				m_complementTime = 0.0f;					//アニメーションの補間時間
 		float				m_initQuietTime = 5.0f;						//初期の静止時間(加速度1000.0fの時)
-		float				m_initQuietSeppd = 0.0f;					//初期の減速度
+		float				m_initDeceleration = 0.0f;					//初期の減速度
 		float				m_acceleDelayTime = 0.0f;					//タイマー変数
 		float				m_driftTime = 1.15f;						//ドリフトタイマー変数
 		float				m_acceleTime = 1.15f;						//アクセルタイマー変数
@@ -454,9 +678,10 @@ namespace nsPlayer
 		bool				m_isPathMoveEnd = false;					//パス移動終了したか
 		bool				m_isMovingForward = false;					//キャラクターが前進しているか
 		bool				m_isPostPathAcceleration = false;			//パス移動終了時に加速フラグ
+		bool				m_drawBoostEffect = false;			//加速時のエフェクトを描画するか
 
 	protected:
-		nsPlayer::IPlayerState* m_playerState = nullptr;			//現在のプレイヤーステート
+		nsPlayer::IPlayerState* m_playerState = nullptr;				//現在のプレイヤーステート
 		CCapsuleCollider			m_capsuleCollider;					//遮蔽物確認用のコライダー
 	};
 }

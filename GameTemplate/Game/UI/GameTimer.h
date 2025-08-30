@@ -47,11 +47,9 @@ public:
 		Second_Right_8,	//１の位が８
 		Second_Right_9	//１の位が９
 	};
-
 	
 	GameTimer();
 	~GameTimer();
-
 	bool Start();
 	void Update();
 	void GameTimerInit();
@@ -67,7 +65,7 @@ public:
 	/// タイマー終了状態を取得
 	/// </summary>
 	/// <returns></returns>
-	bool& GetIsTimerEnd()
+	bool GetIsTimerEnd()
 	{
 		return m_isTimerEnd;
 	}
@@ -76,7 +74,7 @@ public:
 	/// タイマー開始状態を取得
 	/// </summary>
 	/// <returns></returns>
-	bool& GetIsTimerStarted()
+	bool GetIsTimerStarted()
 	{
 		return m_isTimerSterted;
 	}
@@ -126,17 +124,12 @@ private:
 	int				   	m_minute = 3.0f;									//タイマーの分数
 	float				m_second = 0.0f;									//タイマーの秒数
 	float				m_time = 180.0f;									//タイマーの総時間（３分）
-	
-	///*デバッグ用*/
-	//int				m_minute = 0.0f;									//タイマーの分数
-	//float				m_second = 3.0f;									//タイマーの秒数
-	//float				m_time = 3.0f;										//タイマーの総時間（３秒）
-	
+	//デバッグ用
+	//int				m_minute = 1.0f;									//タイマーの分数
+	//float				m_second = 0.0f;									//タイマーの秒数
+	//float				m_time = 60.0f;										//タイマーの総時間（３秒）
 	
 	bool				m_isTimerSterted = false;							//タイマー開始したか
 	bool				m_isTimerEnd = false;								//タイマー終了したか
-
-	
-	//std::array<const char*, 10> m_dightTextures;							//スプライトのテクスチャパス
 };
 

@@ -225,7 +225,7 @@ namespace nsK2EngineLow
 		/// <param name="initData"></param>
 		void InitSkyCubeModel(ModelInitData& initData)
 		{
-			m_renderToGBufferModel.Init(initData);
+			m_model.Init(initData);
 		}
 
 		/// <summary>
@@ -256,7 +256,7 @@ namespace nsK2EngineLow
 	private:
 		Model m_model;					//モデル
 		//Model m_bgModel;
-		Model m_renderToGBufferModel;	//RenderToGBufferで描画されるモデル
+		//Model m_renderToGBufferModel;	//RenderToGBufferで描画されるモデル
 		Model m_shadowModel;			//シャドウマップ
 		Light m_light;					//シェーダーに送るライトの情報
 		Vector3 m_position = Vector3::Zero;		//座標

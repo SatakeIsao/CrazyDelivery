@@ -3,7 +3,7 @@
  */
 #pragma once
 #include "GameSound.h"
-#include "Utill/CRC32.h"
+#include "Util/CRC32.h"
 /** プレイヤーの各ステートパターンを識別するためのIDを定義するdefine */
 #define playerState(name)\
 public:\
