@@ -7,7 +7,6 @@ public:
 	void Update();
 	void CalcRotation();
 	void CalcFadeAlpha();
-	void MakeGame();
 	void Render(RenderContext& rc);
 
 	/// <summary>
@@ -15,17 +14,19 @@ public:
 	/// </summary>
 	/// <param name="callback"></param>
 	void SetOnFadeOutComplete(std::function<void()> callback);
-	
+
 	/// <summary>
 	/// フェードイン開始
 	/// </summary>
-	void StartFadeIn() 
+	void StartFadeIn()
 	{
 		m_isFadeStart = true;		//フェード処理を開始
 		m_isFadeOut = true;			//フェードイン（明るくする）
 		m_fadeSpriteAlpha = 1.0f;	//完全に暗くした状態から開始
 	}
-
+	/// <summary>
+	/// フェードアウト開始
+	/// </summary>
 	void StartFadeOut()
 	{
 		m_isFadeStart = true;		//フェード処理を開始
@@ -36,11 +37,10 @@ private:
 	SpriteRender m_fadeSprite;					//フェード用スプライト
 	SpriteRender m_loadSprite;					//ロード用スプライト
 	float m_fadeSpriteAlpha = 0.0f;				//フェード用のアルファ値
-	float m_rotLoad = 360.0f;
-	Quaternion m_loadRot;
+	float m_rotLoad = 360.0f;					//ロードスプライトの回転角
+	Quaternion m_loadRot;						//ロードスプライトの回転
 	bool m_isFadeStart = true;					//フェードが開始されたか	
 	bool m_isFadeComplete = false;				//真っ暗になったか
 	bool m_isFadeOut = false;					//明るくなるフェーズか
 	std::function<void()> m_onFadeOutComplete;	//フェード完了通知コールバック
 };
-
