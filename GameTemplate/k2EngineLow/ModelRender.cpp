@@ -2,15 +2,12 @@
 #include "ModelRender.h"
 
 namespace nsK2EngineLow {
-
 	ModelRender::ModelRender()
 	{
-		//コンストラクタの処理
 	}
 
 	ModelRender::~ModelRender()
 	{
-		// デストラクタの処理
 	}
 
 	void ModelRender::Init(
@@ -31,7 +28,7 @@ namespace nsK2EngineLow {
 
 		initData.m_tkmFilePath = tkmFilePath;
 		//シャドウレシーバー（影が落とされるモデル）用のシェーダーを指定する
-		initData.m_fxFilePath = "Assets/Shader/model.fx";
+		initData.m_fxFilePath = "Assets/shader/model.fx";
 		//initData.m_fxFilePath = "Assets/shader/shadowReceiverModel.fx";
 
 		lightCamera.SetAspectOnrFlag(true);
@@ -79,7 +76,7 @@ namespace nsK2EngineLow {
 		ModelInitData shadowInitData;
 		shadowInitData.m_tkmFilePath = tkmFilePath;
 		//shadowInitData.m_modelUpAxis = modelUpAxis;
-		shadowInitData.m_fxFilePath = "Assets/Shader/drawShadowMap.fx";
+		shadowInitData.m_fxFilePath = "Assets/shader/drawShadowMap.fx";
 		shadowInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32_FLOAT;
 
 		//アニメーションがあるならスケルトンを指定する
@@ -197,10 +194,5 @@ namespace nsK2EngineLow {
 	void ModelRender::OnRenderModel(RenderContext& rc)
 	{
 		m_model.Draw(rc);
-		
 	}
-
-
-	
-
 }

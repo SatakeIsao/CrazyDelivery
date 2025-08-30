@@ -17,7 +17,7 @@ namespace nsK2EngineLow {
 		int frameBuffer_w = g_graphicsEngine->GetFrameBufferWidth();
 		int frameBuffer_h = g_graphicsEngine->GetFrameBufferHeight();
 
-		float clearColor[4] = { 0.7f,0.7f,1.0f,1.0f };
+		float clearColor[4] = { 0.5f,0.5f,0.5f,1.0f };
 
 		//メインレンダリングターゲット
 		m_mainRenderingTarget.Create(
@@ -36,7 +36,7 @@ namespace nsK2EngineLow {
 		spriteInitData.m_textures[0] = &m_mainRenderingTarget.GetRenderTargetTexture();
 		spriteInitData.m_width = frameBuffer_w;
 		spriteInitData.m_height = frameBuffer_h;
-		spriteInitData.m_fxFilePath = "Assets/Shader/sprite.fx";
+		spriteInitData.m_fxFilePath = "Assets/shader/sprite.fx";
 
 		m_copyToFrameBufferSprite.Init(spriteInitData);
 
@@ -45,7 +45,7 @@ namespace nsK2EngineLow {
 		//2D(フォントやスプライト)用の初期化
 		Init2DSprite();
 
-		//ブルームの初期化///
+		//ブルームの初期化
 		InitBloom();
 
 		//シャドウのための初期化
@@ -66,7 +66,7 @@ namespace nsK2EngineLow {
 
 	void RenderingEngine::Init2DSprite()
 	{
-		float clearColor[4] = { 0.5f,0.5f,0.5f,1.0f };
+		float clearColor[4] = { 0.0f,0.0f,0.0f,0.0f };
 		//2D用のターゲットの初期化
 		m_2DRenderTarget.Create(
 			m_mainRenderingTarget.GetWidth(),
@@ -86,7 +86,7 @@ namespace nsK2EngineLow {
 		spriteInitData.m_width = m_mainRenderingTarget.GetWidth();
 		spriteInitData.m_height = m_mainRenderingTarget.GetHeight();
 		//2D用シェーダーを使用する
-		spriteInitData.m_fxFilePath = "Assets/Shader/sprite.fx";
+		spriteInitData.m_fxFilePath = "Assets/shader/sprite.fx";
 		spriteInitData.m_vsEntryPointFunc = "VSMain";
 		spriteInitData.m_psEntryPoinFunc = "PSMain";
 		//上書き
@@ -102,6 +102,8 @@ namespace nsK2EngineLow {
 		//解像度は2Dレンダーターゲットの幅と高さ
 		spriteInitData.m_width = m_2DRenderTarget.GetWidth();
 		spriteInitData.m_height = m_2DRenderTarget.GetHeight();
+		spriteInitData.m_fxFilePath = "Assets/shader/sprite.fx";
+		spriteInitData.m_alphaBlendMode = AlphaBlendMode_None;
 		//レンダリングターゲットのフォーマット
 		spriteInitData.m_colorBufferFormat[0] = m_2DRenderTarget.GetColorBufferFormat();
 
@@ -112,8 +114,6 @@ namespace nsK2EngineLow {
 	{
 		//影の描画
 		m_shadow.Render(rc, m_renderObjects);
-
-
 		//PreRender2D(rc);
 		//レンダリングターゲットをメインレンダリングターゲットに変更
 		rc.WaitUntilToPossibleSetRenderTarget(m_mainRenderingTarget);
@@ -132,26 +132,19 @@ namespace nsK2EngineLow {
 		//画像と文字の描画
 		SpriteFontDraw(rc);
 
-		// ブルーム///
-		////輝度抽出
+		//ブルーム
+		//輝度抽出
 		m_bloom.RenderLumi(rc);
-		////ボケ画像を生成
+		//ボケ画像を生成
 		m_bloom.RenderGauss(rc);
-		////ボケ画像を加算合成
+		//ボケ画像を加算合成
 		rc.WaitUntilToPossibleSetRenderTarget(m_mainRenderingTarget);
 		//レンダリングターゲットを設定
 		rc.SetRenderTargetAndViewport(m_mainRenderingTarget);
 		//最終合成
 		m_bloom.FinalSpriteDraw(rc);
 		//レンダリングターゲットの書き込み終了待ち
-		rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderingTarget);///
-
-		//Render2D(rc);
-
-		//shadowSP.Draw(renderContext);
-
-		//影確認用のスプライトを描画
-		// shadow.SpriteShadowDraw(rc);
+		rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderingTarget);
 
 		//メインレンダリングターゲットの絵をフレームバッファにコピー
 		CopyMainRenderTargetToFrameBuffer(rc);
