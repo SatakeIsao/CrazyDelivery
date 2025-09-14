@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "StartButtonUI.h"
 #include "GameSound.h"
+#include "GameEvents.h"
 namespace
 {
 	const float FADEOUT_RATE = 0.05f;		//フェードアウト:1回の減少量
@@ -24,6 +25,14 @@ bool StartButtonUI::Start()
 	m_startSprite.SetPosition(START_SPRITE_POS);
 	m_startSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_fadeAlpha });
 	m_startSprite.Update();
+
+	//ResultUIReadyイベントのリスナーとして自身を登録
+	EventManager::GetInstance().Subscribe(GameEvents::ResultUIReady, [this]() {
+		if (this->GetStete() == StartButtonUI::enStartUIState_AlphaZero) {
+			//イベント受け取ったら、状態をフェードインに変更
+			this->SetState(StartButtonUI::enStartUIState_FadeIn);
+		}
+	});
 	return true;
 }
 
