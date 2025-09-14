@@ -1,9 +1,11 @@
 #pragma once
+#include "GameEvents.h"	//様子見でいるか判断
 
 class GameTimer;
 class Game;
 class InventoryUI;
 class StartButtonUI;
+
 class ResultUI :public IGameObject
 {
 public:
@@ -65,6 +67,33 @@ public:
 	/// ランクCの取得
 	/// </summary>
 	bool GetRankC();
+
+public:
+	void OnDestroy() {
+		// オブジェクトが破棄される直前にイベントリスナーをクリア
+		EventManager::GetInstance().ClearListeners();
+	}
+private:
+	/// <summary>
+	/// ゲームロジックの更新
+	/// </summary>
+	void UpdateGameLogic();
+	/// <summary>
+	///	スコア表示の更新
+	/// </summary>
+	void UpdateScoreUpdate();
+	/// <summary>
+	/// スタートボタンUIの更新
+	/// </summary>
+	void UpdateStartButtonUI();
+	/// <summary>
+	/// フィニッシュスプライトの位置スライド
+	/// </summary>
+	void UpdatePositionSlide();
+	/// <summary>
+	/// フィニッシュスプライトの拡大率更新
+	/// </summary>
+	void UpdateFinishSpriteScale();
 	
 private:
 	//Game*			m_game = nullptr;						//ゲーム
@@ -94,6 +123,7 @@ private:
 	float			m_elapsedTime = 0.0f;					//経過時間
 	float			m_displayScore = 0.0f;					//補間用の表示スコア
 	float			m_displayTotalScore = 0.0f;				//補間用の合計スコア
+	float			m_resultDelayTime = 0.0f;				//スコア表示の遅延時間
 	int				m_nowScore = 1.0f;						//実際の現在のスコア
 	int				m_saveNowScore = 0.0f;					//前回のスコア
 	bool			m_isResultEnd = false;					//リザルト表示が終了しているか

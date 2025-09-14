@@ -134,10 +134,10 @@ namespace nsPlayer
 		//アニメーションを再生する
 		PlayAnimation(m_currentAnimationClip);
 
-		////ゲーム終了イベントを購読
-		//EventManager::GetInstance().Subscribe(GameEvents::GameFinished, [&]() {
-		//	this->ResetforGameEnd();
-		//	});
+		//ゲーム終了イベントを購読
+		EventManager::GetInstance().Subscribe(GameEvents::GameFinished, [&]() {
+			this->ResetforGameEnd();
+			});
 		//壁との衝突チェック
 		CheckCollisionWithWall();
 		//モデルの更新

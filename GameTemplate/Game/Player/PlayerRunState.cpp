@@ -140,6 +140,9 @@ namespace nsPlayer {
 			return new PlayerAngryState(m_player);
 		}
 
+		EventManager::GetInstance().Subscribe(GameEvents::GameFinished, [&]() {
+			return new PlayerIdleState(m_player);
+			});
 		//パス移動の開始判定
 		/*if (m_player->GetIsPathMoveStart())
 		{
