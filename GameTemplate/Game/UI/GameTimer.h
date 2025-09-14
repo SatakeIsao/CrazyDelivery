@@ -124,6 +124,7 @@ private:
 	int				   	m_minute = 3.0f;									//タイマーの分数
 	float				m_second = 0.0f;									//タイマーの秒数
 	float				m_time = 180.0f;									//タイマーの総時間（３分）
+
 	//デバッグ用
 	//int					m_minute = 0.0f;									//タイマーの分数
 	//float				m_second = 30.0f;									//タイマーの秒数
