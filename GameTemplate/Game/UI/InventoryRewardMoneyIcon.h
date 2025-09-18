@@ -34,7 +34,7 @@ public:
 		enMoneyType150,
 		enMoneyType200,
 		enMoneyType500,
-		//enMoneyTypeSoldout,
+		enMoneyTypeSoldout,
 		enMoneyTypeMax,
 	};
 

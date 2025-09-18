@@ -58,7 +58,6 @@ namespace _internal
 		/// <summary>
 		/// スプライトが可視かどうか
 		/// </summary>
-		/// <returns></returns>
 		inline bool GetIsVisible() const { return m_isVisible; }
 
 		/// <summary>
@@ -84,7 +83,7 @@ namespace _internal
 		EnRewardAnimationType	m_type = enRewardAnimationTypeNone;	//報酬の種類	
 		bool					m_isVisible = true;				//スプライトの可視状態
 
-		std::vector<bool>		m_movingShopUI[EnFoodType::enFoodTypeMax];		// UIを動かしてもいいか
+		std::vector<bool>		m_movingShopUI[EnFoodType::enFoodTypeMax];		//UIを動かしてもいいか
 	};
 
 }
@@ -124,6 +123,6 @@ private:
 
 	_internal::EnRewardAnimationType m_requestAnimationType = _internal::enRewardAnimationTypeNone;		//次にアニメーションをする種類
 
-	int m_animationCommonType = 0;																		// お金と食べ物共通で何かしら値を渡したいときに使用する　例:お金の種類(150/200/500）とか
+	int m_animationCommonType = 0;								//お金と食べ物共通で何かしら値を渡したいときに使用する　例:お金の種類(150/200/500）とか
 };
 

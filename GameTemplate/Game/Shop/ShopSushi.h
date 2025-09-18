@@ -30,13 +30,11 @@ protected:
 	/// <summary>
 	/// 描画処理
 	/// </summary>
-	/// <param name="rc"></param>
 	void Render(RenderContext& rc);
 public:
 	/// <summary>
 	/// クールダウンタイマーの取得
 	/// </summary>
-	/// <returns></returns>
 	float GetCoolDownTimer() const
 	{
 		return m_coolDownTimer;
@@ -44,15 +42,20 @@ public:
 	/// <summary>
 	/// 寿司の所持数が上限に達しているかの取得
 	/// </summary>
-	/// <returns></returns>
 	bool HasFullSushi() const
 	{
 		return m_hasFullSushi;
 	}
 	/// <summary>
+	/// 寿司の所持数が上限に達しているかの設定
+	/// </summary>
+	void SetFullSushi(const bool fullSushi)
+	{
+		m_hasFullSushi = fullSushi;
+	}
+	/// <summary>
 	/// 寿司UIが動いているかどうかの取得
 	/// </summary>
-	/// <returns></returns>
 	bool MovingSushiUI() const
 	{
 		return m_movingSushiUI;
