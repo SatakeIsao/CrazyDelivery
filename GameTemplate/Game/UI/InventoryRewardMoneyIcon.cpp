@@ -22,15 +22,15 @@ namespace
 	const RewardParameter REWARD_MONEY_PARAMETER[InventoryRewardMoneyIcon::enMoneyTypeMax] = {
 		RewardParameter("Assets/Sprite/UI/GetUI_Reward150.dds", DEFAULT_PLANE_STARTPOS, 1.0f),		//報酬時の150円スプライトの初期化
 		RewardParameter("Assets/Sprite/UI/GetUI_Reward200.dds", DEFAULT_PLANE_STARTPOS, 1.0f),		//報酬時の200円スプライトの初期化
-		RewardParameter("Assets/Sprite/UI/GetUI_Reward500.dds", DEFAULT_PLANE_STARTPOS, 1.0f)		//報酬時の500円スプライトの初期化
-		//RewardParameter("Asssts/Sprite/UI/GetUI_Soldout.dds",DEFAULT_PLANE_STARTPOS,1.0f)
+		RewardParameter("Assets/Sprite/UI/GetUI_Reward500.dds", DEFAULT_PLANE_STARTPOS, 1.0f),		//報酬時の500円スプライトの初期化
+		RewardParameter("Assets/Sprite/UI/GetUI_Soldout.dds",	DEFAULT_PLANE_STARTPOS, 1.0f)
 	};
 	
 	// 食べ物用パラメータ
 	const RewardParameter REWARD_FOOD_PARAMETER[EnFoodType::enFoodTypeMax] = {
 		RewardParameter("Assets/Sprite/UI/GetUI_Hamburger.dds", DEFAULT_PLANE_STARTPOS, 1.0f),		//調達時のハンバーガースプライトの初期化
-		RewardParameter("Assets/Sprite/UI/GetUI_Pizza.dds", DEFAULT_PLANE_STARTPOS, 1.0f),			//調達時のピザスプライトの初期化
-		RewardParameter("Assets/Sprite/UI/GetUI_Sushi.dds", DEFAULT_PLANE_STARTPOS, 1.0f)			//調達時の寿司スプライトの初期化
+		RewardParameter("Assets/Sprite/UI/GetUI_Pizza.dds",		DEFAULT_PLANE_STARTPOS, 1.0f),			//調達時のピザスプライトの初期化
+		RewardParameter("Assets/Sprite/UI/GetUI_Sushi.dds",		DEFAULT_PLANE_STARTPOS, 1.0f)			//調達時の寿司スプライトの初期化
 	};
 }
 
