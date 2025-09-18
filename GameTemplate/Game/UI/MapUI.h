@@ -20,102 +20,12 @@ class HasFoodManager;
 class MapUI : public IGameObject
 {
 public:
-	enum MapFadeState {
+	enum MapFadeState : uint8_t{
 		Map_Fade_Zero,		//表示しない
 		Map_Fade_In,		//フェードイン
 		Map_Fade_Default,	//フェードアウト
 		Map_Fade_Out,		//表示する
 	};
-
-	//struct CoolTimeSpriteData
-	//{
-	//private:
-	//	/// <summary>
-	//	/// ワイプ方向
-	//	/// </summary>
-	//	float m_wipeRatio = 6.3f; //6.3f=全体のアルファ値
-	//	/// <summary>
-	//	/// アルファ値
-	//	/// </summary>
-	//	float m_alpha = 0.7f;
-	//	/// <summary>
-	//	/// ワイプサイズ
-	//	/// </summary>
-	//	float m_wipeSize = 0;
-	//public:
-	//	/// <summary>
-	//	/// 割合の初期化
-	//	/// </summary>
-	//	/// <param name="value"></param>
-	//	void SetDegree(const float& value)
-	//	{
-	//		m_wipeSize = value;
-	//	}
-	//	/// <summary>
-	//	/// 割合の加算
-	//	/// </summary>
-	//	/// <param name="addValue"></param>
-	//	void AddDegree(const float& addValue)
-	//	{
-	//		m_wipeSize += addValue;
-	//	}
-	//	/// <summary>
-	//	/// 割合の取得
-	//	/// </summary>
-	//	/// <returns></returns>
-	//	const float& GetDegree() const
-	//	{
-	//		return m_wipeSize;
-	//	}
-	//	/// <summary>
-	//	/// 方向決定
-	//	/// </summary>
-	//	/// <param name="value"></param>
-	//	void SetDirection(const float& value)
-	//	{
-	//		m_wipeRatio = value;
-	//	}
-	//	/// <summary>
-	//	/// アルファ値の加算
-	//	/// </summary>
-	//	/// <param name="addValue"></param>
-	//	void AddDirection(const float& addValue)
-	//	{
-	//		m_wipeRatio += addValue;
-	//	}
-	//	/// <summary>
-	//	/// 方向取得
-	//	/// </summary>
-	//	/// <returns></returns>
-	//	const float& GetDirection() const
-	//	{
-	//		return m_wipeRatio;
-	//	}
-	//	/// <summary>
-	//	/// アルファ値の初期化
-	//	/// </summary>
-	//	/// <param name="value"></param>
-	//	void SetAlpha(const float value)
-	//	{
-	//		m_alpha = value;
-	//	}
-	//	/// <summary>
-	//	/// アルファ値の加算
-	//	/// </summary>
-	//	/// <param name="addValue"></param>
-	//	void AddAlpha(const float addValue)
-	//	{
-	//		m_alpha += addValue;
-	//	}
-	//	/// <summary>
-	//	/// アルファ値の取得
-	//	/// </summary>
-	//	/// <returns></returns>
-	//	const float& GetAlpha() const
-	//	{
-	//		return m_alpha;
-	//	}
-	//};
 
 	MapUI();
 	~MapUI();
@@ -180,7 +90,6 @@ private:
 	GameTimer* m_gameTimer = nullptr;
 	HasFoodManager* m_hasFoodManager = nullptr;
 
-	//CoolTimeSpriteData m_coolTimeSpriteData;
 	float	m_alpha = 0.0f;					//ミニマップのアルファ値
 	float	m_pulseAlpha = 0.0f;			//点滅させるためのアルファ値
 	int		m_pulseDirection = 1;			//アルファ値の増減方向

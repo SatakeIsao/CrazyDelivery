@@ -33,6 +33,7 @@ ResultUI::ResultUI()
 ResultUI::~ResultUI()
 {
 	DeleteGO(m_startButtonUI);
+	OnDestroy();
 }
 
 bool ResultUI::Start()
@@ -40,12 +41,6 @@ bool ResultUI::Start()
 	m_gameTimer = FindGO<GameTimer>("gametimer");
 	m_resultUI = FindGO<ResultUI>("resultui");
 	m_startButtonUI = NewGO<StartButtonUI>(0, "startbuttonui");
-	//StartButtonUIをフェードイン状態に変更
-	if (m_startButtonUI != nullptr)
-	{
-		m_startButtonUI->SetState(StartButtonUI::enStartUIState_FadeIn);
-		m_startButtonUI->ResetButtonState();
-	}
 
 	//フィニッシュスプライトの初期化
 	m_finishSprite.Init("Assets/Sprite/Result/ResultUI_Finish.dds", 1980.0f, 1020.0f);
@@ -108,93 +103,19 @@ bool ResultUI::Start()
 
 void ResultUI::Update()
 {
-	//if (m_gameTimer->GetIsTimerEnd() == true) {
-	//	//ゲーム終了イベントを送る
-	//	EventManager::GetInstance().Trigger(GameEvents::GameFinished);
-	//}
-	if (m_startButtonUI != nullptr){
-		m_startButtonUI->Update();
-	}
-
-	//ゲームタイマーが終了してリザルトUIが表示されたら、StartButtonUIをフェードインさせる
-	if (m_elapsedTime>=FINISH_DISPLAY_TIME
-		&& m_startButtonUI != nullptr){
-		if (m_startButtonUI->GetStete() == StartButtonUI::enStartUIState_AlphaZero){
-			m_startButtonUI->SetState(StartButtonUI::enStartUIState_FadeIn);
+	if (m_gameTimer->GetIsTimerEnd() == true) {
+		UpdateGameLogic();
+		if (m_elapsedTime >= FINISH_DISPLAY_TIME) {
+			EventManager::GetInstance().Trigger(GameEvents::ResultUIReady);
 		}
+	}else {
+		//ゲーム中のスコア表示更新
+		UpdateScoreUpdate();
 	}
-	//リザルトUIが表示された後、Bボタン押されたらタイトルに戻る
-	if (g_pad[0]->IsTrigger(enButtonB)
-		&& m_gameTimer->GetIsTimerEnd()
-		&& m_elapsedTime >= FINISH_DISPLAY_TIME) {
-		//Bボタンが押されたらSEを鳴らす
-		SoundSource* buttonSE = NewGO<SoundSource>(0);
-		buttonSE->Init(enSoundName_Button);
-		buttonSE->SetVolume(0.5f);
-		buttonSE->Play(false);
-
-		//次の座標状態に変更
-		NextResultPosState();
-		//縮小ステートに変更
-		//m_finishScaleState = Scale_Small;
-
-		Fade* fade = NewGO<Fade>(0, "fade");
-		// フェードアウト開始
-		fade->StartFadeOut();
-		// フェードアウト完了時に `Game` クラスを生成
-		fade->SetOnFadeOutComplete([this](){
-			if (FindGO<GameTitle>("gameTitle") == nullptr){
-				NewGO<GameTitle>(0, "gameTitle");
-			}
-			// タイトル画面の削除
-			DeleteGO(this);
-		});
-	}
-
-	//ゲームタイマーが終了していて
-	//フィニッシュ表示がまだされていないなら
-	if (m_gameTimer->GetIsTimerEnd()
-		&& m_isFinishDisplayed==false)	{
-		//スケールを10倍から開始
-		m_finishScale = 10.0f;
-		//縮小ステートを設定
-		m_finishScaleState = Scale_Small;
-		//フィニッシュ表示済みに設定
-		m_isFinishDisplayed = true;
-	}
-	//フィニッシュスプライトの拡大率の状態を更新
-	NextFinishScaleState();
-	
-	//スライド処理
-	if (m_resultSetPosState == Pos_Slide) {
-		//Y軸を減少させて下にスライド
-		if (m_nowScorePos.y > SLIDE_TARGET_Y) {
-			//スライド速度
-			m_nowScorePos.y -= SLIDE_SPEED;
-		} else {
-			//スライド完了
-			m_resultSetPosState = Pos_InSide;
-		}
-	}
-	
-	const float interpolationRate = 0.1f;
-	
-
-	wchar_t wcsbuf[256];
-	//スコア表示の更新
-	if (m_gameTimer->GetIsTimerEnd() == true)	{
-		//表示スコアを実際のスコアに向かって補間
-		m_displayTotalScore = Math::Lerp(0.015, m_displayTotalScore, (float)m_nowScore);
-		//終了時のスコア表示
-		swprintf_s(wcsbuf, 256, L"$%04d",(int)m_displayTotalScore);
-	}else{
-		//表示スコアを実際のスコアに向かって補間
-		m_displayScore = Math::Lerp(interpolationRate, m_displayScore, (float)m_nowScore);
-		//現在のスコア表示
-		swprintf_s(wcsbuf, 256, L"$ %04d", (int)m_displayScore);
-	}
-	m_nowScoreRender.SetText(wcsbuf);
-	m_nowScoreRender.SetPosition(m_nowScorePos);
+	//どの状態でも実行される共通の更新処理
+	//UpdateStartButtonUI();
+	UpdatePositionSlide();
+	UpdateFinishSpriteScale();
 	//スプライトの更新
 	m_finishSprite.SetScale(m_finishScale);
 	m_finishSprite.Update();
@@ -328,4 +249,105 @@ void ResultUI::Render(RenderContext& rc)
 bool ResultUI::GetRankC()
 {
 	return (m_nowScore < RESULT_SCORE_B);
+}
+
+void ResultUI::UpdateGameLogic()
+{
+	//ゲーム終了イベントを送る
+	EventManager::GetInstance().Trigger(GameEvents::GameFinished);
+	//リザルトUIが表示された後、Bボタン押されたらタイトルに戻る
+	if (g_pad[0]->IsTrigger(enButtonB)
+		&& m_gameTimer->GetIsTimerEnd()
+		&& m_elapsedTime >= FINISH_DISPLAY_TIME) {
+		//Bボタンが押されたらSEを鳴らす
+		SoundSource* buttonSE = NewGO<SoundSource>(0);
+		buttonSE->Init(enSoundName_Button);
+		buttonSE->SetVolume(0.5f);
+		buttonSE->Play(false);
+	
+		//次の座標状態に変更
+		NextResultPosState();
+	
+		Fade* fade = NewGO<Fade>(0, "fade");
+		// フェードアウト開始
+		fade->StartFadeOut();
+		// フェードアウト完了時に `Game` クラスを生成
+		fade->SetOnFadeOutComplete([this](){
+			if (FindGO<GameTitle>("gameTitle") == nullptr){
+				NewGO<GameTitle>(0, "gameTitle");
+			}
+			// タイトル画面の削除
+			DeleteGO(this);
+		});
+	}
+	//ゲームタイマーが終了していて
+	//フィニッシュ表示がまだされていないなら
+	if (m_gameTimer->GetIsTimerEnd()
+		&& m_isFinishDisplayed == false) {
+		m_finishScale = 10.0f;
+		m_finishScaleState = Scale_Small;
+		m_isFinishDisplayed = true;
+	}
+	//スコア表示の更新
+	m_resultDelayTime += g_gameTime->GetFrameDeltaTime();
+	if (m_resultDelayTime >= 3.0f) {
+		//表示スコアを実際のスコアに向かって補間
+		m_displayTotalScore = Math::Lerp(0.025, m_displayTotalScore, (float)m_nowScore);
+	}
+	else {
+		m_displayTotalScore = 0.0f;
+	}
+	//終了時のスコア表示
+	wchar_t wcsbuf[256];
+	swprintf_s(wcsbuf, 256, L"$%04d", (int)m_displayTotalScore);
+	m_nowScoreRender.SetText(wcsbuf);
+	m_nowScoreRender.SetPosition(m_nowScorePos);
+}
+
+void ResultUI::UpdateScoreUpdate()
+{
+	//表示スコアを実際のスコアに向かって補間
+	const float interpolationRate = 0.1f;
+	m_displayScore = Math::Lerp(interpolationRate, m_displayScore, (float)m_nowScore);
+	//現在のスコア表示
+	wchar_t wcsbuf[256];
+	swprintf_s(wcsbuf, 256, L"$ %04d", (int)m_displayScore);
+	m_nowScoreRender.SetText(wcsbuf);
+	m_nowScoreRender.SetPosition(m_nowScorePos);
+}
+void ResultUI::UpdateStartButtonUI()
+{
+	if (m_startButtonUI != nullptr) {
+		m_startButtonUI->Update();
+
+		//ゲームタイマーが終了してリザルトUIが表示されたら、StartButtonUIをフェードインさせる
+		if (m_elapsedTime >= FINISH_DISPLAY_TIME
+			&& m_startButtonUI->GetStete() == StartButtonUI::enStartUIState_AlphaZero) {
+			m_startButtonUI->SetState(StartButtonUI::enStartUIState_FadeIn);
+		}
+	}
+}
+void ResultUI::UpdatePositionSlide()
+{
+	if (m_resultSetPosState == Pos_Slide) {
+		//Y軸を減少させて下にスライド
+		if (m_nowScorePos.y > SLIDE_TARGET_Y) {
+			//スライド速度
+			m_nowScorePos.y -= SLIDE_SPEED;
+		}else {
+			//スライド完了
+			m_resultSetPosState = Pos_InSide;
+		}
+	}	
+}
+
+void ResultUI::UpdateFinishSpriteScale()
+{
+	//拡大率を徐々に減少させる
+	m_finishScale -= 0.2f;
+	if (m_finishScale < 1.0f) {
+		//最小値に固定
+		m_finishScale = 1.0f;
+	}
+	m_finishSprite.SetScale(m_finishScale);
 }

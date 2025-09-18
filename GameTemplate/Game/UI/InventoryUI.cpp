@@ -112,71 +112,57 @@ void InventoryUI::Update()
 	}
 
 	//ハンバーガーを調達時のUI描画処理
-	for (int i = 0; i < m_shopHamburger.size(); i++)
-	{
+	for (int i = 0; i < m_shopHamburger.size(); i++){
 		ShopHamburger* shopHamburger = m_shopHamburger[i];
+
 		if (shopHamburger->MovingHamburgerUI()
-			&& shopHamburger->GetCoolDownTimer() >= 7.0f)
-	{
-			if (!shopHamburger->HasFullHamburger())
-			{
+			&& shopHamburger->GetCoolDownTimer() >= 7.0f){
+			if (m_hasFoodManager->HasFullHamburger()) {
+				uiAnimationManager->RequestAnimationMoney(InventoryRewardMoneyIcon::EnMoneyType::enMoneyTypeSoldout);
+				//売り切れ時の効果音を再生
+				PlaySoundSE(enSoundName_SoldOut, 1.0f, false);
+		
+			}else if (!m_hasFoodManager->HasFullHamburger()){
 				uiAnimationManager->RequestAnimationFood(EnFoodType::enFoodTypeHamburger);
-	//			SetRewardSprite(&m_gotPlane);
-	//			SetFoodSprite(&m_gotHamburger);
-	//			//食べ物獲得時の効果音を再生
+				//食べ物獲得時の効果音を再生
 				PlaySoundSE(enSoundName_FoodGot, 1.0f, false);
 			}
-			//else if (shopHamburger->HasFullHamburger())
-			//{
-			//	uiAnimationManager->RequestAnimationMoney(InventoryRewardMoneyIcon::EnMoneyType::enMoneyTypeSoldout);
-				//売り切れ時の効果音を再生
-			//	PlaySoundSE(enSoundName_SoldOut, 1.0f, false);
-			//}
 		}
 	}
 	//ピザを調達時のUI描画処理
-	for (int i = 0; i < m_shopPizza.size(); i++)
-	{
+	for (int i = 0; i < m_shopPizza.size(); i++){
 		ShopPizza* shopPizza = m_shopPizza[i];
+
 		if (shopPizza->MovingPizzaUI()
-			&& shopPizza->GetCoolDownTimer() >= 7.0f)
-		{
-			if(!shopPizza->HasFullPizza())
-			{
+			&& shopPizza->GetCoolDownTimer() >= 7.0f){
+			if (m_hasFoodManager->HasFullPizza()) {
+				uiAnimationManager->RequestAnimationMoney(InventoryRewardMoneyIcon::EnMoneyType::enMoneyTypeSoldout);
+				//売り切れ時の効果音を再生
+				PlaySoundSE(enSoundName_SoldOut, 1.0f, false);
+			
+			}else if(!m_hasFoodManager->HasFullPizza()){
 				uiAnimationManager->RequestAnimationFood(EnFoodType::enFoodTypePizza);
 				//食べ物獲得時の効果音を再生
 				PlaySoundSE(enSoundName_FoodGot, 1.0f, false);
 			}
-	//		else if (shopPizza->HasFullPizza())
-	//		{
-	//			SetRewardSprite(&m_soldOut);
-	//			//売り切れ時の効果音を再生
-	//			PlaySoundSE(enSoundName_SoldOut, 1.0f, false);
-	//		}
 		}
 	}
 	//寿司を調達時のUI描画処理
-	for (int i = 0; i < m_shopSushi.size(); i++)
-	{
+	for (int i = 0; i < m_shopSushi.size(); i++){
 		ShopSushi* shopSushi = m_shopSushi[i];
+		//MovingSushiUIがtrueになってから7秒以上経過している場合
 		if (shopSushi->MovingSushiUI()
-			&& shopSushi->GetCoolDownTimer() >= 7.0f)
-		{
-			if (!shopSushi->HasFullSushi())
-			{
+			&& shopSushi->GetCoolDownTimer() >= 7.0f){
+			if (m_hasFoodManager->HasFullSushi()){
+				uiAnimationManager->RequestAnimationMoney(InventoryRewardMoneyIcon::EnMoneyType::enMoneyTypeSoldout);
+				//売り切れ時の効果音を再生
+				PlaySoundSE(enSoundName_SoldOut, 1.0f, false);
+
+			}else if(!m_hasFoodManager->HasFullSushi()){
 				uiAnimationManager->RequestAnimationFood(EnFoodType::enFoodTypeSushi);
-	//			SetRewardSprite(&m_gotPlane);
-	//			SetFoodSprite(&m_gotSushi);
-	//			//食べ物獲得時の効果音を再生
+				//食べ物獲得時の効果音を再生
 				PlaySoundSE(enSoundName_FoodGot, 1.0f, false);
-			}
-	//		
-	//		else if(shopSushi->HasFullSushi())
-	//		{
-	//			SetRewardSprite(&m_soldOut);
-	//			//売り切れ時の効果音を再生
-	//			PlaySoundSE(enSoundName_SoldOut, 1.0f, false);
-	//		}
+			}		
 		}
 	}
 	

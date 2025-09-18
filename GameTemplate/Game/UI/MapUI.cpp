@@ -21,15 +21,12 @@ namespace
 	const float LIMITED_RANGE_IMAGE_X = 7125.0f * 2.0f;
 	const float LIMITED_RANGE_IMAGE_Z = 9530.0f * 2.0f;
 	//調整値
-	const float ADJUSTMENT_VALUE = 400.0f;
-	const int	ALPHA_ZERO = 0.0f;
-	const int	ALPHA_PLUS_ONE = 1.0f;
-	const int	ALPHA_MINUS_ONE = -1.0f;
-	const int	PULSE_COUNT_MAX = 5.0f;
+	const float ADJUSTMENT_VALUE	= 400.0f;
 	const float	ALPHA_RATE = 0.02f;
-	//int	  ALPHA_MINUS = -1.0f;
-	/*float LIMITED_RANGE_IMAGE_X = 7125.0f;
-	float LIMITED_RANGE_IMAGE_Z = 9530.0f;*/
+	const int	ALPHA_ZERO			= 0.0f;
+	const int	ALPHA_PLUS_ONE		= 1.0f;
+	const int	ALPHA_MINUS_ONE		= -1.0f;
+	const int	PULSE_COUNT_MAX		= 5.0f;
 }
 
 MapUI::MapUI()
@@ -122,7 +119,6 @@ bool MapUI::Start()
 	m_player = FindGO<nsPlayer::Player>("player");
 	m_inventoryUI = FindGO<InventoryUI>("inventoryui");
 
-	//std::vector<ShopHamburger*>  shopHamburger = FindGOs<ShopHamburger>("shophamburger");
 	m_shopHamburger = FindGOs<ShopHamburger>("shophamburger");
 	m_shopPizza = FindGOs<ShopPizza>("shoppizza");
 	m_shopSushi = FindGOs<ShopSushi>("shopsushi");
@@ -140,8 +136,6 @@ bool MapUI::Start()
 
 void MapUI::Update()
 {
-	//CalcWipeRatio();
-
 	Vector3 playerPosition = m_player->GetPostion();
 	Vector3 bargerShopPositionA = m_shopHamburger[0]->GetPosition();
 	Vector3 bargerShopPositionB = m_shopHamburger[1]->GetPosition();
@@ -158,41 +152,18 @@ void MapUI::Update()
 
 	Vector3 mapPosition;
 
-	if (g_pad[0]->IsTrigger(enButtonB) && m_fadeState == Map_Fade_Zero)
-	{
+	if (g_pad[0]->IsTrigger(enButtonB) && m_fadeState == Map_Fade_Zero){
 		m_fadeState = Map_Fade_In;
 	}
 
 	MapSpriteFade();
 
 	//点滅処理を更新
-	if (m_fadeState == Map_Fade_Default)
-	{
+	if (m_fadeState == Map_Fade_Default){
 		PlayerSpritePulse();
 	}
 
-	////マップに表示する範囲にお店があったら
-	//if (WorldPosConvertToMapPos(playerPosition, bargerShopPositionA, mapPosition))
-	//{
-	//	m_isImage = true;
-
-	//	// クールタイム状態に応じてスプライトを切り替え
-	//	//if (m_shopHamburger[0]->GetCoolDownTimer() <= 7.0f
-	//		//&& m_shopHamburger[0]->GetCoolDownTimer() >= 0.1f) // クールタイム中
-	//	if (g_pad[0]->IsPress(enButtonA))
-	//	{
-	//		m_bargerShopGray.SetPosition(mapPosition);
-	//		m_bargerShopGray.Update();
-	//	}
-	//	else // クールタイム終了
-	//	{
-	//		m_bargerShopSprite.SetPosition(mapPosition);
-	//		m_bargerShopSprite.Update();
-	//	}
-	//}
-
-	if (WorldPosConvertToMapPos(playerPosition, bargerShopPositionA, mapPosition))
-	{
+	if (WorldPosConvertToMapPos(playerPosition, bargerShopPositionA, mapPosition)){
 		//マップに表示するように設定
 		m_isImage = true;
 		//SpriteRenderに座標を設定
@@ -201,8 +172,7 @@ void MapUI::Update()
 		m_bargerShopX.SetPosition(mapPosition);
 	}
 	//マップに表示する範囲にお店があったら
-	if (WorldPosConvertToMapPos(playerPosition, bargerShopPositionB, mapPosition))
-	{
+	if (WorldPosConvertToMapPos(playerPosition, bargerShopPositionB, mapPosition)){
 		//マップに表示するように設定
 		m_isImage = true;
 		//SpriteRenderに座標を設定
@@ -211,8 +181,7 @@ void MapUI::Update()
 		m_bargerShopX2.SetPosition(mapPosition);
 	}
 	//マップに表示する範囲にお店があったら
-	if (WorldPosConvertToMapPos(playerPosition, pizzaShopPositionA, mapPosition))
-	{
+	if (WorldPosConvertToMapPos(playerPosition, pizzaShopPositionA, mapPosition)){
 		//マップに表示するように設定
 		m_isImage = true;
 		//SpriteRenderに座標を設定
@@ -221,8 +190,7 @@ void MapUI::Update()
 		m_pizzaShopX.SetPosition(mapPosition);
 	}
 	//マップに表示する範囲にお店があったら
-	if (WorldPosConvertToMapPos(playerPosition, pizzaShopPositionB, mapPosition))
-	{
+	if (WorldPosConvertToMapPos(playerPosition, pizzaShopPositionB, mapPosition)){
 		//マップに表示するように設定
 		m_isImage = true;
 		//SpriteRenderに座標を設定
@@ -231,8 +199,7 @@ void MapUI::Update()
 		m_pizzaShopX2.SetPosition(mapPosition);
 	}
 	//マップに表示する範囲にお店があったら
-	if (WorldPosConvertToMapPos(playerPosition, sushiShopPositionA, mapPosition))
-	{
+	if (WorldPosConvertToMapPos(playerPosition, sushiShopPositionA, mapPosition)){
 		//マップに表示するように設定
 		m_isImage = true;
 		//SpriteRenderに座標を設定
@@ -241,8 +208,7 @@ void MapUI::Update()
 		m_sushiShopX.SetPosition(mapPosition);
 	}
 	//マップに表示する範囲にお店があったら
-	if (WorldPosConvertToMapPos(playerPosition, sushiShopPositionB, mapPosition))
-	{
+	if (WorldPosConvertToMapPos(playerPosition, sushiShopPositionB, mapPosition)){
 		//マップに表示するように設定
 		m_isImage = true;
 		//SpriteRenderに座標を設定
@@ -250,40 +216,33 @@ void MapUI::Update()
 		m_sushiShopGray2.SetPosition(mapPosition);
 		m_sushiShopX2.SetPosition(mapPosition);
 	}
-	if (WorldPosConvertToMapPos(playerPosition, customerPositionA, mapPosition))
-	{
+	if (WorldPosConvertToMapPos(playerPosition, customerPositionA, mapPosition)){
 		m_isImage = true;
 		m_customerHamburgerSprite.SetPosition(mapPosition);
 	}
-	if (WorldPosConvertToMapPos(playerPosition, customerPositionB, mapPosition))
-	{
+	if (WorldPosConvertToMapPos(playerPosition, customerPositionB, mapPosition)){
 		m_isImage = true;
 		m_customerHamburgerSprite2.SetPosition(mapPosition);
 	}
-	if (WorldPosConvertToMapPos(playerPosition, customerPizzaPosA, mapPosition))
-	{
+	if (WorldPosConvertToMapPos(playerPosition, customerPizzaPosA, mapPosition)){
 		m_isImage = true;
 		m_customerPizzaSprite.SetPosition(mapPosition);
 	}
-	if (WorldPosConvertToMapPos(playerPosition, customerPizzaPosB, mapPosition))
-	{
+	if (WorldPosConvertToMapPos(playerPosition, customerPizzaPosB, mapPosition)){
 		m_isImage = true;
 		m_customerPizzaSprite2.SetPosition(mapPosition);
 	}
-	if (WorldPosConvertToMapPos(playerPosition, customerSushiPosA, mapPosition))
-	{
+	if (WorldPosConvertToMapPos(playerPosition, customerSushiPosA, mapPosition)){
 		m_isImage = true;
 		m_customerSushiSprite.SetPosition(mapPosition);
 	}
-	if (WorldPosConvertToMapPos(playerPosition, customerSushiPosB, mapPosition))
-	{
+	if (WorldPosConvertToMapPos(playerPosition, customerSushiPosB, mapPosition)){
 		m_isImage = true;
 		m_customerSushiSprite2.SetPosition(mapPosition);
 	}
 
 
-	else
-	{
+	else{
 		//マップに表示しない
 		m_isImage = false;
 	}
@@ -384,68 +343,31 @@ void MapUI::MapSpriteFade()
 
 float MapUI::CalcAlpha()
 {
-	//static float alpha = 0.0f;	//内部でalphaを保持する
 	m_alpha += 0.025f;
 
-	if (m_alpha > 1.0f)
-	{
+	if (m_alpha > 1.0f){
 		m_alpha = 1.0f;
 		m_fadeState = Map_Fade_Default;
 	}
 	return m_alpha;
 }
 
-//void MapUI::CalcWipeRatio()
-//{
-//	if (m_shopHamburger[0]->GetIsHamburgerUIMove() == false)
-//	{
-//		m_coolTimeSpriteData.AddDirection(-0.1f);
-//	}
-//	else
-//	{
-//		m_coolTimeSpriteData.SetDirection(6.3f);
-//	}
-//
-//	if (m_shopHamburger[1]->GetIsHamburgerUIMove() == false)
-//	{
-//		m_coolTimeSpriteData.AddDirection(-0.1f);
-//	}
-//	else
-//	{
-//		m_coolTimeSpriteData.AddDirection(6.3f);
-//	}
-//}
-
-//void MapUI::CalcAlpha(float& alpha)
-//{
-//	alpha += 0.025f;
-//	if (alpha > 1.0f)
-//	{
-//		alpha = 1.0f;
-//		m_fadeState = Map_Fade_Default;
-//	}
-//}
-
 void MapUI::PlayerSpritePulse()
 {	
-	if (m_pulseCount <= PULSE_COUNT_MAX)
-	{
+	if (m_pulseCount <= PULSE_COUNT_MAX){
 		m_pulseAlpha += ALPHA_RATE * m_pulseDirection;
-		if (m_pulseAlpha > ALPHA_PLUS_ONE)
-		{
+		if (m_pulseAlpha > ALPHA_PLUS_ONE){
 			m_pulseAlpha = ALPHA_PLUS_ONE;
 			m_pulseDirection = ALPHA_MINUS_ONE;
 			m_pulseCount++;
 		}
-		else if (m_pulseAlpha < ALPHA_ZERO)
-		{
+		else if (m_pulseAlpha < ALPHA_ZERO){
 			m_pulseAlpha = ALPHA_ZERO;
 			m_pulseDirection = ALPHA_PLUS_ONE;
 			m_pulseCount++;
 		}
 		m_playerSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_pulseAlpha });
-	}
-	else {
+	}else {
 		m_playerSprite.SetMulColor({ 1.0f,1.0f,1.0f,ALPHA_PLUS_ONE });
 	}
 	
@@ -458,8 +380,7 @@ const bool MapUI::WorldPosConvertToMapPos(Vector3 worldCenterPosition, Vector3 w
 	worldPosition.y = 0.0f;
 	Vector3 diff = worldPosition - worldCenterPosition;
 	
-	if (diff.LengthSq() >= LIMITED_RANGE_IMAGE_X * LIMITED_RANGE_IMAGE_Z)
-	{
+	if (diff.LengthSq() >= LIMITED_RANGE_IMAGE_X * LIMITED_RANGE_IMAGE_Z){
 		return false;
 	}
 
@@ -467,17 +388,12 @@ const bool MapUI::WorldPosConvertToMapPos(Vector3 worldCenterPosition, Vector3 w
 	float leng = diff.Length();
 
 	//カメラの前ベクトルからクォータニオンを生成
-
 	Vector3 forward = g_camera3D->GetForward();
 	Quaternion cameraRot;
 	cameraRot.SetRotationY(atan2(-forward.x, forward.z));
-	////ベクトルにカメラの回転を適用
+	//ベクトルにカメラの回転を適用
 	cameraRot.Apply(diff);
-	//d.Normalize();
-
-
-	/*d.x = (d.x / LIMITED_RANGE_IMAGE_X) * leng;
-	d.z = (d.z / LIMITED_RANGE_IMAGE_Z) * leng;*/
+	
 	diff.x = (diff.x / LIMITED_RANGE_IMAGE_X) * ADJUSTMENT_VALUE;
 	diff.z = (diff.z / LIMITED_RANGE_IMAGE_Z) * ADJUSTMENT_VALUE;
 
@@ -491,167 +407,96 @@ const bool MapUI::WorldPosConvertToMapPos(Vector3 worldCenterPosition, Vector3 w
 
 void MapUI::Render(RenderContext& rc)
 {
-	if(m_gameTimer->GetIsTimerEnd())
-	//if (m_resultUI->GetIsEnd() == true)
-	{
+	if(m_gameTimer->GetIsTimerEnd()){
 		return;
 	}
 
 	m_spriteRender.Draw(rc);
-	//m_playerSprite.Draw(rc);
 
 	//中心と半径を設定
 	Vector3 mapCenter = Vector3(-600.0f, -250.0f, 0.0f);
 	float mapRadius = 180.0f; //ミニマップの半径（黒い円）
 
-	if (m_isImage == false)
-	{
+	if (m_isImage == false){
 		return;
 	}
 
 	// ハンバーガー店のスプライト描画（クリッピングチェック）
-	if (IsInsideCircle(m_bargerShopSprite.GetPosition(), mapCenter, mapRadius))
-	{
+	if (IsInsideCircle(m_bargerShopSprite.GetPosition(), mapCenter, mapRadius)){
 		if (m_shopHamburger[0]->GetCoolDownTimer() <= 7.0f
 			&& m_shopHamburger[0]->GetCoolDownTimer() >= 0.1f
-			&& m_shopHamburger[0]->HasFullHamburger() == false)
-		//if(g_pad[0]->IsPress(enButtonA))
-		{
+			&& m_shopHamburger[0]->HasFullHamburger() == false){
 			m_bargerShopGray.Draw(rc);
-		}
-		else if(m_hasFoodManager->HasFullHamburger())
-		//else if (m_inventoryUI->HasFullHamburger())
-		{
+		}else if(m_hasFoodManager->HasFullHamburger()){
 			m_bargerShopX.Draw(rc);
-		}
-		else
-		{
+		}else{
 			m_bargerShopSprite.Draw(rc);
 		}
 	}
 	
-	/*if (IsInsideCircle(m_bargerShopSprite.GetPosition(), mapCenter, mapRadius)) {
-		m_bargerShopSprite.Draw(rc);
-	}*/
 	// ハンバーガー店のスプライト描画（クリッピングチェック）
-	if (IsInsideCircle(m_bargerShopSprite2.GetPosition(), mapCenter, mapRadius))
-	{
+	if (IsInsideCircle(m_bargerShopSprite2.GetPosition(), mapCenter, mapRadius)){
 		if (m_shopHamburger[1]->GetCoolDownTimer() <= 7.0f
 			&& m_shopHamburger[1]->GetCoolDownTimer() >= 0.1f
-			&& m_shopHamburger[1]->HasFullHamburger() == false)
-			//if(g_pad[0]->IsPress(enButtonA))
-		{
+			&& m_shopHamburger[1]->HasFullHamburger() == false){
 			m_bargerShopGray2.Draw(rc);
-		}
-		else if(m_hasFoodManager->HasFullHamburger())
-		//else if (m_inventoryUI->HasFullHamburger())
-		{
+		}else if(m_hasFoodManager->HasFullHamburger()){
 			m_bargerShopX2.Draw(rc);
-		}
-		else
-		{
+		}else{
 			m_bargerShopSprite2.Draw(rc);
 		}
 	}
 
-	/*if (IsInsideCircle(m_bargerShopSprite2.GetPosition(), mapCenter, mapRadius)) {
-		m_bargerShopSprite2.Draw(rc);
-	}*/
-
 	// ピザ店のスプライト描画（クリッピングチェック）
-	if (IsInsideCircle(m_pizzaShopSprite.GetPosition(), mapCenter, mapRadius))
-	{
+	if (IsInsideCircle(m_pizzaShopSprite.GetPosition(), mapCenter, mapRadius)){
 		if (m_shopPizza[0]->GetCoolDownTimer() <= 7.0f
 			&& m_shopPizza[0]->GetCoolDownTimer() >= 0.1f
-			&& m_shopPizza[0]->HasFullPizza() == false)
-			//if(g_pad[0]->IsPress(enButtonA))
-		{
+			&& m_shopPizza[0]->HasFullPizza() == false){
 			m_pizzaShopGray.Draw(rc);
-		}
-		//else if (m_inventoryUI->HasFullPizza())
-		else if(m_hasFoodManager->HasFullPizza())
-		{
+		}else if(m_hasFoodManager->HasFullPizza()){
 			m_pizzaShopX.Draw(rc);
-		}
-		else
-		{
+		}else{
 			m_pizzaShopSprite.Draw(rc);
 		}
 	}
-	if (IsInsideCircle(m_pizzaShopSprite2.GetPosition(), mapCenter, mapRadius))
-	{
+	if (IsInsideCircle(m_pizzaShopSprite2.GetPosition(), mapCenter, mapRadius)){
 		if (m_shopPizza[1]->GetCoolDownTimer() <= 7.0f
 			&& m_shopPizza[1]->GetCoolDownTimer() >= 0.1f
-			&& m_shopPizza[1]->HasFullPizza() == false)
-			//if(g_pad[0]->IsPress(enButtonA))
-		{
+			&& m_shopPizza[1]->HasFullPizza() == false){
 			m_pizzaShopGray2.Draw(rc);
-		}
-		//else if (m_inventoryUI->HasFullPizza())
-		else if(m_hasFoodManager->HasFullPizza())
-		{
+		}else if(m_hasFoodManager->HasFullPizza()){
 			m_pizzaShopX2.Draw(rc);
-		}
-		else
-		{
+		}else{
 			m_pizzaShopSprite2.Draw(rc);
 		}
 	}
 
-	/*if (IsInsideCircle(m_pizzaShopSprite.GetPosition(), mapCenter, mapRadius)) {
-		m_pizzaShopSprite.Draw(rc);
-	}
-	if (IsInsideCircle(m_pizzaShopSprite2.GetPosition(), mapCenter, mapRadius)) {
-		m_pizzaShopSprite2.Draw(rc);
-	}*/
-
 	// 寿司店のスプライト描画（クリッピングチェック）
-	if (IsInsideCircle(m_sushiShopSprite.GetPosition(), mapCenter, mapRadius)) 
-	{
+	if (IsInsideCircle(m_sushiShopSprite.GetPosition(), mapCenter, mapRadius)) {
 		if (m_shopSushi[0]->GetCoolDownTimer() <= 7.0f
 			&& m_shopSushi[0]->GetCoolDownTimer() >= 0.1f
-			&& m_shopSushi[0]->HasFullSushi() == false)
-		{
+			&& m_shopSushi[0]->HasFullSushi() == false){
 			m_sushiShopGray.Draw(rc);
-		}
-		//else if (m_inventoryUI->HasFullSushi())
-		else if(m_hasFoodManager->HasFullSushi())
-		{
+		}else if(m_hasFoodManager->HasFullSushi()){
 			m_sushiShopX.Draw(rc);
-		}
-		else
-		{
+		}else{
 			m_sushiShopSprite.Draw(rc);
 		}
 		
 	}
 
-	if (IsInsideCircle(m_sushiShopSprite2.GetPosition(), mapCenter, mapRadius))
-	{
+	if (IsInsideCircle(m_sushiShopSprite2.GetPosition(), mapCenter, mapRadius)){
 		if (m_shopSushi[1]->GetCoolDownTimer() <= 7.0f
 			&& m_shopSushi[1]->GetCoolDownTimer() >= 0.1f
-			&& m_shopSushi[1]->HasFullSushi() == false)
-		{
+			&& m_shopSushi[1]->HasFullSushi() == false){
 			m_sushiShopGray2.Draw(rc);
-		}
-		//else if (m_inventoryUI->HasFullSushi())
-		else if(m_hasFoodManager->HasFullSushi())
-		{
+		}else if(m_hasFoodManager->HasFullSushi()){
 			m_sushiShopX2.Draw(rc);
-		}
-		else
-		{
+		}else{
 			m_sushiShopSprite2.Draw(rc);
 		}
 
 	}
-
-	/*if (IsInsideCircle(m_sushiShopSprite.GetPosition(), mapCenter, mapRadius)) {
-		m_sushiShopSprite.Draw(rc);
-	}
-	if (IsInsideCircle(m_sushiShopSprite2.GetPosition(), mapCenter, mapRadius)) {
-		m_sushiShopSprite2.Draw(rc);
-	}*/
 
 	// お客さんのスプライト描画（クリッピングチェック）
 	if (IsInsideCircle(m_customerHamburgerSprite.GetPosition(), mapCenter, mapRadius)) {

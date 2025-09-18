@@ -5,6 +5,7 @@
 
 enum class GameEvents{
 	GameFinished,
+	ResultUIReady,
 };
 
 //イベントの購読者(関数)を管理するマップ
@@ -27,6 +28,11 @@ public:
 	//subscribe(GameEvents::GameFinished,[&](){player->ResetPosition();});
 	void Subscribe(GameEvents event, std::function<void()> listener) {
 		m_listeners[event].push_back(listener);
+	}
+	//イベントの購読解除
+	//すべての登録をクリア
+	void ClearListeners() {
+		m_listeners.clear();
 	}
 	//イベントの発生
 	//登録された関数をすべて呼び出す
