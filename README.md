@@ -34,34 +34,43 @@
 <br />
 
 
-# 作品概要
-> <d1>
->  <dt>タイトル</dt>
->  <dd>Crazy Delivery(クレイジーデリバリー)</dd>
->  <dt>制作人数</dt>
->  <dd>1人</dd>
->  <dt>制作期間</dt>
->  <dd>2024年8月～2025年2月
->  <dt>ゲームジャンル</dt>
->  <dd>3Dアクションゲーム</dd>
->  <dt>プレイ人数</dt>
->  <dd>1人</dd>
->  <dt>使用言語</dt>
->  <dd>C++
->  <br />
->  HLSL<dd>
->  <dt>使用ツール</dt>
->  <dd>Visual Studio 2022</dd>
->  <dd>Visual Studio Code</dd>
->  <dd>Adobe Photoshop 2025</dd>
->  <dd>3ds Max 2024</dd>
->  <dd>Effekseer</dd>
->  <dd>GitHub</dd>
->  <dd>Fork</dd>
->  <dd>Trello</dd>
->  <dt>開発環境</dt>
->  <dd>学校内製の簡易エンジン</dd>
->  <dd>Windows11
+<section>
+  <h2>作品概要</h2>
+  <dl>
+    <dt>タイトル</dt>
+    <dd>Crazy Delivery(クレイジーデリバリー)</dd>
+    <dt>制作人数</dt>
+    <dd>1人</dd>
+    <dt>制作期間</dt>
+    <dd>2024年8月～2025年2月</dd>
+    <dt>ゲームジャンル</dt>
+    <dd>3Dアクションゲーム</dd>
+    <dt>プレイ人数</dt>
+    <dd>1人</dd>
+    <dt>使用言語</dt>
+    <dd>C++<br>HLSL</dd>
+    <dt>使用ツール</dt>
+    <dd>
+      <ul>
+        <li>Visual Studio 2022</li>
+        <li>Visual Studio Code</li>
+        <li>Adobe Photoshop 2025</li>
+        <li>3ds Max 2024</li>
+        <li>Effekseer</li>
+        <li>GitHub</li>
+        <li>Fork</li>
+        <li>Trello</li>
+      </ul>
+    </dd>
+    <dt>開発環境</dt>
+    <dd>
+      <ul>
+        <li>学校内製の簡易エンジン</li>
+        <li>Windows11</li>
+      </ul>
+    </dd>
+  </dl>
+</section>
 
 <br />
 
@@ -327,7 +336,8 @@
 > ###  RBボタンを押すことで、ドリフトが開始されます。
 > ###  ドリフト中は、左スティックの入力方向に基づいてスムーズに回転します。
 > ###  さらに、慣性の要素を加えることで、リアルなドリフト動作を再現しています。
-> 
+> ![driftON (1) (2)](https://github.com/user-attachments/assets/c5690e43-3f00-4399-8c23-39a06fb882df)
+
 
 <br />
 
@@ -451,7 +461,7 @@
 > ### また、一定値を超えた場合はUIを非表示にします。
 > ### カメラの前方ベクトルとショップやお客さんへの方向ベクトルの内積を用いて、視野角内にあるかを計算します。
 > ### これにより、プレイヤーから見える範囲内にある場合のみUIが表示されるようにしています。
->![shopUI](https://github.com/user-attachments/assets/de27e8e2-7557-44e2-aaa3-1fd418f69af1)![customerUI](https://github.com/user-attachments/assets/05184e3c-b51f-40e5-b98b-62c0c1b85c95)
+>![shopUI](https://github.com/user-attachments/assets/de27e8e2-7557-44e2-aaa3-1fd418f69af1)  ![customerUI](https://github.com/user-attachments/assets/05184e3c-b51f-40e5-b98b-62c0c1b85c95)
 
 
 <br />
