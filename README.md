@@ -351,8 +351,10 @@
 > ###   ゲームを遊ぶテンポ感が落ちてしまいます。
 > ###  ➡衝突時、反射するに加え、減速もしながら反射するように変更しました。
 > ## ＜衝突時の比較＞
-> ### 左側：反射の要素を追加していないもの。右側：反射の要素を追加したもの。
-> ![reflectionOFF](https://github.com/user-attachments/assets/21a5a5aa-7d82-4419-a8df-bf68c8e305e2)![reflectionON](https://github.com/user-attachments/assets/fcba1fb1-d791-433b-be49-7fe66fd87aec)
+> ### ■反射の要素を追加していないもの。 
+> ![reflectionOFF](https://github.com/user-attachments/assets/21a5a5aa-7d82-4419-a8df-bf68c8e305e2) 
+> ### ■反射の要素を追加したもの。
+>![reflectionON](https://github.com/user-attachments/assets/fcba1fb1-d791-433b-be49-7fe66fd87aec)
 
 
 ><img width="480" height="270" alt="image-3-1" src="https://github.com/user-attachments/assets/00711962-5433-435b-88f8-5f568a59d1bf" />
