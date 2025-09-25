@@ -137,6 +137,7 @@ protected:
 	SpriteRender m_shopCoolDownUI;					// クールダウンUIスプライト
 
 	InventoryUI* m_inventoryUI = nullptr;			// インベントリUI
+	GameSound* m_gameSound = nullptr;				// ゲームサウンド
 	//HasFoodManager* m_hasFoodManager = nullptr;		// 食材管理クラス
 	nsPlayer::Player* m_player = nullptr;			// プレイヤー
 };

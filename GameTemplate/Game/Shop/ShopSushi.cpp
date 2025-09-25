@@ -7,7 +7,7 @@
 
 namespace
 {
-	const Vector3	CHECKPOINT_SIZE = { 400.0f,200.0f,450.0f };	//チェックポイントの範囲
+	const Vector3	CHECKPOINT_SIZE = { 510.0f,200.0f,390.0f };	//チェックポイントの範囲
 	const Vector2	UI_SIZE = { 224.0f, 150.0f };				//UIのサイズ
 	const float		COOLDOWN_TIME = 7.0f;						//クールダウン時間
 	const float		MOVE_STOP_SUSHI = 1.7f;						//SUSHI_LEFT_ENDPOSに到達する時間
@@ -27,6 +27,7 @@ ShopSushi::~ShopSushi()
 bool ShopSushi::Start()
 {
 	m_hasFoodManager = FindGO<HasFoodManager>("hasfoodmanager");	//食べ物を所持しているかの管理クラスを取得
+	m_gameSound = FindGO<GameSound>("gamesound");				//ゲームサウンドを取得
 	ShopBase::Start();
 	Init();
 	return true;
@@ -69,29 +70,22 @@ void ShopSushi::OnUpdate()
 void ShopSushi::UpdateHitPlayerCollision()
 {
 	//クールタイム中は何もしない
-	if (m_coolDownTimer > 0.0f)
-	{
+	if (m_coolDownTimer > 0.0f){
 		m_coolDownTimer -= g_gameTime->GetFrameDeltaTime();
 		return;
 	}
-	if (m_collision == nullptr)
-	{
+	if (m_collision == nullptr){
 		return;
 	}
 	//コリジョンとキャラコンが衝突したら
-	if (m_collision->IsHit(m_player->GetCharacterController()))
-	{
-		if (!m_movingSushiUI)
-		{
+	if (m_collision->IsHit(m_player->GetCharacterController())){
+		if (!m_movingSushiUI){
 			m_movingSushiUI = true;
 			m_sushiUIMoveTimer = 0.0f;
 			m_coolDownTimer = COOLDOWN_TIME;
-		}
-		else
-		{
+		}else{
 			//衝突解除後もクールダウン中は何もしない
-			if (m_coolDownTimer <= 0.0f)
-			{
+			if (m_coolDownTimer <= 0.0f){
 				m_movingSushiUI = false;
 			}
 		}
@@ -137,12 +131,18 @@ void ShopSushi::UpdateSushiTransition()
 		m_movingSushiUI = false;
 		m_inventoryUI->NextSushiState();
 		//寿司の所持数が上限に達していないなら
-		if(!m_hasFoodManager->HasFullSushi())
-		{
+		//if(!m_hasFoodManager->HasFullSushi()){
+		
+		// TODO:売り切れ状態でないなら
+		//if(!m_gameSound->StartedSESoldOut()){
+		if (!m_inventoryUI->StartedDelayTime()) {
 			//インベントリー変更の効果音を再生
-			PlaySoundSE(enSoundName_InventoryChange,1.0f,false);
+			PlaySoundSE(enSoundName_InventoryChange, 1.0f, false);
 		}
+			
+		//}
 	}
+	
 }
 
 void ShopSushi::Render(RenderContext& rc)

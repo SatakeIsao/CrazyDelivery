@@ -8,7 +8,8 @@ bool ShopBase::Start()
 {
 	m_player = FindGO<nsPlayer::Player>("player");
 	m_inventoryUI = FindGO<InventoryUI>("inventoryui");
-
+	//m_gameSound = NewGO<GameSound>(0,"GameSound");
+	
 	return true;
 }
 

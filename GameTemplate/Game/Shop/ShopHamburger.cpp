@@ -7,7 +7,7 @@
 
 namespace
 {
-	const Vector3	CHECKPOINT_SIZE = { 380.0f,200.0f,400.0f };		//チェックポイントの範囲
+	const Vector3	CHECKPOINT_SIZE = { 510.0f,200.0f,400.0f };		//チェックポイントの範囲
 	const Vector2	UI_SIZE = { 224.0f, 150.0f };					//UIのサイズ
 	const float		COOLDOWN_TIME = 7.0f;							//クールダウン時間
 	const float		TRANSITION_TIME = 1.3f;							//HAMBURGER_LEFT_ENDPOS に到達する時間を設定
