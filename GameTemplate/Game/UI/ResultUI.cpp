@@ -11,7 +11,7 @@
 
 namespace
 {
-	const Vector3 SCORE_POS(150.0f, 100.0f, 0.0f);	//スコアテキストの座標
+	const Vector3 SCORE_POS(130.0f, 100.0f, 0.0f);	//スコアテキストの座標
 
 	const float RESULT_SCORE_S = 4000.0f;			//スコア条件値：Sランク
 	const float RESULT_SCORE_A = 3000.0f;			//スコア条件値：Aランク
@@ -56,40 +56,40 @@ bool ResultUI::Start()
 	
 	//CLEARの画像
 	m_clearSprite.Init("Assets/Sprite/Result/ResultUI_Clear.DDS", 1440.0f, 810.0f);
-	m_clearSprite.SetPosition(m_position);
-	m_clearSprite.SetScale(m_scale);
+	m_clearSprite.SetPosition(m_resultIconPos);
+	m_clearSprite.SetScale(m_resultIconScale);
 	m_clearSprite.Update();
 
 	//FAILEDの画像
 	m_failedSprite.Init("Assets/Sprite/Result/ResultUI_Failed.DDS", 1440.0f, 810.0f);
-	m_failedSprite.SetPosition(m_position);
-	m_failedSprite.SetScale(m_scale);
+	m_failedSprite.SetPosition(m_failedIconPos);
+	m_failedSprite.SetScale(0.4f);
 	m_failedSprite.Update();
 
 	//ランクSの画像
 	m_rankS_Sprite.Init("Assets/Sprite/Result/ResultUI_RankS.DDS", 1440.0f, 810.0f);
-	m_rankS_Sprite.SetPosition(m_position);
-	m_rankS_Sprite.SetScale(m_scale);
+	m_rankS_Sprite.SetPosition(m_rankIconPos);
+	m_rankS_Sprite.SetScale(m_rankIconScale);
 	m_rankS_Sprite.Update();
 
 	//ランクAの画像
 	m_rankA_Sprite.Init("Assets/Sprite/Result/ResultUI_RankA.DDS", 1440.0f, 810.0f);
-	m_rankA_Sprite.SetPosition(m_position);
-	m_rankA_Sprite.SetScale(m_scale);
+	m_rankA_Sprite.SetPosition(m_rankIconPos);
+	m_rankA_Sprite.SetScale(m_rankIconScale);
 	m_rankA_Sprite.Update();
 
 	//ランクBの画像
 	m_rankB_Sprite.Init("Assets/Sprite/Result/ResultUI_RankB.DDS", 1440.0f, 810.0f);
-	m_rankB_Sprite.SetPosition(m_position);
-	m_rankB_Sprite.SetScale(m_scale);
+	m_rankB_Sprite.SetPosition(m_rankIconPos);
+	m_rankB_Sprite.SetScale(m_rankIconScale);
 	m_rankB_Sprite.Update();
 
 	//ランクCの画像
 	m_rankC_Sprite.Init("Assets/Sprite/Result/ResultUI_RankC.DDS", 1440.0f, 810.0f);
-	m_rankC_Sprite.SetPosition(m_position);
-	m_rankC_Sprite.SetScale(m_scale);
+	m_rankC_Sprite.SetPosition(m_rankIconPos);
+	m_rankC_Sprite.SetScale(m_rankIconScale);
 	m_rankC_Sprite.Update();
-
+	
 	//現在のスコア表示の初期化
 	wchar_t wcsbuf[256];
 	swprintf_s(wcsbuf, 256, L"$ %05d", m_nowScore);
@@ -98,6 +98,14 @@ bool ResultUI::Start()
 	m_nowScoreRender.SetScale(SCORE_SCALE);
 	m_nowScoreRender.SetColor({ 1.0f,1.0f,1.0f,1.0f });
 	
+	//初期スケール値と初期
+	m_rankIconScale = 0.5f;
+	m_rankIconScaleState = RankScale_Small;
+	m_resultIconScale = 0.5f;
+	m_rewardIconScaleState = RewardScale_Small;
+	m_failedIconPos.x = 0.0f;
+	m_failedIconPosState = Failed_Icon_Left;
+
 	return true;
 }
 
@@ -174,6 +182,51 @@ void ResultUI::NextFinishScaleState()
 	}
 }
 
+void ResultUI::NextRankIconScaleState()
+{
+	switch (m_rankIconScaleState) {
+	case RankScale_Small:
+		m_rankIconScaleState = RankScale_Large;
+		break;
+	case RankScale_Large:
+		m_rankIconScaleState = RankScale_Default;
+		break;
+	case RankScale_Default:
+		m_rankIconScaleState = RankScale_Final;
+		break;
+	case RankScale_Final:
+		break;
+	}
+}
+
+void ResultUI::NextRewardIconScaleState()
+{
+	switch (m_rewardIconScaleState) {
+	case RewardScale_Small:
+		m_rewardIconScaleState = RewardScale_Large;
+		break;
+	case RewardScale_Large:
+		m_rewardIconScaleState = RewardScale_Final;
+		break;
+	case RewardScale_Final:
+		break;
+	}
+}
+
+void ResultUI::NextFailedIconPosState()
+{
+	switch (m_failedIconPosState) {
+	case Failed_Icon_Left:
+		m_failedIconPosState = Failed_Icon_Right;
+		break;
+	case Failed_Icon_Right:
+		m_failedIconPosState = Failed_Icon_Stop;
+		break;
+	case Failed_Icon_Stop:
+		break;
+	}
+}
+
 void ResultUI::ScaleDouble()
 {
 	//拡大率を10倍に設定
@@ -216,26 +269,60 @@ void ResultUI::Render(RenderContext& rc)
 			}
 			m_finishSprite.Draw(rc);
 		}else{
+			if (g_pad[0]->IsTrigger(enButtonB))
+			{
+				m_elapsedTime += 5.0f;
+			}
 			//リザルトUIの描画
 			m_resultUI_Sprite.Draw(rc);
-			if (m_nowScore >= RESULT_SCORE_S){
-				m_rankS_Sprite.Draw(rc);
-				m_clearSprite.Draw(rc);
-			}else if (m_nowScore >= RESULT_SCORE_A){
-				m_rankA_Sprite.Draw(rc);
-				m_clearSprite.Draw(rc);
-			}else if (m_nowScore >= RESULT_SCORE_B){
-				m_rankB_Sprite.Draw(rc);
-				m_clearSprite.Draw(rc);
-			}else{
-				m_rankC_Sprite.Draw(rc);
-				m_failedSprite.Draw(rc);
+			if (m_elapsedTime > 8.0f) {
+				//ランクアイコンの描画
+				UpdateRankIconScale();
+
+				if (m_nowScore >= RESULT_SCORE_S) {
+					m_rankS_Sprite.Draw(rc);
+					//m_clearSprite.Draw(rc);
+				}
+				else if (m_nowScore >= RESULT_SCORE_A) {
+					m_rankA_Sprite.Draw(rc);
+					//m_clearSprite.Draw(rc);
+				}
+				else if (m_nowScore >= RESULT_SCORE_B) {
+					m_rankB_Sprite.Draw(rc);
+					//m_clearSprite.Draw(rc);
+				}
+				else {
+					m_rankC_Sprite.Draw(rc);
+					//m_failedSprite.Draw(rc);
+				}
+			}
+			if (m_elapsedTime > 6.0f) {
+				//リザルトアイコンの描画
+				UpdateRewardIconScale();
+				UpdateFailedIconPos();
+
+				if (m_nowScore >= RESULT_SCORE_S) {
+					//m_rankS_Sprite.Draw(rc);
+					m_clearSprite.Draw(rc);
+				}
+				else if (m_nowScore >= RESULT_SCORE_A) {
+					//m_rankA_Sprite.Draw(rc);
+					m_clearSprite.Draw(rc);
+				}
+				else if (m_nowScore >= RESULT_SCORE_B) {
+					//m_rankB_Sprite.Draw(rc);
+					m_clearSprite.Draw(rc);
+				}
+				else {
+					//m_rankC_Sprite.Draw(rc);
+					m_failedSprite.Draw(rc);
+				}
 			}
 
 			if (m_startButtonUI != nullptr){
 				m_startButtonUI->Render(rc);
 			}
-			//
+			//スコアの描画
 			m_nowScoreRender.SetScale(SCORE_SCALE);
 			m_nowScoreRender.SetPosition(SCORE_POS);
 			m_nowScoreRender.Draw(rc);
@@ -258,7 +345,8 @@ void ResultUI::UpdateGameLogic()
 	//リザルトUIが表示された後、Bボタン押されたらタイトルに戻る
 	if (g_pad[0]->IsTrigger(enButtonB)
 		&& m_gameTimer->GetIsTimerEnd()
-		&& m_elapsedTime >= FINISH_DISPLAY_TIME) {
+		&& m_elapsedTime >= FINISH_DISPLAY_TIME
+		&& m_isReturnToTitleStarted) {
 		//Bボタンが押されたらSEを鳴らす
 		SoundSource* buttonSE = NewGO<SoundSource>(0);
 		buttonSE->Init(enSoundName_Button);
@@ -290,10 +378,18 @@ void ResultUI::UpdateGameLogic()
 	}
 	//スコア表示の更新
 	m_resultDelayTime += g_gameTime->GetFrameDeltaTime();
-	if (m_resultDelayTime >= 3.0f) {
+	if (m_resultDelayTime >= 3.0f
+		&&g_pad[0]->IsTrigger(enButtonB))
+	{
+		// Bボタンが押されたら、即座に目標値に到達させる
+		m_displayTotalScore = (float)m_nowScore - 1.0f;
+	}
+	
+	else if (m_resultDelayTime >= 3.0f) {
 		//表示スコアを実際のスコアに向かって補間
 		m_displayTotalScore = Math::Lerp(0.025, m_displayTotalScore, (float)m_nowScore);
 	}
+	
 	else {
 		m_displayTotalScore = 0.0f;
 	}
@@ -350,4 +446,122 @@ void ResultUI::UpdateFinishSpriteScale()
 		m_finishScale = 1.0f;
 	}
 	m_finishSprite.SetScale(m_finishScale);
+}
+
+void ResultUI::UpdateRankIconScale()
+{
+	switch (m_rankIconScaleState) {
+	case RankScale_Small:
+		m_rankIconScale -= 0.02f;
+		if (m_rankIconScale <= 0.1f) {
+			m_rankIconScale = 0.1f;
+			NextRankIconScaleState(); // 次のステートへ
+		}
+		break;
+	case RankScale_Large:
+		m_rankIconScale += 0.06f;
+		if (m_rankIconScale >= 0.27f) {
+			m_rankIconScale = 0.27f;
+			NextRankIconScaleState(); // 次のステートへ
+		}
+		break;
+	case RankScale_Final:
+		// 最終状態では何もしない
+		break;
+	}
+	// すべてのランクアイコンのスケールを更新
+	m_rankA_Sprite.SetScale(m_rankIconScale);
+	m_rankB_Sprite.SetScale(m_rankIconScale);
+	m_rankC_Sprite.SetScale(m_rankIconScale);
+	m_rankS_Sprite.SetScale(m_rankIconScale);
+	m_rankA_Sprite.Update();
+	m_rankB_Sprite.Update();
+	m_rankC_Sprite.Update();
+	m_rankS_Sprite.Update();
+}
+
+void ResultUI::UpdateRewardIconScale()
+{
+	switch (m_rewardIconScaleState) {
+	case RankScale_Small:
+		m_resultIconScale -= 0.02f;
+		if (m_resultIconScale <= 0.1f) {
+			m_resultIconScale = 0.1f;
+			NextRewardIconScaleState(); // 次のステートへ
+		}
+		break;
+	case RankScale_Large:
+		m_resultIconScale += 0.06f;
+		if (m_resultIconScale >= 0.4f) {
+			m_resultIconScale = 0.4f;
+			m_isReturnToTitleStarted = true;
+			NextRewardIconScaleState(); // 次のステートへ
+		}
+		break;
+	case RankScale_Final:
+		// 最終状態では何もしない
+		break;
+	}
+	m_clearSprite.SetScale(m_resultIconScale);
+	m_clearSprite.Update();
+	//m_failedSprite.SetScale(m_resultIconScale);
+	//m_failedSprite.Update();
+}
+
+void ResultUI::UpdateFailedIconPos()
+{
+	switch (m_failedIconPosState) {
+	case Failed_Icon_Left:
+		//m_failedIconPos.x += 0.02f;
+		//if (m_failedIconPos.x <= 0.1f) {
+		//	m_failedIconPos.x = 0.1f;
+			NextFailedIconPosState(); // 次のステートへ
+		//}
+		break;
+	case Failed_Icon_Right:
+		m_failedIconPos.x += 10.0f;
+		if (m_failedIconPos.x >= 200.0f) {
+			m_failedIconPos.x = 200.0f;
+			NextFailedIconPosState(); // 次のステートへ
+		}
+		break;
+	case Failed_Icon_Stop:
+		// 最終状態では何もしない
+		break;
+	}
+
+	m_failedSprite.SetPosition(m_failedIconPos);
+	m_failedSprite.Update();
+}
+
+void ResultUI::RankIconScaleLarge()
+{
+	m_rankIconScale += 0.01f;
+	if (m_rankIconScale > 0.27f) {
+		m_rankIconScale = 0.27f;
+	}
+	m_rankA_Sprite.SetScale(m_rankIconScale);
+	m_rankB_Sprite.SetScale(m_rankIconScale);
+	m_rankC_Sprite.SetScale(m_rankIconScale);
+	m_rankS_Sprite.SetScale(m_rankIconScale);
+}
+
+void ResultUI::RankIconScaleSmall()
+{
+	m_rankIconScale -= 0.01f;
+	if (m_rankIconScale < 0.1f) {
+		m_rankIconScale = 0.1f;
+	}
+	m_rankA_Sprite.SetScale(m_rankIconScale);
+	m_rankB_Sprite.SetScale(m_rankIconScale);
+	m_rankC_Sprite.SetScale(m_rankIconScale);
+	m_rankS_Sprite.SetScale(m_rankIconScale);
+}
+
+void ResultUI::RankIconScaleMedium()
+{
+	m_rankA_Sprite.SetScale(0.27f);
+	m_rankB_Sprite.SetScale(0.27f);
+	m_rankC_Sprite.SetScale(0.27f);
+	m_rankS_Sprite.SetScale(0.27f);
 }

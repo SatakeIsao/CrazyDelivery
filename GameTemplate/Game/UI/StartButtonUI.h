@@ -43,12 +43,18 @@ public:
 		m_isButtonPush = false;
 	}
 
+	bool GetButtonPush()
+	{
+		return m_isButtonPush;
+	}
+
 private:
 	EnStartUIState m_startUIState = enStartUIState_FadeIn;	//初期状態：FadeIn
-	SpriteRender m_startSprite;						 //スタートのスプライト表示用
-	SoundSource* m_buttonSE;							//ボタン入力SE
-	float m_fadeAlpha = 1.0f;							 //アルファ値
-	float m_fadeTime = 0.5f;							 //フェードを管理する時間
+	SpriteRender m_startSprite;								//スタートのスプライト表示用
+	SoundSource* m_buttonSE;								//ボタン入力SE
+	float m_fadeAlpha = 1.0f;								//アルファ値
+	float m_fadeTime = 0.5f;								//フェードを管理する時間
 	bool m_isButtonPush = false;							//スタートボタンは押されたかどうか
+	//bool m_drawButtonUI = false;							//ボタンBUIは描画されているか
 };
 
