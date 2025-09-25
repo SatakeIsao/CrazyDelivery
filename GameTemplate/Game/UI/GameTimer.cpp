@@ -33,7 +33,8 @@ bool GameTimer::Start()
 
 void GameTimer::Update()
 {
-	if (g_pad[0]->IsTrigger(enButtonB)) {
+	if (m_setPosState==Pos_Outside
+		&& g_pad[0]->IsTrigger(enButtonB)) {
 		//次の座標状態に変更
 		NextGameTimerPosState();
 	}
@@ -60,8 +61,8 @@ void GameTimer::Update()
 	}
 
 	//各スプライトの座標更新
-	m_timerSprite3.SetPosition(m_timerPosition);
-	m_timerSprite3.Update();
+	m_timerSprite2.SetPosition(m_timerPosition);
+	m_timerSprite2.Update();
 
 	m_timerColon.SetPosition(Vector3(m_timerPosition + COLON_OFFSET));
 	m_timerColon.Update();

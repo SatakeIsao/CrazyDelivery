@@ -34,6 +34,12 @@ namespace nsPlayer {
 
 	IPlayerState* PlayerRunState::StateChange()
 	{
+		//if (m_resultUI->GetRankC())
+		//{
+		//	EventManager::GetInstance().Subscribe(GameEvents::GameFinished, [&]() {
+		//		return new PlayerAngryState(m_player);
+		//		});
+		//}
 
 		//先頭のパスを取得
 		Path* firstPath = PathStorage::GetPathStorage()->GetFirstPath();
@@ -133,16 +139,16 @@ namespace nsPlayer {
 		}
 
 		//finish表示が終わったら怒りアニメーション遷移
-		//if(m_resultUI->GetRankC())
 		if (m_resultUI->GetFinishDisplayed()
-			&& m_resultUI->GetRankC())
-		{
+			&& m_resultUI->GetRankC()){
 			return new PlayerAngryState(m_player);
-		}
-
-		EventManager::GetInstance().Subscribe(GameEvents::GameFinished, [&]() {
+		}else if (m_resultUI->GetFinishDisplayed()
+			&& !m_resultUI->GetRankC()) {
 			return new PlayerIdleState(m_player);
-			});
+		}
+		//EventManager::GetInstance().Trigger(GameEvents::GameFinished);
+		 
+		
 		//パス移動の開始判定
 		/*if (m_player->GetIsPathMoveStart())
 		{

@@ -10,7 +10,7 @@ namespace nsPlayer {
 	void PlayerAngryState::Enter()
 	{
 		//再生するアニメーションを設定
-		m_player->SetAnimation(Player::enAnimClip_Angry, 0.8f);
+		m_player->SetAnimation(Player::enAnimClip_Angry, 1.0f);
 		m_player->PlaySetAnimationSpeed(1.0f);
 		//リザルトUIのインスタンスを探す
 		m_resultUI = FindGO<ResultUI>("resultui");

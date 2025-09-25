@@ -5,7 +5,7 @@
 
 /// <summary>
 /// プレイヤーの名前空間
-/// </summary>
+/// </summary>kkk
 namespace nsPlayer
 {
 	PlayerIdleState::~PlayerIdleState()
@@ -22,8 +22,7 @@ namespace nsPlayer
 
 	IPlayerState* PlayerIdleState::StateChange()
 	{
-		if(g_pad[0]->IsTrigger(enButtonB))
-		{
+		if(g_pad[0]->IsTrigger(enButtonB)){
 			//スタートランステートに遷移する
 			return new PlayerStartState(m_player);
 		}
