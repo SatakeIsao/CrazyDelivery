@@ -20,5 +20,6 @@ private:
 	Fade*			m_fade = nullptr;				//フェードのオブジェクト
 	SoundSource*	m_titleBGM = nullptr;			//タイトルのBGM
 	bool			m_isMakeFade = false;			//フェードが作成されているかどうか
+	bool			m_isFadeOutStarted = false;		//フェードアウトが開始されたかどうか
 };
 

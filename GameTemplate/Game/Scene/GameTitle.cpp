@@ -39,7 +39,11 @@ bool GameTitle::Start()
 
 void GameTitle::Update()
 {
-	if (g_pad[0]->IsTrigger(enButtonB)){
+	if (!m_isFadeOutStarted
+		&&g_pad[0]->IsTrigger(enButtonB)){
+		//フェードアウト開始フラグを立てる
+		m_isFadeOutStarted = true;
+
 		Fade* fade = NewGO<Fade>(0, "fade");
 		//フェードアウト開始
 		fade->StartFadeOut();
@@ -47,7 +51,7 @@ void GameTitle::Update()
 		fade->SetOnFadeOutComplete([this]() {
 			//フェードアウト完了後にゲームを開始(既に存在していないかチェック)
 			if (FindGO<Game>("game") == nullptr){
-				NewGO<Game>(0, "game");
+				NewGO<Game>(1, "game");
 			}
 			//タイトル画面の削除
 			DeleteGO(this);
