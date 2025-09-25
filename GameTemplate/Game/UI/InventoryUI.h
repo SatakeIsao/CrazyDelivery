@@ -83,7 +83,10 @@ public:
 		return m_hasSushi;
 	}
 
-	
+	bool StartedDelayTime() const
+	{
+		return m_startedDelayTime;
+	}
 	
 private:
 	std::vector<ShopHamburger*> m_shopHamburger;
@@ -107,6 +110,8 @@ private:
 	InventoryFoodIcon m_inventoryFoodIcons[EnFoodType::enFoodTypeMax];	//インベントリアイコン
 
 	float				m_scale = 0.0f;							//現在の拡大率
+	float				m_delayTime = 0.0f;						//食べ物の枠が満杯になる時の遅延時間
+	bool				m_startedDelayTime = false;			//遅延時間開始フラグ
 	//TODO:　後で消す
 	bool				m_hasHamburger = false;				//ハンバーガー所有フラグ
 	bool				m_hasPizza = false;					//ピザ所有フラグ

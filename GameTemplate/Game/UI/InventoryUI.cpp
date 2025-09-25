@@ -42,6 +42,7 @@ bool InventoryUI::Start()
 	m_customerManPizza = FindGOs<CustomerManPizza>("customerman_pizza");
 	m_customerManSushi = FindGOs<CustomerManSushi>("customerman_sushi");
 	m_hasFoodManager = FindGO<HasFoodManager>("hasfoodmanager");
+	//m_gameSound = NewGO<GameSound>(0,"gamesound");
 
 	// ハンバーガー用のアイコン初期化
 	{
@@ -62,13 +63,6 @@ bool InventoryUI::Start()
 		m_inventoryFoodIcons[enFoodTypeSushi].InitializeSprite(enItemStateGrayAll, "Assets/Sprite/UI/Inventory/InventoryUI_Sushi_GrayAll.DDS", FOOD_ICON_SIZE, SUSHI_ICON_POSITION, FOOD_ICON_SCALE);
 	}
 	
-	// TOOD: 後で実装
-	////売り切れ時のスプライトの初期化
-	//m_soldOut.m_reSprite.Init("Assets/Sprite/UI/GetUI_Soldout.dds", 1920.0f, 1080.0f);
-	//m_soldOut.m_reSprite.SetPosition(MONEY_PLANE_STARTPOS);
-	//m_soldOut.m_reSprite.SetScale(1.0f);
-	//m_soldOut.m_reSprite.SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
-	//m_soldOut.m_reSprite.Update();
 	return true;
 }
 
@@ -80,33 +74,27 @@ void InventoryUI::Update()
 
 
 	//お客さんの衝突判定とスプライト設定
-	for (int i = 0; i < m_customerManHamburger.size(); i++)
-	{
+	for (int i = 0; i < m_customerManHamburger.size(); i++){
 		CustomerManHamburger* customerHamburger = m_customerManHamburger[i];
-		if (customerHamburger->GetScoreResetTimer() >= 3.0f)
-		{
+		if (customerHamburger->GetScoreResetTimer() >= 3.0f){
 			uiAnimationManager->RequestAnimationMoney(InventoryRewardMoneyIcon::EnMoneyType::enMoneyType150);
 		}
 	}
 
 	//お客さんの衝突判定とスプライト設定
-	for (int i = 0; i < m_customerManPizza.size(); i++)
-	{
+	for (int i = 0; i < m_customerManPizza.size(); i++){
 		CustomerManPizza* customerPizza = m_customerManPizza[i];
 		if (customerPizza->HasCollidedMan()
-			&& customerPizza->GetScoreResetTimer() >= 3.0f)
-		{
+			&& customerPizza->GetScoreResetTimer() >= 3.0f){
 			uiAnimationManager->RequestAnimationMoney(InventoryRewardMoneyIcon::EnMoneyType::enMoneyType200);
 		}
 	}
 
 	//お客さんの衝突判定とスプライト設定
-	for (int i = 0; i < m_customerManSushi.size(); i++)
-	{
+	for (int i = 0; i < m_customerManSushi.size(); i++){
 		CustomerManSushi* customerSushi = m_customerManSushi[i];
 		if (customerSushi->HasCollidedMan()
-			&& customerSushi->GetScoreResetTimer() >= 3.0f)
-		{
+			&& customerSushi->GetScoreResetTimer() >= 3.0f){
 			uiAnimationManager->RequestAnimationMoney(InventoryRewardMoneyIcon::EnMoneyType::enMoneyType500);
 		}
 	}
@@ -114,7 +102,7 @@ void InventoryUI::Update()
 	//ハンバーガーを調達時のUI描画処理
 	for (int i = 0; i < m_shopHamburger.size(); i++){
 		ShopHamburger* shopHamburger = m_shopHamburger[i];
-
+		//MovingHamburgerUIがtrueになってから7秒以上経過している場合
 		if (shopHamburger->MovingHamburgerUI()
 			&& shopHamburger->GetCoolDownTimer() >= 7.0f){
 			if (m_hasFoodManager->HasFullHamburger()) {
@@ -132,7 +120,7 @@ void InventoryUI::Update()
 	//ピザを調達時のUI描画処理
 	for (int i = 0; i < m_shopPizza.size(); i++){
 		ShopPizza* shopPizza = m_shopPizza[i];
-
+		//MovingPizzaUIがtrueになってから7秒以上経過している場合
 		if (shopPizza->MovingPizzaUI()
 			&& shopPizza->GetCoolDownTimer() >= 7.0f){
 			if (m_hasFoodManager->HasFullPizza()) {
@@ -157,22 +145,27 @@ void InventoryUI::Update()
 				uiAnimationManager->RequestAnimationMoney(InventoryRewardMoneyIcon::EnMoneyType::enMoneyTypeSoldout);
 				//売り切れ時の効果音を再生
 				PlaySoundSE(enSoundName_SoldOut, 1.0f, false);
+				//m_gameSound->SetStartedSESoldOut(true);
+				m_startedDelayTime = true;
 
 			}else if(!m_hasFoodManager->HasFullSushi()){
 				uiAnimationManager->RequestAnimationFood(EnFoodType::enFoodTypeSushi);
 				//食べ物獲得時の効果音を再生
 				PlaySoundSE(enSoundName_FoodGot, 1.0f, false);
+				//m_gameSound->SetStartedSESoldOut(false);
+				m_startedDelayTime = false;
 			}		
 		}
 	}
 	
-	if (g_pad[0]->IsTrigger(enButtonB) && m_scaleState == Item_Scale_Zero) 
-	{
+	//スプライトの大きさを変化させる
+	if (g_pad[0]->IsTrigger(enButtonB) 
+		&& m_scaleState == Item_Scale_Zero) {
 		m_scaleState = Item_Scale_Large;
 	}
 
 	SpriteScale();
-	
+	// インベントリフードアイコンの更新
 	for (auto& icon : m_inventoryFoodIcons) {
 		icon.Update();
 	}
@@ -288,9 +281,16 @@ void InventoryUI::NextSushiState()
 	case enItemStateAll:
 		break;
 	case enItemStateGrayHalf:
+		//while (m_delayTime < 10.0f)
+		//{
+		//	m_delayTime += g_gameTime->GetFrameDeltaTime();
+		//}
+	
 		m_sushiState = enItemStateAll;
 		m_hasFoodManager->SetHasFullSushi(true);
+		//m_delayTime = 0.0f;
 		break;
+		
 	case enItemStateGrayAll:
 		m_sushiState = enItemStateGrayHalf;
 		m_hasFoodManager->SetHasFullSushi(false);

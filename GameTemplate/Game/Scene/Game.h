@@ -24,6 +24,7 @@ class PathStorage;
 class Player;
 class ParameterManager;
 class FocusLine;
+class GameSound;
 
 class Game : public IGameObject
 {
@@ -78,11 +79,12 @@ private:
 	StartButtonUI*		m_startButtonUI = nullptr;								//スタートボタンUIのオブジェクト
 	MakeEffect*			m_makeEfe = nullptr;									//エフェクト作成のオブジェクト
 	ResultUI*			m_resultUI = nullptr;									//リザルトUIのオブジェクト
-	HasFoodManager*		m_hasFoodManager = nullptr;									//食材管理クラス
+	HasFoodManager*		m_hasFoodManager = nullptr;								//食材管理クラス
 	GameInformation*	m_gameInfo = nullptr;									//ゲームインフォメーションのオブジェクト
 	Fade*				m_fade = nullptr;										//フェードのオブジェクト
 	PathStorage*		m_pathSt;												//パスストレージのオブジェクト
 	FocusLine*			m_focusLine = nullptr;									//集中線のオブジェクト
+	GameSound*			m_gameSound;											//サウンドのオブジェクト
 
 	SpriteRender		m_scorePanelSprite;										//スコアパネルスプライト
 	SpriteRender		m_optionPanelSprite;									//操作説明パネルスプライト
@@ -97,5 +99,6 @@ private:
 	
 	bool				m_isFinish = false;										//ゲーム終了しているか
 	bool				m_isFinishStarted = false;								//終了処理開始しているか
+	//bool				m_isReturnToTitleStarted = false;						//タイトルに戻る処理が開始しているか
 };
 

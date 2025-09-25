@@ -276,29 +276,12 @@ void Game::Update()
 	FinishTimer();
 	//集中線の更新
 	UpdateFocusLine();
-	
-	//リザルトが最大まで表示されたら、フェードイン
-	
-
-	////カメラの移動が終われば、フェードアウト
-	//if (m_gameCamera->GetIsCameraMoveFinished())
-	//{
-	//	Fade* fade = NewGO<Fade>(0, "fade");
-	//	//フェードインを開始
-	//	fade->StartFadeOut();
-
-	//	fade->SetOnFadeOutComplete([this]()
-	//		{
-	//			Fade* fade = FindGO<Fade>("fade");
-	//			fade->StartFadeIn();
-	//		}
-	//	);
-	//}
-
 	//制限時間が0で、リザルトUIが終了したらタイトルに戻る処理
 	if (m_gameTimer->GetIsTimerEnd()
 		&& m_resultUI->GetIsResultEnd()
-		&& g_pad[0]->IsTrigger(enButtonB)){
+		&& g_pad[0]->IsTrigger(enButtonB)
+		&& m_resultUI->GetIsReturnToTitleStarted()){
+
 		Fade* fade = NewGO<Fade>(0, "fade");
 		//フェードインを開始
 		fade->StartFadeOut();
@@ -315,7 +298,8 @@ void Game::Update()
 
 	//スコアパネルのスライド処理
 	if (g_pad[0]->IsTrigger(enButtonB)
-		&& !m_gameTimer->GetIsTimerEnd()) {
+		&& !m_gameTimer->GetIsTimerEnd()
+		&& m_setScorePosState == POS_SCORE_OUTSIDE) {
 		//スコアボードの位置を変更
 		NextScorePosState();
 		if (m_resultUI){
@@ -386,10 +370,15 @@ void Game::NextScorePosState()
 
 void Game::UpdateFocusLine()
 {
-	if (m_player->DrawBoostEffect()){
-		//加速中なら集中線を表示
-		m_focusLine->SetScale(1.0);
-	}else{
+	if (!m_startButtonUI->GetButtonPush())
+	{
+		m_focusLine->SetScale(0.0f);
+	}
+	//else if (m_player->DrawBoostEffect()){
+	//	//加速中なら集中線を表示
+	//	m_focusLine->SetScale(1.0f);
+	//}
+	else{
 		// 最大速度の遊びとなるパーセント(一定値以上を集中線最大にしたいから)
 		constexpr float maxSpeedPer = 0.8f;
 		//集中線の最大拡大率
