@@ -51,7 +51,7 @@ void GameTitle::Update()
 		fade->SetOnFadeOutComplete([this]() {
 			//フェードアウト完了後にゲームを開始(既に存在していないかチェック)
 			if (FindGO<Game>("game") == nullptr){
-				NewGO<Game>(1, "game");
+				NewGO<Game>(0, "game");
 			}
 			//タイトル画面の削除
 			DeleteGO(this);
