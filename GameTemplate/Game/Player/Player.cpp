@@ -127,21 +127,24 @@ namespace nsPlayer
 		//RunSEProcess();
 		//減速処理
 		Friction();
-		//デバッグ用：テキストファイルに現在のパラメータを書き込む処理
-		//Output();
 		//現在のステートの更新
 		m_playerState->Update();
 		//アニメーションを再生する
 		PlayAnimation(m_currentAnimationClip);
 
 		//ゲーム終了イベントを購読
-		EventManager::GetInstance().Subscribe(GameEvents::GameFinished, [&]() {
-			this->ResetforGameEnd();
-			});
+		//EventManager::GetInstance().Subscribe(GameEvents::GameFinished, [&]() {
+		//	this->ResetforGameEnd();
+		//	});
+		
 		//壁との衝突チェック
 		CheckCollisionWithWall();
 		//モデルの更新
 		UpdateModels();
+
+		//デバッグ用(テキストファイルに現在のパラメータを書き込む処理)--
+		//Output();
+		// ------------------------------------------------------------
 	}
 
 	void Player::Render(RenderContext& rc)

@@ -24,12 +24,10 @@ namespace nsPlayer {
 
 	IPlayerState* nsPlayer::PlayerStartState::StateChange()
 	{
-		if (m_player->IsPlayingAnimation() == false)
-		{
+		if (m_player->IsPlayingAnimation() == false){
 			const auto& forward = m_player->GetForward();
 			//加速する
 			m_player->SetAccele(forward * PLAYER_ACCELE, m_acceleTime);
-			
 			return new PlayerPushState(m_player);
 
 		}
@@ -41,8 +39,7 @@ namespace nsPlayer {
 		//移動処理
 		m_player->Move();
 		//エフェクトの遅延処理
-		if (m_player->GetAcceleDelayTimer() >= 0.6f)
-		{
+		if (m_player->GetAcceleDelayTimer() >= 0.6f){
 			//エフェクト再生
 			m_player->PlayEffect(enEffectName_PlayerAccele, m_player->GetPostion(), m_player->GetRotation(), m_effectScale);
 		}
