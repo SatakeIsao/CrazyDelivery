@@ -107,7 +107,7 @@ bool MapUI::Start()
 	
 	m_customerPizzaSprite.Init("Assets/Sprite/MapData/Map_Customer.dds", 480, 270);
 	m_customerPizzaSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
-	m_customerPizzaSprite2.Init("Assets/MapData/Map_Customer.dds", 480, 270);
+	m_customerPizzaSprite2.Init("Assets/Sprite/MapData/Map_Customer.dds", 480, 270);
 	m_customerPizzaSprite2.SetMulColor({ 1.0f,1.0f,1.0f,m_alpha });
 	
 	m_customerSushiSprite.Init("Assets/Sprite/MapData/Map_Customer.dds", 480, 270);
